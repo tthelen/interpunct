@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task</title>
+</head>
+<body>
+<div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
+    {% for w in words %}
+        {{ w }}
+        {% if not forloop.last %}
+            <span class="interpunct-commaslot" data-slot="{{ forloop.counter }}">
+                &nbsp;
+            </span>
+        {% endif %}
+    {% endfor %}
+    <p id="feedback-{{ sentence.id }}">
+        <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
+    </p>
+</div>
+<script>
+
+    /* Check if a DOM element has a given CSS class. */
+    function has_class(element, cls) {
+        return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    }
+
+    /* Switch the content of a comma slot from blank to comma / comma to blank */
+    function toggle_comma(element) {
+        console.log("GO: #"+element.innerHTML+"#");
+        if (element.innerHTML.indexOf(',') == -1) {
+            element.innerHTML = ",&nbsp";
+        } else {
+            element.innerHTML = "&nbsp";
+        }
+    }
+
+    function submit_sentence(element) {
+
+        /* find all commaslots for the submitted sentence */
+        var id = element.dataset.sentence;
+        var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
+        var val=0; /* bitfield */
+        for (var i=0; i<sentence.length; i++) {
+            if (sentence[i].innerHTML.indexOf(',')>=0) {
+                val += Math.pow(2, i); /* set bit correcsponding to slot position */
+            }
+        }
+        console.log("Value: "+val);
+
+        /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById("feedback-"+id).innerHTML="<i>Lösung abgeschickt, vielen Dank.</i>";
+            }
+        }
+        xmlhttp.open("GET","submit?id="+id+"&sol="+val+"&uid=testuser",true);
+        xmlhttp.send();
+    }
+
+    document.querySelector('body').addEventListener('click', function(event) {
+      if (has_class(event.target, 'interpunct-commaslot')) {
+          toggle_comma(event.target);
+      }
+      if (has_class(event.target, 'interpunct-sentence-submit')) {
+          submit_sentence(event.target);
+      }
+    });
+</script>
+</body>
+</html>
