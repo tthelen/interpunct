@@ -52,9 +52,9 @@
         var xmlhttp=new XMLHttpRequest();
         xmlhttp.onreadystatechange=function()
         {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                document.getElementById("feedback-"+id).innerHTML="<i>Lösung abgeschickt, vielen Dank.</i>";
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)  // success
+            {   // display success message and remove submit button.
+                document.getElementById("feedback-"+id).innerHTML="<i>Lösung abgeschickt, vielen Dank.</i><br><a href={%  url 'task' %}>Nächste Aufgabe</a>";
             }
         }
         xmlhttp.open("GET","submit?id="+id+"&sol="+val+"&uid=testuser",true);
