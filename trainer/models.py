@@ -1,6 +1,5 @@
 from django.db import models
-from django.conf import settings
-import re # regex support
+import re  # regex support
 
 
 class Sentence(models.Model):
@@ -26,7 +25,7 @@ class Sentence(models.Model):
         Get the word list.
         :return: List of words split at blanks or commas
         """
-        return re.split(r'[ ,]+',self.text.strip())
+        return re.split(r'[ ,]+', self.text.strip())
 
     def get_commalist(self):
         """
@@ -54,7 +53,7 @@ class Solution(models.Model):
     Solutions are stored as bitfields for a sentence.
     """
     sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE)
-    # We do not used django users here because the user id is provided by the embedding system
+    # We do not use django users here because the user id is provided by the embedding system
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     user_id = models.CharField(max_length=255)
     solution = models.BigIntegerField()

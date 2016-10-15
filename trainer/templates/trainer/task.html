@@ -27,7 +27,6 @@
 
     /* Switch the content of a comma slot from blank to comma / comma to blank */
     function toggle_comma(element) {
-        console.log("GO: #"+element.innerHTML+"#");
         if (element.innerHTML.indexOf(',') == -1) {
             element.innerHTML = ",&nbsp";
         } else {
@@ -46,7 +45,6 @@
                 val += Math.pow(2, i); /* set bit correcsponding to slot position */
             }
         }
-        console.log("Value: "+val);
 
         /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
         var xmlhttp=new XMLHttpRequest();

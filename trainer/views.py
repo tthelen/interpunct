@@ -13,13 +13,13 @@ def task(request):
     :return: nothing
     """
     import random
-    # get a random sentenct
+    # get a random sentence
     count = Sentence.objects.all().count()
-    print(count)
     sentence = Sentence.objects.all()[int(random.random() * count)]
     words = sentence.get_words()
     user_id = "testuser"
     return render(request, 'trainer/task.html', locals())
+
 
 def submit(request):
     """
@@ -32,4 +32,4 @@ def submit(request):
     sentence = Sentence.objects.get(id=request.GET['id'])
     s = Solution(sentence=sentence, user_id=request.GET['uid'], solution=request.GET['sol'])
     s.save()
-    return JsonResponse({'submit':'ok'})
+    return JsonResponse({'submit': 'ok'})
