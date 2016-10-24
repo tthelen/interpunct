@@ -3,16 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <title>Task</title>
+    <style>
+    body {
+        font-family:Arial,sans-serif;
+        text-align: center;
+        vertical-align:middle;
+    }
+    .interpunct-sentence{
+        margin-top:5%
+    }
+    /* ----- Submit exercise button styling ----- */
+    .interpunct-sentence-submit{
+        background-color: #f74040;
+        border:none;
+        color: white;
+        font-size:16px;
+        padding: 12px 25px;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius:4px;
+    }
+    .interpunct-sentence-submit:hover{
+       background-color: red;
+    }
+    /* ----- Next exercise button styling ----- */
+    .interpunct-sentence-next:link, .interpunct-sentence-next:visited {
+        background-color: #02a131;
+        border:none;
+        color: white;
+        font-size:16px;
+        padding: 12px 25px;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius:4px;
+    }
+    .interpunct-sentence-next:hover, .interpunct-sentence-next:active {
+        background-color: green;
+    }
+    /* ----- Not yet used styling ----- */
+    .interpunct-commaslot-correct {
+        background-color:green;
+    }
+    .interpunct-commaslot-wrong {
+        background-color:red;
+    }
+    /* ----- Tooltip ----- */
+    [data-tooltip] {
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        padding: 4px;
+    }
+    /* ----- Tooltip styling ----- */
+    [data-tooltip]:before {
+        content: attr(data-tooltip);
+        display: none;
+        position: absolute;
+        background: #fff;
+        color: #000;
+        padding: 4px 8px;
+        font-size: 12px;
+        line-height: 1.4;
+        min-width: 100px;
+        text-align: center;
+        border-radius: 4px;
+        border: 2px solid #000;
+    }
+    /* Dynamic horizontal centering */
+    [data-tooltip-position="top"]:before,
+    [data-tooltip-position="bottom"]:before {
+        left: 50%;
+        -ms-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+    /* Dynamic vertical centering */
+    [data-tooltip-position="right"]:before,
+    [data-tooltip-position="left"]:before {
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+    [data-tooltip-position="top"]:before {
+        bottom: 100%;
+        margin-bottom: 6px;
+    }
+    [data-tooltip-position="right"]:before {
+        left: 100%;
+        margin-left: 6px;
+    }
+    [data-tooltip-position="bottom"]:before {
+        top: 100%;
+        margin-top: 6px;
+    }
+    [data-tooltip-position="left"]:before {
+        right: 100%;
+        margin-right: 6px;
+    }
+
+    /* Tooltip arrow styling/placement */
+    [data-tooltip]:after {
+        content: '';
+        display: none;
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+    }
+    /* Dynamic horizontal centering for the tooltip */
+    [data-tooltip-position="top"]:after,
+    [data-tooltip-position="bottom"]:after {
+        left: 50%;
+        margin-left: -6px;
+    }
+    /* Dynamic vertical centering for the tooltip */
+    [data-tooltip-position="right"]:after,
+    [data-tooltip-position="left"]:after {
+        top: 50%;
+        margin-top: -6px;
+    }
+    [data-tooltip-position="top"]:after {
+        bottom: 100%;
+        border-width: 6px 6px 0;
+        border-top-color: #000;
+    }
+    [data-tooltip-position="right"]:after {
+        left: 100%;
+        border-width: 6px 6px 6px 0;
+        border-right-color: #000;
+    }
+    [data-tooltip-position="bottom"]:after {
+        top: 100%;
+        border-width: 0 6px 6px;
+        border-bottom-color: #000;
+    }
+    [data-tooltip-position="left"]:after {
+        right: 100%;
+        border-width: 6px 0 6px 6px;
+        border-left-color: #000;
+    }
+    /* Show the tooltip when hovering */
+    [data-tooltip]:hover:before,
+    [data-tooltip]:hover:after {
+        display: block;
+        z-index: 50;
+    }
+    /* Show tooltip content on hover */
+    [data-tooltip]:hover:before,
+    [data-tooltip]:hover:after {
+      visibility: hidden;
+      opacity: 1;
+    }
+</style>
 </head>
 <body>
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     {% for w in words %}
-        {{ w }}
-        {% if not forloop.last %}
-            <span class="interpunct-commaslot" data-slot="{{ forloop.counter }}">
-                &nbsp;
-            </span>
-        {% endif %}
+        {% for c in comma_types %} 
+            {% if forloop.counter == forloop.parentloop.counter %}
+                {{ w }}
+                    {% if not forloop.last %}
+                        <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}}' data-tooltip-position="top">
+                        &nbsp;
+                        </span>
+                    {% endif %}
+            {% endif %}
+        {% endfor %}
     {% endfor %}
     <p id="feedback-{{ sentence.id }}">
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
@@ -33,6 +193,44 @@
             element.innerHTML = "&nbsp";
         }
     }
+    
+    /* Changes the color of span depending on the correctness of the solution*/
+    function toggle_color(element, val_sample, val_user) {
+        var id = element.dataset.sentence;
+        var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
+        /* Compares sample solution to user solution */
+        if (val_sample == val_user){
+            for (var i=0; i<sentence.length; i++) {
+                sentence[i].style.background="green";
+            }
+        } else { 
+            for (var i=(sentence.length-1); i>=0; i--) {
+                if ((val_sample - Math.pow(2,i)>= 0) && (val_user - Math.pow(2,i)>= 0)){
+                    sentence[i].style.background="green";
+                    val_sample -= Math.pow(2,i); 
+                    val_user -= Math.pow(2,i);   
+                } else if ((val_sample-Math.pow(2,i)<0)&&(val_user-Math.pow(2,i)>=0)){
+                    /* One comma too much */
+                    sentence[i].style.background="red";
+                    val_user -= Math.pow(2,i);  
+                } else if ((val_sample-Math.pow(2,i)>=0)&&(val_user-Math.pow(2,i)<0)){
+                    /* One comma too less */
+                    sentence[i].style.background="red";
+                    val_sample -= Math.pow(2,i);  
+                } else { 
+                    sentence[i].style.background="green";
+                }
+            }
+        }
+    }
+
+    function change_tooltip_visibility(){
+        var style = document.createElement("style");
+        document.head.appendChild(style);
+        sheet = style.sheet;
+        sheet.insertRule('[data-tooltip]:hover:before,[data-tooltip]:hover:after{visibility: visible; opacity: 1;}', 0);
+    }
+
 
     function submit_sentence(element) {
 
@@ -50,13 +248,18 @@
         var xmlhttp=new XMLHttpRequest();
         xmlhttp.onreadystatechange=function()
         {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)  // success
-            {   // display success message and remove submit button.
-                document.getElementById("feedback-"+id).innerHTML="<i>Lösung abgeschickt, vielen Dank.</i><br><a href={%  url 'task' %}>Nächste Aufgabe</a>";
+           if (xmlhttp.readyState==4 && xmlhttp.status==200) {   
+                document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";                  
             }
         }
+        /* change color of all span slots */
+        toggle_color(element,{{ sol_sample.solution }},val);
+        
         xmlhttp.open("GET","submit?id="+id+"&sol="+val+"&uid=testuser",true);
         xmlhttp.send();
+        
+        /* make the tooltip visible */
+        change_tooltip_visibility();
     }
 
     document.querySelector('body').addEventListener('click', function(event) {
