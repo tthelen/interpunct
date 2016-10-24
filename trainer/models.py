@@ -16,10 +16,26 @@ class Sentence(models.Model):
     Example: Wir essen, Opa.
     """
     text = models.CharField(max_length=2048)
-
+    comma_list = models.CommaSeparatedIntegerField(max_length=255, default='0')
+    
     def __str__(self):
         return self.text
-
+    
+    def set_default_commalist(self):
+        """
+        Set default list of comma types: amout of zeros = amount of comma-slots
+        """
+        self.comma_list
+        for i in range(len(self.get_commalist())):
+            self.comma_list.append(',0')
+        
+    def get_commatypelist(self):
+        """
+        Get the commatype list.
+        :return: List of type values split at commas
+        """
+        return re.split(r'[,]+',self.comma_list.strip())
+    
     def get_words(self):
         """
         Get the word list.
