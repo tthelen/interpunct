@@ -38,10 +38,13 @@ class Sentence(django.db.models.Model):
     def set_comma_select(self, bitfield):
         comma_select = self.get_commaselectlist()
         for i in range(len(comma_select)-1,-1,-1):
-            if (bitfield - 2**i >= 0):
+            if (bitfield - 2**i >= 0) & (i !=(len(comma_select)-1)):
                 comma_select[i] = str(int(comma_select[i]) + 1) + ","
                 bitfield -= 2**i
-            elif(i !=(len(comma_select)-1)):
+            elif bitfield - 2**i >= 0:
+                comma_select[i] = str(int(comma_select[i]) + 1)
+                bitfield -= 2 ** i
+            elif i !=(len(comma_select)-1):
                 comma_select[i] += ","
 
         self.comma_select = "".join(comma_select)
