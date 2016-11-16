@@ -163,15 +163,17 @@
 <body>
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     {% for w in words %}
-        {% for c in comma_types %} 
-            {% if forloop.counter == forloop.parentloop.counter %}
-                {{ w }}
-                    {% if not forloop.last %}
-                        <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}}' data-tooltip-position="top">
-                        &nbsp;
-                        </span>
-                    {% endif %}
-            {% endif %}
+        {% for c,s in collection %}
+                {% if forloop.counter == forloop.parentloop.counter %}
+                        {{ w }}
+                            {% if not forloop.last %}
+                            <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}} Selected by {{ s }} % of users' data-tooltip-position="top">
+                            &nbsp;
+                            </span>
+                            {% endif %}
+
+                {% endif %}
+
         {% endfor %}
     {% endfor %}
     <p id="feedback-{{ sentence.id }}">
@@ -237,6 +239,7 @@
         /* find all commaslots for the submitted sentence */
         var id = element.dataset.sentence;
         var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
+
         var val=0; /* bitfield */
         for (var i=0; i<sentence.length; i++) {
             if (sentence[i].innerHTML.indexOf(',')>=0) {
