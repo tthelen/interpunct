@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Sentence, Solution
+from .models import Sentence, Solution, Rule, import_rules
 
 
 def task(request):
@@ -12,6 +12,10 @@ def task(request):
     :param request: Django request
     :return: nothing
     """
+
+    if Rule.objects.count() == 0: # TODO: move this nasty hack to a more appropriate place
+        import_rules()
+
     import random
     # get a random sentence
     count = Sentence.objects.all().count()
@@ -32,7 +36,10 @@ def task(request):
 
     collection = []
     for i in range(len(comma_types)):
-        collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
+        if submits:
+            collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
+        else:
+            collection.append((comma_types[i], 0))
 
 
     user_id = "testuser"

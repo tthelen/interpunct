@@ -102,3 +102,36 @@ class Solution(django.db.models.Model):
     user_id = django.db.models.CharField(max_length=255)
     solution = django.db.models.BigIntegerField()
 
+
+class Rule(django.db.models.Model):
+    """
+    Represents a rule for mandatory, discretionay, prohibited commas, including typical errors.
+    """
+
+    MODES = (
+        (0, 'must'),
+        (1, 'may'),
+        (2, 'mustnot'),
+    )
+
+    code = django.db.models.CharField(max_length=32)
+    slug = django.db.models.SlugField(max_length=128)
+    mode = django.db.models.IntegerField(choices=MODES)
+    description = django.db.models.CharField(max_length=2048)
+    rule = django.db.models.CharField(max_length=255)
+    # example1 = django.db.models.ForeignKey('Sentence')
+    # example2 = django.db.models.ForeignKey('Sentence')
+    # example3 = django.db.models.ForeignKey('Sentence')
+
+
+def import_rules():
+    from tablib import Dataset
+    imported_data = Dataset().load(open('kommaregeln.csv', encoding='utf-8').read())
+    for row in imported_data:
+        r = Rule()
+        r.code = row[0]
+        r.slug = row[1]
+        r.mode = ['muss', 'kann', 'darf nicht'].index(row[2])
+        r.description = row[3]
+        r.rule = row[4]
+        r.save()
