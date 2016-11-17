@@ -130,23 +130,24 @@ class User(django.db.models.Model):
         self.comma_type_false = new_dict_str[:-1]
         self.save()
 
-    def count_false_types(self, user_bitfield, comma_array):
+       def count_false_types(self, user_bitfield, comma_array):
         """
-        Counting false comma sets and correct comma sets save in dict
-        :param user_bitfield:
+        adds counter for false comma settings and absolute comma settings w.r.t comma_type
+        :param user_bitfield: bitfield of the user
         :param comma_array:
         :return:
         """
         dict = self.get_dictionary()
-
-        for i in range(len(comma_array) - 1, 0, -1):
+        for i in range(len(comma_array)-1, -1, -1):
+            # Optional Comma Type = $
+            if ((comma_array[i][:1] == "$")):
+                dict[comma_array[i]] = a + "/" + str(int(b) + 1)
             # one comma too less (add false, add total)
-            if ((comma_array[i] != "0") and (user_bitfield - 2 ** i < 0)):
-                [a, b] = re.split(r'/', dict[comma_array[i]])
-                dict[comma_array[i]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+            elif ((comma_array[i] != "0") and (user_bitfield - 2**i < 0)):
+                [a,b] = re.split(r'/',dict[comma_array[i]])
+                dict[comma_array[i]]= str(int(a)+1)+"/"+str(int(b)+1)
             # correct comma (add to total)
-            elif ((comma_array[i] != "0") and (user_bitfield - 2 ** i >= 0)):
+            elif((comma_array[i] != "0") and (user_bitfield - 2**i >= 0)):
                 [a, b] = re.split(r'/', dict[comma_array[i]])
                 dict[comma_array[i]] = a + "/" + str(int(b) + 1)
-
         self.save_dictionary(dict)
