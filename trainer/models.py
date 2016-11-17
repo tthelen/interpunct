@@ -16,7 +16,7 @@ class Sentence(django.db.models.Model):
     Example: Wir essen, Opa.
     """
     text = django.db.models.CharField(max_length=2048)
-    comma_list = django.db.models.CommaSeparatedIntegerField(max_length=255, default='0')
+    comma_list = django.db.models.CharField(max_length=255, default='')
     comma_select = django.db.models.CommaSeparatedIntegerField(max_length=255, default='0')
     total_submits = django.db.models.IntegerField(max_length=25,default='0')
 
@@ -102,3 +102,51 @@ class Solution(django.db.models.Model):
     user_id = django.db.models.CharField(max_length=255)
     solution = django.db.models.BigIntegerField()
 
+class User(django.db.models.Model):
+    user_id = django.db.models.CharField(max_length = 255)
+    total_sentences = django.db.models.IntegerField
+    # counts wrong answers for a specific comma type
+    comma_type_false = django.db.models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0, D1:0/0, D2:0/0, D3:0/0, E0:0/0")
+    def get_dictionary(self):
+        """
+        Dictionary with comma types as keys and a value tuple of erros and total amount of trials
+        :return: dictionary
+        """
+        type_dict = {}
+        tmp = re.split(r'[ ,]+', self.comma_type_false)
+        for elem in tmp:
+            [a,b] = re.split(r':',elem)
+            type_dict[a]=b
+        return type_dict
+
+    def save_dictionary(self,update):
+        """
+        Save updated dictionary to the database
+        :param update: updated dictionary
+        """
+        new_dict_str = ""
+        for key in update:
+            new_dict_str += key + ":" + update[key] + ","
+        self.comma_type_false = new_dict_str[:-1]
+        self.save()
+
+    def count_false_types(self, user_bitfield, comma_array):
+        """
+        Counting false comma sets and correct comma sets save in dict
+        :param user_bitfield:
+        :param comma_array:
+        :return:
+        """
+        dict = self.get_dictionary()
+
+        for i in range(len(comma_array) - 1, 0, -1):
+            # one comma too less (add false, add total)
+            if ((comma_array[i] != "0") and (user_bitfield - 2 ** i < 0)):
+                [a, b] = re.split(r'/', dict[comma_array[i]])
+                dict[comma_array[i]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+            # correct comma (add to total)
+            elif ((comma_array[i] != "0") and (user_bitfield - 2 ** i >= 0)):
+                [a, b] = re.split(r'/', dict[comma_array[i]])
+                dict[comma_array[i]] = a + "/" + str(int(b) + 1)
+
+        self.save_dictionary(dict)

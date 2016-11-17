@@ -9,12 +9,15 @@
         text-align: center;
         vertical-align:middle;
     }
+    .interpunct-commaslot{
+        border-radius: 50px;
+    }
     .interpunct-sentence{
         margin-top:5%
     }
     /* ----- Submit exercise button styling ----- */
     .interpunct-sentence-submit{
-        background-color: #f74040;
+        background-color: #219fff;
         border:none;
         color: white;
         font-size:16px;
@@ -24,11 +27,11 @@
         border-radius:4px;
     }
     .interpunct-sentence-submit:hover{
-       background-color: red;
+       background-color: #1469ff;
     }
     /* ----- Next exercise button styling ----- */
     .interpunct-sentence-next:link, .interpunct-sentence-next:visited {
-        background-color: #02a131;
+        background-color: #219fff;
         border:none;
         color: white;
         font-size:16px;
@@ -38,14 +41,7 @@
         border-radius:4px;
     }
     .interpunct-sentence-next:hover, .interpunct-sentence-next:active {
-        background-color: green;
-    }
-    /* ----- Not yet used styling ----- */
-    .interpunct-commaslot-correct {
-        background-color:green;
-    }
-    .interpunct-commaslot-wrong {
-        background-color:red;
+        background-color: #1469ff;
     }
     /* ----- Tooltip ----- */
     [data-tooltip] {
@@ -167,9 +163,11 @@
                 {% if forloop.counter == forloop.parentloop.counter %}
                         {{ w }}
                             {% if not forloop.last %}
-                            <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}} Selected by {{ s }} % of users' data-tooltip-position="top">
-                            &nbsp;
-                            </span>
+
+                                <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip="Kommatyp ist {{c}} Selected by {{ s }} % of users" data-tooltip-position="top">
+                                &nbsp;
+                                </span>
+
                             {% endif %}
 
                 {% endif %}
@@ -190,7 +188,7 @@
     /* Switch the content of a comma slot from blank to comma / comma to blank */
     function toggle_comma(element) {
         if (element.innerHTML.indexOf(',') == -1) {
-            element.innerHTML = ",&nbsp";
+            element.innerHTML = ",";
         } else {
             element.innerHTML = "&nbsp";
         }
@@ -203,24 +201,24 @@
         /* Compares sample solution to user solution */
         if (val_sample == val_user){
             for (var i=0; i<sentence.length; i++) {
-                sentence[i].style.background="green";
+                sentence[i].style.background="#85e278";
             }
         } else { 
             for (var i=(sentence.length-1); i>=0; i--) {
                 if ((val_sample - Math.pow(2,i)>= 0) && (val_user - Math.pow(2,i)>= 0)){
-                    sentence[i].style.background="green";
+                    sentence[i].style.background="#85e278";
                     val_sample -= Math.pow(2,i); 
                     val_user -= Math.pow(2,i);   
                 } else if ((val_sample-Math.pow(2,i)<0)&&(val_user-Math.pow(2,i)>=0)){
                     /* One comma too much */
-                    sentence[i].style.background="red";
-                    val_user -= Math.pow(2,i);  
+                    sentence[i].style.background="#ff876e";
+                    val_user -= Math.pow(2,i);
                 } else if ((val_sample-Math.pow(2,i)>=0)&&(val_user-Math.pow(2,i)<0)){
                     /* One comma too less */
-                    sentence[i].style.background="red";
-                    val_sample -= Math.pow(2,i);  
-                } else { 
-                    sentence[i].style.background="green";
+                    sentence[i].style.background="#ff876e";
+                    val_sample -= Math.pow(2,i);
+                } else {
+                    /*sentence[i].style.background="#85e278";*/
                 }
             }
         }

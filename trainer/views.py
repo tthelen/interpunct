@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Sentence, Solution
+from .models import Sentence, Solution, User
 
 
 def task(request):
@@ -49,6 +49,10 @@ def submit(request):
     """
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
+    user = User.objects.get(user_id="testuser")
+    comma_types = sentence.get_commatypelist()
+    user.count_false_types(int(user_solution), comma_types)
     sentence.set_comma_select(int(user_solution))
     sentence.update_submits()
+
     return JsonResponse({'submit': 'ok'})
