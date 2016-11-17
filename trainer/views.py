@@ -13,9 +13,6 @@ def task(request):
     :return: nothing
     """
 
-    if Rule.objects.count() == 0: # TODO: move this nasty hack to a more appropriate place
-        import_rules()
-
     import random
     # get a random sentence
     count = Sentence.objects.all().count()

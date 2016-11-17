@@ -90,6 +90,20 @@ class Sentence(django.db.models.Model):
                 val += 2**i
         return val
 
+    @classmethod
+    def from_shortcuts(cls, shortcut_string):
+        import shlex
+        lexer = shlex.shlex(shortcut_string)
+        lexer.wordchars += '.'  # Make . in Rule code (B4.1 etc.) parseable
+
+        state_in_ruleset = False
+        while 1:
+            token = lexer.get_token()
+            if token=='(':
+                state_in_ruleset = True
+            elif token == ')':
+                state_in_ruleset = False
+                
 
 class Solution(django.db.models.Model):
     """
@@ -123,15 +137,3 @@ class Rule(django.db.models.Model):
     # example2 = django.db.models.ForeignKey('Sentence')
     # example3 = django.db.models.ForeignKey('Sentence')
 
-
-def import_rules():
-    from tablib import Dataset
-    imported_data = Dataset().load(open('kommaregeln.csv', encoding='utf-8').read())
-    for row in imported_data:
-        r = Rule()
-        r.code = row[0]
-        r.slug = row[1]
-        r.mode = ['muss', 'kann', 'darf nicht'].index(row[2])
-        r.description = row[3]
-        r.rule = row[4]
-        r.save()
