@@ -114,6 +114,10 @@ class Sentence(models.Model):
 
 
 class SentenceRule(models.Model):
+    """Intermediate model for ManyToMany-Relationship of Sentences and Rules.
+
+    Position indicates the 0-based position in the sentence.
+    """
     sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE)
     rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
     position = models.IntegerField()
