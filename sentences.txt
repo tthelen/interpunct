@@ -1,0 +1,2 @@
+Ich   gehe   nach   Hause.
+Ich   sehe   eine   Frau, (B1.1) die   singt, (A1,B1.1) ein   Kind, (B.1.1) das   springt, (B1.1, A4) und   einen   Mann, (B1.1) der   hinkt.

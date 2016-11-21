@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Sentence, Solution, Rule, import_rules
+from .models import Sentence, Solution, Rule
 
 
 def task(request):
@@ -13,9 +13,6 @@ def task(request):
     :return: nothing
     """
 
-    if Rule.objects.count() == 0: # TODO: move this nasty hack to a more appropriate place
-        import_rules()
-
     import random
     # get a random sentence
     count = Sentence.objects.all().count()
@@ -25,9 +22,11 @@ def task(request):
 
     # pack all words of this sentence in a list
     words = sentence.get_words()
+    print(words)
 
     # pack all comma types of this sentence in a list
     comma_types = sentence.get_commatypelist()
+    print(comma_types)
     # apply a 'dirty trick' to make it the same length as the words list
     comma_types.append('0')
     comma_select = sentence.get_commaselectlist()
@@ -40,7 +39,7 @@ def task(request):
             collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
         else:
             collection.append((comma_types[i], 0))
-
+    print(collection)
 
     user_id = "testuser"
     return render(request, 'trainer/task.html', locals())
