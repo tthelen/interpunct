@@ -8,9 +8,9 @@ class Rule(models.Model):
     """
 
     MODES = (
-        (0, 'must'),
+        (0, 'mustnot'),
         (1, 'may'),
-        (2, 'mustnot'),
+        (2, 'must'),
     )
 
     code = models.CharField(max_length=32)
@@ -29,6 +29,12 @@ class Sentence(models.Model):
     Database representation has to include correct commas.
     The sentence is stored as a string in the database,
     words are separated by blanks and commas.
+
+    text: Complete text with commas. (TODO: without commas?)
+    comma_list: int list of comma types (TODO: replaced by rules)
+    comma_select: int list of how often comma was set here
+    total_submits: number of tries for sentence
+    rules: n:m relation to Rule through SentenceRule table (adding position)
 
     IMPORTANT: The list of words of a sentence must never change!
                Solutions store a bool value for each gap, so gap
@@ -58,6 +64,11 @@ class Sentence(models.Model):
             self.comma_list.append(',0')
 
     def set_comma_select(self, bitfield):
+        """
+        TODO: Documentation! What's this method for?
+        :param bitfield:
+        :return:
+        """
         comma_select = self.get_commaselectlist()
         for i in range(len(comma_select) - 1, -1, -1):
             if (bitfield - 2 ** i >= 0) & (i != (len(comma_select) - 1)):
@@ -79,12 +90,12 @@ class Sentence(models.Model):
         """
         return re.split(r'[,]+', self.comma_select.strip())
 
-    def get_commatypelist(self):
-        """
-        Get the commatype list.
-        :return: List of type values split at commas
-        """
-        return re.split(r'[,]+', self.comma_list.strip())
+    #def get_commatypelist(self):
+    #    """
+    #    Get the commatype list.
+    #    :return: List of type values split at commas
+    #    """
+    #    return re.split(r'[,]+', self.comma_list.strip())
 
     def get_words(self):
         """
@@ -98,7 +109,42 @@ class Sentence(models.Model):
         Where do the commas go?
         :return: List of boolean values indicating comma/no comma at that position.
         """
-        return list(map(lambda x: ',' in x, re.split(r'\w+', self.text.strip())[1:-1]))
+        l = []  # list of comma types (0=no, 1=may, 2=must)
+        mode = 0
+        for pos in range(len(self.get_words())):
+            # for each position: get rules
+            rules = self.sentencerule_set.filter(sentencerule__position=pos).all()
+
+            mode = 0  # mustnot
+            for r in rules:
+                if r.rule.mode == 'may':
+                    mode = 1
+                elif r.rule.mode == 'must': # must overrides any 'may'
+                    mode = 2
+                    break
+            l.append(mode)
+        return l
+
+
+    def get_commatypelist(self):
+        """
+        Return a list of rule-name-lists for each position in the sentence.
+        :return: List of lists with rule names.
+        """
+        l = []  # list of comma types (0=no, 1=may, 2=must)
+
+        print("Commtypelist... for %d words." % (len(self.get_words())))
+        for pos in range(len(self.get_words())):
+            # print("Position is %d" % pos)
+            # for each position: get rules
+            rules = self.rules.filter(sentencerule__position=pos).all()
+            rl = []
+            for r in rules:
+                rl.append(r.code)  # collect codes, not rules objects
+            l.append(rl)
+        return l
+
+        #return list(map(lambda x: ',' in x, re.split(r'\w+', self.text.strip())[1:-1]))
 
     def get_commaval(self):
         """

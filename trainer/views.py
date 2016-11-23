@@ -18,15 +18,18 @@ def task(request):
     count = Sentence.objects.all().count()
     sentence = Sentence.objects.all()[int(random.random() * count)]
     # get a corresponding solution for this sentence
-    sol_sample = Solution.objects.get(sentence=sentence,user_id='testuser')
+    # sol_sample = Solution.objects.get(sentence=sentence,user_id='testuser')
 
     # pack all words of this sentence in a list
     words = sentence.get_words()
-    print(words)
+    # print(words)
+
+    comma_types = sentence.get_commatypelist()
+    # print(comma_types)
 
     # pack all comma types of this sentence in a list
-    comma_types = sentence.get_commatypelist()
-    print(comma_types)
+    # comma_types = sentence.get_commatypelist()
+
     # apply a 'dirty trick' to make it the same length as the words list
     comma_types.append('0')
     comma_select = sentence.get_commaselectlist()
@@ -36,7 +39,9 @@ def task(request):
     collection = []
     for i in range(len(comma_types)):
         if submits:
-            collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
+            collection.append((comma_types[i], 0))
+
+#            collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
         else:
             collection.append((comma_types[i], 0))
     print(collection)

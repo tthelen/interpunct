@@ -12,7 +12,7 @@ class Command(BaseCommand):
                 if not shortcut_string:
                     break
                 sentence, words, rules = self.from_shortcuts(shortcut_string)
-                s = Sentence(sentence)
+                s = Sentence(text=sentence)
                 s.save()
                 for (p,r) in rules:
                     rs = SentenceRule(rule=r, sentence=s, position=p)
