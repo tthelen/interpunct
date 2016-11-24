@@ -200,28 +200,17 @@
     function toggle_color(element, val_sample, val_user) {
         var id = element.dataset.sentence;
         var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
-        /* Compares sample solution to user solution */
-        if (val_sample == val_user){
-            for (var i=0; i<sentence.length; i++) {
-                sentence[i].style.background="green";
-            }
-        } else { 
-            for (var i=(sentence.length-1); i>=0; i--) {
-                if ((val_sample - Math.pow(2,i)>= 0) && (val_user - Math.pow(2,i)>= 0)){
-                    sentence[i].style.background="green";
-                    val_sample -= Math.pow(2,i); 
-                    val_user -= Math.pow(2,i);   
-                } else if ((val_sample-Math.pow(2,i)<0)&&(val_user-Math.pow(2,i)>=0)){
-                    /* One comma too much */
-                    sentence[i].style.background="red";
-                    val_user -= Math.pow(2,i);  
-                } else if ((val_sample-Math.pow(2,i)>=0)&&(val_user-Math.pow(2,i)<0)){
-                    /* One comma too less */
-                    sentence[i].style.background="red";
-                    val_sample -= Math.pow(2,i);  
-                } else { 
-                    sentence[i].style.background="green";
-                }
+        for(var i=0;i<val_sample.length;i++){
+            console.log("sample:");
+            console.log(val_sample[i]);
+            console.log("user:");
+            console.log(val_user[i]);
+            if((val_sample[i] == 2) && (val_user[i] == 1)){
+                sentence[i].style.background="#85e278";
+            }else if((val_sample[i] == 1) && (val_user[i] == 1)){
+                sentence[i].style.background="#219fff";
+            }else if(val_sample[i] != val_user[i]){
+                sentence[i].style.background="#ff876e";
             }
         }
     }
@@ -240,10 +229,13 @@
         var id = element.dataset.sentence;
         var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
 
-        var val=0; /* bitfield */
+        var val= new Array();
         for (var i=0; i<sentence.length; i++) {
             if (sentence[i].innerHTML.indexOf(',')>=0) {
-                val += Math.pow(2, i); /* set bit correcsponding to slot position */
+                val.push(1);
+            }
+            else{
+                val.push(0);
             }
         }
 
@@ -256,7 +248,7 @@
             }
         }
         /* change color of all span slots */
-        // toggle_color(element,{{ sol_sample.solution }},val);
+        toggle_color(element,{{ comma }},val);
         
         xmlhttp.open("GET","submit?id="+id+"&sol="+val+"&uid=testuser",true);
         xmlhttp.send();

@@ -23,7 +23,7 @@ def task(request):
     # pack all words of this sentence in a list
     words = sentence.get_words()
     # print(words)
-
+    comma = sentence.get_commalist()
     comma_types = sentence.get_commatypelist()
     # print(comma_types)
 
@@ -32,8 +32,8 @@ def task(request):
 
     # apply a 'dirty trick' to make it the same length as the words list
     comma_types.append('0')
-    comma_select = sentence.get_commaselectlist()
-    comma_select.append('0')
+    #comma_select = sentence.get_commaselectlist()
+    #comma_select.append('0')
     submits = sentence.total_submits
 
     collection = []
@@ -58,8 +58,8 @@ def submit(request):
     :param request: Django request
     :return: nothing
     """
-    sentence = Sentence.objects.get(id=request.GET['id'])
-    user_solution = request.GET['sol']
-    sentence.set_comma_select(int(user_solution))
-    sentence.update_submits()
+#    sentence = Sentence.objects.get(id=request.GET['id'])
+#    user_solution = request.GET['sol']
+#    sentence.set_comma_select(int(user_solution))
+#    sentence.update_submits()
     return JsonResponse({'submit': 'ok'})

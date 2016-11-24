@@ -22,6 +22,9 @@ class Rule(models.Model):
     # example2 = django.db.models.ForeignKey('Sentence')
     # example3 = django.db.models.ForeignKey('Sentence')
 
+    def __str__(self):
+        return self.code
+
 
 class Sentence(models.Model):
     """
@@ -43,7 +46,7 @@ class Sentence(models.Model):
     Example: Wir essen, Opa.
     """
     text = models.CharField(max_length=2048)
-    comma_list = models.CommaSeparatedIntegerField(max_length=255, default='0')
+    #comma_list = models.CommaSeparatedIntegerField(max_length=255, default='0')
     comma_select = models.CommaSeparatedIntegerField(max_length=255, default='0')
     total_submits = models.IntegerField(max_length=25, default='0')  #
     rules = models.ManyToManyField(Rule, through='SentenceRule')
@@ -55,19 +58,10 @@ class Sentence(models.Model):
         self.total_submits += 1
         self.save()
 
-    def set_default_commalist(self):
-        """
-        Set default list of comma types: amout of zeros = amount of comma-slots
-        """
-        self.comma_list
-        for i in range(len(self.get_commalist())):
-            self.comma_list.append(',0')
-
     def set_comma_select(self, bitfield):
         """
-        TODO: Documentation! What's this method for?
-        :param bitfield:
-        :return:
+        Set how much times certain comma was selected
+        :param bitfield: user solution
         """
         comma_select = self.get_commaselectlist()
         for i in range(len(comma_select) - 1, -1, -1):
@@ -83,20 +77,6 @@ class Sentence(models.Model):
         self.comma_select = "".join(comma_select)
         self.save()
 
-    def get_commaselectlist(self):
-        """
-        Get the commatype list.
-        :return: List of type values split at commas
-        """
-        return re.split(r'[,]+', self.comma_select.strip())
-
-    #def get_commatypelist(self):
-    #    """
-    #    Get the commatype list.
-    #    :return: List of type values split at commas
-    #    """
-    #    return re.split(r'[,]+', self.comma_list.strip())
-
     def get_words(self):
         """
         Get the word list.
@@ -110,21 +90,24 @@ class Sentence(models.Model):
         :return: List of boolean values indicating comma/no comma at that position.
         """
         l = []  # list of comma types (0=no, 1=may, 2=must)
-        mode = 0
+        #mode = 0
         for pos in range(len(self.get_words())):
+            print("position %d." % (pos))
             # for each position: get rules
-            rules = self.sentencerule_set.filter(sentencerule__position=pos).all()
-
+            rules = self.sentencerule_set.filter(position=pos).all()
+            print("Amount of rules %d." % (len(rules)))
             mode = 0  # mustnot
             for r in rules:
-                if r.rule.mode == 'may':
+                print("Rule.Mode %s." % (r.rule.mode))
+                if r.rule.mode == 1:
                     mode = 1
-                elif r.rule.mode == 'must': # must overrides any 'may'
+                elif r.rule.mode == 2: # must overrides any 'may'
                     mode = 2
                     break
+                print("Mode %d." % (mode))
             l.append(mode)
+            print("List %s." % (mode))
         return l
-
 
     def get_commatypelist(self):
         """
@@ -143,8 +126,6 @@ class Sentence(models.Model):
                 rl.append(r.code)  # collect codes, not rules objects
             l.append(rl)
         return l
-
-        #return list(map(lambda x: ',' in x, re.split(r'\w+', self.text.strip())[1:-1]))
 
     def get_commaval(self):
         """
