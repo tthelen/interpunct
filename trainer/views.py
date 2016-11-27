@@ -58,8 +58,8 @@ def submit(request):
     :param request: Django request
     :return: nothing
     """
-#    sentence = Sentence.objects.get(id=request.GET['id'])
-#    user_solution = request.GET['sol']
-#    sentence.set_comma_select(int(user_solution))
-#    sentence.update_submits()
+    sentence = Sentence.objects.get(id=request.GET['id'])
+    user_solution = request.GET['sol']
+    sentence.set_comma_select(user_solution)
+    sentence.update_submits()
     return JsonResponse({'submit': 'ok'})

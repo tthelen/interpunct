@@ -2,15 +2,16 @@ from django.db import models
 import re  # regex support
 
 
+
 class Rule(models.Model):
     """
     Represents a rule for mandatory, discretionay, prohibited commas, including typical errors.
     """
 
     MODES = (
-        (0, 'mustnot'),
-        (1, 'may'),
-        (2, 'must'),
+        (0, 'darf nicht'),
+        (1, 'kann'),
+        (2, 'muss'),
     )
 
     code = models.CharField(max_length=32)
@@ -58,23 +59,26 @@ class Sentence(models.Model):
         self.total_submits += 1
         self.save()
 
-    def set_comma_select(self, bitfield):
+    def get_commaselectlist(self,user):
+        """
+        Get the commatype list.
+        :return: List of type values split at commas
+        """
+        return (re.split(r'[,]+', self.comma_select.strip()),re.split(r'[,]+', user.strip()))
+
+    def set_comma_select(self, user_select):
         """
         Set how much times certain comma was selected
         :param bitfield: user solution
         """
-        comma_select = self.get_commaselectlist()
-        for i in range(len(comma_select) - 1, -1, -1):
-            if (bitfield - 2 ** i >= 0) & (i != (len(comma_select) - 1)):
-                comma_select[i] = str(int(comma_select[i]) + 1) + ","
-                bitfield -= 2 ** i
-            elif bitfield - 2 ** i >= 0:
-                comma_select[i] = str(int(comma_select[i]) + 1)
-                bitfield -= 2 ** i
-            elif i != (len(comma_select) - 1):
-                comma_select[i] += ","
+        selects,user_selects = self.get_commaselectlist(user_select);
+        if len(selects) == 1:
+            for i in range(len(self.get_commalist())-1):
+                selects.append(0)
+        for i in range(len(self.get_commalist())):
+            selects[i] = str(int(selects[i]) + int(user_selects[i]))
 
-        self.comma_select = "".join(comma_select)
+        self.comma_select = "".join(selects)
         self.save()
 
     def get_words(self):
@@ -89,14 +93,14 @@ class Sentence(models.Model):
         Where do the commas go?
         :return: List of boolean values indicating comma/no comma at that position.
         """
-        l = []  # list of comma types (0=no, 1=may, 2=must)
-        #mode = 0
+        l = []  # list of comma types (0=mustnot, 1=may, 2=must)
         for pos in range(len(self.get_words())):
-            print("position %d." % (pos))
+            print("length: %d " % (len(self.get_words())))
+            print("Position : %d" % pos)
             # for each position: get rules
-            rules = self.sentencerule_set.filter(position=pos).all()
-            print("Amount of rules %d." % (len(rules)))
             mode = 0  # mustnot
+            rules = self.sentencerule_set.filter(position=pos+1).all()
+            print("Amount of rules %d." % (len(rules)))
             for r in rules:
                 print("Rule.Mode %s." % (r.rule.mode))
                 if r.rule.mode == 1:
@@ -104,9 +108,8 @@ class Sentence(models.Model):
                 elif r.rule.mode == 2: # must overrides any 'may'
                     mode = 2
                     break
-                print("Mode %d." % (mode))
             l.append(mode)
-            print("List %s." % (mode))
+            print(l)
         return l
 
     def get_commatypelist(self):
@@ -114,13 +117,13 @@ class Sentence(models.Model):
         Return a list of rule-name-lists for each position in the sentence.
         :return: List of lists with rule names.
         """
-        l = []  # list of comma types (0=no, 1=may, 2=must)
+        l = []  # list of comma types (0=mustnot, 1=may, 2=must)
 
         print("Commtypelist... for %d words." % (len(self.get_words())))
         for pos in range(len(self.get_words())):
             # print("Position is %d" % pos)
             # for each position: get rules
-            rules = self.rules.filter(sentencerule__position=pos).all()
+            rules = self.rules.filter(sentencerule__position=pos+1).all()
             rl = []
             for r in rules:
                 rl.append(r.code)  # collect codes, not rules objects
@@ -141,7 +144,9 @@ class Sentence(models.Model):
 
 
 class SentenceRule(models.Model):
-    """Intermediate model for ManyToMany-Relationship of Sentences and Rules.
+
+    """
+    Intermediate model for ManyToMany-Relationship of Sentences and Rules.
 
     Position indicates the 0-based position in the sentence.
     """
@@ -149,6 +154,8 @@ class SentenceRule(models.Model):
     rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
     position = models.IntegerField()
 
+    def __str__(self):
+        return self.sentence.text + self.rule.code
 
 class Solution(models.Model):
     """
