@@ -12,6 +12,7 @@ class Command(BaseCommand):
                 if not shortcut_string:
                     break
                 sentence, words, rules = self.from_shortcuts(shortcut_string)
+                print("Sentence: {}, Words: {}, Rules: {}".format(sentence, words, rules))
                 s = Sentence(text=sentence)
                 s.save()
                 for (p,r) in rules:
@@ -33,6 +34,8 @@ class Command(BaseCommand):
                 (position - 0-based position in sentence,
                  rule - Rule object))
         """
+
+        shortcut_string.replace('(,)',',') # treat MAY-commas indicated as (,) like , - the mode comes from the rules
 
         import shlex
         lexer = shlex.shlex(shortcut_string)

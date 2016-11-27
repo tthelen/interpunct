@@ -116,7 +116,6 @@ class Sentence(models.Model):
         """
         l = []  # list of comma types (0=no, 1=may, 2=must)
 
-        print("Commtypelist... for %d words." % (len(self.get_words())))
         for pos in range(len(self.get_words())):
             # print("Position is %d" % pos)
             # for each position: get rules

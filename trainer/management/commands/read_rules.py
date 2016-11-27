@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 from trainer.models import Rule
 
+
 class Command(BaseCommand):
     help = 'Reads update rule set vom kommaregeln.csv'
 
@@ -17,7 +18,7 @@ class Command(BaseCommand):
                 r.code = row[0]
                 self.stdout.write(self.style.SUCCESS('Create rule "%s"' % row[0]))
             r.slug = row[1]
-            r.mode = ['muss', 'kann', 'darf nicht'].index(row[2])
+            r.mode = ['darf nicht', 'kann', 'muss'].index(row[2])
             r.description = row[3]
             r.rule = row[4]
             r.save()
