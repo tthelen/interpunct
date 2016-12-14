@@ -8,9 +8,14 @@
         font-family:Arial,sans-serif;
         text-align: center;
         vertical-align:middle;
+        margin-top: 100px;
     }
-    .interpunct-sentence{
+    /*.interpunct-sentence{
         margin-top:5%
+    }*/
+    /* ----- rounding corners -----*/
+    .interpunct-commaslot{
+        border-radius: 50px;
     }
     /* ----- Submit exercise button styling ----- */
     .interpunct-sentence-submit{
@@ -167,9 +172,8 @@
                 {% if forloop.counter == forloop.parentloop.counter %}
                         {{ w }}
                             {% if not forloop.last %}
-                            <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}} Selected by {{ s }} % of users' data-tooltip-position="top">
-                            &nbsp;
-                            </span>
+                                <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}} Selected by {{ s }} % of users' data-tooltip-position="top">
+                            &nbsp;   </span>
                             {% endif %}
 
                 {% endif %}
@@ -181,7 +185,7 @@
     </p>
 </div>
 <script>
-
+var submitted = false;
     /* Check if a DOM element has a given CSS class. */
     function has_class(element, cls) {
         return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
@@ -190,7 +194,7 @@
     /* Switch the content of a comma slot from blank to comma / comma to blank */
     function toggle_comma(element) {
         if (element.innerHTML.indexOf(',') == -1) {
-            element.innerHTML = ",&nbsp";
+            element.innerHTML = ",";
         } else {
             element.innerHTML = "&nbsp";
         }
@@ -206,11 +210,11 @@
             console.log("user:");
             console.log(val_user[i]);
             if((val_sample[i] == 2) && (val_user[i] == 1)){
-                sentence[i].style.background="#85e278";
+                sentence[i].style.background="#85e278"; //green
             }else if((val_sample[i] == 1) && (val_user[i] == 1)){
-                sentence[i].style.background="#219fff";
+                sentence[i].style.background="#219fff"; //blue
             }else if(val_sample[i] != val_user[i]){
-                sentence[i].style.background="#ff876e";
+                sentence[i].style.background="#ff876e"; //red
             }
         }
     }
@@ -255,10 +259,12 @@
         
         /* make the tooltip visible */
         change_tooltip_visibility();
+
+        submitted = true;
     }
 
     document.querySelector('body').addEventListener('click', function(event) {
-      if (has_class(event.target, 'interpunct-commaslot')) {
+      if (has_class(event.target, 'interpunct-commaslot') && (!submitted)) {
           toggle_comma(event.target);
       }
       if (has_class(event.target, 'interpunct-sentence-submit')) {
