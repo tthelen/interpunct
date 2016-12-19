@@ -73,11 +73,11 @@ class Sentence(models.Model):
         """
         selects = self.get_commaselectlist();
         user_select_arr = re.split(r'[,]+', user_select_str)
-        print("set comma thingy")
-        print(selects)
-        print(user_select_arr)
-        for i in range(len(self.get_commalist())):
-            selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
+        for i in range(len(self.get_commalist())-1):
+            if i != len(self.get_commalist()):
+                selects[i] = str(int(selects[i]) + int(user_select_arr[i]))+ ","
+            else:
+                selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
         self.comma_select = "".join(selects)
         self.save()
 
@@ -95,21 +95,16 @@ class Sentence(models.Model):
         """
         l = []  # list of comma types (0=mustnot, 1=may, 2=must)
         for pos in range(len(self.get_words())-1):
-            print("length: %d " % (len(self.get_words())))
-            print("Position : %d" % pos)
             # for each position: get rules
             mode = 0  # mustnot
             rules = self.sentencerule_set.filter(position=pos+1).all()
-            print("Amount of rules %d." % (len(rules)))
             for r in rules:
-                print("Rule.Mode %s." % (r.rule.mode))
                 if r.rule.mode == 1:
                     mode = 1
                 elif r.rule.mode == 2: # must overrides any 'may'
                     mode = 2
                     break
             l.append(mode)
-            print(l)
         return l
 
     def get_commatypelist(self):
@@ -187,7 +182,7 @@ class User(models.Model):
     user_id = models.CharField(max_length = 255)
     total_sentences = models.IntegerField
     # counts wrong answers for a specific comma type
-    comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0, D1:0/0, D2:0/0, D3:0/0, E0:0/0")
+    comma_type_false = models.CharField(max_length=400,default="KK:0, A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0, D1:0/0, D2:0/0, D3:0/0, E0:0/0")
     def get_dictionary(self):
         """
         Dictionary with comma types as keys and a value tuple of erros and total amount of trials
@@ -220,20 +215,19 @@ class User(models.Model):
 
         dict = self.get_dictionary()
         for i in range(len(solution_array)-1, -1, -1):
-            # Optional Comma Type = $
-            if solution_array[i] == "1":
+            if solution_array[i] == [] and user_array[i] == 1:
+                dict["KK"] += 1
+            elif solution_array[i][0] != []:
                 a, b = re.split(r'/', dict[solution_array[i]])
-                dict[solution_array[i]] = a + "/" + str(int(b) + 1)
-                print("optional1" + solution_array[i])
-            # one comma too less (add one to false, add one to total)
-            elif (solution_array[i] != "0") and (user_array[i] == "0"):
-                a,b = re.split(r'/',dict[solution_array[i]])
-                dict[solution_array[i]]= str(int(a)+1)+"/"+str(int(b)+1)
-                print("optional2" + solution_array[i])
-            # correct comma (add one to total)
-            elif(solution_array[i] != "0") and (user_array == 1):
-                a, b = re.split(r'/', dict[solution_array[i]])
-                dict[solution_array[i]] = a + "/" + str(int(b) + 1)
-                print("optional3" + solution_array[i])
-
+                rule= Rule.objects.get(code=solution_array[i][0])
+                if rule.mode == 0 and user_array[i] != 0:                                   #must not, false
+                    dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
+                if rule.mode == 0 and user_array[i] == 0:                                   #must not, correct
+                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                if rule.mode == 1:                                                          #may, always correct
+                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                if rule.mode == 2 and user_array[i] == 1:                                   #must, correct
+                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                if rule.mode == 2 and user_array[i] == 0:                                   #must, false
+                    dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
         self.save_dictionary(dict)

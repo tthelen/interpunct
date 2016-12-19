@@ -213,8 +213,8 @@ var submitted = false;
             console.log(val_user[i]);
             if((val_sample[i] == 2) && (val_user[i] == 1)){
                 sentence[i].style.background="#85e278"; //green
-            }else if((val_sample[i] == 1) && (val_user[i] == 1)){
-                sentence[i].style.background="#219fff"; //blue
+            }else if((val_sample[i] == 1)){
+                sentence[i].style.background = "#219fff"; //blue
             }else if(val_sample[i] != val_user[i]){
                 sentence[i].style.background="#ff876e"; //red
             }
