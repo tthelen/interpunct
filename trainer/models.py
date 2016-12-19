@@ -211,24 +211,29 @@ class User(models.Model):
         self.comma_type_false = new_dict_str[:-1]
         self.save()
 
-    def count_false_types(self, user_bitfield, comma_array):
+    def count_false_types(self, user_array, solution_array):
         """
-        adds counter for false comma settings and absolute comma settings w.r.t comma_type
-        :param user_bitfield: bitfield of the user
-        :param comma_array:
-        :return:
+        :param user_array: contains submitted array of bools
+        :param solution_array: contains solution array with 0,1,2
+        :return: ratio
         """
+
         dict = self.get_dictionary()
-        for i in range(len(comma_array)-1, -1, -1):
+        for i in range(len(solution_array)-1, -1, -1):
             # Optional Comma Type = $
-            if ((comma_array[i][:1] == "$")):
-                dict[comma_array[i]] = a + "/" + str(int(b) + 1)
-            # one comma too less (add false, add total)
-            elif ((comma_array[i] != "0") and (user_bitfield - 2**i < 0)):
-                [a,b] = re.split(r'/',dict[comma_array[i]])
-                dict[comma_array[i]]= str(int(a)+1)+"/"+str(int(b)+1)
-            # correct comma (add to total)
-            elif((comma_array[i] != "0") and (user_bitfield - 2**i >= 0)):
-                [a, b] = re.split(r'/', dict[comma_array[i]])
-                dict[comma_array[i]] = a + "/" + str(int(b) + 1)
+            if solution_array[i] == "1":
+                a, b = re.split(r'/', dict[solution_array[i]])
+                dict[solution_array[i]] = a + "/" + str(int(b) + 1)
+                print("optional1" + solution_array[i])
+            # one comma too less (add one to false, add one to total)
+            elif (solution_array[i] != "0") and (user_array[i] == "0"):
+                a,b = re.split(r'/',dict[solution_array[i]])
+                dict[solution_array[i]]= str(int(a)+1)+"/"+str(int(b)+1)
+                print("optional2" + solution_array[i])
+            # correct comma (add one to total)
+            elif(solution_array[i] != "0") and (user_array == 1):
+                a, b = re.split(r'/', dict[solution_array[i]])
+                dict[solution_array[i]] = a + "/" + str(int(b) + 1)
+                print("optional3" + solution_array[i])
+
         self.save_dictionary(dict)

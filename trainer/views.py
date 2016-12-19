@@ -62,5 +62,5 @@ def submit(request):
     sentence.update_submits()
     user = User.objects.get(user_id="testuser")
     comma_types = sentence.get_commatypelist()
-    #user.count_false_types(int(user_solution), comma_types)
+    user.count_false_types(user_solution, comma_types)
     return JsonResponse({'submit': 'ok'})
