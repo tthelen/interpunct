@@ -73,9 +73,11 @@ class Sentence(models.Model):
         """
         selects = self.get_commaselectlist();
         user_select_arr = re.split(r'[,]+', user_select_str)
+        print("set comma thingy")
+        print(selects)
+        print(user_select_arr)
         for i in range(len(self.get_commalist())):
             selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
-
         self.comma_select = "".join(selects)
         self.save()
 

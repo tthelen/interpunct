@@ -15,6 +15,14 @@ class Command(BaseCommand):
                 print("Sentence: {}, Words: {}, Rules: {}".format(sentence, words, rules))
                 s = Sentence(text=sentence)
                 s.save()
+                comma_select_str = ""
+                for i in range(len(s.get_commalist())):
+                    if i!=len(s.get_commalist())-1:
+                        comma_select_str += "0,"
+                    else:
+                        comma_select_str += "0"
+                s.comma_select = comma_select_str
+                s.save()
                 for (p,r) in rules:
                     rs = SentenceRule(rule=r, sentence=s, position=p)
                     rs.save()

@@ -236,7 +236,7 @@ var submitted = false;
         var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
 
         var val= new Array();
-        for (var i=0; i<sentence.length-1; i++) {
+        for (var i=0; i<sentence.length; i++) {
             if (sentence[i].innerHTML.indexOf(',')>=0) {
                 val.push(1);
             }
