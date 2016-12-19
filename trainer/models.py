@@ -217,8 +217,8 @@ class User(models.Model):
         for i in range(len(solution_array)-1, -1, -1):
             if solution_array[i] == [] and user_array[i] == 1:
                 dict["KK"] += 1
-            elif solution_array[i][0] != []:
-                a, b = re.split(r'/', dict[solution_array[i]])
+            elif solution_array[i] != []:
+                a, b = re.split(r'/', dict[solution_array[i][0]])
                 rule= Rule.objects.get(code=solution_array[i][0])
                 if rule.mode == 0 and user_array[i] != 0:                                   #must not, false
                     dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
