@@ -8,11 +8,11 @@
         font-family:Arial,sans-serif;
         text-align: center;
         vertical-align:middle;
-        margin-top: 100px;
+        margin-top: 60px;
     }
-    /*.interpunct-sentence{
-        margin-top:5%
-    }*/
+    .interpunct-sentence{
+        margin-top: 40px;
+    }
     /* ----- rounding corners -----*/
     .interpunct-commaslot{
         border-radius: 50px;
@@ -138,6 +138,7 @@
 </style>
 </head>
 <body onload="toggle_comma()">
+<h2>Übung: Komma erklären</h2>
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     {% for w in words %}
         {% for c,s in collection %}

@@ -46,7 +46,11 @@ def task(request):
     print(collection)
 
     user_id = "testuser"
-    return render(request, 'trainer/task.html', locals())
+    index = random.randint(0, 1)
+    if index == 0:
+        return render(request, 'trainer/task.html', locals())
+    else:
+        return render(request, 'trainer/task2.html', locals())
 
 def submit(request):
     """
