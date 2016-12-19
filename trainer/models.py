@@ -94,7 +94,7 @@ class Sentence(models.Model):
         :return: List of boolean values indicating comma/no comma at that position.
         """
         l = []  # list of comma types (0=mustnot, 1=may, 2=must)
-        for pos in range(len(self.get_words())):
+        for pos in range(len(self.get_words())-1):
             print("length: %d " % (len(self.get_words())))
             print("Position : %d" % pos)
             # for each position: get rules

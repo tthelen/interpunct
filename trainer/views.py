@@ -24,6 +24,7 @@ def task(request):
     words = sentence.get_words()
     # print(words)
     comma = sentence.get_commalist()
+    print(comma)
     comma_types = sentence.get_commatypelist()
     # print(comma_types)
 
@@ -31,7 +32,7 @@ def task(request):
     # comma_types = sentence.get_commatypelist()
 
     # apply a 'dirty trick' to make it the same length as the words list
-    comma_types.append('0')
+    #comma_types.append('0')
     #comma_select = sentence.get_commaselectlist()
     #comma_select.append('0')
     submits = sentence.total_submits
