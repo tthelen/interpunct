@@ -70,4 +70,5 @@ def submit(request):
     user = User.objects.get(user_id="testuser")
     comma_types = sentence.get_commatypelist()
     user.count_false_types(user_solution, comma_types)
+    user.update_rank()
     return JsonResponse({'submit': 'ok'})
