@@ -180,10 +180,36 @@ class Solution(models.Model):
     solution = models.BigIntegerField()
 
 class User(models.Model):
+
+    RANKS = (
+        (0, 'Kommachaot'),
+        (1, 'Kommakönner'),
+        (2, 'Kommakönig'),
+    )
     user_id = models.CharField(max_length = 255)
+    user_rank = models.IntegerField(choices=RANKS, default = 0)
     total_sentences = models.IntegerField
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="KK:0, A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0, D1:0/0, D2:0/0, D3:0/0, E0:0/0")
+
+    def update_rank(self):
+        rank_counter = 0
+        dict = self.get_dictionary()
+        for key in dict:
+            if key != "KK":
+                a, b = re.split(r'/', dict[key])
+                points = int(b)-int(a)
+                if points >= 25:
+                    rank_counter +=2
+                elif  points >= 10:
+                    rank_counter +=1
+        if rank_counter == len(dict)-1:
+            self.user_rank = 1
+            self.save()
+        if rank_counter == 2*(len(dict)-1):
+            self.user_rank = 2
+            self.save()
+
     def get_dictionary(self):
         """
         Dictionary with comma types as keys and a value tuple of erros and total amount of trials
@@ -229,7 +255,7 @@ class User(models.Model):
                     dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
                 if rule.mode == 0 and user_array[i] == "0":                                   #must not, correct
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                if rule.mode == 1:                                                          #may, always correct
+                if rule.mode == 1:                                                            #may, always correct
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
                 if rule.mode == 2 and user_array[i] == "1":                                   #must, correct
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
