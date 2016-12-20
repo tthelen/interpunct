@@ -21,31 +21,34 @@ def task(request):
     # pack all words of this sentence in a list
     words = sentence.get_words()
     comma = sentence.get_commalist()
+
     # pack all comma types of this sentence in a list
     comma_types = sentence.get_commatypelist()
-
-    # apply a 'dirty trick' to make it the same length as the words list
-    #comma_types.append('0')
-    #comma_select = sentence.get_commaselectlist()
-
-    #comma_select.append('0')
+    comma_select = sentence.get_commaselectlist()
+    # dirty trick to make the comma_select the same length as comma_types
+    comma_select.append('0')
     submits = sentence.total_submits
 
+    # printing out user results
+    user_id = "testuser"
     user = User.objects.get(user_id="testuser")
     dictionary = user.comma_type_false
 
-
+    # generating radio buttons content
+    explanations = []
+    # generating tooltip content
     collection = []
     for i in range(len(comma_types)):
+        if len(comma_types[i]) != 0:
+            explanations.append(sentence.get_explanations(comma_types[i][0]))
         if submits:
             collection.append((comma_types[i], 0))
 
-            #collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
+            collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
         else:
             collection.append((comma_types[i], 0))
-    print(collection)
 
-    user_id = "testuser"
+    # task randomizer
     index = random.randint(0, 1)
     if index == 0:
         return render(request, 'trainer/task.html', locals())

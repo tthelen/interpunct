@@ -137,7 +137,7 @@
 
 </style>
 </head>
-<body onload="toggle_comma()">
+<body>
 <h2>Übung: Komma erklären</h2>
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     {% for w in words %}
@@ -154,14 +154,19 @@
         {% endfor %}
     {% endfor %}
     <br><br><br><br>
-    <div class = "explanations"></div>
+    <div class = "explanations">
+    </div>
     <p id="feedback-{{ sentence.id }}">
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
     </p>
 </div>
 
 <script>
-var submitted = false;
+    document.addEventListener("DOMContentLoaded",function(){
+        toggle_comma();
+    });
+
+    var submitted = false;
     /* Check if a DOM element has a given CSS class. */
     function has_class(element, cls) {
         return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
@@ -175,26 +180,29 @@ var submitted = false;
         explanations = document.getElementsByClassName("explanations");
         var comma_count = 1;
         console.log(commas);
-        //explanations = {{ options_slugs }}
+        explanations = {{ explanations }};
         for(var i=0;i<commas.length;i++){
             if(commas[i]==1 || commas[i]==2){
-                console.log(commas.length);
-                console.log(commas[i]);
                 slots[i].innerHTML=",";
                 slots[i].setAttribute("data-tooltip",comma_count);
                 comma_count++;
                 var form = document.createElement("form");
-                var select = document.createElement("select");
                 for(var j=0;j<4;j++){
-                    var option = document.createElement("option");
-                    option.setAttribute("type","radio");
-                    option.setAttribute("name",j.toString());
+                    var input = document.createElement("input");
+                    input.setAttribute("type","radio");
+                    input.setAttribute("name",j.toString());
+                    input.setAttribute("value",j.toString());
                     //option.innerHTML = explanations[comma_count][i];
-                    option.innerHTML = "explanations" + j.toString();
-                    select.appendChild(option);
+                    //input.innerHTML = " explanations" + j.toString();
+                    form.appendChild(input);
+                    var label = document.createElement("label");
+                    label.setAttribute("for",j.toString());
+                    //label.innerHTML = " explanations" + j.toString();
+                    console.log(typeof(explanations[comma_count][j]))
+                    label.innerHTML = explanations[comma_count][j];
+                    form.appendChild(label);
+                    form.appendChild(document.createElement("br"));
                 }
-                console.log(select);
-                form.appendChild(select);
                 console.log(form);
                 explanations[0].appendChild(form);
             }

@@ -136,20 +136,21 @@ class Sentence(models.Model):
                 val += 2 ** i
         return val
 
-    def get_options(self, commatype):
+    def get_explanations(self, commatype):
         """
         :param commatype:
         :param difficulty: int 0,1,2,3 implement later
         :return:
         """
         index = random.randint(0, 3)
+        # initialize solution
         solution = [0,0,0,0]
         count = Rule.objects.all().count()
         for i in range(4):
             if i != index:
-                solution[i] = Rule.objects.all()[int(random.random() * count)]
+                solution[i] = Rule.objects.all()[int(random.random() * count)].description
             else:
-                solution[i] = commatype
+                solution[i] = Rule.objects.get(code=commatype).description
         return solution
 
 

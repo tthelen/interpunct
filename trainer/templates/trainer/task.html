@@ -207,10 +207,6 @@ var submitted = false;
         var id = element.dataset.sentence;
         var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
         for(var i=0;i<val_sample.length;i++){
-            console.log("sample:");
-            console.log(val_sample[i]);
-            console.log("user:");
-            console.log(val_user[i]);
             if((val_sample[i] == 2) && (val_user[i] == 1)){
                 sentence[i].style.background="#85e278"; //green
             }else if((val_sample[i] == 1)){
