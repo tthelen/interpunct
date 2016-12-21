@@ -73,9 +73,9 @@ class Sentence(models.Model):
         """
         selects = self.get_commaselectlist();
         user_select_arr = re.split(r'[,]+', user_select_str)
-        for i in range(len(self.get_commalist())-1):
-            if i != len(self.get_commalist()):
-                selects[i] = str(int(selects[i]) + int(user_select_arr[i]))+ ","
+        for i in range(len(self.get_commalist())):
+            if i != len(self.get_commalist())-1:
+                selects[i] = str(int(selects[i]) + int(user_select_arr[i])) + ","
             else:
                 selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
         self.comma_select = "".join(selects)
@@ -114,7 +114,7 @@ class Sentence(models.Model):
         """
         l = []  # list of comma types (0=mustnot, 1=may, 2=must)
 
-        for pos in range(len(self.get_words())):
+        for pos in range(len(self.get_words())-1):
             # print("Position is %d" % pos)
             # for each position: get rules
             rules = self.rules.filter(sentencerule__position=pos+1).all()
@@ -144,13 +144,13 @@ class Sentence(models.Model):
         """
         index = random.randint(0, 3)
         # initialize solution
-        solution = [0,0,0,0]
+        solution = []
         count = Rule.objects.all().count()
         for i in range(4):
             if i != index:
-                solution[i] = Rule.objects.all()[int(random.random() * count)].description
+                solution.append(Rule.objects.all()[int(random.random() * count)].description)
             else:
-                solution[i] = Rule.objects.get(code=commatype).description
+                solution.append(Rule.objects.get(code=commatype).description)
         return solution
 
 
@@ -186,8 +186,9 @@ class User(models.Model):
         (1, 'Kommakönner'),
         (2, 'Kommakönig'),
     )
+
     user_id = models.CharField(max_length = 255)
-    user_rank = models.IntegerField(choices=RANKS, default = 0)
+    user_rank = models.IntegerField(choices=RANKS,default=0)
     total_sentences = models.IntegerField
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="KK:0, A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0, D1:0/0, D2:0/0, D3:0/0, E0:0/0")

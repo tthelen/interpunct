@@ -27,27 +27,33 @@ def task(request):
     comma_select = sentence.get_commaselectlist()
     # dirty trick to make the comma_select the same length as comma_types
     comma_select.append('0')
+    comma_types.append([])
     submits = sentence.total_submits
 
     # printing out user results
     user_id = "testuser"
     user = User.objects.get(user_id="testuser")
     dictionary = user.comma_type_false
-
+    rank = user.user_rank
+    # print(user.RANKS.index(rank))
     # generating radio buttons content
     explanations = []
-    # generating tooltip content
-    collection = []
     for i in range(len(comma_types)):
         if len(comma_types[i]) != 0:
             explanations.append(sentence.get_explanations(comma_types[i][0]))
-        if submits:
-            collection.append((comma_types[i], 0))
-
+    # generating tooltip content
+    collection = []
+    for i in range(len(comma_types)):
+        if submits!=0:
+            #collection.append((comma_types[i], 0))
             collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
         else:
             collection.append((comma_types[i], 0))
-
+    print(len(words))
+    print(len(comma_select))
+    print(len(comma_types))
+    print(len(collection))
+    print(len(comma))
     # task randomizer
     index = random.randint(0, 1)
     if index == 0:
