@@ -48,7 +48,6 @@ class Command(BaseCommand):
         import shlex
         lexer = shlex.shlex(shortcut_string)
         lexer.wordchars += '.äöüÜÖÄß!'  # Make . in Rule code (B4.1 etc.) parseable
-        print("Wordchars: {}".format(lexer.wordchars))
 
         rules = []
         words = []
