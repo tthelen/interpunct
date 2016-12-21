@@ -38,9 +38,12 @@ def task(request):
     # print(user.RANKS.index(rank))
     # generating radio buttons content
     explanations = []
+    index_arr = []
     for i in range(len(comma_types)):
         if len(comma_types[i]) != 0:
-            explanations.append(sentence.get_explanations(comma_types[i][0]))
+            exp, index = sentence.get_explanations(comma_types[i][0])
+            explanations.append(exp)
+            index_arr.append(index)
     # generating tooltip content
     collection = []
     for i in range(len(comma_types)):

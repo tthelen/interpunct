@@ -151,7 +151,7 @@ class Sentence(models.Model):
                 solution.append(Rule.objects.all()[int(random.random() * count)].description)
             else:
                 solution.append(Rule.objects.get(code=commatype).description)
-        return solution
+        return solution,index
 
 
 class SentenceRule(models.Model):

@@ -63,7 +63,7 @@
         content: attr(data-tooltip);
         /*display: none;*/
         position: absolute;
-        background: #97d7ff;
+        background: #daff81;
         color: #000;
         padding: 4px 8px;
         font-size: 12px;
@@ -71,7 +71,7 @@
         min-width: 10px;
         text-align: center;
         border-radius: 10px;
-        border: 2px solid #000;
+        border: 2px solid #ffc855;
     }
     /* Dynamic horizontal centering */
     [data-tooltip-position="top"]:before,
@@ -115,7 +115,7 @@
     [data-tooltip-position="top"]:after {
         bottom: 100%;
         border-width: 6px 6px 0;
-        border-top-color: #000;
+        border-top-color: #ffc855;
     }
     [data-tooltip-position="right"]:after {
         left: 100%;
@@ -132,16 +132,16 @@
         border-width: 6px 0 6px 6px;
         border-left-color: #000;
     }
-    .explanations form{
+    .exp-form{
         margin-top: 10px;
         margin-left: 25%;
         display: block;
-        background: #97d7ff;
+        background: #daff81;
         width: 50%;
-        text-align: justify;
+        text-align: left;
         border-radius: 10px;
-        border: 2px solid #000;
-        padding: 5px;
+        border: 2px solid #ffc855;
+        padding: 8px;
     }
 
 
@@ -192,12 +192,10 @@
         }else if (rank == 2) {
             p.innerHTML = 'Kommakönig';
         }
-        console.log(typeof(parent[0]));
         parent[0].appendChild(p);
     }
     /* Switch the content of a comma slot from blank to comma / comma to blank */
     function toggle_comma() {
-        console.log("toggle_comma()");
         var slots = document.getElementsByClassName("interpunct-commaslot");
         var commas = {{ comma }};
         var explanations_div = document.getElementsByClassName("explanations");
@@ -211,6 +209,7 @@
                 p.innerHTML = comma_count.toString();
                 explanations_div[0].appendChild(p);
                 var form = document.createElement("form");
+                form.className = "exp-form";
                 for(var j=0;j<4;j++){
                     var input = document.createElement("input");
                     input.setAttribute("type","checkbox");
@@ -230,6 +229,25 @@
         }
     }
 
+    function validate_form(){
+        var index = {{ index_arr }};
+        var forms = document.getElementsByClassName("exp-form");
+        for(var i = 0; i<forms.length; i++){
+            var checkboxes = forms[i].childNodes;
+            console.log(checkboxes);
+            var chckbx_nr = -1;
+            for(var j = 0; j<checkboxes.length; j++){
+                if(checkboxes[j].nodeName == "INPUT"){
+                    chckbx_nr++;
+                    if(checkboxes[j].checked && chckbx_nr==index[i]){
+                        console.log(checkboxes[j+1].nodeName);
+                        checkboxes[j+1].style.border= "2px dashed #ffc855";
+                        checkboxes[j+1].style.borderRadius= "10px";
+                    }
+                }
+            }
+        }
+    }
 
     function change_tooltip_visibility(){
         var style = document.createElement("style");
@@ -237,7 +255,6 @@
         sheet = style.sheet;
         sheet.insertRule('[data-tooltip]:hover:before,[data-tooltip]:hover:after{visibility: visible; opacity: 1;}', 0);
     }
-
 
     function submit_sentence(element) {
 
@@ -267,9 +284,7 @@
         xmlhttp.open("GET","submit?id="+id+"&sol="+val+"&uid=testuser",true);
         xmlhttp.send();
 
-        /* make the tooltip visible */
-        change_tooltip_visibility();
-
+        validate_form();
         submitted = true;
     }
 
