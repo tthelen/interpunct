@@ -241,7 +241,17 @@
                     chckbx_nr++;
                     if(checkboxes[j].checked && chckbx_nr==index[i]){
                         console.log(checkboxes[j+1].nodeName);
-                        checkboxes[j+1].style.border= "2px dashed #ffc855";
+                        checkboxes[j+1].style.border= "2px dashed green";
+                        checkboxes[j+1].style.borderRadius= "10px";
+                    }
+                    else if(!checkboxes[j].checked && chckbx_nr==index[i]){
+                        console.log(checkboxes[j+1].nodeName);
+                        checkboxes[j+1].style.border= "2px dashed red";
+                        checkboxes[j+1].style.borderRadius= "10px";
+                    }
+                    else if(checkboxes[j].checked && chckbx_nr!=index[i]){
+                        console.log(checkboxes[j+1].nodeName);
+                        checkboxes[j+1].style.border= "2px dashed red";
                         checkboxes[j+1].style.borderRadius= "10px";
                     }
                 }
