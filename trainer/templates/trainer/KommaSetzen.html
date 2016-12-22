@@ -186,26 +186,12 @@
     </p>
 </div>
 {{ dictionary }}
-<div class="rank"></div>
+{{ rank }}
 <script>
 var submitted = false;
     /* Check if a DOM element has a given CSS class. */
     function has_class(element, cls) {
         return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
-    }
-
-    function show_user_rank(){
-        var rank = {{ rank }};
-        var parent = document.getElementsByClassName("rank");
-        var p = document.createElement("p");
-        if(rank == 0){
-            p.innerHTML = 'Kommachaot';
-        }else if(rank == 1){
-            p.innerHTML = 'Kommakönner';
-        }else if (rank == 2) {
-            p.innerHTML = 'Kommakönig';
-        }
-        parent[0].appendChild(p);
     }
 
     /* Switch the content of a comma slot from blank to comma / comma to blank */

@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Sentence, Solution, Rule, User
-
+import re  # regex support
+import os
 
 def task(request):
     """
@@ -34,8 +35,7 @@ def task(request):
     user_id = "testuser"
     user = User.objects.get(user_id="testuser")
     dictionary = user.comma_type_false
-    rank = user.user_rank
-    # print(user.RANKS.index(rank))
+    rank = user.get_user_rank_display()
     # generating radio buttons content
     explanations = []
     index_arr = []
@@ -48,21 +48,31 @@ def task(request):
     collection = []
     for i in range(len(comma_types)):
         if submits!=0:
-            #collection.append((comma_types[i], 0))
             collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
         else:
             collection.append((comma_types[i], 0))
-    print(len(words))
-    print(len(comma_select))
-    print(len(comma_types))
-    print(len(collection))
-    print(len(comma))
     # task randomizer
     index = random.randint(0, 1)
     if index == 0:
-        return render(request, 'trainer/task.html', locals())
+        return render(request, 'trainer/KommaSetzen.html', locals())
     else:
-        return render(request, 'trainer/task2.html', locals())
+        return render(request, 'trainer/KommaErklärenI.html', locals())
+
+def profile(request):
+    user_id = "testuser"
+    user = User.objects.get(user_id="testuser")
+    dictionary = user.get_dictionary()
+    for i in dictionary:
+        if i != 'KK':
+            a, b = re.split(r'/', dictionary[i])
+            if b != '0':
+                dictionary[i] = str(int((int(a)/int(b))*100))
+    rank = user.get_user_rank_display()
+    tasks = []
+    for roots, directs, files in os.walk("trainer/templates/trainer"):
+        for file in files:
+            tasks.append(file[:-5]);
+    return render(request, 'user_profile.html', locals())
 
 def submit(request):
     """
