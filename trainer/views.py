@@ -43,7 +43,7 @@ def task(request):
     index_arr = []
     for i in range(len(comma_types)):
         if len(comma_types[i]) != 0:
-            exp, index = sentence.get_explanations(comma_types[i][0])
+            exp, index = sentence.get_explanations(comma_types[i][0],user)
             explanations.append(exp)
             index_arr.append(index)
     # generating tooltip content
@@ -95,5 +95,5 @@ def submit(request):
     user.count_false_types_task1(user_solution, comma_types)
     user.update_rank()
     chckbx_sol = request.GET['chckbx_sol']
-    print(chckbx_sol)
+    user.count_false_types_task2(chckbx_sol, comma_types)
     return JsonResponse({'submit': 'ok'})
