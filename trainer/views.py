@@ -66,7 +66,9 @@ def profile(request):
         if i != 'KK':
             a, b = re.split(r'/', dictionary[i])
             if b != '0':
-                dictionary[i] = str(int((int(a)/int(b))*100))
+                dictionary[i] = str(100-int((int(a)/int(b))*100))
+            else:
+                dictionary[i] = str(0)
     rank = user.get_user_rank_display()
     tasks = []
     for roots, directs, files in os.walk("trainer/templates/trainer"):
