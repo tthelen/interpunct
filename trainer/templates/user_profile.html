@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <style>
+        body{
+            font-family:Arial,sans-serif;
+        }
+        .comma-types {
+            width: 240px;
+            float:left;
+        }
+        .task-types {
+            float:right;
+        }
+</style>
+</head>
+<body>
+{{ rank }}
+<aside class="task-types">
+{% for t in tasks %}
+    <a href=#>{{ t }}</a>
+    <br>
+{% endfor %}
+</aside>
+<aside class="comma-types">
+{% for c,s in dictionary.items %}
+    {{ c }} : {{ s }} %
+    <br>
+{% endfor %}
+</aside>
+<script>
+
+    /* Check if a DOM element has a given CSS class. */
+    function has_class(element, cls) {
+        return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    }
+
+</script>
+</body>
+</html>
