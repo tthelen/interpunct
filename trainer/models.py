@@ -234,7 +234,7 @@ class User(models.Model):
         self.comma_type_false = new_dict_str[:-1]
         self.save()
 
-    def count_false_types(self, user_array_str, solution_array):
+    def count_false_types_task1(self, user_array_str, solution_array):
         """
         :param user_array: contains submitted array of bools
         :param solution_array: contains solution array with 0,1,2
@@ -244,8 +244,6 @@ class User(models.Model):
         dict = self.get_dictionary()
 
         user_array = re.split(r'[ ,]+', user_array_str)
-        print(solution_array)
-        print(user_array)
         for i in range(len(solution_array)-2):
             if len(solution_array[i]) == 0 and int(user_array[i]) == 1:
                 dict["KK"] = str(int(dict["KK"]) + 1)
@@ -261,5 +259,25 @@ class User(models.Model):
                 if rule.mode == 2 and user_array[i] == "1":                                   #must, correct
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
                 if rule.mode == 2 and user_array[i] == "0":                                   #must, false
+                    dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
+        self.save_dictionary(dict)
+
+
+    def count_false_types_task2(self, user_array_str, solution_array):
+        """
+        :param user_array: contains submitted array of bools
+        :param solution_array: contains solution array with 0,1,2
+        :return: ratio
+        """
+
+        dict = self.get_dictionary()
+        user_array = re.split(r'[ ,]+', user_array_str)
+        for i in range(len(solution_array) - 2):
+            if len(solution_array[i]) != 0:
+                a, b = re.split(r'/', dict[solution_array[i][0]])
+                rule = Rule.objects.get(code=solution_array[i][0])
+                if user_array[i] == "1":
+                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                elif user_array[i] == "0":
                     dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
         self.save_dictionary(dict)

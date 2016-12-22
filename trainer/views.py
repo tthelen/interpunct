@@ -78,6 +78,8 @@ def submit(request):
     sentence.update_submits()
     user = User.objects.get(user_id="testuser")
     comma_types = sentence.get_commatypelist()
-    user.count_false_types(user_solution, comma_types)
+    user.count_false_types_task1(user_solution, comma_types)
     user.update_rank()
+    chckbx_sol = request.GET['chckbx_sol']
+    print(chckbx_sol)
     return JsonResponse({'submit': 'ok'})

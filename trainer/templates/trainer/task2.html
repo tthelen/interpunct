@@ -5,7 +5,7 @@
     <title>Task</title>
     <style>
     body {
-        font-family:Arial,sans-serif;
+        font-family: Arial,sans-serif;
         text-align: center;
         margin-top: 60px;
     }
@@ -63,7 +63,7 @@
         content: attr(data-tooltip);
         /*display: none;*/
         position: absolute;
-        background: #daff81;
+        background: rgba(151, 215, 255, 0.57);
         color: #000;
         padding: 4px 8px;
         font-size: 12px;
@@ -71,7 +71,7 @@
         min-width: 10px;
         text-align: center;
         border-radius: 10px;
-        border: 2px solid #ffc855;
+        border: 2px solid #38aeff;
     }
     /* Dynamic horizontal centering */
     [data-tooltip-position="top"]:before,
@@ -115,7 +115,7 @@
     [data-tooltip-position="top"]:after {
         bottom: 100%;
         border-width: 6px 6px 0;
-        border-top-color: #ffc855;
+        border-top-color: #38aeff;
     }
     [data-tooltip-position="right"]:after {
         left: 100%;
@@ -133,14 +133,15 @@
         border-left-color: #000;
     }
     .exp-form{
+        color: #000;
         margin-top: 10px;
         margin-left: 25%;
         display: block;
-        background: #daff81;
+        background: rgba(151, 215, 255, 0.57);
         width: 50%;
         text-align: left;
         border-radius: 10px;
-        border: 2px solid #ffc855;
+        border: 2px solid #38aeff;
         padding: 8px;
     }
 
@@ -163,12 +164,14 @@
 
         {% endfor %}
     {% endfor %}
+    <p>Choose one</p>
     <div class = "explanations"></div>
     <p id="feedback-{{ sentence.id }}">
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
     </p>
 </div>
 <div class="rank"></div>
+{{ dictionary }}
 <script>
     document.addEventListener("DOMContentLoaded",function(){
         show_user_rank();
@@ -212,6 +215,7 @@
                 form.className = "exp-form";
                 for(var j=0;j<4;j++){
                     var input = document.createElement("input");
+                    input.className = "exp-input";
                     input.setAttribute("type","checkbox");
                     input.setAttribute("name",j.toString());
                     input.setAttribute("value",j.toString());
@@ -228,35 +232,44 @@
             }
         }
     }
-
+    function one_select_atatime(element){
+        var parents = element.parentNode;
+        var checkboxes = parents.childNodes;
+        for(var j = 0; j<checkboxes.length; j++) {
+            if (checkboxes[j].nodeName == "INPUT" && checkboxes[j].checked && checkboxes[j]!=element) {
+                checkboxes[j].checked = false;
+            }
+        }
+    }
     function validate_form(){
         var index = {{ index_arr }};
+        var user_solution = [];
         var forms = document.getElementsByClassName("exp-form");
         for(var i = 0; i<forms.length; i++){
             var checkboxes = forms[i].childNodes;
-            console.log(checkboxes);
             var chckbx_nr = -1;
             for(var j = 0; j<checkboxes.length; j++){
                 if(checkboxes[j].nodeName == "INPUT"){
                     chckbx_nr++;
                     if(checkboxes[j].checked && chckbx_nr==index[i]){
-                        console.log(checkboxes[j+1].nodeName);
                         checkboxes[j+1].style.border= "2px dashed green";
                         checkboxes[j+1].style.borderRadius= "10px";
+                        user_solution.push(1);
                     }
                     else if(!checkboxes[j].checked && chckbx_nr==index[i]){
-                        console.log(checkboxes[j+1].nodeName);
                         checkboxes[j+1].style.border= "2px dashed red";
                         checkboxes[j+1].style.borderRadius= "10px";
+                        user_solution.push(0);
                     }
                     else if(checkboxes[j].checked && chckbx_nr!=index[i]){
-                        console.log(checkboxes[j+1].nodeName);
                         checkboxes[j+1].style.border= "2px dashed red";
                         checkboxes[j+1].style.borderRadius= "10px";
                     }
                 }
             }
         }
+        console.log(user_solution);
+        return user_solution;
     }
 
     function change_tooltip_visibility(){
@@ -281,7 +294,7 @@
                 val.push(0);
             }
         }
-
+        var chckbx_sol = validate_form();
         /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
         var xmlhttp=new XMLHttpRequest();
         xmlhttp.onreadystatechange=function()
@@ -291,16 +304,18 @@
             }
         }
 
-        xmlhttp.open("GET","submit?id="+id+"&sol="+val+"&uid=testuser",true);
+        xmlhttp.open("GET","submit?id="+id+"&sol="+val+"&uid=testuser"+"&chckbx_sol="+chckbx_sol,true);
         xmlhttp.send();
 
-        validate_form();
         submitted = true;
     }
 
     document.querySelector('body').addEventListener('click', function(event) {
       if (has_class(event.target, 'interpunct-sentence-submit')) {
           submit_sentence(event.target);
+      }
+      if (has_class(event.target, 'exp-input')) {
+          one_select_atatime(event.target);
       }
     });
 </script>
