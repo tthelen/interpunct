@@ -64,13 +64,15 @@ def profile(request):
     user_id = "testuser"
     user = User.objects.get(user_id="testuser")
     dictionary = user.get_dictionary()
+    new_dictionary = {}
     for i in dictionary:
         if i != 'KK':
             a, b = re.split(r'/', dictionary[i])
+            rule_desc = Rule.objects.get(code=i).slug
             if b != '0':
-                dictionary[i] = str(100-int((int(a)/int(b))*100))
+                new_dictionary[rule_desc] = str(100-int((int(a)/int(b))*100))
             else:
-                dictionary[i] = str(0)
+                new_dictionary[rule_desc] = str(0)
     rank = user.get_user_rank_display()
     tasks = []
     for roots, directs, files in os.walk("trainer/templates/trainer"):
@@ -78,7 +80,7 @@ def profile(request):
             tasks.append(file[:-5]);
     return render(request, 'user_profile.html', locals())
 
-def submit(request):
+def submit_task1(request):
     """
     Receives an AJAX GET request containing a solution bitfield for a sentence.
     Saves solution and user_id to database.
@@ -91,9 +93,22 @@ def submit(request):
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
     user = User.objects.get(user_id="testuser")
-    comma_types = sentence.get_commatypelist()
-    user.count_false_types_task1(user_solution, comma_types)
+    user.count_false_types_task1(user_solution, sentence.get_commatypelist())
+    user.update_rank()
+    return JsonResponse({'submit': 'ok'})
+
+def submit_task2(request):
+    """
+    Receives an AJAX GET request containing a solution bitfield for a sentence.
+    Saves solution and user_id to database.
+
+    :param request: Django request
+    :return: nothing
+    """
+    sentence = Sentence.objects.get(id=request.GET['id'])
+    sentence.update_submits()
+    user = User.objects.get(user_id="testuser")
     user.update_rank()
     chckbx_sol = request.GET['chckbx_sol']
-    user.count_false_types_task2(chckbx_sol, comma_types)
+    user.count_false_types_task2(chckbx_sol, sentence.get_commatypelist())
     return JsonResponse({'submit': 'ok'})

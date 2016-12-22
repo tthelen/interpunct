@@ -15,17 +15,20 @@
             float:right;
         }
         .rank{
-            margin-left: 250px;
+            margin-left: 320px;
             position: absolute;
         }
         .progress-bars{
             display: block;
-            width: 200px;
+            width: 300px;
             border-radius: 10px;
             background: rgba(0, 0, 0, 0.13);
+            height: 15px;
         }
         .description{
+            display: block;
             width: inherit;
+            height: 100%;
             border-radius: 10px;
         }
             /* ----- Tooltip ----- */
@@ -148,7 +151,7 @@
 {% endfor %}
 </aside>
 <aside class="comma-types">
-    {% for c,s in dictionary.items %}
+    {% for c,s in new_dictionary.items %}
     <div class="progress-bars" data-tooltip="{{ s }}%" data-tooltip-position="right">
         <div class="description">{{ c }}</div>
     </div>
@@ -168,8 +171,8 @@
         for(var i = 0; i<progress_bars.length; i++){
             var percentage = progress_bars[i].getAttribute("data-tooltip");
             var child = progress_bars[i].childNodes[1];
+            child.style.background = "#A1FF94";
             child.style.width = percentage;
-            child.style.background = "red";
         }
     }
 

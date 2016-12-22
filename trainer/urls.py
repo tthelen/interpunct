@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     # ex: /polls/
     url(r'^$', views.task, name='task'),
-    url(r'^submit$', views.submit),
+    url(r'^submit_task1$', views.submit_task1),
+    url(r'^submit_task2$', views.submit_task2),
     url(r'^profile$', views.profile),
     # ex: /polls/5/
     #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),

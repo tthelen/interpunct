@@ -65,7 +65,6 @@ class Sentence(models.Model):
     Example: Wir essen, Opa.
     """
     text = models.CharField(max_length=2048)
-    #comma_list = models.CommaSeparatedIntegerField(max_length=255, default='0')
     comma_select = models.CommaSeparatedIntegerField(max_length=255, default='0')
     total_submits = models.IntegerField(max_length=25, default='0')  #
     rules = models.ManyToManyField(Rule, through='SentenceRule')
@@ -87,7 +86,7 @@ class Sentence(models.Model):
     def set_comma_select(self, user_select_str):
         """
         Set how much times certain comma was selected
-        :param bitfield: user solution
+        :param boolean_str: string of seleced commas
         """
         selects = self.get_commaselectlist();
         user_select_arr = re.split(r'[,]+', user_select_str)
