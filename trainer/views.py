@@ -15,9 +15,13 @@ def task(request):
     """
 
     import random
+
+    user_id = "testuser"
+    user = User.objects.get(user_id="testuser")
     # get a random sentence
-    count = Sentence.objects.all().count()
-    sentence = Sentence.objects.all()[int(random.random() * count)]
+    #count = Sentence.objects.all().count()
+    #sentence = Sentence.objects.all()[int(random.random() * count)]
+    sentence = user.roulette_wheel_selection()
 
     # pack all words of this sentence in a list
     words = sentence.get_words()
@@ -32,8 +36,6 @@ def task(request):
     submits = sentence.total_submits
 
     # printing out user results
-    user_id = "testuser"
-    user = User.objects.get(user_id="testuser")
     dictionary = user.comma_type_false
     rank = user.get_user_rank_display()
     # generating radio buttons content

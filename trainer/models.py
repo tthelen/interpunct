@@ -180,35 +180,41 @@ class Solution(models.Model):
     solution = models.BigIntegerField()
 
 class User(models.Model):
+    def __str__(self):
+        return self.user_id
 
     RANKS = (
         (0, 'Kommachaot'),
         (1, 'Kommakönner'),
-        (2, 'Kommakönig'),
+        (2, "Kommakommandant"),
+        (3, 'Kommakönig'),
     )
-
     user_id = models.CharField(max_length = 255)
-    user_rank = models.IntegerField(choices=RANKS,default=0)
-    total_sentences = models.IntegerField
+    user_rank = models.IntegerField(choices=RANKS, default = 0)
     # counts wrong answers for a specific comma type
-    comma_type_false = models.CharField(max_length=400,default="KK:0, A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0, D1:0/0, D2:0/0, D3:0/0, E0:0/0")
+    comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
 
     def update_rank(self):
         rank_counter = 0
         dict = self.get_dictionary()
         for key in dict:
-            if key != "KK":
+            if key != "E1":
                 a, b = re.split(r'/', dict[key])
                 points = int(b)-int(a)
+                if points >= 50:
+                    rank_counter +=4
                 if points >= 25:
                     rank_counter +=2
-                elif  points >= 10:
+                if  points >= 10:
                     rank_counter +=1
         if rank_counter == len(dict)-1:
             self.user_rank = 1
             self.save()
         if rank_counter == 2*(len(dict)-1):
             self.user_rank = 2
+            self.save()
+        if rank_counter == 4 * (len(dict) - 1):
+            self.user_rank = 3
             self.save()
 
     def get_dictionary(self):
@@ -234,7 +240,7 @@ class User(models.Model):
         self.comma_type_false = new_dict_str[:-1]
         self.save()
 
-    def count_false_types_task1(self, user_array_str, solution_array):
+    def count_false_types1(self, user_array_str, solution_array):
         """
         :param user_array: contains submitted array of bools
         :param solution_array: contains solution array with 0,1,2
@@ -244,9 +250,11 @@ class User(models.Model):
         dict = self.get_dictionary()
 
         user_array = re.split(r'[ ,]+', user_array_str)
+        current_rule_list = []
         for i in range(len(solution_array)-2):
             if len(solution_array[i]) == 0 and int(user_array[i]) == 1:
-                dict["KK"] = str(int(dict["KK"]) + 1)
+                a, b = re.split(r'/', dict["E1"])
+                dict["E1"] = str(int(a)+1) + "/" + str(int(b) + 1)
             elif len(solution_array[i]) != 0:
                 a, b = re.split(r'/', dict[solution_array[i][0]])
                 rule= Rule.objects.get(code=solution_array[i][0])
@@ -260,12 +268,12 @@ class User(models.Model):
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
                 if rule.mode == 2 and user_array[i] == "0":                                   #must, false
                     dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
+                current_rule_list.append(rule)
         self.save_dictionary(dict)
-
 
     def count_false_types_task2(self, user_array_str, solution_array):
         """
-        :param user_array: contains submitted array of bools
+        :param user_array: contains submitted array of bools (checkbox answers)
         :param solution_array: contains solution array with 0,1,2
         :return: ratio
         """
@@ -281,3 +289,61 @@ class User(models.Model):
                 elif user_array[i] == "0":
                     dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
         self.save_dictionary(dict)
+
+
+    def naive_task_selection(self):
+        """
+        Gets a sentence for a rule with the highest false values, chooses random among those sentences
+        (pick lowest score rule)
+        :return:
+        """
+        sentence_for_rule = []
+        my_dict = self.get_dictionary()
+        my_max = 0
+        lowest_rule = ""
+        for key in my_dict:
+            if key != "E1":
+                a, b = re.split(r'/', my_dict[key])
+                if int(b) == 0:
+                    rule_obj = Rule.objects.filter(code = key)
+                    count = SentenceRule.objects.filter(rule = rule_obj[0])
+                    index = int(random.random() * len(count))
+                    return SentenceRule.objects.filter(rule = rule_obj[0])[index].sentence
+
+                elif int(b) != 0 :
+                    ratio = (int(b) - int(a))
+                    if my_max < ratio:
+                        my_max = ratio
+                        lowest_rule = key
+                    rule_obj = Rule.objects.filter(code=lowest_rule)
+                    sentence_for_rule.append(SentenceRule.objects.filter(rule = rule_obj))
+                    index = int(random.random() * len(sentence_for_rule))
+
+                    return sentence_for_rule[0][index]
+
+
+    def roulette_wheel_selection(self):
+        """
+        gets a new sentence via roulette wheel, chooses random among sentences
+        :return: roulette_list with accumulated rules
+        """
+        dict = self.get_dictionary()
+        roulette_list = []
+        sum = 0
+        for key in dict:
+            a, b = re.split(r'/', dict[key])
+            sum += int(b)
+        for key in dict:
+            if key != "E1":
+                a, b = re.split(r'/', dict[key])
+                if int(b) != 0:
+                    ratio = int((int(a)/sum)*100)
+                else:
+                    ratio = 1
+                for i in range(ratio):
+                    roulette_list.append(key)
+        index = random.randint(0, len(roulette_list)-1)
+        rule_obj = Rule.objects.filter(code=roulette_list[index])
+        sentence_rule_obj_arr = SentenceRule.objects.filter(rule=rule_obj[0])
+        index = int(random.random() * len(sentence_rule_obj_arr))
+        return sentence_rule_obj_arr[index].sentence
