@@ -413,40 +413,38 @@ class User(models.Model):
 
     def count_false_types_task1(self, user_array_str, solution_array):
         """
+        count false types for: AllKommaSetzen
         :param user_array: contains submitted array of bools
         :param solution_array: contains comma types
-        :return: ratio
         """
-
         dict = self.get_dictionary()
-
         user_array = re.split(r'[ ,]+', user_array_str)
-        current_rule_list = []
-        for i in range(len(solution_array)-2):
+        # current_rule_list = []
+        for i in range(len(solution_array) - 2):
             if len(solution_array[i]) == 0 and int(user_array[i]) == 1:
                 a, b = re.split(r'/', dict["E1"])
-                dict["E1"] = str(int(a)+1) + "/" + str(int(b) + 1)
+                dict["E1"] = str(int(a) + 1) + "/" + str(int(b) + 1)
             elif len(solution_array[i]) != 0:
                 a, b = re.split(r'/', dict[solution_array[i][0]])
-                rule= Rule.objects.get(code=solution_array[i][0])
-                if rule.mode == 0 and user_array[i] != "0":                                   #must not, false
-                    dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
-                if rule.mode == 0 and user_array[i] == "0":                                   #must not, correct
+                rule = Rule.objects.get(code=solution_array[i][0])
+                if rule.mode == 0 and user_array[i] != "0":  # must not, false
+                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+                if rule.mode == 0 and user_array[i] == "0":  # must not, correct
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                if rule.mode == 1:                                                            #may, always correct
+                if rule.mode == 1:  # may, always correct
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                if rule.mode == 2 and user_array[i] == "1":                                   #must, correct
+                if rule.mode == 2 and user_array[i] == "1":  # must, correct
                     dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                if rule.mode == 2 and user_array[i] == "0":                                   #must, false
-                    dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
-                current_rule_list.append(rule)
+                if rule.mode == 2 and user_array[i] == "0":  # must, false
+                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+                    # current_rule_list.append(rule)
         self.save_dictionary(dict)
 
     def count_false_types_task2(self, user_array_str, solution_array):
         """
+        count false types for: AllKommaErlären
         :param user_array: contains submitted array of bools (checkbox answers)
         :param solution_array: contains comma types
-        :return: ratio
         """
 
         dict = self.get_dictionary()
@@ -463,6 +461,43 @@ class User(models.Model):
                 comma_amout += 1
         self.save_dictionary(dict)
 
+    def count_false_types_task3(self, user_array_str, solution_array):
+        """
+        count false types for: KannKommaLöschen
+        :param user_array_str:
+        :param solution_array:
+        """
+        dict = self.get_dictionary()
+        user_array = re.split(r'[ ,]+', user_array_str)
+        for i in range(len(solution_array) - 2):
+            a, b = re.split(r'/', dict[solution_array[i][0]])
+            rule = Rule.objects.get(code=solution_array[i][0])
+            if rule.mode == 1 and user_array[i] == "0":
+                dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+            elif rule.mode == 1 and user_array[i] == "1":
+                dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+            elif rule.mode == 2 and user_array[i] == "0":
+                dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+        self.save_dictionary(dict)
+
+    def count_false_types_task4(self, user_array_str, solution_array):
+        """
+        count false types for: KannKommaSetzen
+        :param user_array_str:
+        :param solution_array:
+        """
+        dict = self.get_dictionary()
+        user_array = re.split(r'[ ,]+', user_array_str)
+        for i in range(len(solution_array) - 2):
+                a, b = re.split(r'/', dict[solution_array[i][0]])
+                rule = Rule.objects.get(code=solution_array[i][0])
+                if rule.mode == 1 and user_array[i] == "0":
+                    dict[solution_array[i][0]] = str(int(a)+1)   + "/" + str(int(b) + 1)
+                elif rule.mode == 1 and user_array[i] == "1":
+                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                elif rule.mode == 0 and user_array[i] == "1":
+                    dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
+        self.save_dictionary(dict)
 
     def naive_task_selection(self):
         """
@@ -520,3 +555,45 @@ class User(models.Model):
         sentence_rule_obj_arr = SentenceRule.objects.filter(rule=rule_obj[0])
         index = int(random.random() * len(sentence_rule_obj_arr))
         return sentence_rule_obj_arr[index].sentence
+
+    def may_roulette_wheel_selection(self):
+        """
+        gets a new may sentence via roulette wheel, chooses random among sentences
+        :return: roulette_list with accumulated rules
+        """
+        may_obj = Rule.objects.filter(mode=1)
+        dict = self.get_dictionary()
+        may_roulette_list = []
+        sum = 0
+
+        for rule in range(len(may_obj) - 1):
+            print("dictmayrule: " + dict[str(may_obj[rule])])
+            a, b = re.split(r'/', dict[str(may_obj[rule])])
+            sum += int(b)
+
+        for rule in range(len(may_obj) - 1):
+            a, b = re.split(r'/', dict[str(may_obj[rule])])
+            if int(b) != 0:
+                ratio = int((int(a) / sum) * 100)
+            else:
+                ratio = 1
+            for i in range(ratio):
+                may_roulette_list.append(may_obj[rule])
+
+        rule_index = random.randint(0, len(may_roulette_list) - 1)
+        sent_obj = SentenceRule.objects.filter(rule=may_roulette_list[rule_index])
+        sent_index = random.randint(0, len(sent_obj) - 1)
+        print("sent_obj:")
+        print(sent_obj)
+
+        return sent_obj[sent_index].sentence
+
+    def sentence_selector(self):
+        may_obj = Rule.objects.filter(mode=1)
+        print("May Rules: ")
+        print(may_obj)
+        rule_index = random.randint(0, len(may_obj) - 1)
+        sent_obj = SentenceRule.objects.filter(rule=may_obj[rule_index])
+        print("corresponding Sentence:")
+        sent_index = random.randint(0, len(sent_obj) - 1)
+        return may_obj
