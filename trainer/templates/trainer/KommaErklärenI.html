@@ -144,7 +144,10 @@
         border: 2px solid #38aeff;
         padding: 8px;
     }
-
+    .rank{
+        font-size: 11px;
+        color: rgba(0, 0, 0, 0.52);
+    }
 
 </style>
 </head>
@@ -164,14 +167,13 @@
 
         {% endfor %}
     {% endfor %}
-    <p>Choose one</p>
     <div class = "explanations"></div>
     <p id="feedback-{{ sentence.id }}">
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
     </p>
 </div>
-{{ rank }}
-{{ dictionary }}
+<p class="rank">Dein Rang ist <b>{{ rank }}</b></p>
+
 <script>
     document.addEventListener("DOMContentLoaded",function(){
         toggle_comma();
@@ -208,7 +210,7 @@
                     form.appendChild(input);
                     var label = document.createElement("label");
                     label.setAttribute("for",j.toString());
-                    //label.innerHTML = " explanations" + j.toString();
+                    //label.innerHTML = " explan ations" + j.toString();
                     label.innerHTML = explanations_arr[comma_count-1][j];
                     form.appendChild(label);
                     form.appendChild(document.createElement("br"));
