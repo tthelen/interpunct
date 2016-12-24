@@ -266,15 +266,6 @@
         var id = element.dataset.sentence;
         var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
 
-        var val= new Array();
-        for (var i=0; i<sentence.length; i++) {
-            if (sentence[i].innerHTML.indexOf(',')>=0) {
-                val.push(1);
-            }
-            else{
-                val.push(0);
-            }
-        }
         var chckbx_sol = validate_form();
         /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
         var xmlhttp=new XMLHttpRequest();

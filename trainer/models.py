@@ -462,14 +462,15 @@ class User(models.Model):
         dict = self.get_dictionary()
         user_array = re.split(r'[ ,]+', user_array_str)
         for i in range(len(solution_array) - 2):
-            a, b = re.split(r'/', dict[solution_array[i][0]])
-            rule = Rule.objects.get(code=solution_array[i][0])
-            if rule.mode == 1 and user_array[i] == "0":
-                dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-            elif rule.mode == 1 and user_array[i] == "1":
-                dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
-            elif rule.mode == 2 and user_array[i] == "0":
-                dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+            if len(solution_array[i])!=0:
+                a, b = re.split(r'/', dict[solution_array[i][0]])
+                rule = Rule.objects.get(code=solution_array[i][0])
+                if rule.mode == 1 and user_array[i] == "0":
+                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                elif rule.mode == 1 and user_array[i] == "1":
+                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+                elif rule.mode == 2 and user_array[i] == "0":
+                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
         self.save_dictionary(dict)
 
     def count_false_types_task4(self, user_array_str, solution_array):

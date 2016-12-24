@@ -270,15 +270,13 @@ var submitted = false;
         var explanations_arr = {{ explanations|safe }};
         console.log("add_forms!");
         for(var i=0;i<slots.length;i++){
-            console.log(window.getComputedStyle(slots[i]).getPropertyValue("background"));
             if(commas[i]==1 | commas[i]==2){
                 comma_count++;
             }
             if((slots[i].innerHTML.indexOf(',') > -1)&&(window.getComputedStyle(slots[i]).getPropertyValue("background") != "rgb(255, 135, 110) none repeat scroll 0% 0% / auto padding-box border-box")){
                 console.log("I am green");
                 slots[i].innerHTML=",";
-                var datatooltip = slots[i].getAttribute("data-tooltip");
-                slots[i].setAttribute("data-tooltip", datatooltip + comma_count_selected.toString());
+                slots[i].setAttribute("data-tooltip", comma_count_selected.toString());
                 var p = document.createElement("p");
                 p.innerHTML = comma_count_selected.toString();
                 explanations_div[0].appendChild(p);
@@ -301,6 +299,46 @@ var submitted = false;
                 comma_count_selected++;
             }
         }
+    }
+
+    function validate_form(){
+        var slots = document.getElementsByClassName("interpunct-commaslot");
+        var commas = {{ comma }};
+        var explanations_div = document.getElementsByClassName("explanations");
+        var comma_count = -1;
+        var comma_selected = 0;
+        var index = {{ index_arr }};
+        var user_solution = [];
+        var forms = document.getElementsByClassName("exp-form");
+        for(var i = 0; i<slots.length; i++){
+            if(commas[i]==1 | commas[i]==2){
+                comma_count++;
+            }
+            if((slots[i].innerHTML.indexOf(',') > -1)&&(window.getComputedStyle(slots[i]).getPropertyValue("background") != "rgb(255, 135, 110) none repeat scroll 0% 0% / auto padding-box border-box")) {
+                var checkboxes = forms[comma_selected].childNodes;
+                var chckbx_nr = -1;
+                for (var j = 0; j < checkboxes.length; j++) {
+                    if (checkboxes[j].nodeName == "INPUT") {
+                        chckbx_nr++;
+                        if (checkboxes[j].checked && chckbx_nr == index[comma_count]) {
+                            checkboxes[j + 1].style.border = "2px dashed green";
+                            checkboxes[j + 1].style.borderRadius = "10px";
+                            user_solution.push(1);
+                        }
+                        else if (!checkboxes[j].checked && chckbx_nr == index[comma_count]) {
+                            checkboxes[j + 1].style.border = "2px dashed red";
+                            checkboxes[j + 1].style.borderRadius = "10px";
+                            user_solution.push(0);
+                        }
+                        else if (checkboxes[j].checked && chckbx_nr != index[comma_count]) {
+                            checkboxes[j + 1].style.border = "2px dashed red";
+                            checkboxes[j + 1].style.borderRadius = "10px";
+                        }
+                    }
+                }
+            }
+        }
+        return user_solution;
     }
 
     function check_sentence(element) {
@@ -328,24 +366,20 @@ var submitted = false;
         /* add forms */
         add_forms();
 
+        submitted == true;
+
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.open("GET","submit_task1?id="+id+"&sol="+val+"&uid=testuser",true);
+        xmlhttp.send();
+
     }
 
     function submit_sentence(element) {
-
         /* find all commaslots for the submitted sentence */
         var id = element.dataset.sentence;
         var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
 
-        var val= new Array();
-        for (var i=0; i<sentence.length; i++) {
-            if (sentence[i].innerHTML.indexOf(',')>=0) {
-                val.push(1);
-            }
-            else{
-                val.push(0);
-            }
-        }
-
+        var chckbx_sol = validate_form();
         /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
         var xmlhttp=new XMLHttpRequest();
         xmlhttp.onreadystatechange=function()
@@ -354,16 +388,10 @@ var submitted = false;
                 document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
             }
         }
-        /* change color of all span slots */
-        toggle_color(element,{{ comma }},val);
 
-        xmlhttp.open("GET","submit_task1?id="+id+"&sol="+val+"&uid=testuser",true);
+        xmlhttp.open("GET","submit_task2?id="+id+"&uid=testuser"+"&chckbx_sol="+chckbx_sol,true);
         xmlhttp.send();
 
-        /* make the tooltip visible */
-        change_visibility();
-
-        submitted = true;
     }
 
     document.querySelector('body').addEventListener('click', function(event) {
