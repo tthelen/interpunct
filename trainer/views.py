@@ -173,3 +173,20 @@ def submit_task3(request):
     user.count_false_types_task3(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
+
+def submit_task4(request):
+    """
+    Receives an AJAX GET request containing a solution bitfield for a sentence.
+    Saves solution and user_id to database.
+
+    :param request: Django request
+    :return: nothing
+    """
+    sentence = Sentence.objects.get(id=request.GET['id'])
+    user_solution = request.GET['sol']
+    sentence.set_comma_select(user_solution)
+    sentence.update_submits()
+    user = User.objects.get(user_id="testuser")
+    user.count_false_types_task4(user_solution, sentence.get_commatypelist())
+    user.update_rank()
+    return JsonResponse({'submit': 'ok'})
