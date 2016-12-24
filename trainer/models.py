@@ -132,7 +132,6 @@ class Sentence(models.Model):
         l = []  # list of comma types (0=mustnot, 1=may, 2=must)
 
         for pos in range(len(self.get_words())-1):
-            # print("Position is %d" % pos)
             # for each position: get rules
             rules = self.rules.filter(sentencerule__position=pos+1).all()
             rl = []
@@ -159,7 +158,6 @@ class Sentence(models.Model):
         :param user: user rank
         :return: solution
         """
-        print("in Explanations")
 
         rank = user.user_rank
         # Rule Representation: e.g : A,1,0,0 and Difference List
@@ -173,21 +171,15 @@ class Sentence(models.Model):
         rule_decoded_list.remove(decode_list)
 
         # Initial Indexing, current commatype
-        print("Initial Index Print")
         index_list = [0, 1, 2, 3]
-        print(index_list)
         index = random.choice(index_list)
         index_list.remove(index)
-        print(index)
 
         solution = [0, 0, 0, 0]
         count = Rule.objects.all().count()
 
-        print(decode_list)
         # Random Explanations
-
         if rank == 0:
-            print("in rank: 0")
             for i in range(4):
                 if i != index:
                     tmp = rule_decoded_list[int(random.random() * len(rule_decoded_list))]
@@ -567,7 +559,6 @@ class User(models.Model):
         sum = 0
 
         for rule in range(len(may_obj) - 1):
-            print("dictmayrule: " + dict[str(may_obj[rule])])
             a, b = re.split(r'/', dict[str(may_obj[rule])])
             sum += int(b)
 
@@ -583,17 +574,12 @@ class User(models.Model):
         rule_index = random.randint(0, len(may_roulette_list) - 1)
         sent_obj = SentenceRule.objects.filter(rule=may_roulette_list[rule_index])
         sent_index = random.randint(0, len(sent_obj) - 1)
-        print("sent_obj:")
-        print(sent_obj)
 
         return sent_obj[sent_index].sentence
 
     def sentence_selector(self):
         may_obj = Rule.objects.filter(mode=1)
-        print("May Rules: ")
-        print(may_obj)
         rule_index = random.randint(0, len(may_obj) - 1)
         sent_obj = SentenceRule.objects.filter(rule=may_obj[rule_index])
-        print("corresponding Sentence:")
         sent_index = random.randint(0, len(sent_obj) - 1)
         return may_obj

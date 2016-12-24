@@ -21,9 +21,10 @@ def task(request):
     user = User.objects.get(user_id="testuser")
     rank = user.get_user_rank_display()
     # task randomizer
-    index = random.randint(0, 3)
+    index = random.randint(0, 4)
+    print(index)
     # for AllKommaSetzen.html + AllKommaErklärenI.html
-    if index < 2:
+    if index < 3:
         # choose a sentence from roulette wheel (the bigger the error for
         # a certain rule, the more likely one will get a sentence with that rule)
         sentence = user.roulette_wheel_selection()
@@ -34,44 +35,44 @@ def task(request):
         # pack all comma types [['A2.1'],...] of this sentence in a list
         comma_types = sentence.get_commatypelist()
 
-        # for AllKommaSetzen.html
-        if index == 0:
-            # pack all selects in a list
-            comma_select = sentence.get_commaselectlist()
-            # dirty trick to make the comma_select and comma_types the same length as words
-            comma_select.append('0')
-            comma_types.append([])
-            # get total amount of submits
-            submits = sentence.total_submits
+        # pack all selects in a list
+        comma_select = sentence.get_commaselectlist()
+        # dirty trick to make the comma_select and comma_types the same length as words
+        comma_select.append('0')
+        comma_types.append([])
+        # get total amount of submits
+        submits = sentence.total_submits
 
-            # printing out user results
-            dictionary = user.comma_type_false
-            # generating tooltip content
-            collection = []
-            for i in range(len(comma_types)):
-                if submits != 0:
-                    collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
-                else:
-                    collection.append((comma_types[i], 0))
-
+        # printing out user results
+        dictionary = user.comma_type_false
+        # generating tooltip content
+        collection = []
+        for i in range(len(comma_types)):
+            if submits != 0:
+                collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
+            else:
+                collection.append((comma_types[i], 0))
+        if index==0:
             return render(request, 'trainer/AllKommaSetzen.html', locals())
 
-        # for AllKommaErklärenI.html
-        elif index == 1:
-            # generating radio buttons content
-            explanations = []
-            # list of indexes of correct solution
-            index_arr = []
-            print(sentence)
-            for i in range(len(comma_types)):
-                if len(comma_types[i]) != 0:
-                    exp, index = sentence.get_explanations(comma_types[i][0],user)
-                    explanations.append(exp)
-                    index_arr.append(index)
 
+        # generating radio buttons content
+        explanations = []
+        # list of indexes of correct solution
+        index_arr = []
+        print(sentence)
+        for i in range(len(comma_types)):
+            if len(comma_types[i]) != 0:
+                exp, index = sentence.get_explanations(comma_types[i][0],user)
+                explanations.append(exp)
+                index_arr.append(index)
+        if index==1:
             return render(request, 'trainer/AllKommaErklärenI.html', locals())
+        else:
+            return render(request, 'trainer/AllKommaSetzenUndErklären.html', locals())
+
     # for KannKommaSetzen.html + KannKommaLöschen.html
-    elif index >= 2 and index < 4:
+    elif index >= 3 and index < 5:
         # choose a sentence containing "may" commas from roulette wheel (the bigger the error for
         # a certain rule, the more likely one will get a sentence with that rule)
         sentence = user.may_roulette_wheel_selection()
