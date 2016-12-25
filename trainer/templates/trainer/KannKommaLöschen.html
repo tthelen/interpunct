@@ -202,13 +202,21 @@ var submitted = false;
     }
 
     /* Switch the content of a comma slot from blank to comma / comma to blank */
+    /* Only if the comma is supposed to be there*/
     function toggle_comma(element) {
-        if (element.innerHTML.indexOf(',') == -1) {
-            element.innerHTML = ",";
-        } else {
-            element.innerHTML = "&nbsp";
+        var commas = {{ comma }};
+        var id = parseInt(element.id.substr(21, 2));
+        console.log(id);
+        if(commas[id] == 1 || commas[id] == 2) {
+            console.log(commas[id]);
+            if (element.innerHTML.indexOf(',') == -1) {
+                element.innerHTML = ",";
+            } else {
+                element.innerHTML = "&nbsp";
+            }
         }
     }
+
     function put_all_commas() {
         var slots = document.getElementsByClassName("interpunct-commaslot");
         var commas = {{ comma }};
