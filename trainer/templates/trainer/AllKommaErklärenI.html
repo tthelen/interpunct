@@ -51,6 +51,7 @@
     .interpunct-commaslot-wrong {
         background-color:red;
     }
+    /*https://chrisbracco.com/a-simple-css-tooltip/*/
     /* ----- Tooltip ----- */
     [data-tooltip] {
         display: inline-block;
@@ -142,7 +143,24 @@
         text-align: left;
         border-radius: 10px;
         border: 2px solid #38aeff;
-        padding: 8px;
+        padding-bottom: 5px;
+    }
+    .exp-form p{
+        background: #38aeff;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        text-align: center;
+        color: white;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-bottom: 5px;
+    }
+    .exp-form label {
+
+    }
+    .exp-form input {
+    position: relative;
+    top: 1px;
     }
     .rank{
         font-size: 11px;
@@ -189,11 +207,11 @@
             if(commas[i]==1 || commas[i]==2){
                 slots[i].innerHTML=",";
                 slots[i].setAttribute("data-tooltip",comma_count.toString());
-                var p = document.createElement("p");
-                p.innerHTML = comma_count.toString();
-                explanations_div[0].appendChild(p);
                 var form = document.createElement("form");
                 form.className = "exp-form";
+                var p = document.createElement("p");
+                p.innerHTML = comma_count.toString();
+                form.appendChild(p);
                 for(var j=0;j<4;j++){
                     var input = document.createElement("input");
                     input.className = "exp-input";
@@ -224,31 +242,47 @@
     }
     function validate_form(){
         var index = {{ index_arr }};
+        console.log(index);
         var user_solution = [];
         var forms = document.getElementsByClassName("exp-form");
         for(var i = 0; i<forms.length; i++){
             var checkboxes = forms[i].childNodes;
             var chckbx_nr = -1;
-            for(var j = 0; j<checkboxes.length; j++){
-                if(checkboxes[j].nodeName == "INPUT"){
+            for(var j = 0; j<checkboxes.length; j++) {
+                var tmp = [];
+                if (checkboxes[j].nodeName == "INPUT") {
                     chckbx_nr++;
-                    if(checkboxes[j].checked && chckbx_nr==index[i]){
-                        checkboxes[j+1].style.border= "2px dashed green";
-                        checkboxes[j+1].style.borderRadius= "10px";
-                        user_solution.push(1);
+                    var correct = false;
+                    for (var k = 0; k < index[i].length; k++) {
+                        if (chckbx_nr == index[i][k]) {
+                            correct = true;
+                        }
                     }
-                    else if(!checkboxes[j].checked && chckbx_nr==index[i]){
-                        checkboxes[j+1].style.border= "2px dashed red";
-                        checkboxes[j+1].style.borderRadius= "10px";
-                        user_solution.push(0);
+                    if (checkboxes[j].checked && correct) {
+                        checkboxes[j + 1].style.border = "2px dashed green";
+                        checkboxes[j + 1].style.borderRadius = "10px";
+                        tmp.push(1);
+                        console.log(tmp)
                     }
-                    else if(checkboxes[j].checked && chckbx_nr!=index[i]){
-                        checkboxes[j+1].style.border= "2px dashed red";
-                        checkboxes[j+1].style.borderRadius= "10px";
+                    if (!checkboxes[j].checked && correct) {
+                        checkboxes[j + 1].style.border = "2px dashed red";
+                        checkboxes[j + 1].style.borderRadius = "10px";
+                    }
+                    if (checkboxes[j].checked && !correct) {
+                        checkboxes[j + 1].style.border = "2px dashed red";
+                        checkboxes[j + 1].style.borderRadius = "10px";
                     }
                 }
+                console.log(tmp);
+                console.log(index[i]);
+                if (tmp.length == index[i].length) {
+                    user_solution.push(1);
+                } else {
+                    user_solution.push(0);
+                }
             }
-        }
+            }
+
         console.log(user_solution);
         return user_solution;
     }
@@ -286,9 +320,9 @@
       if (has_class(event.target, 'interpunct-sentence-submit')) {
           submit_sentence(event.target);
       }
-      if (has_class(event.target, 'exp-input')) {
-          one_select_atatime(event.target);
-      }
+      //if (has_class(event.target, 'exp-input')) {
+      //    one_select_atatime(event.target);
+      //}
     });
 </script>
 </body>

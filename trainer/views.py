@@ -21,8 +21,8 @@ def task(request):
     user = User.objects.get(user_id="testuser")
     rank = user.get_user_rank_display()
     # task randomizer
-    index = random.randint(0, 4)
-    print(index)
+    #index = random.randint(0, 4)
+    index = 1
     # for AllKommaSetzen.html + AllKommaErklärenI.html
     if index < 3:
         # choose a sentence from roulette wheel (the bigger the error for
@@ -55,18 +55,69 @@ def task(request):
         if index==0:
             return render(request, 'trainer/AllKommaSetzen.html', locals())
 
-
-        # generating radio buttons content
+        # generating radio buttons content (2D array to be)
         explanations = []
-        # list of indexes of correct solution
+        # list of indexes of correct solution (2D array to be)
         index_arr = []
-        print(sentence)
+
         for i in range(len(comma_types)):
             if len(comma_types[i]) != 0:
-                exp, index = sentence.get_explanations(comma_types[i][0],user)
-                explanations.append(exp)
-                index_arr.append(index)
-        if index==1:
+                # In case there is only one comma type
+                if len(comma_types[i]) == 1:
+                    options, solution_index = sentence.get_explanations(comma_types[i][0], user)
+                    explanations.append(options)
+                    index_arr.append([solution_index])
+                # If there are multiple types for one position
+                else:
+                    # Initial Indexing
+                    non_taken_positions = [0, 1, 2, 3]
+                    # Set of options
+                    options = ["","","",""]
+                    # Set of answer positions
+                    answers = []
+                    # Check all the muss rules
+                    for j in range(len(comma_types[i])):
+                        if Rule.objects.get(code=comma_types[i][j]).mode == 2:
+                            solution_index = random.choice(non_taken_positions)
+                            # Save the description of a comma
+                            options[solution_index] = Rule.objects.get(code=comma_types[i][j]).description
+                            # Save the index of a correct solution
+                            answers.append(solution_index)
+                            # "Mark" the index as "taken"
+                            non_taken_positions.remove(solution_index)
+                    # If there are only kann rules, take those
+                    if options == ["","","",""]:
+                        for j in range(len(comma_types[i])):
+                            if Rule.objects.get(code=comma_types[i][j]).mode == 1:
+                                solution_index = random.choice(non_taken_positions)
+                                # Save the description of a comma
+                                options[solution_index] = Rule.objects.get(code=comma_types[i][j]).description
+                                # Save the index of a correct solution
+                                answers.append(solution_index)
+                                # "Mark" the index as "taken"
+                                non_taken_positions.remove(solution_index)
+                    # If there are only must-not commas
+                    if options == ["","","",""]:
+                        print("Only must-nots")
+                        continue
+                    # Save an array of answers in index array
+                    index_arr.append(sorted(answers))
+                    # Get neighboring explanations to the first comma (can be optimized)
+                    rest_options, ignore_index = sentence.get_explanations(comma_types[i][0], user)
+                    k = 0
+                    # Array of indexes of rest_options
+                    positions_in_rest_options = [0, 1, 2, 3]
+                    # ... without the index of a correct solution
+                    positions_in_rest_options.remove(ignore_index)
+                    # Do until all positions are taken
+                    while len(non_taken_positions) != 0:
+                        random_sol_index = random.choice(non_taken_positions)
+                        random_rest_option = random.choice(positions_in_rest_options)
+                        options[random_sol_index] = rest_options[random_rest_option]
+                        non_taken_positions.remove(random_sol_index)
+                        positions_in_rest_options.remove(random_rest_option)
+                    explanations.append(options)
+        if index == 1:
             return render(request, 'trainer/AllKommaErklärenI.html', locals())
         else:
             return render(request, 'trainer/AllKommaSetzenUndErklären.html', locals())
@@ -100,7 +151,7 @@ def task(request):
                 collection.append((comma_types[i], int((int(comma_select[i]) / submits) * 100)))
             else:
                 collection.append((comma_types[i], 0))
-        if index == 2:
+        if index == 3:
             return render(request, 'trainer/KannKommaSetzen.html', locals())
         else:
             return render(request, 'trainer/KannKommaLöschen.html', locals())

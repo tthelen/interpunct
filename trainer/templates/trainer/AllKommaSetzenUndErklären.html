@@ -189,7 +189,17 @@
         text-align: left;
         border-radius: 10px;
         border: 2px solid #38aeff;
-        padding: 8px;
+        padding-bottom: 5px;
+    }
+    .exp-form p{
+        background: #38aeff;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        text-align: center;
+        color: white;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-bottom: 5px;
     }
 </style>
 </head>
@@ -215,7 +225,7 @@
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
     </p>
 </div>
-<p class="rank">Dein Rang ist <b>{{ rank }}</b></p>
+<p class="rank">Dein Rang ist: <b>{{ rank }}</b></p>
 <script>
 var submitted = false;
     /* Check if a DOM element has a given CSS class. */
