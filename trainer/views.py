@@ -23,7 +23,7 @@ def task(request):
     # task randomizer
     index = random.randint(0, 4)  # randomly choose one of 5 task types
     #index = 1
-    # for AllKommaSetzen.html + AllKommaErklärenI.html
+    # for AllKommaSetzen.html + AllKommaErklaerenI.html
     if index < 3:
         # choose a sentence from roulette wheel (the bigger the error for
         # a certain rule, the more likely one will get a sentence with that rule)
@@ -118,11 +118,11 @@ def task(request):
                         positions_in_rest_options.remove(random_rest_option)
                     explanations.append(options)
         if index == 1:
-            return render(request, 'trainer/AllKommaErklärenI.html', locals())
+            return render(request, 'trainer/AllKommaErklaerenI.html', locals())
         else:
-            return render(request, 'trainer/AllKommaSetzenUndErklären.html', locals())
+            return render(request, 'trainer/AllKommaSetzenUndErklaeren.html', locals())
 
-    # for KannKommaSetzen.html + KannKommaLöschen.html
+    # for KannKommaSetzen.html + KannKommaLoeschen.html
     elif index >= 3 and index < 5:
         # choose a sentence containing "may" commas from roulette wheel (the bigger the error for
         # a certain rule, the more likely one will get a sentence with that rule)
@@ -154,7 +154,7 @@ def task(request):
         if index == 3:
             return render(request, 'trainer/KannKommaSetzen.html', locals())
         else:
-            return render(request, 'trainer/KannKommaLöschen.html', locals())
+            return render(request, 'trainer/KannKommaLoeschen.html', locals())
 
 def profile(request):
     user_id = "testuser"
