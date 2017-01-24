@@ -25,7 +25,7 @@ SECRET_KEY = ')=&zs!opq7krx1bsh5l5sub!rl6gx#k-+7+bof6@x@p94$2oh$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pycoa.de','www.pycoa.de']
 
 
 # Application definition
@@ -47,7 +47,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',  # we want to embed
 ]
 
 ROOT_URLCONF = 'interpunct.urls'
