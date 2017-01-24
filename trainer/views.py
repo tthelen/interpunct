@@ -21,8 +21,8 @@ def task(request):
     user = User.objects.get(user_id="testuser")
     rank = user.get_user_rank_display()
     # task randomizer
-    #index = random.randint(0, 4)
-    index = 1
+    index = random.randint(0, 4)  # randomly choose one of 5 task types
+    #index = 1
     # for AllKommaSetzen.html + AllKommaErklärenI.html
     if index < 3:
         # choose a sentence from roulette wheel (the bigger the error for
