@@ -98,20 +98,36 @@
 
 <script>
 
-    document.addEventListener("DOMContentLoaded",function(){
+    document.addEventListener("DOMContentLoaded",function()
+    {
         start();
     });
 
-    function start() {
+    function start()
+    {
         var circles = document.getElementsByClassName("col-2");
+        var sum = 0;
         for(var i=0; i<circles.length; i++)
         {
-            var step = circles[i].childNodes[1].getAttribute("score");
+            var step = Math.floor(circles[i].childNodes[1].getAttribute("score")/10);
+            sum += step;
             var style = document.createElement("style");
             document.head.appendChild(style);
-            console.log(step);
             sheet = style.sheet;
-            sheet.insertRule('#circle_'+(i+1)+'{background-image: url("./static/images/Name_'+(Math.floor(step/10))+'.png");}', 0);
+            sheet.insertRule('#circle_'+(i+1)+'{background-image: url("./static/images/Name_'+step+'.png");}', 0);
+        }
+        var rank_img = document.getElementsByClassName("rank")[0].childNodes[1];
+        var rang = "{{ rank }}";
+        switch(rang) {
+            case("Kommachaot"):
+                rank_img.src = "./static/images/Chaot_"+Math.floor(sum/circles.length)+".png";
+                break;
+            case("Kommakönner"):
+                rank_img.src = "./static/images/Könner_"+Math.floor(sum/circles.length)+".png";
+                break;
+            case("Kommakönig"):
+                rank_img.src = "./static/images/König_"+Math.floor(sum/circles.length)+".png";
+                break;
         }
     }
 
