@@ -25,7 +25,7 @@ SECRET_KEY = ')=&zs!opq7krx1bsh5l5sub!rl6gx#k-+7+bof6@x@p94$2oh$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pycoa.de','www.pycoa.de']
+ALLOWED_HOSTS = ['pycoa.de','www.pycoa.de','127.0.0.1']
 
 
 # Application definition
@@ -120,3 +120,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    '/images/',
+]

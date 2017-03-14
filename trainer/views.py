@@ -13,7 +13,6 @@ def task(request):
     :param request: Django request
     :return: nothing
     """
-
     import random
 
     # get user
@@ -27,6 +26,7 @@ def task(request):
     if index < 3:
         # choose a sentence from roulette wheel (the bigger the error for
         # a certain rule, the more likely one will get a sentence with that rule)
+        #TODO: fetch errors
         sentence = user.roulette_wheel_selection()
         # pack all words of this sentence in a list
         words = sentence.get_words()
