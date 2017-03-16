@@ -4,33 +4,21 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <style>
+    * {
+        box-sizing: border-box;
+    }
     body{
         font-family:Arial,sans-serif;
         padding-right: 5%;
         padding-left: 10%;
-    }
-    /* Column layout */
-    .col-1 {width: 8.33%;}
-    .col-2 {width: 16.66%;}
-    .col-3 {width: 25%;}
-    .col-4 {width: 33.33%;}
-    .col-5 {width: 41.66%;}
-    .col-6 {width: 50%;}
-    .col-7 {width: 58.33%;}
-    .col-8 {width: 66.66%;}
-    .col-9 {width: 75%;}
-    .col-10 {width: 83.33%;}
-    .col-11 {width: 91.66%;}
-    .col-12 {width: 100%;}
-    * {
-        box-sizing: border-box;
     }
     .row::after {
         content: "";
         clear: both;
         display: table;
     }
-    [class*="col-"] {
+    .progress {
+        width: 16.66%;
         float: left;
         padding: 15px;
         margin: 1%;
@@ -38,7 +26,7 @@
         background-size: 100% 100%;
         text-align: center;
     }
-    [class*="col-"]:before {
+    .progress:before {
         content: "";
 	    display: block;
 	    padding-top: 100%;
@@ -94,12 +82,11 @@
 </div>
 <div class="row">
 {% for c,s in new_dictionary.items %}
-    <div class="col-2" id="circle_{{ forloop.counter }}" score="{{ s }}">
+    <div class="progress" id="circle_{{ forloop.counter }}" score="{{ s }}">
         <span class="description"><b>{{ c }}</b></span>
     </div>
 {% endfor %}
 </div>
-
 
 <script>
     document.addEventListener("DOMContentLoaded",function()
@@ -109,7 +96,9 @@
 
     function start()
     {
-        var circles = document.getElementsByClassName("col-2");
+        // Fill in the progress circles with corresponding background png
+        var circles = document.getElementsByClassName("progress");
+        // Sum is required to calculate the whole progress on the current rang
         var sum = 0;
         for(var i=0; i<circles.length; i++)
         {
@@ -120,6 +109,7 @@
             sheet = style.sheet;
             sheet.insertRule('#circle_'+(i+1)+'{background-image: url("./static/images/Name_'+step+'.png");}', 0);
         }
+        // Fill in the progress circle of the rang image
         var rank_img = document.getElementsByClassName("rank")[0].childNodes[1];
         var rang = "{{ rank }}";
         switch(rang) {
@@ -132,6 +122,7 @@
             case("Kommakönig"):
                 rank_img.src = "./static/images/König_"+Math.floor(sum/circles.length)+".png";
                 break;
+            // TODO: + one more rang
         }
     }
 
