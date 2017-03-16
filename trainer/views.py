@@ -157,6 +157,12 @@ def task(request):
             return render(request, 'trainer/KannKommaLöschen.html', locals())
 
 def profile(request):
+    """
+        Receives request for a profile page
+
+        :param request: Django request
+        :return: response
+    """
     user_id = "testuser"
     user = User.objects.get(user_id="testuser")
     dictionary = user.get_dictionary()
