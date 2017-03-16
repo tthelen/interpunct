@@ -36,6 +36,7 @@
         margin: 1%;
         height: auto;
         background-size: 100% 100%;
+        text-align: center;
     }
     [class*="col-"]:before {
         content: "";
@@ -71,6 +72,12 @@
     .rank a:hover {
         background-color: rgb(138,157,188);
     }
+    .description {
+        margin-top: -120%;
+        display: inline-block;
+        vertical-align: middle;
+        color: rgb(25,66,114);
+    }
 </style>
 </head>
 <body>
@@ -87,17 +94,14 @@
 </div>
 <div class="row">
 {% for c,s in new_dictionary.items %}
-    <div class="col-2" id="circle_{{ forloop.counter }}">
-    <div class="progress-bars" score="{{ s }}">
-        <div class="description">{{ c }}</div>
-    </div>
+    <div class="col-2" id="circle_{{ forloop.counter }}" score="{{ s }}">
+        <span class="description"><b>{{ c }}</b></span>
     </div>
 {% endfor %}
 </div>
 
 
 <script>
-
     document.addEventListener("DOMContentLoaded",function()
     {
         start();
@@ -109,7 +113,7 @@
         var sum = 0;
         for(var i=0; i<circles.length; i++)
         {
-            var step = Math.floor(circles[i].childNodes[1].getAttribute("score")/10);
+            var step = Math.floor(circles[i].getAttribute("score")/10);
             sum += step;
             var style = document.createElement("style");
             document.head.appendChild(style);
