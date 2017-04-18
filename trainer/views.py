@@ -15,13 +15,30 @@ def task(request):
     """
     import random
 
-    # get user
-    user_id = "testuser"
-    user = User.objects.get(user_id="testuser")
+    # get user from URL or session or default
+    user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
+
+    try:
+        user = User.objects.get(user_id=user_id)
+    except User.DoesNotExist:
+        user = User(user_id=user_id)
+        user.save()
+
+    if user.rules_activated_count == 0: # new user without activated rules
+        user.rules_activated_count = 1  # activate first rule for next request
+        user.save()
+        return render(request, 'trainer/welcome.html', locals())
+    else:
+        new_rule = user.progress()
+        level = user.rules_activated_count
+        if new_rule:
+            return render(request, 'trainer/level_progress.html', locals())
+
     rank = user.get_user_rank_display()
+    level = user.level_display()
     # task randomizer
-    index = random.randint(0, 4)
-    #index = 1
+    # index = random.randint(0, 4)
+    index = 0
     # for AllKommaSetzen.html + AllKommaErklärenI.html
     if index < 3:
         # choose a sentence from roulette wheel (the bigger the error for
@@ -194,7 +211,7 @@ def submit_task1(request):
     user_solution = request.GET['sol']
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
-    user = User.objects.get(user_id="testuser")
+    user = User.objects.get(user_id="testuser00")
     user.count_false_types_task1(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
@@ -212,6 +229,7 @@ def submit_task2(request):
     user = User.objects.get(user_id="testuser")
     user.update_rank()
     chckbx_sol = request.GET['chckbx_sol']
+
     user.count_false_types_task2(chckbx_sol, sentence.get_commatypelist())
     return JsonResponse({'submit': 'ok'})
 
@@ -248,3 +266,15 @@ def submit_task4(request):
     user.count_false_types_task4(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
+
+
+def delete_user(request):
+    """Remove a user."""
+
+    # get user from URL or session or default
+    user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
+
+    u = User.get(user_id=user_id)
+    u.delete()
+    u.save()
+    return "Deleted"

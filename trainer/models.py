@@ -357,6 +357,20 @@ class User(models.Model):
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
 
+    # rules_activated: user progress in terms of available rules.
+    # Starts at 0, continues to ~40
+    rules_activated_count = models.IntegerField(default=0)
+
+    rules = [
+        "A1","A2","A3","A4",  # 4 rules for A
+        "B1.1","B1.2","B1.3","B1.4.1","B1.4.2","B1.5",     # 6 rules for B1
+        "B2.1","B2.2","B2.3","B2.4.1","B2.4.2","B2.5",     # 6 rules for B2
+        "C1","C2","C3.1","C3.2","C4.1","C4.2","C5",        # 7 rules for C1-5
+        "C6.1","C6.2","C6.3.1","C6.3.2","C6.4","C7","C8",  # 7 rules for C6-8
+        "D1", "D2", "D3",                                  # 3 rues for D
+        "E1"
+    ]
+
     def update_rank(self):
         rank_counter = 0
         dict = self.get_dictionary()
@@ -373,23 +387,50 @@ class User(models.Model):
         if rank_counter == len(dict)-1:
             self.user_rank = 1
             self.save()
-        if rank_counter == 2*(len(dict)-1):
+        if rank_counter == 2 * (len(dict)-1):
             self.user_rank = 2
             self.save()
         if rank_counter == 4 * (len(dict) - 1):
             self.user_rank = 3
             self.save()
 
-    def get_dictionary(self):
+    def progress(self):
+        """Advance to next level, if appropriate.
+        
+        Returns False is no level progress, the newly activated Rule object otherwise.
+        """
+
+        # highest level reached?
+        if self.rules_activated_count == len(self.rules):
+            return False
+
+        d = self.get_dictionary()
+        last_rule = self.rules[self.rules_activated_count-1]
+        if last_rule in d:
+            # advancement criterion: at least 3 tries, less than half of them wrong
+            wrong, tries = d[last_rule].split('/')
+            if int(tries) >= 3 and int(wrong) < int(tries)/2:
+                self.rules_activated_count += 1
+                self.save()
+                return Rule.objects.get(code=self.rules[self.rules_activated_count-1])
+        return False
+
+    def level_display(self):
+        return "Highest activated rule: {}\nRecords: {}".format(self.rules_activated_count, self.get_dictionary())
+
+    def get_dictionary(self, only_activated=False):
         """
         Dictionary with comma types as keys and a value tuple of erros and total amount of trials
         :return: dictionary
         """
         type_dict = {}
         tmp = re.split(r'[ ,]+', self.comma_type_false)
+
+        activated_rules = self.rules[:self.rules_activated_count]
         for elem in tmp:
             [a,b] = re.split(r':',elem)
-            type_dict[a]=b
+            if not only_activated or a in activated_rules:
+                type_dict[a]=b
         return type_dict
 
     def save_dictionary(self,update):
@@ -409,28 +450,28 @@ class User(models.Model):
         :param user_array: contains submitted array of bools
         :param solution_array: contains comma types
         """
-        dict = self.get_dictionary()
+        d = self.get_dictionary()
         user_array = re.split(r'[ ,]+', user_array_str)
         # current_rule_list = []
         for i in range(len(solution_array) - 2):
             if len(solution_array[i]) == 0 and int(user_array[i]) == 1:
-                a, b = re.split(r'/', dict["E1"])
-                dict["E1"] = str(int(a) + 1) + "/" + str(int(b) + 1)
+                a, b = re.split(r'/', d["E1"])
+                d["E1"] = str(int(a) + 1) + "/" + str(int(b) + 1)
             elif len(solution_array[i]) != 0:
-                a, b = re.split(r'/', dict[solution_array[i][0]])
+                a, b = re.split(r'/', d[solution_array[i][0]])
                 rule = Rule.objects.get(code=solution_array[i][0])
                 if rule.mode == 0 and user_array[i] != "0":  # must not, false
-                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+                    d[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
                 if rule.mode == 0 and user_array[i] == "0":  # must not, correct
-                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                    d[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
                 if rule.mode == 1:  # may, always correct
-                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                    d[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
                 if rule.mode == 2 and user_array[i] == "1":  # must, correct
-                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                    d[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
                 if rule.mode == 2 and user_array[i] == "0":  # must, false
-                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+                    d[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
                     # current_rule_list.append(rule)
-        self.save_dictionary(dict)
+        self.save_dictionary(d)
 
     def count_false_types_task2(self, user_array_str, solution_array):
         """
@@ -528,26 +569,39 @@ class User(models.Model):
         gets a new sentence via roulette wheel, chooses random among sentences
         :return: roulette_list with accumulated rules
         """
-        dict = self.get_dictionary()
+        dict = self.get_dictionary(only_activated=True)
         roulette_list = []
         sum = 0
         for key in dict:
             a, b = re.split(r'/', dict[key])
             sum += int(b)
-        for key in dict:
+        for key in dict: # TODO: make good rule wheighting
             if key != "E1":
                 a, b = re.split(r'/', dict[key])
-                if int(b) != 0:
+                if int(b) != 0 and int(a) != 0:
                     ratio = int((int(a)/sum)*100)
+                    print("RATIO FOR ",key,"=",ratio)
+                elif int(b) < 3:
+                    ratio = 100
                 else:
                     ratio = 1
                 for i in range(ratio):
                     roulette_list.append(key)
         index = random.randint(0, len(roulette_list)-1)
         rule_obj = Rule.objects.filter(code=roulette_list[index])
-        sentence_rule_obj_arr = SentenceRule.objects.filter(rule=rule_obj[0])
-        index = int(random.random() * len(sentence_rule_obj_arr))
-        return sentence_rule_obj_arr[index].sentence
+
+        # filter out all sentences that have higher rules than current user's progress
+        possible_sentences = []
+        for sr in SentenceRule.objects.filter(rule=rule_obj[0]).all():
+            ok = True
+            for r in sr.sentence.rules.all():
+                if self.rules.index(r.code) > self.rules_activated_count:
+                    ok = False
+                    break
+            if ok:
+                possible_sentences.append(sr.sentence)
+
+        return random.choice(possible_sentences)
 
     def may_roulette_wheel_selection(self):
         """

@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^submit_task3$', views.submit_task3),
     url(r'^submit_task4$', views.submit_task4),
     url(r'^profile$', views.profile),
+    url(r'^delete_user$', views.delete_user),
     # ex: /polls/5/
     #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
     # ex: /polls/5/results/
