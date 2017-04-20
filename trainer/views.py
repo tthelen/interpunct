@@ -1,11 +1,125 @@
 # from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .models import Sentence, Solution, Rule, User
+from .models import Sentence, Solution, Rule, User, UserRule
 import re  # regex support
 import os
 
+
+import base64
+from django.http import HttpResponse
+# from django.contrib.auth import authenticate, login
+
+#############################################################################
+#
+def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
+    """
+    This is a helper function used by both 'logged_in_or_basicauth' and
+    'has_perm_or_basicauth' that does the nitty of determining if they
+    are already logged in or if they have provided proper http-authorization
+    and returning the view if all goes well, otherwise responding with a 401.
+    """
+    #if test_func(request.username):
+        # Already logged in, just return the view.
+        #
+    #    return view(request, *args, **kwargs)
+
+    # They are not logged in. See if they provided login credentials
+    #
+    if 'HTTP_AUTHORIZATION' in request.META:
+        auth = request.META['HTTP_AUTHORIZATION'].split()
+        if len(auth) == 2:
+            # NOTE: We are only support basic authentication for now.
+            #
+            if auth[0].lower() == "basic":
+                print(auth[1])
+                auth_bytes=bytes(auth[1], 'utf8')
+                uname, passwd = base64.b64decode(auth_bytes).split(b':')
+                if uname==passwd:
+                    request.username=uname
+                    return view(request, *args, **kwargs)
+
+    # Either they did not provide an authorization header or
+    # something in the authorization attempt failed. Send a 401
+    # back to them to ask them to authenticate.
+    #
+    response = HttpResponse()
+    response.status_code = 401
+    response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
+    return response
+
+
+#############################################################################
+#
+def logged_in_or_basicauth(realm=""):
+    """
+    A simple decorator that requires a user to be logged in. If they are not
+    logged in the request is examined for a 'authorization' header.
+
+    If the header is present it is tested for basic authentication and
+    the user is logged in with the provided credentials.
+
+    If the header is not present a http 401 is sent back to the
+    requestor to provide credentials.
+
+    The purpose of this is that in several django projects I have needed
+    several specific views that need to support basic authentication, yet the
+    web site as a whole used django's provided authentication.
+
+    The uses for this are for urls that are access programmatically such as
+    by rss feed readers, yet the view requires a user to be logged in. Many rss
+    readers support supplying the authentication credentials via http basic
+    auth (and they do NOT support a redirect to a form where they post a
+    username/password.)
+
+    Use is simple:
+
+    @logged_in_or_basicauth
+    def your_view:
+        ...
+
+    You can provide the name of the realm to ask for authentication within.
+    """
+
+    def view_decorator(func):
+        def wrapper(request, *args, **kwargs):
+            return view_or_basicauth(func, request,
+                                     lambda u: u.is_authenticated(),
+                                     realm, *args, **kwargs)
+
+        return wrapper
+
+    return view_decorator
+
+
+#############################################################################
+#
+def has_perm_or_basicauth(perm, realm=""):
+    """
+    This is similar to the above decorator 'logged_in_or_basicauth'
+    except that it requires the logged in user to have a specific
+    permission.
+
+    Use:
+
+    @logged_in_or_basicauth('asforums.view_forumcollection')
+    def your_view:
+        ...
+
+    """
+
+    def view_decorator(func):
+        def wrapper(request, *args, **kwargs):
+            return view_or_basicauth(func, request,
+                                     lambda u: u.has_perm(perm),
+                                     realm, *args, **kwargs)
+
+        return wrapper
+
+    return view_decorator
+
+@logged_in_or_basicauth("Bitte einloggen")
 def task(request):
     """
     Pick a task and show it.
@@ -16,47 +130,57 @@ def task(request):
     import random
 
     # get user from URL or session or default
-    user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
+    # user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
+    uname = request.username
 
     try:
-        user = User.objects.get(user_id=user_id)
+        user = User.objects.get(user_id=uname)
     except User.DoesNotExist:
-        user = User(user_id=user_id)
+        user = User(user_id=uname)
+        user.rules_activated_count=0
         user.save()
 
     if user.rules_activated_count == 0: # new user without activated rules
-        user.rules_activated_count = 1  # activate first rule for next request
-        user.save()
+        user.init_rules()
+        display_rank=False
         return render(request, 'trainer/welcome.html', locals())
-    else:
-        new_rule = user.progress()
-        level = user.rules_activated_count
-        if new_rule:
-            return render(request, 'trainer/level_progress.html', locals())
 
+    display_rank=True
+    new_rule = user.progress()
+    level = user.rules_activated_count
     rank = user.get_user_rank_display()
-    level = user.level_display()
+    leveldsp = user.level_display()
+    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)
+
+    if new_rule:
+        return render(request, 'trainer/level_progress.html', locals())
+
     # task randomizer
-    # index = random.randint(0, 4)
-    index = 0
+    if user.rules_activated_count >= 3:
+        index = random.randint(0, 1)
+    else:
+        index = 0
     # for AllKommaSetzen.html + AllKommaErklärenI.html
     if index < 3:
         # choose a sentence from roulette wheel (the bigger the error for
         # a certain rule, the more likely one will get a sentence with that rule)
         #TODO: fetch errors
         sentence = user.roulette_wheel_selection()
-        # pack all words of this sentence in a list
-        words = sentence.get_words()
-        # pack all commas [0,1,2] in a list
-        comma = sentence.get_commalist()
-        # pack all comma types [['A2.1'],...] of this sentence in a list
-        comma_types = sentence.get_commatypelist()
+        words = sentence.get_words()  # pack all words of this sentence in a list
+        comma = sentence.get_commalist() # pack all commas [0,1,2] in a list
+        comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
+        comma_to_check=[]
+        for ct in comma_types:
+            if ct != [] and ct[0][0] != 'E': # rule, but no error rule
+                # at a rule position include comma with 50% probabily
+                comma_to_check.append(random.randint(0,1))
+            else:  # 10% prob. to set comma in no-comma position
+                comma_to_check.append(random.choice([1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
 
-        # pack all selects in a list
-        comma_select = sentence.get_commaselectlist()
-        # dirty trick to make the comma_select and comma_types the same length as words
-        comma_select.append('0')
+        comma_select = sentence.get_commaselectlist() # pack all selects in a list
+        comma_select.append('0') # dirty trick to make the comma_select and comma_types the same length as words
         comma_types.append([])
+        comma_to_check.append(0)
         # get total amount of submits
         submits = sentence.total_submits
 
@@ -70,7 +194,13 @@ def task(request):
             else:
                 collection.append((comma_types[i], 0))
         if index==0:
-            return render(request, 'trainer/AllKommaSetzen.html', locals())
+            # return render(request, 'trainer/task_set_commas.html', locals())
+            # return render(request, 'trainer/task_correct_commas.html', locals())
+
+            if random.randint(0,1)==0:
+                return render(request, 'trainer/task_correct_commas.html', locals())
+            else:
+                return render(request, 'trainer/task_set_commas.html', locals())
 
         # generating radio buttons content (2D array to be)
         explanations = []
@@ -135,7 +265,7 @@ def task(request):
                         positions_in_rest_options.remove(random_rest_option)
                     explanations.append(options)
         if index == 1:
-            return render(request, 'trainer/AllKommaErklärenI.html', locals())
+            return render(request, 'trainer/task_explain_commas.html', locals())
         else:
             return render(request, 'trainer/AllKommaSetzenUndErklären.html', locals())
 
@@ -199,6 +329,7 @@ def profile(request):
             tasks.append(file[:-5]);
     return render(request, 'user_profile.html', locals())
 
+@logged_in_or_basicauth("Bitte einloggen")
 def submit_task1(request):
     """
     Receives an AJAX GET request containing a solution bitfield for a sentence.
@@ -207,16 +338,18 @@ def submit_task1(request):
     :param request: Django request
     :return: nothing
     """
+    uname = request.username
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
-    user = User.objects.get(user_id="testuser00")
+    user = User.objects.get(user_id=uname)
     user.count_false_types_task1(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
 
-def submit_task2(request):
+@logged_in_or_basicauth("Bitte einloggen")
+def submit_task_correct_commas(request):
     """
     Receives an AJAX GET request containing a solution bitfield for a sentence.
     Saves solution and user_id to database.
@@ -224,15 +357,37 @@ def submit_task2(request):
     :param request: Django request
     :return: nothing
     """
+    uname = request.username
+    sentence = Sentence.objects.get(id=request.GET['id'])
+    user_solution = request.GET['sol']
+    commas = request.GET['commas']
+    #sentence.set_comma_select(user_solution)
+    #sentence.update_submits()
+    user = User.objects.get(user_id=uname)
+    user.count_false_types_task_correct_commas(user_solution, commas, sentence.get_commatypelist())
+    #user.update_rank()
+    return JsonResponse({'submit': 'ok'})
+
+@logged_in_or_basicauth("Bitte einloggen")
+def submit_task_explain_commas(request):
+    """
+    Receives an AJAX GET request containing a solution bitfield for a sentence.
+    Saves solution and user_id to database.
+
+    :param request: Django request
+    :return: nothing
+    """
+    uname = request.username
     sentence = Sentence.objects.get(id=request.GET['id'])
     sentence.update_submits()
-    user = User.objects.get(user_id="testuser")
+    user = User.objects.get(user_id=uname)
     user.update_rank()
     chckbx_sol = request.GET['chckbx_sol']
 
-    user.count_false_types_task2(chckbx_sol, sentence.get_commatypelist())
+    user.count_false_types_task_explain_commas(chckbx_sol, sentence.get_commatypelist())
     return JsonResponse({'submit': 'ok'})
 
+@logged_in_or_basicauth("Bitte einloggen")
 def submit_task3(request):
     """
     Receives an AJAX GET request containing a solution bitfield for a sentence.
@@ -241,15 +396,17 @@ def submit_task3(request):
     :param request: Django request
     :return: nothing
     """
+    uname = request.username
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
-    user = User.objects.get(user_id="testuser")
+    user = User.objects.get(user_id=uname)
     user.count_false_types_task3(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
 
+@logged_in_or_basicauth("Bitte einloggen")
 def submit_task4(request):
     """
     Receives an AJAX GET request containing a solution bitfield for a sentence.
@@ -258,23 +415,26 @@ def submit_task4(request):
     :param request: Django request
     :return: nothing
     """
+    uname = request.username
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
-    user = User.objects.get(user_id="testuser")
+    user = User.objects.get(user_id=uname)
     user.count_false_types_task4(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
 
 
+@logged_in_or_basicauth("Bitte einloggen")
 def delete_user(request):
     """Remove a user."""
 
     # get user from URL or session or default
-    user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
-
-    u = User.get(user_id=user_id)
+    u = User.objects.get(user_id=request.username)
     u.delete()
-    u.save()
-    return "Deleted"
+    return redirect("/")
+
+@logged_in_or_basicauth("Bitte einloggen")
+def logout(request):
+    return render(request, 'trainer/reset.html', locals())

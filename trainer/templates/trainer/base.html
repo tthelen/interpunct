@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Komma-Trainer{% endblock %}</title>
+    <link rel="stylesheet" href="./static/interpunct.css">
+ </style>
+</head>
+<body>
+    <div class="rankinfo">
+        {% if display_rank %}
+            <img style="width:150px" src="./static/images/{{ rankimg }}">
+            <div class="rank">
+                <p>{{ uname }}, Du bist in Level {{ level }}.<br>(<a href="logout">Reset</a>)</p>
+                <p>Deine Regeln:</p>
+                <table>
+                    {%  for ur in leveldsp %}
+                    <tr>
+                        <td><abbr title='{{ ur.rule.description }}'>{{ ur.rule.code }}</abbr></td>
+                        <td align=right>{{ ur.correct }}/{{ ur.total }}</td>
+                        <td>
+                            {% if ur.box == 0 %} <span title="Diese Regel musst du noch üben.">🤔</span>
+                            {% elif ur.box == 1 %} <span title="Diese Regel scheint zu sitzen.">&#128077;</span>
+                            {% elif ur.box == 2 %} <span title="Diese Regel kannst du gut.">&#128526;</span>
+                            {% elif ur.box == 3 %} <span title="Diese Regel kannst du sehr gut.">&#128525;</span>
+                            {% elif ur.box == 4 %} <span title="Diese Regel kannst du locker.">😇</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+           </div>
+    {% endif %}
+    </div>
+    <div class="main">
+        {% block main %}
+        <h2>Der Komma-Trainer</h2>
+
+        Hallo. Hier ist etwas schiefgelaufen.
+        {% endblock %}
+    </div>
+</body>
+</html>

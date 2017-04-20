@@ -360,15 +360,42 @@ class User(models.Model):
     # rules_activated: user progress in terms of available rules.
     # Starts at 0, continues to ~40
     rules_activated_count = models.IntegerField(default=0)
+    rules = models.ManyToManyField(Rule, through='UserRule')
 
-    rules = [
-        "A1","A2","A3","A4",  # 4 rules for A
-        "B1.1","B1.2","B1.3","B1.4.1","B1.4.2","B1.5",     # 6 rules for B1
-        "B2.1","B2.2","B2.3","B2.4.1","B2.4.2","B2.5",     # 6 rules for B2
-        "C1","C2","C3.1","C3.2","C4.1","C4.2","C5",        # 7 rules for C1-5
-        "C6.1","C6.2","C6.3.1","C6.3.2","C6.4","C7","C8",  # 7 rules for C6-8
-        "D1", "D2", "D3",                                  # 3 rues for D
-        "E1"
+    rule_order = [
+        "A1", # GLEICHRANG
+        "A2", # ENTGEGEN
+        "B1.1", # NEBEN
+        "B2.1", # UMOHNESTATT
+        "C1", # PARANTHESE
+        "C2", # APPOSITION
+        "D1", # ANREDE
+        "D2", # AUSRUF
+        "A3",
+        "A4",
+        "B1.2",
+        "B1.3",
+        "B1.4.1",
+        "B1.4.2",
+        "B1.5",
+        "B2.2",
+        "B2.3",
+        "B2.4.1",
+        "B2.4.2",
+        "B2.5",
+        "C3.1",
+        "C3.2",
+        "C4.1",
+        "C4.2",
+        "C5",
+        "C6.1",
+        "C6.2",
+        "C6.3.1",
+        "C6.3.2",
+        "C6.4",
+        "C7",
+        "C8",
+        "D3"
     ]
 
     def update_rank(self):
@@ -394,6 +421,25 @@ class User(models.Model):
             self.user_rank = 3
             self.save()
 
+    def init_rules(self):
+        """Initialize active rules for user."""
+
+        # create correct rules
+        for r in self.rule_order:
+            ur = UserRule(rule=Rule.objects.get(code=r), user=self, active=False)
+            ur.save()
+        # create error rules
+        ur = UserRule(rule=Rule.objects.get(code="E1"), user=self, active=False)
+        ur.save()
+
+        # activate first rule
+        ur = UserRule.objects.get(rule=Rule.objects.get(code=self.rule_order[0]), user=self)
+        ur.active = True
+        ur.save()
+
+        self.rules_activated_count = 1  # activate first rule for next request
+        self.save()
+
     def progress(self):
         """Advance to next level, if appropriate.
         
@@ -401,22 +447,34 @@ class User(models.Model):
         """
 
         # highest level reached?
-        if self.rules_activated_count == len(self.rules):
+        if self.rules_activated_count == len(self.rule_order):
             return False
 
-        d = self.get_dictionary()
-        last_rule = self.rules[self.rules_activated_count-1]
-        if last_rule in d:
-            # advancement criterion: at least 3 tries, less than half of them wrong
-            wrong, tries = d[last_rule].split('/')
-            if int(tries) >= 3 and int(wrong) < int(tries)/2:
-                self.rules_activated_count += 1
-                self.save()
-                return Rule.objects.get(code=self.rules[self.rules_activated_count-1])
+        # d = self.get_dictionary()
+        last_rule = self.rule_order[self.rules_activated_count - 1]
+        ur = UserRule.objects.get(user=self, rule=Rule.objects.get(code=last_rule))
+        # advancement criterion: at least 3 tries, less than half of them wrong
+        # print("CHECK FOR PROGRESS: {},{},{}".format(ur.rule.code, ur.total, ur.correct))
+        if ur.total >= 4 and ur.correct >= (ur.total / 2):
+            self.rules_activated_count += 1
+            self.save()
+            # create and activate new rule for user
+            new_rule = Rule.objects.get(code=self.rule_order[self.rules_activated_count - 1])
+            new_ur = UserRule.objects.get(rule=new_rule, user=self)
+            new_ur.active = True
+            new_ur.save()
+            return new_rule
+
         return False
 
     def level_display(self):
-        return "Highest activated rule: {}\nRecords: {}".format(self.rules_activated_count, self.get_dictionary())
+        """Return UserRule data for displaying level."""
+
+        res = []
+        for i in range(self.rules_activated_count):
+            res.append(UserRule.objects.get(user=self, rule=Rule.objects.get(code=self.rule_order[i])))
+        return res
+
 
     def get_dictionary(self, only_activated=False):
         """
@@ -426,7 +484,7 @@ class User(models.Model):
         type_dict = {}
         tmp = re.split(r'[ ,]+', self.comma_type_false)
 
-        activated_rules = self.rules[:self.rules_activated_count]
+        activated_rules = self.rule_order[:self.rules_activated_count]
         for elem in tmp:
             [a,b] = re.split(r':',elem)
             if not only_activated or a in activated_rules:
@@ -450,49 +508,80 @@ class User(models.Model):
         :param user_array: contains submitted array of bools
         :param solution_array: contains comma types
         """
-        d = self.get_dictionary()
         user_array = re.split(r'[ ,]+', user_array_str)
-        # current_rule_list = []
-        for i in range(len(solution_array) - 2):
-            if len(solution_array[i]) == 0 and int(user_array[i]) == 1:
-                a, b = re.split(r'/', d["E1"])
-                d["E1"] = str(int(a) + 1) + "/" + str(int(b) + 1)
-            elif len(solution_array[i]) != 0:
-                a, b = re.split(r'/', d[solution_array[i][0]])
+        for i in range(len(solution_array) - 1):
+            if len(solution_array[i]) == 0 and int(user_array[i]) == 1: # comma in the wild
+                userrule = UserRule.objects.get(user=self, rule=Rule.objects.get(code="E1"))
+                userrule.count(correct=False)
+            elif len(solution_array[i]) != 0: # comma at rule position
+                # TODO handle multiple comma types per comma
                 rule = Rule.objects.get(code=solution_array[i][0])
-                if rule.mode == 0 and user_array[i] != "0":  # must not, false
-                    d[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
-                if rule.mode == 0 and user_array[i] == "0":  # must not, correct
-                    d[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                if rule.mode == 1:  # may, always correct
-                    d[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                if rule.mode == 2 and user_array[i] == "1":  # must, correct
-                    d[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                if rule.mode == 2 and user_array[i] == "0":  # must, false
-                    d[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
-                    # current_rule_list.append(rule)
-        self.save_dictionary(d)
+                userrule = UserRule.objects.get(user=self, rule=rule)
+                if (rule.mode == 0 and user_array[i] == "0") or  \
+                   (rule.mode == 1) or \
+                   (rule.mode == 2 and user_array[i] == "1"):
+                    corr = True
+                else:
+                    corr = False
+                userrule.count(correct=corr)
 
-    def count_false_types_task2(self, user_array_str, solution_array):
+    def count_false_types_task_correct_commas(self, user_array_str, comma_array_str, solution_array):
+        """
+        count false types for: AllKommaSetzen
+        :param user_array: contains submitted array of bools (positions marked as incorrect)
+        :param solution_array: contains comma types
+        """
+        user_array = re.split(r'[ ,]+', user_array_str)
+        comma_array = re.split(r'[ ,]+', comma_array_str)
+
+        for i in range(len(solution_array) - 1):
+
+            if len(solution_array[i]) == 0 and int(comma_array[i]) == 1: # comma in the wild
+
+                if user_array[i]==1:  # wrong comma without rule detected correctly
+                    pass
+                else:  # wrong comma without rule not detected correctly
+                    userrule = UserRule.objects.get(user=self, rule=Rule.objects.get(code="E1"))
+                    userrule.count(correct=False)
+
+            elif len(solution_array[i]) != 0: # rule position
+
+                # TODO handle multiple comma types per comma
+                rule = Rule.objects.get(code=solution_array[i][0])
+                userrule = UserRule.objects.get(user=self, rule=rule)
+
+                # case 1: mode = 2 (MUST)
+                if rule.mode == 2:
+                   corr = (user_array[i] != comma_array[i])  # right if set and not marked (and vice versa)
+
+                # case 2: mode = 1 (MAY)
+                if rule.mode == 1:
+                   corr = not user_array[i]  # marking a MAY comma slot is always false
+
+                # case 3: mode = 0 (MUST NOT)
+                if rule.mode == 0:
+                    corr = (user_array[i] == comma_array[i])  # right if not set and not marked (and vice versa)
+
+                userrule.count(correct=corr)
+
+    def count_false_types_task_explain_commas(self, user_array_str, solution_array):
         """
         count false types for: AllKommaErlären
         :param user_array: contains submitted array of bools (checkbox answers)
         :param solution_array: contains comma types
         """
 
-        dict = self.get_dictionary()
         user_array = re.split(r'[ ,]+', user_array_str)
         comma_amout = 0;
-        for i in range(len(solution_array) - 2):
+        for i in range(len(solution_array) - 1):
             if len(solution_array[i]) != 0:
-                a, b = re.split(r'/', dict[solution_array[i][0]])
                 rule = Rule.objects.get(code=solution_array[i][0])
+                ur = UserRule.objects.get(user=self, rule=rule)
                 if user_array[comma_amout] == "1":
-                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
+                    ur.count(correct=True)
                 elif user_array[comma_amout] == "0":
-                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
+                    ur.count(correct=False)
                 comma_amout += 1
-        self.save_dictionary(dict)
 
     def count_false_types_task3(self, user_array_str, solution_array):
         """
@@ -533,60 +622,17 @@ class User(models.Model):
                     dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
         self.save_dictionary(dict)
 
-    def naive_task_selection(self):
-        """
-        Gets a sentence for a rule with the highest false values, chooses random among those sentences
-        (pick lowest score rule)
-        :return:
-        """
-        sentence_for_rule = []
-        my_dict = self.get_dictionary()
-        my_max = 0
-        lowest_rule = ""
-        for key in my_dict:
-            if key != "E1":
-                a, b = re.split(r'/', my_dict[key])
-                if int(b) == 0:
-                    rule_obj = Rule.objects.filter(code = key)
-                    count = SentenceRule.objects.filter(rule = rule_obj[0])
-                    index = int(random.random() * len(count))
-                    return SentenceRule.objects.filter(rule = rule_obj[0])[index].sentence
-
-                elif int(b) != 0 :
-                    ratio = (int(b) - int(a))
-                    if my_max < ratio:
-                        my_max = ratio
-                        lowest_rule = key
-                    rule_obj = Rule.objects.filter(code=lowest_rule)
-                    sentence_for_rule.append(SentenceRule.objects.filter(rule = rule_obj))
-                    index = int(random.random() * len(sentence_for_rule))
-
-                    return sentence_for_rule[0][index]
-
-
     def roulette_wheel_selection(self):
         """
         gets a new sentence via roulette wheel, chooses random among sentences
         :return: roulette_list with accumulated rules
         """
-        dict = self.get_dictionary(only_activated=True)
+
         roulette_list = []
-        sum = 0
-        for key in dict:
-            a, b = re.split(r'/', dict[key])
-            sum += int(b)
-        for key in dict: # TODO: make good rule wheighting
-            if key != "E1":
-                a, b = re.split(r'/', dict[key])
-                if int(b) != 0 and int(a) != 0:
-                    ratio = int((int(a)/sum)*100)
-                    print("RATIO FOR ",key,"=",ratio)
-                elif int(b) < 3:
-                    ratio = 100
-                else:
-                    ratio = 1
-                for i in range(ratio):
-                    roulette_list.append(key)
+        for ur in UserRule.objects.filter(user=self, active=True).all():
+            for i in range(2**(4-ur.box)):  # Spaced repetition algorithm: Each box is 5 times less probable then previous
+                roulette_list.append(ur.rule.code)
+
         index = random.randint(0, len(roulette_list)-1)
         rule_obj = Rule.objects.filter(code=roulette_list[index])
 
@@ -595,7 +641,7 @@ class User(models.Model):
         for sr in SentenceRule.objects.filter(rule=rule_obj[0]).all():
             ok = True
             for r in sr.sentence.rules.all():
-                if self.rules.index(r.code) > self.rules_activated_count:
+                if self.rule_order.index(r.code) > (self.rules_activated_count-1):
                     ok = False
                     break
             if ok:
@@ -638,3 +684,62 @@ class User(models.Model):
         sent_obj = SentenceRule.objects.filter(rule=may_obj[rule_index])
         sent_index = random.randint(0, len(sent_obj) - 1)
         return may_obj
+
+
+class UserRule(models.Model):
+
+    """
+    Intermediate model for ManyToMany-Relationship of Users and Rules.
+
+    box - 0-based index of box for spaced repetition (0 = most often, 4 = least often)
+    
+    Position indicates the 0-based position in the sentence.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
+    active = models.BooleanField(default=False)
+    box = models.IntegerField(default=0)  # in which spaced repetition box (0-4) does the rule sit?
+    score = models.FloatField(default=0.0)  # score counter for advancing/degrading rule to boxes
+    total = models.IntegerField(default=0)  # total rule solution counter
+    correct = models.IntegerField(default=0)  # correct rule solution counter
+
+    def count(self, correct=True, tries=1):
+        """Register solution for a rule.
+        
+        correct: Was the rule applied correctly?
+        try: How many tries did the user need? (1,2,3,...)"""
+
+        self.total += 1  # we had one rule application
+
+        # score is used to determine when a rule shall be placed in another box
+        # it differs from trad. spaced repetition because not a single sentence
+        # is repeated but a rule (that occurs in many diff. sentences)
+        # so we don't upgrade/downgrade immediately
+        # upgrade to higher box: score > 3 (3 or more correct applications in a row (% numtries))
+        # downgrade to box 0: score <= -3 (3 or more incorrect applications in a row)
+        #
+        if self.score >=0: # we're in a positive run
+            if correct:
+                self.score += 1/tries  # it's worth 1/numtries
+            else:
+                self.score = -1
+        else:
+            if correct:
+                self.score = 1/tries
+            else:
+                self.score -= 1
+
+        if correct:
+            self.correct += 1
+        if self.score <= -3:
+            self.box = 0  # return to first box on error (leitner algorithm)
+            self.score = 0
+        elif self.score > 3 and self.box < 4:  # three correct tries: advance a box (up to box 4)
+            self.box += 1
+            self.score = 0
+        self.save()
+
+    def __str__(self):
+        return "{} / {}: Box {}, Score {}, {}/{} correct" % (
+            self.user.user_id, self.rule.code,
+            self.box, self.score, self.correct, self.total)
