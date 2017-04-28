@@ -1,0 +1,136 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Übung: Kommas korrigieren{% endblock %}
+
+{% block main %}
+    <h2>Übung: Kommas korrigieren</h2>
+    <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
+        <div class="interaction">
+        {% for w in words %}
+            {% for cts in comma_to_check %}
+                    {% if forloop.counter == forloop.parentloop.counter %}
+                        {{ w }}
+                        {% if not forloop.last %}
+                            <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}">
+                            {% if cts == 1 %}&nbsp;,&nbsp;{% else %}&nbsp;{% endif %}
+                        &nbsp;   </span>
+                        {% endif %}
+                    {% endif %}
+            {% endfor %}
+        {% endfor %}
+        </div>
+        <p id="feedback-{{ sentence.id }}">
+            <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
+        </p>
+    </div>
+    <p class="manual">Anleitung: <br>Streiche alle Fehler an!
+    </p>
+
+    <script>
+    var submitted = false;
+        /* Check if a DOM element has a given CSS class. */
+        function has_class(element, cls) {
+            return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+        }
+
+        function toggle_correction(element) {
+            element.classList.toggle("markedincorrect");
+        }
+
+        /* Switch the content of a comma slot from blank to comma / comma to blank */
+        function toggle_comma(element) {
+            if (element.innerHTML.indexOf(',') == -1) {
+                element.innerHTML = ",";
+            } else {
+                element.innerHTML = "&nbsp";
+            }
+        }
+
+        /* Changes the color of span depending on the correctness of the solution*/
+        function toggle_colors(element, val_sample, val_commas, val_user) {
+            var id = element.dataset.sentence;
+            var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
+            for(var i=0;i<val_sample.length;i++){
+                if (val_sample[i] == 2) {  // MUST comma: right is unmarked comma (and vice versa)
+                    if (val_commas[i]) {  // background: is comma given correct?
+                        sentence[i].style.background = "#85e278"; //green
+                    } else {
+                        sentence[i].style.background = "#ff876e"; //red
+                    }
+                    if (val_user[i] != val_commas[i]) {
+                        sentence[i].classList.add('markingright');
+                    } else {
+                        sentence[i].classList.add('markingwrong');
+                    }
+                } else if (val_sample[i] == 1) { // MAY comma: always wrong
+                    sentence[i].style.background = "#219fff"; //blue
+                    if (!val_user[i]) {
+                        sentence[i].classList.add('markingright');
+                    } else {
+                        sentence[i].classList.add('markingwrong');
+                    }
+                } else if (val_sample[i] ==0) { // MUST NOT comma: right is marked comma (and vice versa)
+                    if (val_commas[i]) {  // background: is comma given correct?
+                        sentence[i].style.background = "#ff876e"; //red
+                    }
+                    if (val_user[i] != val_commas[i]) {
+                        sentence[i].classList.add('markingwrong');
+                    } else if (val_commas[i]) {
+                        sentence[i].classList.add('markingright');
+                    }
+                }
+            }
+        }
+
+        function change_tooltip_visibility(){
+            var style = document.createElement("style");
+            document.head.appendChild(style);
+            sheet = style.sheet;
+            sheet.insertRule('[data-tooltip]:hover:before,[data-tooltip]:hover:after{visibility: visible; opacity: 1;}', 0);
+        }
+
+
+        function submit_sentence(element) {
+
+            /* find all commaslots for the submitted sentence */
+            var id = element.dataset.sentence;
+            var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
+
+            var markedincorrect= new Array();
+            var commas=new Array();
+            for (var i=0; i<sentence.length; i++) {
+                markedincorrect.push(sentence[i].classList.contains('markedincorrect') ? 1 : 0);
+                commas.push((sentence[i].innerHTML.indexOf(',')>=0) ? 1 : 0);
+            }
+
+            /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
+            var xmlhttp=new XMLHttpRequest();
+            xmlhttp.onreadystatechange=function()
+            {
+               if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                    document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
+                }
+            }
+            /* change color of all span slots */
+            toggle_colors(element,{{ comma }},{{ comma_to_check }},markedincorrect);
+
+            xmlhttp.open("GET","submit_task_correct_commas?id="+id+"&sol="+markedincorrect+"&commas="+commas+"&uid=testuser",true);
+            xmlhttp.send();
+
+            /* make the tooltip visible */
+            change_tooltip_visibility();
+
+            submitted = true;
+        }
+
+        document.querySelector('body').addEventListener('click', function(event) {
+          if (has_class(event.target, 'interpunct-commaslot') && (!submitted)) {
+              //toggle_comma(event.target);
+              toggle_correction(event.target);
+          }
+          if (has_class(event.target, 'interpunct-sentence-submit')) {
+              submit_sentence(event.target);
+          }
+        });
+    </script>
+{%  endblock %}

@@ -1,0 +1,223 @@
+@charset "utf-8";
+
+body {
+    font-family:Arial,sans-serif;
+}
+
+.rankinfo {
+    float:left; width:200px; padding:10px;
+}
+
+.main {
+    padding: 10px; margin-left:220px;
+}
+
+.interaction {
+    margin-right:1em; padding:10px; background-color:#cccccc;
+}
+
+.interpunct-sentence{
+    margin-top: 40px;
+}
+/* ----- rounding corners -----*/
+.interpunct-commaslot{
+    border-radius: 50px;
+}
+
+.interpunct-commaslot:hover {
+    background-color: #dddddd;
+}
+/* ----- Submit exercise button styling ----- */
+.interpunct-sentence-submit{
+    background-color: #f74040;
+    border:none;
+    color: white;
+    font-size:16px;
+    padding: 12px 25px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius:4px;
+}
+.interpunct-sentence-submit:hover{
+   background-color: red;
+}
+/* ----- Next exercise button styling ----- */
+.interpunct-sentence-next:link, .interpunct-sentence-next:visited {
+    background-color: #02a131;
+    border:none;
+    color: white;
+    font-size:16px;
+    padding: 12px 25px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius:4px;
+}
+.interpunct-sentence-next:hover, .interpunct-sentence-next:active {
+    background-color: green;
+}
+/* ----- Not yet used styling ----- */
+.interpunct-commaslot-correct {
+    background-color:green;
+}
+.interpunct-commaslot-wrong {
+    background-color:red;
+}
+/*Temporary tooltip from*/
+/*https://chrisbracco.com/a-simple-css-tooltip/*/
+/* ----- Tooltip ----- */
+[data-tooltip] {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    padding: 4px;
+}
+/* ----- Tooltip styling ----- */
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    display: none;
+    position: absolute;
+    background: #fff;
+    color: #000;
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    min-width: 100px;
+    text-align: center;
+    border-radius: 4px;
+    border: 2px solid #000;
+}
+/* Dynamic horizontal centering */
+[data-tooltip-position="top"]:before,
+[data-tooltip-position="bottom"]:before {
+    left: 50%;
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+/* Dynamic vertical centering */
+[data-tooltip-position="right"]:before,
+[data-tooltip-position="left"]:before {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+[data-tooltip-position="top"]:before {
+    bottom: 100%;
+    margin-bottom: 6px;
+}
+[data-tooltip-position="right"]:before {
+    left: 100%;
+    margin-left: 6px;
+}
+[data-tooltip-position="bottom"]:before {
+    top: 100%;
+    margin-top: 6px;
+}
+[data-tooltip-position="left"]:before {
+    right: 100%;
+    margin-right: 6px;
+}
+
+/* Tooltip arrow styling/placement */
+[data-tooltip]:after {
+    content: '';
+    display: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+/* Dynamic horizontal centering for the tooltip */
+[data-tooltip-position="top"]:after,
+[data-tooltip-position="bottom"]:after {
+    left: 50%;
+    margin-left: -6px;
+}
+/* Dynamic vertical centering for the tooltip */
+[data-tooltip-position="right"]:after,
+[data-tooltip-position="left"]:after {
+    top: 50%;
+    margin-top: -6px;
+}
+[data-tooltip-position="top"]:after {
+    bottom: 100%;
+    border-width: 6px 6px 0;
+    border-top-color: #000;
+}
+[data-tooltip-position="right"]:after {
+    left: 100%;
+    border-width: 6px 6px 6px 0;
+    border-right-color: #000;
+}
+[data-tooltip-position="bottom"]:after {
+    top: 100%;
+    border-width: 0 6px 6px;
+    border-bottom-color: #000;
+}
+[data-tooltip-position="left"]:after {
+    right: 100%;
+    border-width: 6px 0 6px 6px;
+    border-left-color: #000;
+}
+/* Show the tooltip when hovering */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+    display: block;
+    z-index: 50;
+}
+/* Show tooltip content on hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: hidden;
+  opacity: 1;
+}
+
+.exp-form{
+    color: #000;
+    margin-top: 10px;
+    margin-left: 25%;
+    display: block;
+    background: rgba(151, 215, 255, 0.57);
+    width: 50%;
+    text-align: left;
+    border-radius: 10px;
+    border: 2px solid #38aeff;
+    padding-bottom: 5px;
+}
+.exp-form p{
+    background: #38aeff;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    color: white;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 5px;
+}
+.exp-form label {
+    display: block;
+    padding-left: 20px;
+}
+.exp-form input {
+    float: left;
+    position: relative;
+    top: 1px;
+}
+
+
+.manual, .rank {
+    font-size: 11px;
+    color: #777;
+}
+
+.markedincorrect {
+    border-radius: 0px;
+    border-bottom: rgba(255,0,0,0.8) 4px solid;
+}
+
+.markingright::after { color: green; content: "✔"; }
+.markingwrong::after { color: red; content: "✘"; }

@@ -169,26 +169,34 @@
 </style>
 </head>
 <body>
-<h2>Übung: Komma setzen</h2>
-<div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
-    {% for w in words %}
-        {% for c,s in collection %}
-                {% if forloop.counter == forloop.parentloop.counter %}
-                        {{ w }}
-                            {% if not forloop.last %}
-                                <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}} Selected by {{ s }} % of users' data-tooltip-position="top">
-                            &nbsp;   </span>
-                            {% endif %}
+<div>
+    <div style="float:left; width:10%; padding:1em;">
+        <img style="width:100%" src="./static/images/{{ rankimg }}">
+        <p class="rank">Dein Rang ist: <b>{{ rank }}</b></p>
+        <div class="rank">{{ leveldsp|safe }}</div>
+    </div>
+    <div>
+        <h2>Übung: Komma setzen</h2>
+        <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
+            {% for w in words %}
+                {% for c,s in collection %}
+                        {% if forloop.counter == forloop.parentloop.counter %}
+                                {{ w }}
+                                    {% if not forloop.last %}
+                                        <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip='Kommatyp ist {{c}} Selected by {{ s }} % of users' data-tooltip-position="top">
+                                    &nbsp;   </span>
+                                    {% endif %}
 
-                {% endif %}
+                        {% endif %}
 
-        {% endfor %}
-    {% endfor %}
-    <p id="feedback-{{ sentence.id }}">
-        <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
-    </p>
+                {% endfor %}
+            {% endfor %}
+            <p id="feedback-{{ sentence.id }}">
+                <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
+            </p>
+        </div>
+    </div>
 </div>
-<p class="rank">Dein Rang ist: <b>{{ rank }}</b></p>
 <script>
 var submitted = false;
     /* Check if a DOM element has a given CSS class. */

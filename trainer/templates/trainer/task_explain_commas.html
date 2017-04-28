@@ -1,178 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Task</title>
-    <style>
-    body {
-        font-family: Arial,sans-serif;
-    }
-    .interpunct-sentence{
-        margin-top: 40px;
-    }
-    /* ----- rounding corners -----*/
-    .interpunct-commaslot{
-        border-radius: 50px;
-    }
-    /* ----- Submit exercise button styling ----- */
-    .interpunct-sentence-submit{
-        background-color: #f74040;
-        border:none;
-        color: white;
-        font-size:16px;
-        padding: 12px 25px;
-        text-decoration: none;
-        cursor: pointer;
-        border-radius:4px;
-    }
-    .interpunct-sentence-submit:hover{
-       background-color: red;
-    }
-    /* ----- Next exercise button styling ----- */
-    .interpunct-sentence-next:link, .interpunct-sentence-next:visited {
-        background-color: #02a131;
-        border:none;
-        color: white;
-        font-size:16px;
-        padding: 12px 25px;
-        text-decoration: none;
-        cursor: pointer;
-        border-radius:4px;
-    }
-    .interpunct-sentence-next:hover, .interpunct-sentence-next:active {
-        background-color: green;
-    }
-    /* ----- Not yet used styling ----- */
-    .interpunct-commaslot-correct {
-        background-color:green;
-    }
-    .interpunct-commaslot-wrong {
-        background-color:red;
-    }
+{% extends "trainer/base.html" %}
 
-    /*Temporary tooltip from*/
-    /*https://chrisbracco.com/a-simple-css-tooltip/*/
-    /* ----- Tooltip ----- */
-    [data-tooltip] {
-        display: inline-block;
-        position: relative;
-        cursor: pointer;
-        padding: 4px;
-    }
-    /* ----- Tooltip styling ----- */
-    [data-tooltip]:before {
-        content: attr(data-tooltip);
-        /*display: none;*/
-        position: absolute;
-        background: rgba(151, 215, 255, 0.57);
-        color: #000;
-        padding: 4px 8px;
-        font-size: 12px;
-        line-height: 1.4;
-        min-width: 10px;
-        text-align: center;
-        border-radius: 10px;
-        border: 2px solid #38aeff;
-    }
-    /* Dynamic horizontal centering */
-    [data-tooltip-position="top"]:before,
-    [data-tooltip-position="bottom"]:before {
-        left: 50%;
-        -ms-transform: translateX(-50%);
-        -moz-transform: translateX(-50%);
-        -webkit-transform: translateX(-50%);
-        transform: translateX(-50%);
-    }
-    [data-tooltip-position="top"]:before {
-        bottom: 100%;
-        margin-bottom: 6px;
-    }
-    [data-tooltip-position="bottom"]:before {
-        top: 100%;
-        margin-top: 6px;
-    }
-    /* Tooltip arrow styling/placement */
-    [data-tooltip]:after {
-        content: '';
-        /*display: none;*/
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-color: transparent;
-        border-style: solid;
-    }
-    /* Dynamic horizontal centering for the tooltip */
-    [data-tooltip-position="top"]:after,
-    [data-tooltip-position="bottom"]:after {
-        left: 50%;
-        margin-left: -6px;
-    }
-    /* Dynamic vertical centering for the tooltip */
-    [data-tooltip-position="right"]:after,
-    [data-tooltip-position="left"]:after {
-        top: 50%;
-        margin-top: -6px;
-    }
-    [data-tooltip-position="top"]:after {
-        bottom: 100%;
-        border-width: 6px 6px 0;
-        border-top-color: #38aeff;
-    }
-    [data-tooltip-position="right"]:after {
-        left: 100%;
-        border-width: 6px 6px 6px 0;
-        border-right-color: #000;
-    }
-    [data-tooltip-position="bottom"]:after {
-        top: 100%;
-        border-width: 0 6px 6px;
-        border-bottom-color: #000;
-    }
-    [data-tooltip-position="left"]:after {
-        right: 100%;
-        border-width: 6px 0 6px 6px;
-        border-left-color: #000;
-    }
-    .exp-form{
-        color: #000;
-        margin-top: 10px;
-        margin-left: 25%;
-        display: block;
-        background: rgba(151, 215, 255, 0.57);
-        width: 50%;
-        text-align: left;
-        border-radius: 10px;
-        border: 2px solid #38aeff;
-        padding-bottom: 5px;
-    }
-    .exp-form p{
-        background: #38aeff;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        text-align: center;
-        color: white;
-        margin-top: 0px;
-        margin-bottom: 0px;
-        padding-bottom: 5px;
-    }
-    .exp-form label {
-        display: block;
-        padding-left: 20px;
-    }
-    .exp-form input {
-        float: left;
-        position: relative;
-        top: 1px;
-    }
-    .rank{
-        font-size: 11px;
-        color: rgba(0, 0, 0, 0.52);
-    }
+{% block title %}Komma-Trainer - Übung: Kommas erklären{% endblock %}
 
-</style>
-</head>
-<body>
-<h2>Übung: Komma erklären</h2>
+{% block main %}
+    <h2>Übung: Kommas erklären</h2>
+
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     {% for w in words %}
         {{ w }}
@@ -185,7 +17,7 @@
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
     </p>
 </div>
-<p class="rank">Dein Rang ist: <b>{{ rank }}</b></p>
+    <p class="rank">Anleitung: Wähle für jedes Komma die passende Regel aus.</p>
 
 <script>
     document.addEventListener("DOMContentLoaded",function(){
@@ -207,12 +39,12 @@
         var explanations_arr = {{ explanations|safe }};
         for(var i=0;i<commas.length;i++){
             if(commas[i]==1 || commas[i]==2){
-                slots[i].innerHTML=",";
+                slots[i].innerHTML=", ("+comma_count+")";
                 slots[i].setAttribute("data-tooltip",comma_count.toString());
                 var form = document.createElement("form");
                 form.className = "exp-form";
                 var p = document.createElement("p");
-                p.innerHTML = comma_count.toString();
+                p.innerHTML = "Erkläre Komma ("+comma_count.toString()+")";
                 form.appendChild(p);
                 for(var j=0;j<4;j++){
                     var input = document.createElement("input");
@@ -312,7 +144,7 @@
             }
         }
 
-        xmlhttp.open("GET","submit_task2?id="+id+"&uid=testuser"+"&chckbx_sol="+chckbx_sol,true);
+        xmlhttp.open("GET","submit_task_explain_commas?id="+id+"&uid=testuser"+"&chckbx_sol="+chckbx_sol,true);
         xmlhttp.send();
 
         submitted = true;
@@ -327,5 +159,4 @@
       //}
     });
 </script>
-</body>
-</html>
+{%  endblock %}

@@ -6,10 +6,13 @@ urlpatterns = [
     # ex: /polls/
     url(r'^$', views.task, name='task'),
     url(r'^submit_task1$', views.submit_task1),
-    url(r'^submit_task2$', views.submit_task2),
+    url(r'^submit_task_correct_commas$', views.submit_task_correct_commas),
+    url(r'^submit_task_explain_commas$', views.submit_task_explain_commas),
     url(r'^submit_task3$', views.submit_task3),
     url(r'^submit_task4$', views.submit_task4),
-    url(r'^profile$', views.profile),
+    url(r'^delete_user$', views.delete_user),
+    url(r'^logout$', views.logout),
+
     # ex: /polls/5/
     #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
     # ex: /polls/5/results/

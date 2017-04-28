@@ -204,14 +204,12 @@ var submitted = false;
     /* Only if the comma is supposed to be there*/
     function toggle_comma(element) {
         var commas = {{ comma }};
-        var id = parseInt(element.id.substr(21, 2));
-        console.log(id);
-        if(commas[id] == 1 || commas[id] == 2) {
-            console.log(commas[id]);
+        var id = parseInt(element.id.substr(21, 2))-1;  // index is 0-based, id 1-based
+        if(commas[id] == 1 || commas[id] == 2) {  // we can only delete commas at predefined positions here
             if (element.innerHTML.indexOf(',') == -1) {
-                element.innerHTML = ",";
+                element.innerHTML = ",";  // set comma
             } else {
-                element.innerHTML = "&nbsp";
+                element.innerHTML = "&nbsp";  // delete comma
             }
         }
     }

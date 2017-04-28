@@ -1,0 +1,17 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Levelaufstieg{% endblock %}
+
+{% block main %}
+<h2>Du bist aufgestiegen!</h2>
+
+<p>Herzlichen Glückwunsch!
+
+<p>Du bist einen Level aufgestiegen und bist jetzt in Level {{level}}.
+
+<p>Und du hast eine neue Regel bekommen. Die Regel heißt:
+
+<p style="margin:2em; background-color:#ccc; padding: 1em;"><em>{{ new_rule.description }}</em>
+
+<p><a href="">HIER geht es weiter.</a>
+{% endblock %}
