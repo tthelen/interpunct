@@ -331,16 +331,7 @@ class SentenceRule(models.Model):
     def __str__(self):
         return self.sentence.text + self.rule.code
 
-class Solution(models.Model):
-    """
-    Represents one solutions to a sentence.
-    Solutions are stored as bitfields for a sentence.
-    """
-    sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE)
-    # We do not use django users here because the user id is provided by the embedding system
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    user_id = models.CharField(max_length=255)
-    solution = models.BigIntegerField()
+
 
 class User(models.Model):
     def __str__(self):
@@ -564,14 +555,13 @@ class User(models.Model):
 
                 userrule.count(correct=corr)
 
-    def count_false_types_task_explain_commas(self, user_array_str, solution_array):
+    def count_false_types_task_explain_commas(self, user_array, solution_array):
         """
         count false types for: AllKommaErlären
         :param user_array: contains submitted array of bools (checkbox answers)
         :param solution_array: contains comma types
         """
 
-        user_array = re.split(r'[ ,]+', user_array_str)
         comma_amout = 0;
         for i in range(len(solution_array) - 1):
             if len(solution_array[i]) != 0:
@@ -743,3 +733,15 @@ class UserRule(models.Model):
         return "{} / {}: Box {}, Score {}, {}/{} correct" % (
             self.user.user_id, self.rule.code,
             self.box, self.score, self.correct, self.total)
+
+
+class Solution(models.Model):
+    """
+    Represents one solutions to a sentence.
+    Solutions are stored as bitfields for a sentence.
+    """
+    sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=64)  # TODO: make it an enum
+    solution = models.CharField(max_length=255)
+    mkdate = models.DateTimeField(auto_now_add=True)

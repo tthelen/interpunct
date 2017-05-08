@@ -346,6 +346,7 @@ def submit_task1(request):
     user = User.objects.get(user_id=uname)
     user.count_false_types_task1(user_solution, sentence.get_commatypelist())
     user.update_rank()
+    Solution(user=user, sentence=sentence, type="set", solution="".join(user_solution)).save() # save solution to db
     return JsonResponse({'submit': 'ok'})
 
 @logged_in_or_basicauth("Bitte einloggen")
@@ -365,6 +366,9 @@ def submit_task_correct_commas(request):
     #sentence.update_submits()
     user = User.objects.get(user_id=uname)
     user.count_false_types_task_correct_commas(user_solution, commas, sentence.get_commatypelist())
+
+    Solution(user=user, sentence=sentence, type="correct", solution="".join([str(x) for x in user_solution])).save() # save solution to db
+
     #user.update_rank()
     return JsonResponse({'submit': 'ok'})
 
@@ -382,9 +386,13 @@ def submit_task_explain_commas(request):
     sentence.update_submits()
     user = User.objects.get(user_id=uname)
     user.update_rank()
-    chckbx_sol = request.GET['chckbx_sol']
 
-    user.count_false_types_task_explain_commas(chckbx_sol, sentence.get_commatypelist())
+    user_array = re.split(r'[ ,]+', chckbx_sol = request.GET['chckbx_sol'])
+
+    # write solution to db
+    Solution(user=user, sentence=sentence, type='explain', solution="".join(user_array), ).save()
+
+    user.count_false_types_task_explain_commas(user_array, sentence.get_commatypelist())
     return JsonResponse({'submit': 'ok'})
 
 @logged_in_or_basicauth("Bitte einloggen")
