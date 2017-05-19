@@ -33,7 +33,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
             # NOTE: We are only support basic authentication for now.
             #
             if auth[0].lower() == "basic":
-                print(auth[1])
+                # print(auth[1])
                 auth_bytes=bytes(auth[1], 'utf8')
                 uname, passwd = base64.b64decode(auth_bytes).split(b':')
                 if uname == passwd:
@@ -141,6 +141,10 @@ def task(request):
         user = User(user_id=uname)
         user.rules_activated_count=0
         user.save()
+        display_rank=False
+        return render(request, 'trainer/welcome.html', locals())
+
+    if not user.data:
         display_rank=False
         return render(request, 'trainer/welcome.html', locals())
 
@@ -307,6 +311,22 @@ def task(request):
             return render(request, 'trainer/KannKommaSetzen.html', locals())
         else:
             return render(request, 'trainer/KannKommaLöschen.html', locals())
+
+@logged_in_or_basicauth("Bitte einloggen")
+def start(request):
+    uname = request.username
+    user = User.objects.get(user_id=uname)
+    vector = "{}{}{}{}{}{}".format(
+        request.GET.get('abschluss',0),
+        request.GET.get('semester',0),
+        request.GET.get('fach1',0),
+        request.GET.get('fach2',0),
+        request.GET.get('gender',0),
+        request.GET.get('estim',0))
+    user.data = vector
+    user.save()
+    return redirect("/")
+
 
 def profile(request):
     """

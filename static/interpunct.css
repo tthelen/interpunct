@@ -251,7 +251,7 @@ abbr {
   cursor: pointer;
 }
 
-.modal{
+.xmodal{
   /* arbitrary styling */
   box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
   height:250px;
@@ -271,7 +271,7 @@ abbr {
     padding:8px;
 }
 
-.modal::backdrop {
+.xmodal::backdrop {
   position: fixed;
   top: 0;
   left: 0;

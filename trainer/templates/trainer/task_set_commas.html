@@ -4,19 +4,21 @@
 
 {% block main %}
     <h2>Übung: Komma setzen</h2>
+    <p class="manual">Anleitung: <br>Setze alle notwendigen Kommas, indem Du auf die Wortzwischenräume klickst. Optionale Kommas
+    kannst Du setzen, musst Du aber nicht.
+    </p>
     <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
         <div class="interaction">
 {% spaceless %}
 {% for w in words %}{% for c,s in collection %}{% if forloop.counter == forloop.parentloop.counter %}{{w}}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}">&nbsp; </span>{% endif %}{% endif %}{% endfor %}{% endfor %}
 {% endspaceless %}
         </div>
+        <p>&nbsp;</p>
+
         <p id="feedback-{{ sentence.id }}">
             <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
         </p>
     </div>
-    <p class="manual">Anleitung: <br>Setze alle notwendigen Kommas, indem Du auf die Wortzwischenräume klickst. Optionale Kommas
-    kannst Du setzen, musst Du aber nicht.
-    </p>
 
     <script>
         document.addEventListener("DOMContentLoaded",function(){

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
     <meta charset="UTF-8">
     <title>{% block title %}Komma-Trainer{% endblock %}</title>
-    <link rel="stylesheet" href="./static/dialog-polyfill/dialog-polyfill.css">
+    <link rel="stylesheet" href="./static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="./static/interpunct.css">
-    <script src="./static/dialog-polyfill/dialog-polyfill.js"></script>
+    <script src="./static/jquery-3.2.1.min.js"></script>
+    <script src="./static/bootstrap/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
     <div class="rankinfo">
@@ -13,23 +15,29 @@
             <img style="width:150px" src="./static/images/{{ rankimg }}">
             <div class="rank">
                 <p>{{ uname }}, Du bist in Level {{ level }}.<br>(<a href="logout">Reset</a>)</p>
-                <p>Regeln im Fokus:</p>
-                <table>
+                <h6>Regeln im Fokus:</h6>
                     {%  for ur in leveldsp %}
-                    <tr>
-                        <td><abbr title='{{ ur.rule.description }}' id='abbr-{{ ur.rule.id }}'>{{ ur.rule.rule }}</abbr></td>
-                    </tr>
+                    <p>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
+                    </p>
                     {% endfor %}
-                </table>
                     {% for ur in leveldsp %}
-                      <dialog id="dialog-{{ ur.rule.id }}" class="modal">
-                        <h1>Regel {{ ur.rule.rule }}</h1>
-                            {{ ur.rule.description }}
-                            <p>&nbsp;</p>
-                            <form method="dialog">
-                              <input type="submit" value="Schließen" />
-                            </form>
-                      </dialog>
+                        <div class="modal fade" id="modal-{{ ur.rule.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modal-label-{{ ur.rule.id }}">Regel {{ ur.rule.rule }}</h4>
+                              </div>
+                              <div class="modal-body">
+                                {{ ur.rule.description }}
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     {% endfor %}
            </div>
     {% endif %}

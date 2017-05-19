@@ -4,17 +4,19 @@
 
 {% block main %}
     <h2>Übung: Kommas erklären</h2>
+    <p class="rank">Anleitung: Wähle für jedes Komma die passende Regel aus.</p>
 
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     <div class="interaction">
     {% spaceless %}{% for w in words %}{{ w }}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip-position="top">&nbsp</span>{% endif %}{% endfor %}{% endspaceless %}
     </div>
+    <p>&nbsp;</p>
     <div class = "explanations"></div>
+    <p>&nbsp;</p>
     <p id="feedback-{{ sentence.id }}">
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
     </p>
 </div>
-    <p class="rank">Anleitung: Wähle für jedes Komma die passende Regel aus.</p>
 
 <script>
     document.addEventListener("DOMContentLoaded",function(){

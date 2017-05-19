@@ -3,9 +3,166 @@
 {% block title %}Willkommen beim Komma-Trainer!{% endblock %}
 
 {% block main %}
-<h2>Der Komma-Trainer</h2>
 
-Hallo, du bist neu. Gleich geht es los. Einfach nochmal laden.
+    <h1>Komma-Trainer</h1>
+
+    <p>Herzlich Willkommen zum Komma-Trainer! Du möchtest auf motivierende und herausfordernde Weise an deinen Kommasetzungs-Fähigkeiten arbeiten?
+    Kein Problem - die Kommas sind nur noch wenige Klicks entfernt. Lange Anleitungen und Vorreden gibt es nicht, dafür aber jede Menge
+    interessanter Sätze, spielerischer Elemente und dazu noch die Möglichkeit, etwas für die Wissenschaft zu tun.
+    </p>
+
+    <h2>Wissenschaftliche Auswertung</h2>
+
+    <p>
+    Wir wollen Leistungen und Schwierigkeiten Studierender bei der Kommasetzung untersuchen, um dieses Programm zu
+    verbessern, aber auch, um etwas über typische (und untypische) Problemstellen herauszufinden. Dazu hilft es uns,
+    wenn Du den folgenden Fragebogen kurz ausfüllst.
+    </p>
+
+    <p>Alle anfallenden Daten werden pseudonym gespeichert, d.h. das Programm merkt sich Deinen Übungsstand und
+    präsentiert Dir jeweils passende Übungen. An keiner Stelle sind dabei aber Rückschlüsse auf Deine Identität
+    und Deinen Namen möglich. Technisch funktioniert das so, dass Stud.IP aus deinem Benutzernamen einen
+    verschlüsselten Wert (kryptographisches Hashing) bildet und das Komma-Programm nur diesen Wert kennt.
+    Es nutzt eine eigene Datenbank und hat keinerlei Zugriff auf Stud.IP-Daten.</p>
+
+    <p>Alle Fragen zum Programm und zum Datenschutz beantwortet Dr. Tobias Thelen, Zentrum für Informationsmanagement und
+    virtuelle Lehre, <a href="mailto:tobias.thelen@uni-osnabrueck.de">tobias.thelen@uni-osnabrueck.de</a>, Telefon 0541/969-6502.</p>
+
+    <h2>Fragebogen</h2>
+
+<form id="theform" class="form-horizontal" action="start">
+
+  <div class="form-group" id="formAbschlussGroup">
+    <label for="formAbschluss" class="col-sm-2 control-label">Studiengang *</label>
+    <div class="col-sm-3">
+    <select id="formAbschluss" name="abschluss" class="form-control" required="true">
+      <option value="0">bitte auswählen</option>
+      <option value="1">Bachelor (1 Fach)</option>
+      <option value="2">Bachelor (2-Fächer, Lehramt)</option>
+      <option value="3">Bachelor (2-Fächer, kein Lehramt)</option>
+      <option value="4">Master (Lehramt)</option>
+      <option value="5">Master (kein Lehramt)</option>
+      <option value="6">sonstiges</option>
+      <option value="7">nicht studierend</option>
+    </select>
+        <p id="formAbschlussGroup-error">Bitte auswählen!</p>
+    </div>
+
+    <div class="col-sm-2">
+    <select id="formSem" name="semester" class="form-control">
+      <option value="0">Fachsemester?</option>
+      <option value="1">1./2. Semester</option>
+      <option value="2">3./4. Semester</option>
+      <option value="3">4./5. Semester</option>
+      <option value="4">6./7. Semester</option>
+      <option value="5">8./9. Semester</option>
+      <option value="6">höheres Semester</option>
+    </select>
+    </div>
+
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2">&nbsp;</div>
+    <div class="col-sm-3">
+    <select id="formFach1" name="fach1" class="form-control">
+      <option value="0">ggf. 1. Studienfach</option>
+      <option value="1">Anglistik/Englisch</option>
+      <option value="2">Cognitive Science</option>
+      <option value="3">Germanistik/Deutsch</option>
+      <option value="4">Mathematik</option>
+      <option value="5">Informatik</option>
+      <option value="6">Sonstiges</option>
+    </select>
+    </div>
+
+    <div class="col-sm-3">
+    <select id="formFach2" name="fach2" class="form-control">
+      <option value="0">ggf. 2. Studienfach</option>
+      <option value="1">Anglistik/Englisch</option>
+      <option value="2">Cognitive Science</option>
+      <option value="3">Germanistik/Deutsch</option>
+      <option value="4">Mathematik</option>
+      <option value="5">Informatik</option>
+      <option value="6">Sonstiges</option>
+    </select>
+    </div>
+
+  </div>
+
+  <div class="form-group">
+    <label for="formGender" class="col-sm-2 control-label">Geschlecht</label>
+    <div class="col-sm-3">
+        <select id="formGender" name="gender" class="form-control">
+            <option value="w">weiblich</option>
+            <option value="m">männlich</option>
+        </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="formHZB" class="col-sm-2 control-label">Hochschulzugangsberechitung</label>
+    <div class="col-sm-3">
+    <select id="formFach1" name="fach2" class="form-control">
+      <option value="0">bitte auswählen</option>
+      <option value="1">Abitur (Deutschland)</option>
+      <option value="2">Abitur-äquivalent (Ausland)</option>
+      <option value="3">Berufsqualifikation</option>
+      <option value="4">sonstige</option>
+      <option value="5">nicht studierend</option>
+    </select>
+    </div>
+  </div>
+
+  <div class="form-group" id="formSelfestGroup">
+    <label for="formSelfest" class="col-sm-2 control-label">Wie sicher fühlst Du Dich bei der Kommasetzung? *</label>
+    <div class="col-sm-3">
+        <select id="formSelfest" name="fach2" class="form-control" required="true">
+            <option value="0">bitte auswählen</option>
+            <option value="1">sehr unsicher</option>
+            <option value="2">eher unsicher</option>
+            <option value="3">eher sicher</option>
+            <option value="4">sehr unsicher</option>
+        </select>
+         <p id="formSelfestGroup-error">Bitte auswählen!</p>
+    </div>
+  </div>
+
+<div class="col-sm-offset-2 col-sm-10">
+<button type="submit" class="btn btn-default">Submit</button>
+</div>
+</form>
 
 <a href="">HIER</a>
+
+<script>
+$(document).ready(function () {
+    $("#formAbschlussGroup-error").hide();
+    $("#formSelfestGroup-error").hide();
+    $("#theform").on("submit", function (event) {
+        if ($("#formAbschluss").val()==0) {
+            $("#formAbschlussGroup").addClass("has-error");
+            $("#formAbschlussGroup").removeClass("has-success");
+            $("#formAbschlussGroup-error").show();
+            event.preventDefault();
+        } else {
+            $("#formAbschlussGroup").addClass("has-success");
+            $("#formAbschlussGroup").removeClass("has-error");
+            $("#formAbschlussGroup-error").hide();
+        }
+        if ($("#formSelfest").val()==0) {
+            $("#formSelfestGroup").addClass("has-error");
+            $("#formSelfestGroup").removeClass("has-success");
+            $("#formSelfestGroup-error").show();
+            event.preventDefault();
+        } else {
+            $("#formSelfestGroup").addClass("has-success");
+            $("#formSelfestGroup").removeClass("has-error");
+            $("#formSelfestGroup-error").hide();
+        }
+
+    });
+});
+
+</script>
 {% endblock %}
