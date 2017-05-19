@@ -2,6 +2,7 @@
 
 body {
     font-family:Arial,sans-serif;
+    font-size:140%;
 }
 
 .rankinfo {
@@ -14,15 +15,27 @@ body {
 
 .interaction {
     margin-right:1em; padding:10px; background-color:#cccccc;
+    word-spacing: 0;
 }
+
+.interaction-correct {
+    margin-right:1em; padding:10px; background-color:#ffaaaa;
+    word-spacing: 0;
+}
+
 
 .interpunct-sentence{
     margin-top: 40px;
 }
 /* ----- rounding corners -----*/
 .interpunct-commaslot{
-    border-radius: 50px;
+    xborder-radius: 50px;
+    padding-left:0.4em;
+    padding-right:0.4em;
+    cursor: pointer;
+    xwhite-space:nowrap;
 }
+
 
 .interpunct-commaslot:hover {
     background-color: #dddddd;
@@ -32,7 +45,7 @@ body {
     background-color: #f74040;
     border:none;
     color: white;
-    font-size:16px;
+    font-size:100%;
     padding: 12px 25px;
     text-decoration: none;
     cursor: pointer;
@@ -61,6 +74,10 @@ body {
 }
 .interpunct-commaslot-wrong {
     background-color:red;
+}
+
+.comma {
+    margin-left: -0.375em;  /* left align comma */
 }
 /*Temporary tooltip from*/
 /*https://chrisbracco.com/a-simple-css-tooltip/*/
@@ -176,26 +193,31 @@ body {
   opacity: 1;
 }
 
+.explanations {
+    margin-top:15px;
+}
+
 .exp-form{
     color: #000;
     margin-top: 10px;
-    margin-left: 25%;
+    margin-left: 0;
     display: block;
-    background: rgba(151, 215, 255, 0.57);
-    width: 50%;
+    background: rgb(221,226,225);
+    width: 80%;
     text-align: left;
     border-radius: 10px;
-    border: 2px solid #38aeff;
+    border: 2px solid #899cbc;
     padding-bottom: 5px;
+    font-size: 75%;
 }
 .exp-form p{
-    background: #38aeff;
+    background: #899cbc;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     text-align: center;
     color: white;
     margin-top: 0px;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
     padding-bottom: 5px;
 }
 .exp-form label {
@@ -210,7 +232,7 @@ body {
 
 
 .manual, .rank {
-    font-size: 11px;
+    font-size: 75%;
     color: #777;
 }
 
@@ -221,3 +243,39 @@ body {
 
 .markingright::after { color: green; content: "✔"; }
 .markingwrong::after { color: red; content: "✘"; }
+
+
+/* modal */
+
+abbr {
+  cursor: pointer;
+}
+
+.modal{
+  /* arbitrary styling */
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+  height:250px;
+  width:50%;
+  background: rgba(231,236,235,0.95);
+  text-align: left;
+  border-radius: 10px;
+  border: 2px solid #899cbc;
+  padding: 15px;
+
+  /* change position to fixed if you want to prevent the dialog from scrolling away, and center it */
+  position:fixed;
+  top:50%;
+  left:30%;
+  margin-left: -150px;
+  margin-top:-100px;
+    padding:8px;
+}
+
+.modal::backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+}

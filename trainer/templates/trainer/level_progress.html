@@ -3,15 +3,27 @@
 {% block title %}Komma-Trainer - Levelaufstieg{% endblock %}
 
 {% block main %}
+{% if level > 0 %}
 <h2>Du bist aufgestiegen!</h2>
 
 <p>Herzlichen Glückwunsch!
 
 <p>Du bist einen Level aufgestiegen und bist jetzt in Level {{level}}.
 
-<p>Und du hast eine neue Regel bekommen. Die Regel heißt:
+<p>Und Du hast eine neue Regel bekommen. Die Regel heißt:
+{%  else %}
+<h2>Deine erste Regel</h2>
 
+    <p>Du bekommst nach und nach weitere Regeln zum Üben hinzu. Immer, wenn Du diese Regel gut genug beherrschst,
+        steigst Du einen Level auf und erweiterst dein Regelrepertoire. Die alten Regeln sind damit nicht aus
+        dem Spiel: Je nachdem, wie fehlerfrei Du sie meisterst, tauchen sie ab und an, auch in Kombinationen mit
+        anderen Regeln, wieder auf.
+    </p>
+
+    <p>Hier nun Deine erste Regel:</p>
+{% endif %}
 <p style="margin:2em; background-color:#ccc; padding: 1em;"><em>{{ new_rule.description }}</em>
 
 <p><a href="">HIER geht es weiter.</a>
+
 {% endblock %}

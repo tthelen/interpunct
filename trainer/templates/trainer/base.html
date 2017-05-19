@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Komma-Trainer{% endblock %}</title>
+    <link rel="stylesheet" href="./static/dialog-polyfill/dialog-polyfill.css">
     <link rel="stylesheet" href="./static/interpunct.css">
- </style>
+    <script src="./static/dialog-polyfill/dialog-polyfill.js"></script>
 </head>
 <body>
     <div class="rankinfo">
@@ -12,23 +13,24 @@
             <img style="width:150px" src="./static/images/{{ rankimg }}">
             <div class="rank">
                 <p>{{ uname }}, Du bist in Level {{ level }}.<br>(<a href="logout">Reset</a>)</p>
-                <p>Deine Regeln:</p>
+                <p>Regeln im Fokus:</p>
                 <table>
                     {%  for ur in leveldsp %}
                     <tr>
-                        <td><abbr title='{{ ur.rule.description }}'>{{ ur.rule.code }}</abbr></td>
-                        <td align=right>{{ ur.correct }}/{{ ur.total }}</td>
-                        <td>
-                            {% if ur.box == 0 %} <span title="Diese Regel musst du noch üben.">🤔</span>
-                            {% elif ur.box == 1 %} <span title="Diese Regel scheint zu sitzen.">&#128077;</span>
-                            {% elif ur.box == 2 %} <span title="Diese Regel kannst du gut.">&#128526;</span>
-                            {% elif ur.box == 3 %} <span title="Diese Regel kannst du sehr gut.">&#128525;</span>
-                            {% elif ur.box == 4 %} <span title="Diese Regel kannst du locker.">😇</span>
-                            {% endif %}
-                        </td>
+                        <td><abbr title='{{ ur.rule.description }}' id='abbr-{{ ur.rule.id }}'>{{ ur.rule.rule }}</abbr></td>
                     </tr>
                     {% endfor %}
                 </table>
+                    {% for ur in leveldsp %}
+                      <dialog id="dialog-{{ ur.rule.id }}" class="modal">
+                        <h1>Regel {{ ur.rule.rule }}</h1>
+                            {{ ur.rule.description }}
+                            <p>&nbsp;</p>
+                            <form method="dialog">
+                              <input type="submit" value="Schließen" />
+                            </form>
+                      </dialog>
+                    {% endfor %}
            </div>
     {% endif %}
     </div>
@@ -39,5 +41,6 @@
         Hallo. Hier ist etwas schiefgelaufen.
         {% endblock %}
     </div>
+
 </body>
 </html>

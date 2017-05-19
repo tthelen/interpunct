@@ -36,7 +36,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
                 print(auth[1])
                 auth_bytes=bytes(auth[1], 'utf8')
                 uname, passwd = base64.b64decode(auth_bytes).split(b':')
-                if uname==passwd:
+                if uname == passwd:
                     request.username=uname
                     return view(request, *args, **kwargs)
 
@@ -132,33 +132,38 @@ def task(request):
     # get user from URL or session or default
     # user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
     uname = request.username
+    new_rule = None  # new level reached? (new rule to explain)
+    display_rank=True  # show the rank in output? (not on welcome and rule explanation screens)
 
     try:
         user = User.objects.get(user_id=uname)
-    except User.DoesNotExist:
+    except User.DoesNotExist:  # new user: welcome!
         user = User(user_id=uname)
         user.rules_activated_count=0
         user.save()
-
-    if user.rules_activated_count == 0: # new user without activated rules
-        user.init_rules()
         display_rank=False
         return render(request, 'trainer/welcome.html', locals())
 
-    display_rank=True
+    if user.rules_activated_count == 0: # new user without activated rules
+        new_rule = user.init_rules()
+        display_rank=False
+        level = 0
+        return render(request, 'trainer/level_progress.html', locals())
+
+    # normal task selection process
     new_rule = user.progress()
     level = user.rules_activated_count
     rank = user.get_user_rank_display()
     leveldsp = user.level_display()
     rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)
 
-    if new_rule:
+    if new_rule:  # level progress: show new rules instead of task
         return render(request, 'trainer/level_progress.html', locals())
 
     # task randomizer
-    if user.rules_activated_count >= 3:
+    if user.rules_activated_count >= 3:  # more than 3 rules: set, correct or explain task
         index = random.randint(0, 1)
-    else:
+    else:  # less than 3 active rules: only set and correct tasks
         index = 0
     # for AllKommaSetzen.html + AllKommaErklärenI.html
     if index < 3:
@@ -387,7 +392,8 @@ def submit_task_explain_commas(request):
     user = User.objects.get(user_id=uname)
     user.update_rank()
 
-    user_array = re.split(r'[ ,]+', chckbx_sol = request.GET['chckbx_sol'])
+    chckbx_sol = request.GET['chckbx_sol']
+    user_array = re.split(r'[ ,]+', chckbx_sol)  # TODO fix for explain task
 
     # write solution to db
     Solution(user=user, sentence=sentence, type='explain', solution="".join(user_array), ).save()

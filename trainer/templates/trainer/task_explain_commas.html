@@ -6,12 +6,9 @@
     <h2>Übung: Kommas erklären</h2>
 
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
-    {% for w in words %}
-        {{ w }}
-        {% if not forloop.last %}
-            <span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip-position="top">&nbsp</span>
-        {% endif %}
-    {% endfor %}
+    <div class="interaction">
+    {% spaceless %}{% for w in words %}{{ w }}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip-position="top">&nbsp</span>{% endif %}{% endfor %}{% endspaceless %}
+    </div>
     <div class = "explanations"></div>
     <p id="feedback-{{ sentence.id }}">
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
@@ -22,6 +19,12 @@
 <script>
     document.addEventListener("DOMContentLoaded",function(){
         toggle_comma();
+        var dialog;
+        {% for ur in leveldsp %}
+            dialog = document.querySelector('#dialog-{{ ur.rule.id }}');
+            dialogPolyfill.registerDialog(dialog);
+            document.querySelector('#abbr-{{ ur.rule.id }}').addEventListener('click', function (event) { document.querySelector('#dialog-{{ ur.rule.id }}').showModal(); });
+        {%  endfor %}
     });
 
     var submitted = false;
@@ -39,8 +42,8 @@
         var explanations_arr = {{ explanations|safe }};
         for(var i=0;i<commas.length;i++){
             if(commas[i]==1 || commas[i]==2){
-                slots[i].innerHTML=", ("+comma_count+")";
-                slots[i].setAttribute("data-tooltip",comma_count.toString());
+                slots[i].innerHTML="<span class='comma'>,</span> <b>["+comma_count+"]</b>";
+                //slots[i].setAttribute("data-tooltip",comma_count.toString());
                 var form = document.createElement("form");
                 form.className = "exp-form";
                 var p = document.createElement("p");

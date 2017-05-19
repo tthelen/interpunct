@@ -424,12 +424,15 @@ class User(models.Model):
         ur.save()
 
         # activate first rule
-        ur = UserRule.objects.get(rule=Rule.objects.get(code=self.rule_order[0]), user=self)
+        new_rule = Rule.objects.get(code=self.rule_order[0])
+        ur = UserRule.objects.get(rule=new_rule, user=self)
         ur.active = True
         ur.save()
 
         self.rules_activated_count = 1  # activate first rule for next request
         self.save()
+
+        return new_rule
 
     def progress(self):
         """Advance to next level, if appropriate.
