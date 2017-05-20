@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/trainer/migrations/0008_solution_time_elapsed.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/models.py" afterPath="$PROJECT_DIR$/trainer/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/views.py" afterPath="$PROJECT_DIR$/trainer/views.py" />
     </list>
     <ignored path="interpunct.iws" />
@@ -67,43 +60,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="task_set_commas.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="89" column="85" lean-forward="false" selection-start-line="89" selection-start-column="85" selection-end-line="89" selection-end-column="85" />
-              <folding>
-                <element signature="e#812#818#1#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_correct_commas.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="42" column="75" lean-forward="false" selection-start-line="42" selection-start-column="75" selection-end-line="42" selection-end-column="75" />
-              <folding>
-                <element signature="e#811#817#1#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_explain_commas.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="146" column="51" lean-forward="false" selection-start-line="146" selection-start-column="51" selection-end-line="146" selection-end-column="51" />
-              <folding>
-                <element signature="e#628#634#1#HTML" expanded="true" />
-                <element signature="e#685#691#1#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/urls.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -114,17 +70,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trainer/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="420" column="86" lean-forward="false" selection-start-line="420" selection-start-column="86" selection-end-line="420" selection-end-column="86" />
+            <state relative-caret-position="510">
+              <caret line="186" column="57" lean-forward="false" selection-start-line="186" selection-start-column="57" selection-end-line="186" selection-end-column="57" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.trainer_solution" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.trainer_solution" pinned="false" current-in-tab="false">
         <entry file="dbDummy://dbtable:/d08381e1/948627af-16bd-4562-8b76-47857f843b8b/main.trainer_solution">
           <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
             <state>
@@ -242,9 +198,9 @@
         <option value="$PROJECT_DIR$/sentences.txt" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" />
-        <option value="$PROJECT_DIR$/trainer/views.py" />
         <option value="$PROJECT_DIR$/trainer/models.py" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" />
+        <option value="$PROJECT_DIR$/trainer/views.py" />
       </list>
     </option>
   </component>
@@ -751,7 +707,14 @@
       <option name="project" value="LOCAL" />
       <updated>1495232898937</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="- Zeitmessung&#10;- Vollständige Lösungen für Korrektur-Aufgaben">
+      <created>1495317748084</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1495317748084</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TodoView">
@@ -830,7 +793,8 @@
     <MESSAGE value="- &quot;Regeln im Fokus&quot; statt Liste&#10;- Regel-Paragraf als Titel&#10;- Kommas linksbündig" />
     <MESSAGE value="- Fragebogen zum Einsiteg&#10;- Umstellung auf Bootstrap" />
     <MESSAGE value="- neue Regel: Vorfeldkomma&#10;- Neue Beispielsätze" />
-    <option name="LAST_COMMIT_MESSAGE" value="- neue Regel: Vorfeldkomma&#10;- Neue Beispielsätze" />
+    <MESSAGE value="- Zeitmessung&#10;- Vollständige Lösungen für Korrektur-Aufgaben" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Zeitmessung&#10;- Vollständige Lösungen für Korrektur-Aufgaben" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1099,14 +1063,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="7" column="31" lean-forward="false" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="dbDummy://dbtable:/d08381e1/948627af-16bd-4562-8b76-47857f843b8b/main.trainer_user">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
@@ -1164,12 +1120,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="317" column="0" lean-forward="true" selection-start-line="317" selection-start-column="0" selection-end-line="317" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/d08381e1/948627af-16bd-4562-8b76-47857f843b8b/main.trainer_solution">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="421">
           <caret line="89" column="85" lean-forward="false" selection-start-line="89" selection-start-column="85" selection-end-line="89" selection-end-column="85" />
           <folding>
             <element signature="e#812#818#1#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="42" column="75" lean-forward="false" selection-start-line="42" selection-start-column="75" selection-end-line="42" selection-end-column="75" />
+          <folding>
+            <element signature="e#811#817#1#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1185,41 +1172,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="7" column="31" lean-forward="false" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trainer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="420" column="86" lean-forward="false" selection-start-line="420" selection-start-column="86" selection-end-line="420" selection-end-column="86" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="317" column="0" lean-forward="true" selection-start-line="317" selection-start-column="0" selection-end-line="317" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="42" column="75" lean-forward="false" selection-start-line="42" selection-start-column="75" selection-end-line="42" selection-end-column="75" />
-          <folding>
-            <element signature="e#811#817#1#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/d08381e1/948627af-16bd-4562-8b76-47857f843b8b/main.trainer_solution">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="510">
+          <caret line="186" column="57" lean-forward="false" selection-start-line="186" selection-start-column="57" selection-end-line="186" selection-end-column="57" />
           <folding />
         </state>
       </provider>

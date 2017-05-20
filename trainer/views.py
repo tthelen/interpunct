@@ -183,8 +183,8 @@ def task(request):
             if ct != [] and ct[0][0] != 'E': # rule, but no error rule
                 # at a rule position include comma with 50% probabily
                 comma_to_check.append(random.randint(0,1))
-            else:  # 10% prob. to set comma in no-comma position
-                comma_to_check.append(random.choice([1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
+            else:  # 20% prob. to set comma in no-comma position
+                comma_to_check.append(random.choice([1,0,0,0,0]))
 
         comma_select = sentence.get_commaselectlist() # pack all selects in a list
         comma_select.append('0') # dirty trick to make the comma_select and comma_types the same length as words
