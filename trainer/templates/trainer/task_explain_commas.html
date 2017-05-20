@@ -21,15 +21,11 @@
 <script>
     document.addEventListener("DOMContentLoaded",function(){
         toggle_comma();
-        var dialog;
-        {% for ur in leveldsp %}
-            dialog = document.querySelector('#dialog-{{ ur.rule.id }}');
-            dialogPolyfill.registerDialog(dialog);
-            document.querySelector('#abbr-{{ ur.rule.id }}').addEventListener('click', function (event) { document.querySelector('#dialog-{{ ur.rule.id }}').showModal(); });
-        {%  endfor %}
     });
 
     var submitted = false;
+    var start_time = Date.now();
+
     /* Check if a DOM element has a given CSS class. */
     function has_class(element, cls) {
         return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
@@ -148,8 +144,8 @@
                 document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
             }
         }
-
-        xmlhttp.open("GET","submit_task_explain_commas?id="+id+"&uid=testuser"+"&chckbx_sol="+chckbx_sol,true);
+        var time_elapsed = Date.now() - start_time;
+        xmlhttp.open("GET","submit_task_explain_commas?id="+id+"&tim="+time_elapsed+"&chckbx_sol="+chckbx_sol,true);
         xmlhttp.send();
 
         submitted = true;

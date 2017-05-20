@@ -21,16 +21,8 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded",function(){
-            var dialog;
-            {% for ur in leveldsp %}
-                dialog = document.querySelector('#dialog-{{ ur.rule.id }}');
-                dialogPolyfill.registerDialog(dialog);
-                document.querySelector('#abbr-{{ ur.rule.id }}').addEventListener('click', function (event) { document.querySelector('#dialog-{{ ur.rule.id }}').showModal(); });
-            {%  endfor %}
-        });
 
-
+        var start_time = Date.now();
         var submitted = false;
         /* Check if a DOM element has a given CSS class. */
         function has_class(element, cls) {
@@ -94,8 +86,8 @@
             }
             /* change color of all span slots */
             toggle_color(element,{{ comma }},val);
-
-            xmlhttp.open("GET","submit_task1?id="+id+"&sol="+val+"&uid=testuser",true);
+            var time_elasped = Date.now() - start_time;
+            xmlhttp.open("GET","submit_task1?id="+id+"&sol="+val+"&tim="+time_elasped,true);
             xmlhttp.send();
 
             /* make the tooltip visible */

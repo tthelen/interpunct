@@ -60,15 +60,15 @@
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="29" parent="4" name="auth_group_permissions_group_id_0cd325b0_uniq">
+    <index id="29" parent="4" name="auth_group_permissions_group_id_permission_id_0cd325b0_uniq">
       <ColNames>group_id
 permission_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="30" parent="4" name="auth_group_permissions_0e939a4f">
+    <index id="30" parent="4" name="auth_group_permissions_group_id_b120cbf9">
       <ColNames>group_id</ColNames>
     </index>
-    <index id="31" parent="4" name="auth_group_permissions_8373b171">
+    <index id="31" parent="4" name="auth_group_permissions_permission_id_84c5c92e">
       <ColNames>permission_id</ColNames>
     </index>
     <key id="32" parent="4">
@@ -105,12 +105,12 @@ permission_id</ColNames>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="39" parent="5" name="auth_permission_content_type_id_01ab375a_uniq">
+    <index id="39" parent="5" name="auth_permission_content_type_id_codename_01ab375a_uniq">
       <ColNames>content_type_id
 codename</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="40" parent="5" name="auth_permission_417f1b1c">
+    <index id="40" parent="5" name="auth_permission_content_type_id_2f476e4b">
       <ColNames>content_type_id</ColNames>
     </index>
     <key id="41" parent="5">
@@ -203,15 +203,15 @@ codename</ColNames>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="60" parent="7" name="auth_user_groups_user_id_94350c0c_uniq">
+    <index id="60" parent="7" name="auth_user_groups_user_id_group_id_94350c0c_uniq">
       <ColNames>user_id
 group_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="61" parent="7" name="auth_user_groups_e8701ad4">
+    <index id="61" parent="7" name="auth_user_groups_user_id_6a12ed8b">
       <ColNames>user_id</ColNames>
     </index>
-    <index id="62" parent="7" name="auth_user_groups_0e939a4f">
+    <index id="62" parent="7" name="auth_user_groups_group_id_97559544">
       <ColNames>group_id</ColNames>
     </index>
     <key id="63" parent="7">
@@ -243,15 +243,15 @@ group_id</ColNames>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="69" parent="8" name="auth_user_user_permissions_user_id_14a6b632_uniq">
+    <index id="69" parent="8" name="auth_user_user_permissions_user_id_permission_id_14a6b632_uniq">
       <ColNames>user_id
 permission_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="70" parent="8" name="auth_user_user_permissions_e8701ad4">
+    <index id="70" parent="8" name="auth_user_user_permissions_user_id_a95ead1b">
       <ColNames>user_id</ColNames>
     </index>
-    <index id="71" parent="8" name="auth_user_user_permissions_8373b171">
+    <index id="71" parent="8" name="auth_user_user_permissions_permission_id_1fbb5f2c">
       <ColNames>permission_id</ColNames>
     </index>
     <key id="72" parent="8">
@@ -306,10 +306,10 @@ permission_id</ColNames>
       <DataType>datetime|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="83" parent="9" name="django_admin_log_417f1b1c">
+    <index id="83" parent="9" name="django_admin_log_content_type_id_c4bce8eb">
       <ColNames>content_type_id</ColNames>
     </index>
-    <index id="84" parent="9" name="django_admin_log_e8701ad4">
+    <index id="84" parent="9" name="django_admin_log_user_id_c564eba6">
       <ColNames>user_id</ColNames>
     </index>
     <key id="85" parent="9">
@@ -341,7 +341,7 @@ permission_id</ColNames>
       <DataType>varchar(100)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="91" parent="10" name="django_content_type_app_label_76bd3d3b_uniq">
+    <index id="91" parent="10" name="django_content_type_app_label_model_76bd3d3b_uniq">
       <ColNames>app_label
 model</ColNames>
       <Unique>1</Unique>
@@ -392,7 +392,7 @@ model</ColNames>
       <ColNames>session_key</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="102" parent="12" name="django_session_de54fa62">
+    <index id="102" parent="12" name="django_session_expire_date_a5c62663">
       <ColNames>expire_date</ColNames>
     </index>
     <key id="103" parent="12">
@@ -441,22 +441,22 @@ model</ColNames>
       <DataType>varchar(128)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="114" parent="15" name="description">
+    <column id="114" parent="15" name="mode">
       <Position>3</Position>
-      <DataType>varchar(2048)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="115" parent="15" name="rule">
-      <Position>4</Position>
-      <DataType>varchar(255)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="116" parent="15" name="mode">
-      <Position>5</Position>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="117" parent="15" name="trainer_rule_2dbcba41">
+    <column id="115" parent="15" name="description">
+      <Position>4</Position>
+      <DataType>varchar(2048)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="116" parent="15" name="rule">
+      <Position>5</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="117" parent="15" name="trainer_rule_slug_562b470c">
       <ColNames>slug</ColNames>
     </index>
     <key id="118" parent="15">
@@ -528,12 +528,12 @@ model</ColNames>
     </column>
     <column id="132" parent="18" name="user_id">
       <Position>1</Position>
-      <DataType>varchar(255)|0</DataType>
+      <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
     <column id="133" parent="18" name="solution">
       <Position>2</Position>
-      <DataType>bigint|0</DataType>
+      <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
     </column>
     <column id="134" parent="18" name="sentence_id">
@@ -541,102 +541,125 @@ model</ColNames>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="135" parent="18" name="solution_counter">
+    <column id="135" parent="18" name="mkdate">
       <Position>4</Position>
-      <DataType>varchar(255)|0</DataType>
+      <DataType>datetime|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="136" parent="18" name="trainer_solution_28fb0fea">
-      <ColNames>sentence_id</ColNames>
-    </index>
-    <key id="137" parent="18">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <foreign-key id="138" parent="18">
-      <ColNames>sentence_id</ColNames>
-      <RefTableName>trainer_sentence</RefTableName>
-      <RefColNames>id</RefColNames>
-    </foreign-key>
-    <column id="139" parent="19" name="id">
-      <DataType>integer|0</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-    </column>
-    <column id="140" parent="19" name="user_id">
-      <Position>1</Position>
-      <DataType>varchar(255)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="141" parent="19" name="user_rank">
-      <Position>2</Position>
-      <DataType>integer|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="142" parent="19" name="comma_type_false">
-      <Position>3</Position>
-      <DataType>varchar(400)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="143" parent="19" name="rules_activated_count">
-      <Position>4</Position>
-      <DataType>integer|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <key id="144" parent="19">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="145" parent="20" name="id">
-      <DataType>integer|0</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-    </column>
-    <column id="146" parent="20" name="active">
-      <Position>1</Position>
-      <DataType>bool|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="147" parent="20" name="box">
-      <Position>2</Position>
-      <DataType>integer|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="148" parent="20" name="score">
-      <Position>3</Position>
-      <DataType>real|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="149" parent="20" name="total">
-      <Position>4</Position>
-      <DataType>integer|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="150" parent="20" name="correct">
+    <column id="136" parent="18" name="type">
       <Position>5</Position>
-      <DataType>integer|0</DataType>
+      <DataType>varchar(64)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="151" parent="20" name="rule_id">
+    <column id="137" parent="18" name="time_elapsed">
       <Position>6</Position>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="152" parent="20" name="user_id">
+    <index id="138" parent="18" name="trainer_solution_user_id_51e6bae6">
+      <ColNames>user_id</ColNames>
+    </index>
+    <index id="139" parent="18" name="trainer_solution_sentence_id_7db1d9c3">
+      <ColNames>sentence_id</ColNames>
+    </index>
+    <key id="140" parent="18">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="141" parent="18">
+      <ColNames>user_id</ColNames>
+      <RefTableName>trainer_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="142" parent="18">
+      <ColNames>sentence_id</ColNames>
+      <RefTableName>trainer_sentence</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="143" parent="19" name="id">
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="144" parent="19" name="user_id">
+      <Position>1</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="145" parent="19" name="user_rank">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="146" parent="19" name="comma_type_false">
+      <Position>3</Position>
+      <DataType>varchar(400)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="147" parent="19" name="rules_activated_count">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="148" parent="19" name="data">
+      <Position>5</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="149" parent="19">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="150" parent="20" name="id">
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="151" parent="20" name="active">
+      <Position>1</Position>
+      <DataType>bool|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="152" parent="20" name="box">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="153" parent="20" name="score">
+      <Position>3</Position>
+      <DataType>real|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="154" parent="20" name="total">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="155" parent="20" name="correct">
+      <Position>5</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="156" parent="20" name="rule_id">
+      <Position>6</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="157" parent="20" name="user_id">
       <Position>7</Position>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="153" parent="20">
+    <key id="158" parent="20">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="154" parent="20">
+    <foreign-key id="159" parent="20">
       <ColNames>rule_id</ColNames>
       <RefTableName>trainer_rule</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="155" parent="20">
+    <foreign-key id="160" parent="20">
       <ColNames>user_id</ColNames>
       <RefTableName>trainer_user</RefTableName>
       <RefColNames>id</RefColNames>

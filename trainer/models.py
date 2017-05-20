@@ -163,7 +163,7 @@ class Sentence(models.Model):
         # Rule Representation: e.g : A,1,0,0 and Difference List
         rule_obj = Rule.objects.get(code=commatype)
         decode_list = rule_obj.decode()
-        rule_list = Rule.objects.all()
+        rule_list = Rule.objects.exclude(code__startswith='E').all()
 
         rule_decoded_list = []
         for rule in rule_list:
@@ -176,13 +176,13 @@ class Sentence(models.Model):
         index_list.remove(index)
 
         solution = [0, 0, 0, 0]
-        count = Rule.objects.all().count()
+        count = Rule.objects.exclude(code__startswith='E').count()
 
         # Random Explanations
         if rank == 0:
             for i in range(4):
                 if i != index:
-                    tmp = rule_decoded_list[int(random.random() * len(rule_decoded_list))]
+                    tmp = random.choice(rule_decoded_list)
                     solution[i] = Rule.objects.get(code=rule_obj.encode(tmp)).description
                     rule_decoded_list.remove(tmp)
                 else:
@@ -748,4 +748,5 @@ class Solution(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.CharField(max_length=64)  # TODO: make it an enum
     solution = models.CharField(max_length=255)
+    time_elapsed = models.IntegerField(default=0) # time in ms
     mkdate = models.DateTimeField(auto_now_add=True)

@@ -366,12 +366,13 @@ def submit_task1(request):
     uname = request.username
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
+    time_elapsed = request.GET.get('tim',0)
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
     user = User.objects.get(user_id=uname)
     user.count_false_types_task1(user_solution, sentence.get_commatypelist())
     user.update_rank()
-    Solution(user=user, sentence=sentence, type="set", solution="".join(user_solution)).save() # save solution to db
+    Solution(user=user, sentence=sentence, type="set", time_elapsed=time_elapsed, solution="".join(user_solution)).save() # save solution to db
     return JsonResponse({'submit': 'ok'})
 
 @logged_in_or_basicauth("Bitte einloggen")
@@ -387,14 +388,14 @@ def submit_task_correct_commas(request):
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     commas = request.GET['commas']
+    time_elapsed = request.GET.get('tim',0)
     #sentence.set_comma_select(user_solution)
     #sentence.update_submits()
     user = User.objects.get(user_id=uname)
     user.count_false_types_task_correct_commas(user_solution, commas, sentence.get_commatypelist())
 
-    Solution(user=user, sentence=sentence, type="correct", solution="".join([str(x) for x in user_solution])).save() # save solution to db
+    Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution])).save() # save solution to db
 
-    #user.update_rank()
     return JsonResponse({'submit': 'ok'})
 
 @logged_in_or_basicauth("Bitte einloggen")
@@ -413,10 +414,11 @@ def submit_task_explain_commas(request):
     user.update_rank()
 
     chckbx_sol = request.GET['chckbx_sol']
+    time_elapsed = request.GET.get('tim',0)
     user_array = re.split(r'[ ,]+', chckbx_sol)  # TODO fix for explain task
 
     # write solution to db
-    Solution(user=user, sentence=sentence, type='explain', solution="".join(user_array), ).save()
+    Solution(user=user, sentence=sentence, type='explain', time_elapsed=time_elapsed, solution="".join(user_array), ).save()
 
     user.count_false_types_task_explain_commas(user_array, sentence.get_commatypelist())
     return JsonResponse({'submit': 'ok'})
