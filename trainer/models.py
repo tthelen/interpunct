@@ -54,7 +54,6 @@ class Sentence(models.Model):
 
     text: Complete text with commas. (TODO: without commas?)
     comma_list: int list of comma types (TODO: replaced by rules)
-    comma_select: int list of how often comma was set here
     total_submits: number of tries for sentence
     rules: n:m relation to Rule through SentenceRule table (adding position)
 
@@ -65,8 +64,7 @@ class Sentence(models.Model):
     Example: Wir essen, Opa.
     """
     text = models.CharField(max_length=2048)
-    comma_select = models.CommaSeparatedIntegerField(max_length=255, default='0')
-    total_submits = models.IntegerField(max_length=25, default='0')  #
+    total_submits = models.IntegerField(default='0')  #
     rules = models.ManyToManyField(Rule, through='SentenceRule')
 
     def __str__(self):
@@ -81,22 +79,24 @@ class Sentence(models.Model):
         Get the commatype list.
         :return: List of type values split at commas
         """
-        return re.split(r'[,]+', self.comma_select.strip())
+        return [] # re.split(r'[,]+', self.comma_select.strip())
 
     def set_comma_select(self, user_select_str):
         """
         Set how much times certain comma was selected
         :param boolean_str: string of seleced commas
         """
-        selects = self.get_commaselectlist();
-        user_select_arr = re.split(r'[,]+', user_select_str)
-        for i in range(len(self.get_commalist())):
-            if i != len(self.get_commalist())-1:
-                selects[i] = str(int(selects[i]) + int(user_select_arr[i])) + ","
-            else:
-                selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
-        self.comma_select = "".join(selects)
-        self.save()
+        return
+
+        #selects = self.get_commaselectlist();
+        #user_select_arr = re.split(r'[,]+', user_select_str)
+        #for i in range(len(self.get_commalist())):
+        #    if i != len(self.get_commalist())-1:
+        #        selects[i] = str(int(selects[i]) + int(user_select_arr[i])) + ","
+        #    else:
+        #        selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
+        #self.comma_select = "".join(selects)
+        #self.save()
 
     def get_words(self):
         """
@@ -171,150 +171,22 @@ class Sentence(models.Model):
         rule_decoded_list.remove(decode_list)
 
         # Initial Indexing, current commatype
-        index_list = [0, 1, 2, 3]
+        index_list = [0, 1, 2]
         index = random.choice(index_list)
         index_list.remove(index)
 
-        solution = [0, 0, 0, 0]
+        solution = [0, 0, 0]
         count = Rule.objects.exclude(code__startswith='E').count()
 
         # Random Explanations
-        if rank == 0:
-            for i in range(4):
-                if i != index:
-                    tmp = random.choice(rule_decoded_list)
-                    solution[i] = Rule.objects.get(code=rule_obj.encode(tmp)).description
-                    rule_decoded_list.remove(tmp)
-                else:
-                    solution[i] = rule_obj.description
-            return solution, index
-
-        if rank == 1:
-            options_1 = self.optionfinder_1(commatype, decode_list, rule_decoded_list)
-
-            # Indexing
-            index_1 = random.choice(index_list)
-            index_list.remove(index_1)
-            # Picking
-            if len(options_1) != 0:
-                pick = random.randint(0, len(options_1) - 1)
-                options_1.remove(options_1[pick])
+        for i in range(3):
+            if i != index:
+                tmp = random.choice(rule_decoded_list)
+                solution[i] = Rule.objects.get(code=rule_obj.encode(tmp)).description
+                rule_decoded_list.remove(tmp)
             else:
-                pick = random.randint(0, len(rule_decoded_list) - 1)
-                rule_decoded_list.remove(rule_decoded_list[pick])
-
-            # Solution
-            for i in range(4):
-                if i == index:
-                    solution[i] = Rule.objects.get(code=commatype).description
-                elif i == index_1 and len(options_1) != 0:
-                    solution[i] = Rule.objects.get(code=rule_obj.encode(options_1[pick])).description
-                else:
-                    solution[i] = Rule.objects.get(code=rule_obj.encode(rule_decoded_list[0])).description
-            return solution, index
-
-        if rank == 2:
-            options_1 = self.optionfinder_1(commatype, decode_list, rule_decoded_list)
-            options_2 = self.optionfinder_2(commatype, decode_list, rule_decoded_list)
-
-            # Indexing for 2 options
-            index_2a = random.choice(index_list)
-            index_list.remove(index_2a)
-            index_2b = random.choice(index_list)
-            index_list.remove(index_2b)
-
-            # Solution
-            for i in range(4):
-                if i == index:
-                    solution[i] = Rule.objects.get(code=commatype).description
-                elif i == index_2a or i == index_2b:
-                    if len(options_2) != 0:
-                        pick_2 = random.randint(0, len(options_2) - 1)
-                        solution[i] = Rule.objects.get(code=rule_obj.encode(options_2[pick_2])).description
-                        options_2.remove(options_2[pick_2])
-                    elif len(options_1) != 0:
-                        pick_2 = random.randint(0, len(options_1) - 1)
-                        solution[i] = Rule.objects.get(code=rule_obj.encode(options_1[pick_2])).description
-                        options_1.remove(options_1[pick_2])
-                    else:
-                        pick_2 = random.randint(0, len(rule_decoded_list) - 1)
-                        solution[i] = Rule.objects.get(code=rule_obj.encode(rule_decoded_list[pick_2])).description
-                        rule_decoded_list.remove(rule_decoded_list[pick_2])
-                else:
-                    pick_2 = random.randint(0, len(rule_decoded_list) - 1)
-                    solution[i] = Rule.objects.get(code=rule_obj.encode(rule_decoded_list[pick_2])).description
-                    rule_decoded_list.remove(rule_decoded_list[pick_2])
-            return solution, index
-
-        elif rank == 3:
-            options_1 = self.optionfinder_1(commatype, decode_list, rule_decoded_list)
-            options_2 = self.optionfinder_2(commatype, decode_list, rule_decoded_list)
-            options_3 = self.optionfinder_3(commatype, decode_list, rule_decoded_list)
-
-            # Indexing
-
-            index_3a = random.choice(index_list)
-            index_list.remove(index_3a)
-            index_3b = random.choice(index_list)
-            index_list.remove(index_3b)
-            index_3c = random.choice(index_list)
-            index_list.remove(index_3c)
-
-            # Solution
-            for i in range(4):
-                if i == index:
-                    solution[i] = Rule.objects.get(code=commatype).description
-
-                elif i == index_3a or i == index_3b or i == index_3c:
-                    if len(options_3) != 0:
-                        pick_3 = random.randint(0, len(options_3) - 1)
-                        solution[i] = Rule.objects.get(code=rule_obj.encode(options_3[pick_3])).description
-                        options_3.remove(options_3[pick_3])
-                    elif len(options_2) != 0:
-                        pick_3 = random.randint(0, len(options_2) - 1)
-                        solution[i] = Rule.objects.get(code=rule_obj.encode(options_2[pick_3])).description
-                        options_2.remove(options_2[pick_3])
-                    elif len(options_1) != 0:
-                        pick_3 = random.randint(0, len(options_1) - 1)
-                        solution[i] = Rule.objects.get(code=rule_obj.encode(options_1[pick_3])).description
-                        options_1.remove(options_1[pick_3])
-                    else:
-                        pick_3 = random.randint(0, len(rule_decoded_list) - 1)
-                        solution[i] = Rule.objects.get(code=rule_obj.encode(rule_decoded_list[pick_3])).description
-                        rule_decoded_list.remove(rule_decoded_list[pick_3])
-                else:
-                    pick_3 = random.randint(0, len(rule_decoded_list) - 1)
-                    solution[i] = Rule.objects.get(code=rule_obj.encode(rule_decoded_list[pick_3])).description
-                    rule_decoded_list.remove(rule_decoded_list[pick_3])
-
+                solution[i] = rule_obj.description
         return solution, index
-
-    def optionfinder_1(self, commatype, decode_list, rule_decoded_list):
-        # Distance 1 e.g. index = A123 ; option.obj = A421
-        options_1 = []
-        for i in decode_list:
-            for j in range(len(rule_decoded_list) - 1):
-                if rule_decoded_list[j][0] == i:
-                    options_1.append(rule_decoded_list[j])
-        return options_1
-
-    def optionfinder_2(self, commatype, decode_list, rule_decoded_list):
-        # Distance 2 eg. index A123 ; option.obj = A140
-        options_2 = []
-        for i in decode_list:
-            for j in range(len(rule_decoded_list) - 1):
-                if rule_decoded_list[j][0] == i and rule_decoded_list[j][1] == i:
-                    options_2.append(rule_decoded_list[j])
-        return options_2
-
-    def optionfinder_3(self, commatype, decode_list, rule_decoded_list):
-        # Distance 2 eg. index A123 ; option.obj = A140
-        options_3 = []
-        for i in decode_list:
-            for j in range(len(rule_decoded_list) - 1):
-                if rule_decoded_list[j][0] == i and rule_decoded_list[j][1] == i and rule_decoded_list[j][2]:
-                    options_3.append(rule_decoded_list[j])
-        return options_3
 
 
 class SentenceRule(models.Model):
@@ -348,11 +220,19 @@ class User(models.Model):
     user_rank = models.IntegerField(choices=RANKS, default = 0)
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
+    sentences = models.ManyToManyField(Sentence, through='UserSentence')
+
+    # global exercise counter
+    counter = models.IntegerField(default=0)
+    counter_correct = models.IntegerField(default=0)
+    counter_wrong = models.IntegerField(default=0)
 
     # rules_activated: user progress in terms of available rules.
     # Starts at 0, continues to ~40
     rules_activated_count = models.IntegerField(default=0)
     rules = models.ManyToManyField(Rule, through='UserRule')
+
+
 
     rule_order = [
         "A1", # GLEICHRANG
@@ -423,6 +303,8 @@ class User(models.Model):
         # create error rules
         ur = UserRule(rule=Rule.objects.get(code="E1"), user=self, active=False)
         ur.save()
+        ur = UserRule(rule=Rule.objects.get(code="E2"), user=self, active=False)
+        ur.save()
 
         # activate first rule
         new_rule = Rule.objects.get(code=self.rule_order[0])
@@ -463,12 +345,20 @@ class User(models.Model):
         return False
 
     def level_display(self):
-        """Return UserRule data for displaying level."""
+        """Return UserRule and examples sentence data for displaying level and expanations. At most 5 rules sorted by box position."""
 
-        res = []
-        for i in range(self.rules_activated_count):
-            res.append(UserRule.objects.get(user=self, rule=Rule.objects.get(code=self.rule_order[i])))
+        limit = min(self.rules_activated_count, 5)
+        res = UserRule.objects.filter(user=self, active=1).order_by('box')[:limit]
         return res
+
+
+    def count(self, correct):
+
+        self.counter += 1
+        if correct:
+            self.counter_correct += 1
+        else:
+            self.counter_wrong += 1
 
 
     def get_dictionary(self, only_activated=False):
@@ -519,6 +409,9 @@ class User(models.Model):
                 else:
                     corr = False
                 userrule.count(correct=corr)
+                if not rule.code.startswith('E'): # count everything but error positions
+                    self.count(corr)
+                    self.save()
 
     def count_false_types_task_correct_commas(self, user_array_str, comma_array_str, solution_array):
         """
@@ -526,14 +419,14 @@ class User(models.Model):
         :param user_array: contains submitted array of bools (positions marked as incorrect)
         :param solution_array: contains comma types
         """
-        user_array = re.split(r'[ ,]+', user_array_str)
+        user_array = re.split(r'[ ,]+', user_array_str) # contais pairs of (comma present / marked), e.g. 00, 01, 10, 11
         comma_array = re.split(r'[ ,]+', comma_array_str)
 
         for i in range(len(solution_array) - 1):
 
             if len(solution_array[i]) == 0 and int(comma_array[i]) == 1: # comma in the wild
 
-                if user_array[i]==1:  # wrong comma without rule detected correctly
+                if user_array[i] == '11':  # wrong comma without rule detected correctly
                     pass
                 else:  # wrong comma without rule not detected correctly
                     userrule = UserRule.objects.get(user=self, rule=Rule.objects.get(code="E1"))
@@ -547,17 +440,21 @@ class User(models.Model):
 
                 # case 1: mode = 2 (MUST)
                 if rule.mode == 2:
-                   corr = (user_array[i] != comma_array[i])  # right if set and not marked (and vice versa)
+                   corr = user_array[i] in ['01','10']  # right if set and not marked (and vice versa)
 
                 # case 2: mode = 1 (MAY)
                 if rule.mode == 1:
-                   corr = not user_array[i]  # marking a MAY comma slot is always false
+                   corr = False # not user_array[i]  # marking a MAY comma slot is always false
 
                 # case 3: mode = 0 (MUST NOT)
                 if rule.mode == 0:
-                    corr = (user_array[i] == comma_array[i])  # right if not set and not marked (and vice versa)
+                   corr = user_array[i] in ['00', '11']  # right if not set and not marked (and vice versa)
 
                 userrule.count(correct=corr)
+                if not rule.code.startswith('E'): # count everything but error positions
+                    self.count(corr)
+                    self.save()
+
 
     def count_false_types_task_explain_commas(self, user_array, solution_array):
         """
@@ -567,15 +464,19 @@ class User(models.Model):
         """
 
         comma_amout = 0;
+        print(user_array)
+        print(solution_array)
         for i in range(len(solution_array) - 1):
             if len(solution_array[i]) != 0:
                 rule = Rule.objects.get(code=solution_array[i][0])
                 ur = UserRule.objects.get(user=self, rule=rule)
-                if user_array[comma_amout] == "1":
-                    ur.count(correct=True)
-                elif user_array[comma_amout] == "0":
-                    ur.count(correct=False)
+                corr = (user_array[i] == "1")
+                ur.count(correct=corr)
                 comma_amout += 1
+                if not rule.code.startswith('E'):  # count everything but error positions
+                    self.count(corr)
+                    self.save()
+
 
     def count_false_types_task3(self, user_array_str, solution_array):
         """
@@ -619,29 +520,52 @@ class User(models.Model):
     def roulette_wheel_selection(self):
         """
         gets a new sentence via roulette wheel, chooses random among sentences
-        :return: roulette_list with accumulated rules
+        :return: a randomly chosen SentenceRule object
         """
 
         roulette_list = []
+        active_rules = 0
         for ur in UserRule.objects.filter(user=self, active=True).all():
-            for i in range(2**(4-ur.box)):  # Spaced repetition algorithm: Each box is 5 times less probable then previous
+            for i in range(2**(4-ur.box)):  # Spaced repetition algorithm: Each box is half probable than previous
                 roulette_list.append(ur.rule.code)
+            active_rules += 1
 
+        if active_rules >= 4:  # error rules are activated with fourth rule
+
+            for r in Rule.objects.filter(code__startswith='E').all():
+                    # all error rules are treated like box 3
+                    # TODO: treat error rules like normal rules
+                    roulette_list.append(r.code)
+                    roulette_list.append(r.code)
+        print(roulette_list)
         index = random.randint(0, len(roulette_list)-1)
         rule_obj = Rule.objects.filter(code=roulette_list[index])
-
+        print("Select for {}".format(rule_obj))
         # filter out all sentences that have higher rules than current user's progress
         possible_sentences = []
         for sr in SentenceRule.objects.filter(rule=rule_obj[0]).all():
             ok = True
             for r in sr.sentence.rules.all():
-                if self.rule_order.index(r.code) > (self.rules_activated_count-1):
+                if r.code in self.rule_order and (self.rule_order.index(r.code) > (self.rules_activated_count-1)):
                     ok = False
                     break
             if ok:
-                possible_sentences.append(sr.sentence)
+                try:
+                    us = UserSentence.objects.get(user=self, sentence=sr.sentence)
+                    count = us.count
+                except UserSentence.DoesNotExist:
+                    count = 0
+                possible_sentences.append([sr,count])  # collect sentence and per user counter for the sentence
 
-        return random.choice(possible_sentences)
+        possible_sentences.sort(key=lambda sentence:sentence[1])  # sort ascending by counts
+
+        if possible_sentences[0][1] == 0:  # first use all sentences at least once
+            num = 1                        # i.e. if least used sentence has zero count, use it
+        else:
+            num = min(3,len(possible_sentences))  # else choose from three least often used
+
+        return random.choice(possible_sentences[:num])[0]  # randomly choose and return SentenceRule object
+
 
     def may_roulette_wheel_selection(self):
         """
@@ -703,6 +627,8 @@ class UserRule(models.Model):
         correct: Was the rule applied correctly?
         try: How many tries did the user need? (1,2,3,...)"""
 
+        print("Count {} for {}".format(correct, self.rule))
+
         self.total += 1  # we had one rule application
 
         # score is used to determine when a rule shall be placed in another box
@@ -725,10 +651,10 @@ class UserRule(models.Model):
 
         if correct:
             self.correct += 1
-        if self.score <= -3:
+        if self.score <= -4:
             self.box = 0  # return to first box on error (leitner algorithm)
             self.score = 0
-        elif self.score > 3 and self.box < 4:  # three correct tries: advance a box (up to box 4)
+        elif self.score >= 3 and self.box < 4:  # three correct tries: advance a box (up to box 4)
             self.box += 1
             self.score = 0
         self.save()
@@ -738,6 +664,23 @@ class UserRule(models.Model):
             self.user.user_id, self.rule.code,
             self.box, self.score, self.correct, self.total)
 
+
+class UserSentence(models.Model):
+
+    """
+    Intermediate model for ManyToMany-Relationship of Users and Sentences.
+
+    Counter indicates how many times the user has seen the sentence.
+    """
+    sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE, related_name='link_to_user')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    count = models.IntegerField()
+
+    def __str__(self):
+        return "{}:{}:{}".format(self.user.uname, self.sentence.text, count)
+
+    class Meta:
+        ordering = ('count',)
 
 class Solution(models.Model):
     """
@@ -750,3 +693,4 @@ class Solution(models.Model):
     solution = models.CharField(max_length=255)
     time_elapsed = models.IntegerField(default=0) # time in ms
     mkdate = models.DateTimeField(auto_now_add=True)
+

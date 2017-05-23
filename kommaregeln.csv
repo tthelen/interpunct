@@ -32,6 +32,5 @@ C8,HINWEIS:GESETZ,darf nicht,"Bei mehrteíligen Hinweisen auf Gesetze und Verord
 D1,ANREDE,muss,"Bei Anreden muss ein Komma gesetzt werden.",§79 (1),mark,"Kinder,(D1) hört doch mal zu.",,
 D2,AUSRUF,muss,"Bei Ausrufen muss ein Komma gesetzt werden.",§79 (2),mark,"Juhu,(D2) wir sind endlich fertig!",,
 D3,BEKRÄFT,muss,"Bei Bejahungen, Verneinungen, Bekräftigungen und Bitten muss ein Komma gesetzt werden.",§79 (3),mark,"Ja,(D3) wir haben endlich Platz. Nein,(D3) wir haben keine Lust mehr. Das hat er gesagt,(D3) leider. Bitte,(D3) lass mich in Ruhe. ",,
-E0,ABSURD,darf nicht,"Absurde Fälle",,,,,
 E1,FEHLER,darf nicht,"Fehler""",,,,,
 E2,VORFELD,darf nicht,"An dieser Stelle steht kein Komma!",,,,,

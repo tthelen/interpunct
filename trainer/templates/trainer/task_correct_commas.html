@@ -77,30 +77,22 @@
 
         /* Construct a solution array, consisting of:
         *
-        *  string comma_type (2 = must, 1 = may, 0 = must not)
-        *         + comma_in_task (1=present, 0 = not present)
+        *  string comma_in_task (1=present, 0 = not present)
         *         + user_marked_as_incorrect (1 = marked as incorrect, 0 = not marked)
         *
         *  Values:
-        *  000 = no-comma-slot, no comma presented, not marked as incorrect (OK)
-        *  011 = no-comma-slot, comma presented, marked as incorrect (OK)
-        *  100 = may-comma-slot, no comma presented, not marked as incorrect (OK)
-        *  110 = may-comma-slot, comma presented, not marked as incorrect (OK)
-        *  201 = must-comma-slot, no comma presented, marked as incorrect (OK)
-        *  210 = must-comma-slot, comma presented, not marked as incorrect (OK)
-        *
-        *  001 = no-comma-slot, no comma presented, marked as incorrect (not OK)
-        *  010 = no-comma-slot, comma presented, not marked as incorrect (not OK)
-        *  111 = may-comma-slot, comma presented, marked as incorrect (not OK)
-        *  101 = may-comma-slot, no comma presented, marked as incorrect (not OK)
-        *  200 = must-comma-slot, no comma presented, not marked as incorrect (not OK)
-        *  211 = must-comma-slot, comma presented, marked as incorrect (not OK)
+        *  00 = no comma presented, not marked as incorrect
+        *  10 = comma presented, not marked as incorrect
+        *  01 = no comma presented, marked as incorrect
+        *  11 = comma presented, marked as incorrect
         *
         * */
-        function construct_solution(val_sample, val_commas, val_user) {
+        function construct_solution(val_commas, val_user) {
+            console.log(val_commas);
+            console.log(val_user);
             var solution = Array();
-            for(var i=0;i<val_sample.length;i++) {
-                solution.push(val_sample[i].toString() + val_commas[i].toString() + val_user[i].toString());
+            for(var i=0;i<val_commas.length;i++) {
+                solution.push(val_commas[i].toString() + val_user[i].toString());
             }
             return solution;
         }
@@ -117,8 +109,9 @@
                 markedincorrect.push(sentence[i].classList.contains('markedincorrect') ? 1 : 0);
                 commas.push((sentence[i].innerHTML.indexOf(',')>=0) ? 1 : 0);
             }
+            markedincorrect.push(0); // TODO: remove hack from view!
 
-            var solution = construct_solution({{ comma }}, {{ comma_to_check }}, markedincorrect);
+            var solution = construct_solution({{ comma_to_check }}, markedincorrect);
 
             /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
             var xmlhttp=new XMLHttpRequest();

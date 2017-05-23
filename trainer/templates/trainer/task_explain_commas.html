@@ -8,7 +8,7 @@
 
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     <div class="interaction">
-    {% spaceless %}{% for w in words %}{{ w }}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip-position="top">&nbsp</span>{% endif %}{% endfor %}{% endspaceless %}
+    {% spaceless %}{% for w in words %}{{ w }}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip-position="top">&nbsp</span> {% endif %}{% endfor %}{% endspaceless %}
     </div>
     <p>&nbsp;</p>
     <div class = "explanations"></div>
@@ -40,26 +40,28 @@
         var explanations_arr = {{ explanations|safe }};
         for(var i=0;i<commas.length;i++){
             if(commas[i]==1 || commas[i]==2){
-                slots[i].innerHTML="<span class='comma'>,</span> <b>["+comma_count+"]</b>";
+                slots[i].innerHTML="<span class='comma'>,</span> <b>["+comma_count+"]</b> ";
                 //slots[i].setAttribute("data-tooltip",comma_count.toString());
                 var form = document.createElement("form");
                 form.className = "exp-form";
-                var p = document.createElement("p");
+                var p = document.createElement("h3");
                 p.innerHTML = "Erkläre Komma ("+comma_count.toString()+")";
                 form.appendChild(p);
-                for(var j=0;j<4;j++){
+                for(var j=0;j<3;j++){
                     var input = document.createElement("input");
+                    var id = "expl-"+i.toString()+"-"+j.toString();
                     input.className = "exp-input";
                     input.setAttribute("type","checkbox");
                     input.setAttribute("name",j.toString());
+                    input.setAttribute("id",id);
                     input.setAttribute("value",j.toString());
                     form.appendChild(input);
                     var label = document.createElement("label");
-                    label.setAttribute("for",j.toString());
+                    label.setAttribute("for",id);
                     //label.innerHTML = " explan ations" + j.toString();
                     label.innerHTML = explanations_arr[comma_count-1][j];
                     form.appendChild(label);
-                    form.appendChild(document.createElement("br"));
+                    form.appendChild(document.createElement("p"));
                 }
                 comma_count++;
                 explanations_div[0].appendChild(form);
@@ -77,7 +79,6 @@
     }
     function validate_form(){
         var index = {{ index_arr }};
-        console.log(index);
         var user_solution = [];
         var forms = document.getElementsByClassName("exp-form");
         for(var i = 0; i<forms.length; i++){
@@ -97,7 +98,6 @@
                         checkboxes[j + 1].style.border = "2px dashed green";
                         checkboxes[j + 1].style.borderRadius = "10px";
                         tmp.push(1);
-                        console.log(tmp)
                     }
                     if (!checkboxes[j].checked && correct) {
                         checkboxes[j + 1].style.border = "2px dashed red";
@@ -108,8 +108,6 @@
                         checkboxes[j + 1].style.borderRadius = "10px";
                     }
                 }
-                console.log(tmp);
-                console.log(index[i]);
                 if (tmp.length == index[i].length) {
                     user_solution.push(1);
                 } else {
@@ -118,7 +116,6 @@
             }
             }
 
-        console.log(user_solution);
         return user_solution;
     }
 

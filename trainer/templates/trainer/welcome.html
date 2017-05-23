@@ -37,13 +37,17 @@
     <div class="col-sm-3">
     <select id="formAbschluss" name="abschluss" class="form-control" required="true">
       <option value="0">bitte auswählen</option>
-      <option value="1">Bachelor (1 Fach)</option>
-      <option value="2">Bachelor (2-Fächer, Lehramt)</option>
-      <option value="3">Bachelor (2-Fächer, kein Lehramt)</option>
-      <option value="4">Master (Lehramt)</option>
-      <option value="5">Master (kein Lehramt)</option>
-      <option value="6">sonstiges</option>
-      <option value="7">nicht studierend</option>
+      <option value="10">Bachelor BEU (Lehramt GHR)</option>
+      <option value="11">Bachelor berufliche Bildung (Lehramt LBS)</option>
+      <option value="12">Bachelor 2-Fächer (Lehramt Gym)</option>
+      <option value="13">Bachelor 2-Fächer (kein Lehramt)</option>
+      <option value="14">Bachelor (1 Fach)</option>
+      <option value="20">Master (Lehramt GHR)</option>
+      <option value="21">Master (Lehramt Gym)</option>
+      <option value="22">Master (Lehramt LBS)</option>
+      <option value="23">Master (kein Lehramt)</option>
+      <option value="30">sonstiges</option>
+      <option value="40">nicht studierend</option>
     </select>
         <p id="formAbschlussGroup-error">Bitte auswählen!</p>
     </div>
@@ -66,25 +70,65 @@
     <div class="col-sm-2">&nbsp;</div>
     <div class="col-sm-3">
     <select id="formFach1" name="fach1" class="form-control">
-      <option value="0">ggf. 1. Studienfach</option>
-      <option value="1">Anglistik/Englisch</option>
-      <option value="2">Cognitive Science</option>
-      <option value="3">Germanistik/Deutsch</option>
-      <option value="4">Mathematik</option>
-      <option value="5">Informatik</option>
-      <option value="6">Sonstiges</option>
+      <option value="00">ggf. 1. Studienfach</option>
+      <option value="10">Anglistik/Englisch</option>
+      <option value="11">Betriebswirtschaftslehre</option>
+      <option value="12">Biologie</option>
+      <option value="13">Chemie</option>
+      <option value="14">Cognitive Science</option>
+      <option value="15">Erziehungswissenschaft</option>
+      <option value="16">Evangelische Theologie</option>
+      <option value="17">Französisch</option>
+      <option value="18">Geographie/Erdkunde</option>
+      <option value="19">Germanistik/Deutsch</option>
+      <option value="20">Geschichte</option>
+      <option value="21">Informatik</option>
+      <option value="22">Islamische Theologie</option>
+      <option value="23">Katholische Theologie</option>
+      <option value="24">Kunst/Kunstpädagogik</option>
+      <option value="25">Latein</option>
+      <option value="26">Mathematik</option>
+      <option value="27">Musik</option>
+      <option value="28">Physik</option>
+      <option value="29">Psychologie</option>
+      <option value="30">Rechtswissenschaft</option>
+      <option value="31">Romanistik</option>
+      <option value="32">Sachunterricht</option>
+      <option value="33">Sport/Sportwissenschaft</option>
+      <option value="34">Textiles Gestalten</option>
+      <option value="35">Sonstiges Fach</option>
     </select>
     </div>
 
     <div class="col-sm-3">
     <select id="formFach2" name="fach2" class="form-control">
-      <option value="0">ggf. 2. Studienfach</option>
-      <option value="1">Anglistik/Englisch</option>
-      <option value="2">Cognitive Science</option>
-      <option value="3">Germanistik/Deutsch</option>
-      <option value="4">Mathematik</option>
-      <option value="5">Informatik</option>
-      <option value="6">Sonstiges</option>
+      <option value="00">ggf. 2. Studienfach</option>
+      <option value="10">Anglistik/Englisch</option>
+      <option value="11">Betriebswirtschaftslehre</option>
+      <option value="12">Biologie</option>
+      <option value="13">Chemie</option>
+      <option value="14">Cognitive Science</option>
+      <option value="15">Erziehungswissenschaft</option>
+      <option value="16">Evangelische Theologie</option>
+      <option value="17">Französisch</option>
+      <option value="18">Geographie/Erdkunde</option>
+      <option value="19">Germanistik/Deutsch</option>
+      <option value="20">Geschichte</option>
+      <option value="21">Informatik</option>
+      <option value="22">Islamische Theologie</option>
+      <option value="23">Katholische Theologie</option>
+      <option value="24">Kunst/Kunstpädagogik</option>
+      <option value="25">Latein</option>
+      <option value="26">Mathematik</option>
+      <option value="27">Musik</option>
+      <option value="28">Physik</option>
+      <option value="29">Psychologie</option>
+      <option value="30">Rechtswissenschaft</option>
+      <option value="31">Romanistik</option>
+      <option value="32">Sachunterricht</option>
+      <option value="33">Sport/Sportwissenschaft</option>
+      <option value="34">Textiles Gestalten</option>
+      <option value="35">Sonstiges Fach</option>
     </select>
     </div>
 
@@ -94,6 +138,7 @@
     <label for="formGender" class="col-sm-2 control-label">Geschlecht</label>
     <div class="col-sm-3">
         <select id="formGender" name="gender" class="form-control">
+            <option value="-"></option>
             <option value="w">weiblich</option>
             <option value="m">männlich</option>
         </select>
@@ -105,8 +150,8 @@
     <div class="col-sm-3">
     <select id="formFach1" name="fach2" class="form-control">
       <option value="0">bitte auswählen</option>
-      <option value="1">Abitur (Deutschland)</option>
-      <option value="2">Abitur-äquivalent (Ausland)</option>
+      <option value="1">Abitur (oder äquivalent)</option>
+      <option value="2">Fachabitur (oder äquivalent)</option>
       <option value="3">Berufsqualifikation</option>
       <option value="4">sonstige</option>
       <option value="5">nicht studierend</option>

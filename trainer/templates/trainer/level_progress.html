@@ -22,8 +22,8 @@
 
     <p>Hier nun Deine erste Regel:</p>
 {% endif %}
-<p style="margin:2em; background-color:#ccc; padding: 1em;"><em>{{ new_rule.description }}</em>
+<p style="margin:2em; background-color:#ccc; padding: 1em;">{{ new_rule.description|safe }}</p>
 
-<p><a href="">HIER geht es weiter.</a>
+    <p><a href=""><button class="btn btn-default">Hier geht es weiter.</button></a>
 
 {% endblock %}

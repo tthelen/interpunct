@@ -10,15 +10,16 @@
 
 </head>
 <body>
-    <div class="rankinfo">
+<div class="container">
+<div class="row">
+    <div class="col-md-2">
         {% if display_rank %}
-            <img style="width:150px" src="./static/images/{{ rankimg }}">
+            <img style="width:100%" src="./static/images/{{ rankimg }}">
             <div class="rank">
-                <p>{{ uname }}, Du bist in Level {{ level }}.<br>(<a href="logout">Reset</a>)</p>
-                <h6>Regeln im Fokus:</h6>
+                <h4>Regeln im Fokus:</h4>
                     {%  for ur in leveldsp %}
                     <p>
-                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }} ({{ ur.correct }}/{{ ur.total }} - {{ ur.score }})</button>
                     </p>
                     {% endfor %}
                     {% for ur in leveldsp %}
@@ -27,10 +28,24 @@
                             <div class="modal-content">
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="modal-label-{{ ur.rule.id }}">Regel {{ ur.rule.rule }}</h4>
+                                <h4 class="modal-title" id="modal-label-{{ ur.rule.id }}">Regel {{ ur.rule.rule }} </h4>
                               </div>
                               <div class="modal-body">
-                                {{ ur.rule.description }}
+                                <h4>Regel:</h4>
+                                <p>{{ ur.rule.description|safe }}<p>
+                                  <h4>Statistik:</h4>
+                                  <table>
+                                      <tr><td>Vorkommen in Übungen: </td><td style="text-align: right">{{ ur.total }}</td></tr>
+                                      <tr><td>Davon korrekt gelöst: </td><td style="text-align: right">{{ ur.correct }}</td></tr>
+                                      <tr><td>Übungshäufigkeit: </td><td>
+                                          {% if ur.box == 0 %}sehr häufig{% endif %}
+                                          {% if ur.box == 1 %}häufig{% endif %}
+                                          {% if ur.box == 2 %}mittelmäßig oft{% endif %}
+                                          {% if ur.box == 3 %}selten{% endif %}
+                                          {% if ur.box == 4 %}sehr selten{% endif %}
+                                      </td></tr>
+                                  </table>
+                              </p>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
@@ -39,16 +54,24 @@
                           </div>
                         </div>
                     {% endfor %}
+                <p>&nbsp;</p>
+                <h4>Du bist in Level {{ level }}.</h4>
+                <p>(<a href="logout">Reset</a>)</p>
+
            </div>
     {% endif %}
     </div>
-    <div class="main">
+    <div class="col-md-10">
         {% block main %}
         <h2>Der Komma-Trainer</h2>
 
         Hallo. Hier ist etwas schiefgelaufen.
         {% endblock %}
     </div>
+
+</div>
+</div>
+
 
 </body>
 </html>
