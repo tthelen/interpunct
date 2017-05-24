@@ -141,6 +141,35 @@ class Sentence(models.Model):
             l.append(rl)
         return l
 
+    def get_words_commas_rules(self):
+        """Return a list of tuples: (word,commstring,rule) for a sentence."""
+
+        words = self.get_words()
+
+        rules = []  # list of comma types (0=mustnot, 1=may, 2=must)
+
+        for pos in range(len(self.get_words()) - 1):
+            # for each position: get rules
+            ruleset = self.rules.filter(sentencerule__position=pos + 1).all()
+            rl = []
+            for r in ruleset:
+                if not r.code=='E1':
+                    rl.append(r)  # collect codes, not rules objects
+            rules.append(rl)
+        rules.append([])
+
+        commas = []
+        for r in rules:
+            if not r or r[0].mode == 0:  # no mixed mode rules # TODO: check if that is correct
+                commas.append(" ")
+            elif r[0].mode == 1:
+                commas.append("(,) ")
+            elif r[0].mode == 2:
+                commas.append(", ")
+        commas.append("")
+
+        return list(zip(words,commas,rules))
+
     def get_commaval(self):
         """
         Where do the commas go?

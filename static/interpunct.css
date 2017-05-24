@@ -12,6 +12,13 @@ body {
     padding: 10px; margin-left:220px;
 }
 
+.sentence-correct {
+    margin-right:1em; padding:10px; background-color:#ddffdd;
+    margin-top:1em;
+    word-spacing: 0;
+}
+
+
 .interaction {
     margin-right:1em; padding:10px; background-color:#cccccc;
     word-spacing: 0;

@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^submit_task4$', views.submit_task4),
     url(r'^delete_user$', views.delete_user),
     url(r'^logout$', views.logout),
+    url(r'^sentence/([0-9]+)$', views.sentence, name='sentence'),  # ajax load html for single correct sentence
 
     # ex: /polls/5/
     #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),

@@ -10,7 +10,8 @@
     <div class="interaction">
     {% spaceless %}{% for w in words_and_commas %}{{ w.0 }}{% if not forloop.last %}<span class="{% if forloop.counter == explanation_position.0 %}explanation-position{% endif %}">{% if w.1 != 0 %},{% endif %}{% if forloop.counter0 == explanation_position.0 %} [1]{% endif %}</span> {% endif %}{% endfor %}{% endspaceless %}
     </div>
-    <p>&nbsp;</p>
+    <p id="correction">&nbsp;</p>
+
     <div class = "explanations">
         <form class="exp-form" id="form0">
             <h3>Erkläre Kommaposition [1]</h3>
@@ -82,6 +83,7 @@
                validate_form();
                $("input:checkbox").attr('disabled',true);
                 document.getElementById("feedback-" + "{{ sentence.id }}").innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
+               $('#correction').load('{% url 'sentence' sentence.id %}');
             }
         }
         xhr.open('POST', '{% url 'submit_task_explain_commas' %}', true);

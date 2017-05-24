@@ -531,3 +531,15 @@ def delete_user(request):
 @logged_in_or_basicauth("Bitte einloggen")
 def logout(request):
     return render(request, 'trainer/reset.html', locals())
+
+
+def sentence(request, sentence_id):
+    s = Sentence.objects.get(id=sentence_id)
+    wcr = s.get_words_commas_rules()
+    rules=[]
+    for x in wcr:
+        for y in x[2]:
+            rules.append(y)
+    print(rules)
+    rules = list(set(rules))
+    return render(request, 'trainer/partials/sentence.html', locals())

@@ -1,0 +1,31 @@
+<div class="sentence-correct">
+    {% for x in wcr %}
+        {{ x.0 }}{{ x.1 }}
+        {% for y in x.2 %}
+            <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-default{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> {% endif %}{{ y.rule }}</span>
+        {% endfor %}
+    {% endfor %}
+</div>
+{% for r in rules %}
+<div class="modal fade" id="modal-rule-{{ r.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal-rule-label-{{ r.id }}">Regel {{ r.rule }} </h4>
+      </div>
+      <div class="modal-body">
+        <h4>Regel {{ r.rule }}:</h4>
+        <p>{{ r.description|safe }}<p>
+      <h4>Beispiel:</h4>
+          <p><em>{{ r.example|safe }}</em></p>
+      </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}

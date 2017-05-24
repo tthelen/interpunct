@@ -10,7 +10,7 @@
         <div class="interaction-correct">
             {% spaceless %}{% for w in words %}{% for cts in comma_to_check %}{% if forloop.counter == forloop.parentloop.counter %}{{ w }}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}">{% if cts == 1 %}<span class="comma">,</span>&nbsp;&nbsp;{% else %}&nbsp; {% endif %}</span>{% endif %}{% endif %}{% endfor %}{% endfor %}{% endspaceless %}
         </div>
-    <p>&nbsp;</p>
+        <p id="correction">&nbsp;</p>
         <p id="feedback-{{ sentence.id }}">
             <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
         </p>
@@ -119,7 +119,8 @@
             {
                if (xmlhttp.readyState==4 && xmlhttp.status==200) {
                     document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
-                }
+                    $('#correction').load('{% url 'sentence' sentence.id %}');
+                 }
             }
             /* change color of all span slots */
             toggle_colors(element,{{ comma }},{{ comma_to_check }},markedincorrect);
