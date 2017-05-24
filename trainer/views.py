@@ -341,7 +341,7 @@ def start(request):
         request.GET.get('estim',0))
     user.data = vector
     user.save()
-    return redirect("")
+    return redirect("task")
 
 
 def profile(request):
