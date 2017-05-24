@@ -19,6 +19,7 @@ class Rule(models.Model):
     mode = models.IntegerField(choices=MODES)
     description = models.CharField(max_length=2048)
     rule = models.CharField(max_length=255)
+    example = models.CharField(max_length=2048, default='')
     # example1 = django.db.models.ForeignKey('Sentence')
     # example2 = django.db.models.ForeignKey('Sentence')
     # example3 = django.db.models.ForeignKey('Sentence')
@@ -201,7 +202,7 @@ class SentenceRule(models.Model):
     position = models.IntegerField()
 
     def __str__(self):
-        return self.sentence.text + self.rule.code
+        return self.sentence.text + self.rule.code + " " + str(self.position)
 
 
 
@@ -396,7 +397,10 @@ class User(models.Model):
         user_array = re.split(r'[ ,]+', user_array_str)
         for i in range(len(solution_array) - 1):
             if len(solution_array[i]) == 0 and int(user_array[i]) == 1: # comma in the wild
-                userrule = UserRule.objects.get(user=self, rule=Rule.objects.get(code="E1"))
+                try:
+                    userrule = UserRule.objects.get(user=self, rule=Rule.objects.get(code="E1"))
+                except UserRule.DoesNotExist:
+                    userrule = UserRule(user=self, rule=Rule.objects.get(code="E1"))
                 userrule.count(correct=False)
             elif len(solution_array[i]) != 0: # comma at rule position
                 # TODO handle multiple comma types per comma
@@ -436,41 +440,41 @@ class User(models.Model):
 
                 # TODO handle multiple comma types per comma
                 rule = Rule.objects.get(code=solution_array[i][0])
-                userrule = UserRule.objects.get(user=self, rule=rule)
+                try:
+                    userrule = UserRule.objects.get(user=self, rule=rule)
+                except UserRule.DoesNotExist:
+                    userrule = UserRule(user=self, rule=rule)
 
                 # case 1: mode = 2 (MUST)
                 if rule.mode == 2:
-                   corr = user_array[i] in ['01','10']  # right if set and not marked (and vice versa)
+                    corr = user_array[i] in ['01','10']  # right if set and not marked (and vice versa)
 
                 # case 2: mode = 1 (MAY)
                 if rule.mode == 1:
-                   corr = False # not user_array[i]  # marking a MAY comma slot is always false
+                    corr = False # not user_array[i]  # marking a MAY comma slot is always false
 
                 # case 3: mode = 0 (MUST NOT)
                 if rule.mode == 0:
-                   corr = user_array[i] in ['00', '11']  # right if not set and not marked (and vice versa)
+                    corr = user_array[i] in ['00', '11']  # right if not set and not marked (and vice versa)
 
                 userrule.count(correct=corr)
                 if not rule.code.startswith('E'): # count everything but error positions
                     self.count(corr)
                     self.save()
 
-
     def count_false_types_task_explain_commas(self, user_array, solution_array):
         """
         count false types for: AllKommaErlären
-        :param user_array: contains submitted array of bools (checkbox answers)
+        :param user_array: contains bool per comma to explain
         :param solution_array: contains comma types
         """
 
         comma_amout = 0;
-        print(user_array)
-        print(solution_array)
         for i in range(len(solution_array) - 1):
             if len(solution_array[i]) != 0:
                 rule = Rule.objects.get(code=solution_array[i][0])
                 ur = UserRule.objects.get(user=self, rule=rule)
-                corr = (user_array[i] == "1")
+                corr = (user_array[comma_amout] == "1")
                 ur.count(correct=corr)
                 comma_amout += 1
                 if not rule.code.startswith('E'):  # count everything but error positions
@@ -537,10 +541,10 @@ class User(models.Model):
                     # TODO: treat error rules like normal rules
                     roulette_list.append(r.code)
                     roulette_list.append(r.code)
-        print(roulette_list)
+        # print(roulette_list)
         index = random.randint(0, len(roulette_list)-1)
         rule_obj = Rule.objects.filter(code=roulette_list[index])
-        print("Select for {}".format(rule_obj))
+        # print("Select for {}".format(rule_obj))
         # filter out all sentences that have higher rules than current user's progress
         possible_sentences = []
         for sr in SentenceRule.objects.filter(rule=rule_obj[0]).all():
@@ -627,7 +631,7 @@ class UserRule(models.Model):
         correct: Was the rule applied correctly?
         try: How many tries did the user need? (1,2,3,...)"""
 
-        print("Count {} for {}".format(correct, self.rule))
+        # print("Count {} for {}".format(correct, self.rule))
 
         self.total += 1  # we had one rule application
 
@@ -660,9 +664,7 @@ class UserRule(models.Model):
         self.save()
 
     def __str__(self):
-        return "{} / {}: Box {}, Score {}, {}/{} correct" % (
-            self.user.user_id, self.rule.code,
-            self.box, self.score, self.correct, self.total)
+        return "{} / {}: Box {}, Score {}, {}/{} correct".format(self.user.user_id, self.rule.code, self.box, self.score, self.correct, self.total)
 
 
 class UserSentence(models.Model):

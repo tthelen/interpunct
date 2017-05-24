@@ -20,9 +20,11 @@
         anderen Regeln, wieder auf.
     </p>
 
-    <p>Hier nun Deine erste Regel:</p>
+    <h4>Hier nun Deine erste Regel:</h4>
 {% endif %}
-<p style="margin:2em; background-color:#ccc; padding: 1em;">{{ new_rule.description|safe }}</p>
+<p class="interpunct-sentence interaction">{{ new_rule.rule }}: {{ new_rule.description|safe }}</p>
+    <h4>Beispiel:</h4>
+    <p><em>{{ new_rule.example|safe }}</em></p>
 
     <p><a href=""><button class="btn btn-default">Hier geht es weiter.</button></a>
 

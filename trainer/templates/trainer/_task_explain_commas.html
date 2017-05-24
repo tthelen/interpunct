@@ -1,0 +1,162 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Übung: Kommas erklären{% endblock %}
+
+{% block main %}
+    <h2>Übung: Kommas erklären</h2>
+    <p class="rank">Anleitung: Wähle für jedes Komma die passende Regel aus.</p>
+
+<div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
+    <div class="interaction">
+    {% spaceless %}{% for w in words %}{{ w }}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}" data-tooltip-position="top">&nbsp</span> {% endif %}{% endfor %}{% endspaceless %}
+    </div>
+    <p>&nbsp;</p>
+    <div class = "explanations"></div>
+    <p>&nbsp;</p>
+    <p id="feedback-{{ sentence.id }}">
+        <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
+    </p>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded",function(){
+        toggle_comma();
+    });
+
+    var submitted = false;
+    var start_time = Date.now();
+
+    /* Check if a DOM element has a given CSS class. */
+    function has_class(element, cls) {
+        return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    }
+
+    /* Switch the content of a comma slot from blank to comma / comma to blank */
+    function toggle_comma() {
+        var slots = document.getElementsByClassName("interpunct-commaslot");
+        var commas = {{ comma }};
+        var explanations_div = document.getElementsByClassName("explanations");
+        var comma_count = 1;
+        var explanations_arr = {{ explanations|safe }};
+        for(var i=0;i<commas.length;i++){
+            if(commas[i]==1 || commas[i]==2){
+                slots[i].innerHTML="<span class='comma'>,</span> <b>["+comma_count+"]</b> ";
+                //slots[i].setAttribute("data-tooltip",comma_count.toString());
+                var form = document.createElement("form");
+                form.className = "exp-form";
+                var p = document.createElement("h3");
+                p.innerHTML = "Erkläre Komma ("+comma_count.toString()+")";
+                form.appendChild(p);
+                for(var j=0;j<3;j++){
+                    var input = document.createElement("input");
+                    var id = "expl-"+i.toString()+"-"+j.toString();
+                    input.className = "exp-input";
+                    input.setAttribute("type","checkbox");
+                    input.setAttribute("name",j.toString());
+                    input.setAttribute("id",id);
+                    input.setAttribute("value",j.toString());
+                    form.appendChild(input);
+                    var label = document.createElement("label");
+                    label.setAttribute("for",id);
+                    //label.innerHTML = " explan ations" + j.toString();
+                    label.innerHTML = explanations_arr[comma_count-1][j];
+                    form.appendChild(label);
+                    form.appendChild(document.createElement("p"));
+                }
+                comma_count++;
+                explanations_div[0].appendChild(form);
+            }
+        }
+    }
+    function one_select_atatime(element){
+        var parents = element.parentNode;
+        var checkboxes = parents.childNodes;
+        for(var j = 0; j<checkboxes.length; j++) {
+            if (checkboxes[j].nodeName == "INPUT" && checkboxes[j].checked && checkboxes[j]!=element) {
+                checkboxes[j].checked = false;
+            }
+        }
+    }
+    function validate_form(){
+        var index = {{ index_arr }};
+        console.log(index);
+        var user_solution = [];
+        var forms = document.getElementsByClassName("exp-form");
+        for(var i = 0; i<forms.length; i++){  // for all forms i
+            var tmp = [];
+            var checkboxes = forms[i].childNodes;
+            var chckbx_nr = -1;
+            for(var j = 0; j<checkboxes.length; j++) {
+                if (checkboxes[j].nodeName == "INPUT") {  // for all inputs
+                    chckbx_nr++;
+                    var correct = false;
+                    for (var k = 0; k < index[i].length; k++) {  // all correct options
+                        if (chckbx_nr == index[i][k]) {  // is current selection correct?
+                            correct = true;
+                        }
+                    }
+                    if (checkboxes[j].checked && correct) {
+                        checkboxes[j + 1].style.border = "2px dashed green";
+                        checkboxes[j + 1].style.borderRadius = "10px";
+                        tmp.push(1);  // correct selection
+                    }
+                    if (!checkboxes[j].checked && correct) {
+                        checkboxes[j + 1].style.border = "2px dashed red";
+                        checkboxes[j + 1].style.borderRadius = "10px";
+                    }
+                    if (checkboxes[j].checked && !correct) {
+                        checkboxes[j + 1].style.border = "2px dashed red";
+                        checkboxes[j + 1].style.borderRadius = "10px";
+                    }
+                }
+            }
+            console.log("One form processed: "+tmp+" vs. "+index[i]);
+            if (tmp.length == index[i].length) {  // is number of correct solutions = number of correctly chosen solutions?
+                user_solution.push(1);
+            } else {
+                user_solution.push(0);
+            }
+        }
+
+        return user_solution;
+    }
+
+    function change_tooltip_visibility(){
+        var style = document.createElement("style");
+        document.head.appendChild(style);
+        sheet = style.sheet;
+        sheet.insertRule('[data-tooltip]:hover:before,[data-tooltip]:hover:after{visibility: visible; opacity: 1;}', 0);
+    }
+
+    function submit_sentence(element) {
+
+        /* find all commaslots for the submitted sentence */
+        var id = element.dataset.sentence;
+        var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
+
+        var chckbx_sol = validate_form();
+        /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function()
+        {
+           if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
+            }
+        }
+        var time_elapsed = Date.now() - start_time;
+        xmlhttp.open("GET","submit_task_explain_commas?id="+id+"&tim="+time_elapsed+"&chckbx_sol="+chckbx_sol,true);
+        xmlhttp.send();
+
+        submitted = true;
+    }
+
+    document.querySelector('body').addEventListener('click', function(event) {
+      if (has_class(event.target, 'interpunct-sentence-submit')) {
+          submit_sentence(event.target);
+      }
+      //if (has_class(event.target, 'exp-input')) {
+      //    one_select_atatime(event.target);
+      //}
+    });
+</script>
+{%  endblock %}

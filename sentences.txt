@@ -40,7 +40,7 @@ Da er seinen morgendlichen Kaffee nicht getrunken hatte (B1.3) oder vielleicht a
 Er sollte sich(,)(B1.5) wenn möglich(,)(B1.5) am besten diese Woche noch entscheiden.
 Wie üblich(,)(B1.5) treffen sich die Mitglieder des Rates auch dieses Jahr wieder jeden zweiten Freitag in der Königsallee.
 Marlene hat(,)(B1.5) wie immer(,)(B1.5) die beste Klausur geschrieben
-Ihre Antennen sind darauf spezialisiert,(B2.3) den Pheromonduft von jungen Königinnen aufzunehmen,(B2.3), B2.1, B1.1) um sich dann hoch in der Luft (im Flug) mit diesen zu paaren.
+Ihre Antennen sind darauf spezialisiert,(B2.3) den Pheromonduft von jungen Königinnen aufzunehmen,(B2.3, B2.1, B1.1) um sich dann hoch in der Luft (im Flug) mit diesen zu paaren.
 Ohne ein weiteres Wort zu verlieren,(B2.1) verließ er den Raum.
 Hilf mir doch einfach mal,(B2.1) anstatt hier nur irgendwelche schlauen Kommentare abzulassen!
 In einem weiteren Verständnis hat die Germanistik die Aufgabe,(B2.2) die germanischen Sprachen mit ihren Kulturen und Literaturen zu erforschen.
@@ -53,11 +53,11 @@ Der Gedanke(,)(B2.4.1) zu sparen(,)(B2.4.1) war ihm nicht gekommen.
 Die Motivation(,)(B2.4.1) zu lernen(,)(B2.4.1) kann ich heute einfach nicht aufbringen.
 Zu tanzen(,)(B2.4.1) die Idee kam mir spontan.
 Ich liebe es(,)(B2.4.2) zu essen!
-Obwohl es ihm gar nicht gefiel(,)(B2.4.2) zu tanzen(,)(B1.1), B2.4.2) tat er es ihr zuliebe.
+Obwohl es ihm gar nicht gefiel(,)(B2.4.2) zu tanzen(,)(B1.1, B2.4.2) tat er es ihr zuliebe.
 Sich zu beschweren(,)(B2.4.2) daran hatte er nicht gedacht.
-Er versprach(,)(B2.5) jungen Familien mehr finanzielle Unterstützung zu bieten. (vs.) Er versprach jungen Familien(,)(B2.5) mehr finanzielle Unterstützung zu bieten.
+Er versprach(,)(B2.5) jungen Familien (,)(B2.5) mehr finanzielle Unterstützung zu bieten.
 Dennoch ist es,(C4.1)  insbesondere vor dem Hintergrund der bisherigen Geschehnisse,(C4.1) sicherlich nicht ganz unwichtig(,)(B2.4.2) herauszustellen,(B2.4.2) wer hier wen belogen hat und wieso,(B1.1) auch(,)(B1.2) wenn ich mir selbstverständlich nicht anmaßen möchte(,)(B2.5) ohne genauere Kenntniss der gesamten Umstände eigenmmächtig zu bestimmen(,)(B2.5) wer im Unrecht ist und wer nicht.
-Otto versprach seiner Oma(,)(B2.5) ein Handy zu kaufen. (vs) Otto versprach(,)(B2.5) seiner Oma ein Handy zu kaufen.
+Otto versprach(,)(B2.5) seiner Oma(,)(B2.5) ein Handy zu kaufen.
 Sebastian,(C1) so heißt mein großer Bruder,(C1) ist ein wirklich netter Kerl.
 Das ist,(C1) erlaube mir(,)(B2.5) das zu sagen,(C1) ja wirklich schrecklich!
 Bist du,(C1) jetzt sag's mir endlich,(C1) wirklich nicht sauer?
@@ -105,21 +105,29 @@ Laut §3 (C8)Abs.1 (C8)Satz 1 des Strafgesetzbuches ist der Täter schuldig.
 Sarah,(D1) kommst du?
 Frau Präsidentin,(D1) wir gratulieren Ihnen herzlich!
 Steffen,(D1) das war nicht witzig!
-Hallo,(D2, D3) wir waren zuerst da!
+Hallo,(D2) wir waren zuerst da!
+Ach, (D2) du lebst auch noch?
+Sapperlot, (D2) da hat doch der Kasperl dem Räuber wieder mal ein Schnippchen geschlagen.
+Sapperlot, (D2) da hat doch der Kasperl, (C2) der Gute, (C2) dem Räuber wieder mal ein Schnippchen geschlagen.
 Aua,(D2) das tat weh!
 Halleluja,(D2) komplizierter geht immer,(D3) oder?
 Na ja,(D3) sie hatte nicht viel zur Auswahl.
 Vielen Dank,(D3) ihr seid echt klasse!
+Mein lieber Herr Gesangsverein, (D1) das war knapp.
+Walter, (D1) wo ist der Nachschub?
+Kann ich Dir, (D1) Gertrud, (D1) noch nachschenken?
+Darf ich Euch, (D1) Gertrud, (A1) Walter und Kevin, (D1) noch Sojaböhnchen nachlegen?
 Wir sollten gehen,(D3) oder?
 Als dann aber nach einer Stunde immer noch kein Professor erschien, (B1.1) gingen die Studierenden nach Hause.
 Sie trank die Limonade, (B1.1) die sie im Supermarkt gekauft hatte, (B1.1) in einem Zug leer.
-Die Studenten und Studentinen, (B1.1) die genau wissen, (B1.2) wie und wo sie im Internet suchen müssen, (B1.2) bekommen schneller eine Wohnung.
+Die Studenten und Studentinen, (B1.1) die genau wissen, (B1.1) wie und wo sie im Internet suchen müssen, (B1.1) bekommen schneller eine Wohnung.
 Der Schüler ging alleine nach Hause, (B1.1) weil seine Freunde eine weitere Unterrichtsstunde hatten, (B1.1) und kochte sich dort eine Suppe.
 Er traf sich mit seinen Freunden, (B1.1) obwohl er keine Lust hatte, (B1.1) und bereute es nicht.
-Erst danach, (B1.2) wenn ihnen nichts mehr auffällt, (B1.2) werde ich mich selbst einbringen.
-Dass er den Preis gewonnen hat, (B1.2) ist unglaublich.
-Dass du kommst, (B1.2) freut mich sehr.
-Ich kann mir vorstellen, (B1.2) wie schwierig es ist, (B2.3) einen günstigen Flug nach Australien zu finden.
+Erst danach, (B1.1) wenn ihnen nichts mehr auffällt, (B1.1) werde ich mich selbst einbringen.
+Dass er den Preis gewonnen hat, (B1.1) ist unglaublich.
+Angenommen(,) (B1.2) dass es nicht regnet, (B1.1) können wir zu Fuß gehen.
+Dass du kommst, (B1.1) freut mich sehr.
+Ich kann mir vorstellen, (B1.1) wie schwierig es ist, (B1.1, B2.3) einen günstigen Flug nach Australien zu finden.
 Aber als Impuls um jetzt in zwanzig Minuten einen Text zu produzieren, (B2.1) sollte es ausreichen.
 Sie lässt ihnen dabei die Möglichkeit, (B2.3) über die Diskussion selbst zu urteilen.
 Ein junger Mann, (C1) der jüngste unter ihnen, (C1) heiratete an diesem Tag eine wunderbare Frau.

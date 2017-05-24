@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .models import Sentence, Solution, Rule, User, UserSentence
+from .models import Sentence, Solution, Rule, SentenceRule, User, UserSentence, UserRule
 import re  # regex support
 import os
 
@@ -171,7 +171,9 @@ def task(request):
     sentence = sentence_rule.sentence
     rule = sentence_rule.rule
     words = sentence.get_words()  # pack all words of this sentence in a list
+
     comma = sentence.get_commalist() # pack all commas [0,1,2] in a list
+    words_and_commas = list(zip(words,comma+[0]))
     comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
     #print(words)
     #print(comma)
@@ -202,7 +204,8 @@ def task(request):
     #        collection.append((comma_types[i], 0))
 
     # task randomizer
-    if user.rules_activated_count >= 3 and not rule.code.startswith('E'):  # more than 3 rules: set, correct or explain task
+    # explain task only for must or may commas, usres with at least 3 active rules and non-error rules
+    if rule.mode > 0 and user.rules_activated_count >= 3 and not rule.code.startswith('E'):
         index = random.randint(0, 1)
     else:  # less than 3 active rules: only set and correct tasks
         index = 0
@@ -216,7 +219,50 @@ def task(request):
         else:
             return render(request, 'trainer/task_set_commas.html', locals())
 
+    # EXPLANATION task
+
+    # pick one comma slot from the sentence
+    # there must at least be one non-error and non-'must not' rule (ensured above)
+    comma_candidates= []
+    # comma candidates is a list of tuples: (position, rule list for this position)
+    for pos in range(len(sentence.get_words()) - 1):
+        # for each position: get rules
+        rules = sentence.rules.filter(sentencerule__position=pos + 1).all()
+        pos_rules = []  # rules at this position
+        for r in rules:
+            if r.mode > 0:
+                pos_rules.append(r)  # collect codes, not rules objects
+        if pos_rules:
+            comma_candidates.append((pos,pos_rules))
+
+    explanation_position = random.choice(comma_candidates)
+    guessing_position = explanation_position[0]
+    guessing_candidates = []  # the rules to be displayed for guessing
+    correct_rules_js = "["+",".join(['"{}"'.format(r.code) for r in explanation_position[1]])+"]"; # javascript list of correct rules
+    if len(explanation_position[1]) > 3:
+        guessing_candidates = explanation_position[1][:3]
+    else:
+        guessing_candidates = explanation_position[1][:3]
+
+    # add other active rules until we have three rules as guessing candidates
+    # beacuse explanation tasks will not occur before rule 3 is activated, there always are enough active rules
+    active_rules = UserRule.objects.filter(user=user, active=1)
+    for ar in active_rules:
+        if len(guessing_candidates) == 3:
+            break
+        if not ar.rule in guessing_candidates:
+            guessing_candidates.append(ar.rule)
+    random.shuffle(guessing_candidates)
+
+
+    # data for template:
+    # guessing_candidates: the three rules to display
+    # guessing_postition: the comma slot position to explain
+    # sentence
+
     # generating radio buttons content (2D array to be)
+
+
     explanations = []
     # list of indexes of correct solution (2D array to be)
     index_arr = []
@@ -392,26 +438,45 @@ def submit_task_explain_commas(request):
     :return: nothing
     """
     uname = request.username
-    sentence = Sentence.objects.get(id=request.GET['id'])
+    sentence = Sentence.objects.get(id=request.POST['sentence_id'])
     sentence.update_submits()
     user = User.objects.get(user_id=uname)
     user.update_rank()
 
-    chckbx_sol = request.GET['chckbx_sol']
-    time_elapsed = request.GET.get('tim',0)
-    user_array = re.split(r'[ ,]+', chckbx_sol)  # TODO fix for explain task
+
+    rules=[]
+    try:
+        rules.append(Rule.objects.get(code=request.POST.getlist('rule-0')[0]))
+        rules.append(Rule.objects.get(code=request.POST.getlist('rule-1')[0]))
+        rules.append(Rule.objects.get(code=request.POST.getlist('rule-2')[0]))
+    except Rule.DoesNotExist:
+        return JsonResponse({'error': 'invalid rule', 'submit':'fail'})
+
+    solution=[] # solution is array of the form: rule_id:correct?:chosen?, rule_id:...
+
+    pos = int(request.POST['position'])+1
+    for r in rules:
+        correct = 1 if SentenceRule.objects.filter(sentence=sentence, rule=r, position=pos) else 0  # correct if sentence has rule
+        chosen = 1 if r.code in request.POST else 0  # chosen if box was checked
+        solution.append("{}:{}:{}".format(r.id, correct, chosen))
+        if not r.code.startswith('E'):  # only count non-error rules
+            ur = UserRule.objects.get(user=user, rule=r)
+            ur.count((correct==chosen))  # count rule application as correct if correct rule was chosen and vice versa
 
     # write solution to db
-    Solution(user=user, sentence=sentence, type='explain', time_elapsed=time_elapsed, solution="".join(user_array), ).save()
-    try:
+    time_elapsed = request.POST.get('tim', 0)
+    Solution(user=user, sentence=sentence, type='explain', time_elapsed=time_elapsed,
+             solution="{}|".format(pos)+",".join(solution), ).save()
+
+    try:  # count sentence as seen
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
         us.save()
     except UserSentence.DoesNotExist:
         UserSentence(user=user, sentence=sentence, count=1).save()
 
-    user.count_false_types_task_explain_commas(user_array, sentence.get_commatypelist())
     return JsonResponse({'submit': 'ok'})
+
 
 @logged_in_or_basicauth("Bitte einloggen")
 def submit_task3(request):
@@ -431,6 +496,7 @@ def submit_task3(request):
     user.count_false_types_task3(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
+
 
 @logged_in_or_basicauth("Bitte einloggen")
 def submit_task4(request):
@@ -460,6 +526,7 @@ def delete_user(request):
     u = User.objects.get(user_id=request.username)
     u.delete()
     return redirect("/")
+
 
 @logged_in_or_basicauth("Bitte einloggen")
 def logout(request):

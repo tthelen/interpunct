@@ -21,6 +21,9 @@ class Command(BaseCommand):
             r.mode = ['darf nicht', 'kann', 'muss'].index(row[2])
             r.description = row[3]
             r.rule = row[4]
+            r.example = row[6]
+            import re
+            r.example=re.sub(r"\([^,].*\)","",r.example)
             r.save()
         self.stdout.write(self.style.SUCCESS('Successfully updated rules.'))
 

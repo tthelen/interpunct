@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^start$', views.start),
     url(r'^submit_task1$', views.submit_task1),
     url(r'^submit_task_correct_commas$', views.submit_task_correct_commas),
-    url(r'^submit_task_explain_commas$', views.submit_task_explain_commas),
+    url(r'^submit_task_explain_commas$', views.submit_task_explain_commas, name='submit_task_explain_commas'),
     url(r'^submit_task3$', views.submit_task3),
     url(r'^submit_task4$', views.submit_task4),
     url(r'^delete_user$', views.delete_user),

@@ -19,7 +19,7 @@
                 <h4>Regeln im Fokus:</h4>
                     {%  for ur in leveldsp %}
                     <p>
-                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }} ({{ ur.correct }}/{{ ur.total }} - {{ ur.score }})</button>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
                     </p>
                     {% endfor %}
                     {% for ur in leveldsp %}
@@ -31,8 +31,10 @@
                                 <h4 class="modal-title" id="modal-label-{{ ur.rule.id }}">Regel {{ ur.rule.rule }} </h4>
                               </div>
                               <div class="modal-body">
-                                <h4>Regel:</h4>
+                                <h4>Regel {{ ur.rule.rule }}:</h4>
                                 <p>{{ ur.rule.description|safe }}<p>
+                              <h4>Beispiel:</h4>
+                                  <p><em>{{ ur.rule.example|safe }}</em></p>
                                   <h4>Statistik:</h4>
                                   <table>
                                       <tr><td>Vorkommen in Übungen: </td><td style="text-align: right">{{ ur.total }}</td></tr>

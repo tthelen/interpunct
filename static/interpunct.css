@@ -198,6 +198,15 @@ body {
     font-size:75%;
 }
 
+.explanation-correct {
+    border: 3px dashed green;
+    borderRadius: 10px;
+}
+
+.explanation-wrong {
+    border: 3px solid red;
+    borderRadius: 10px;
+}
 .xxexp-form{
     color: #000;
     margin-top: 10px;
