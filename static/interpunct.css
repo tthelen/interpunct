@@ -18,6 +18,10 @@ body {
     word-spacing: 0;
 }
 
+.sentence-correct .label {
+    cursor: pointer;
+}
+
 
 .interaction {
     margin-right:1em; padding:10px; background-color:#cccccc;

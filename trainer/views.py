@@ -543,3 +543,7 @@ def sentence(request, sentence_id):
     print(rules)
     rules = list(set(rules))
     return render(request, 'trainer/partials/sentence.html', locals())
+
+
+def help(request):
+    return render(request, 'trainer/help.html', locals())
