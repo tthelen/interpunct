@@ -24,7 +24,7 @@
                     {%  for ur in leveldsp %}
                     <p>
                         <span class="counter">[{{ ur.correct|stringformat:"02d" }}/{{ ur.total|stringformat:"02d" }}]</span>
-                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
+                        <button type="button" class="btn {% if ur.user.current_rule == ur.rule %}btn-info{% endif %}" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
                     </p>
                     {% endfor %}
                     {% for ur in leveldsp %}
@@ -52,6 +52,11 @@
                                           {% if ur.box == 4 %}sehr selten{% endif %}
                                       </td></tr>
                                   </table>
+                                  {% if ur.user.current_rule == ur.rule %}
+                                  <h4>Levelaufstieg</h4>
+                                  <p>Diese Regel ist als letzte hinzugekommen. Du steigst in den nächsten Level auf, wenn du mindestens
+                                      4 Aufgaben zu dieser Regel mehrheitlich korrekt gelöst hast.</p>
+                                  {% endif %}
                               </p>
                               </div>
                               <div class="modal-footer">

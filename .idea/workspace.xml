@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata" afterPath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/interpunct.css" afterPath="$PROJECT_DIR$/static/interpunct.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/models.py" afterPath="$PROJECT_DIR$/trainer/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/base.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/base.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" />
     </list>
     <ignored path="interpunct.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -121,8 +117,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+            <state relative-caret-position="203">
+              <caret line="177" column="24" lean-forward="false" selection-start-line="177" selection-start-column="24" selection-end-line="177" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -131,8 +127,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="650" column="6" lean-forward="false" selection-start-line="650" selection-start-column="6" selection-end-line="650" selection-end-column="6" />
+            <state relative-caret-position="483">
+              <caret line="386" column="0" lean-forward="true" selection-start-line="386" selection-start-column="0" selection-end-line="386" selection-end-column="0" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -140,79 +136,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="level_progress.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/level_progress.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-              <folding>
-                <element signature="e#845#851#1#HTML" expanded="true" />
-                <element signature="e#1193#1199#1#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="base.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="568">
+              <caret line="55" column="34" lean-forward="false" selection-start-line="55" selection-start-column="34" selection-end-line="55" selection-end-column="34" />
               <folding>
                 <element signature="e#748#754#1#HTML" expanded="true" />
-                <element signature="e#3562#3568#0#HTML" expanded="true" />
-                <element signature="e#3643#3649#1#HTML" expanded="true" />
+                <element signature="e#4039#4045#0#HTML" expanded="true" />
+                <element signature="e#4120#4126#1#HTML" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_correct_commas.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="5" column="21" lean-forward="false" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_explain_commas.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="26" lean-forward="false" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_set_commas.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="26" lean-forward="false" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="interpunct.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/interpunct.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sentence.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/partials/sentence.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="154" lean-forward="false" selection-start-line="1" selection-start-column="154" selection-end-line="1" selection-end-column="154" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -230,7 +163,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>zur nächste</find>
       <find>nächsten Wal</find>
       <find>echt</find>
       <find>Sebastian</find>
@@ -260,6 +192,7 @@
       <find>144</find>
       <find>request.username</find>
       <find>exampl</find>
+      <find>progress</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer</dir>
@@ -296,17 +229,17 @@
         <option value="$PROJECT_DIR$/trainer/management/commands/read_sentences.py" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/reset.html" />
         <option value="$PROJECT_DIR$/sentences.txt" />
-        <option value="$PROJECT_DIR$/trainer/models.py" />
         <option value="$PROJECT_DIR$/kommaregeln.csv" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/help.html" />
         <option value="$PROJECT_DIR$/trainer/views.py" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/partials/sentence.html" />
-        <option value="$PROJECT_DIR$/trainer/templates/trainer/base.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" />
         <option value="$PROJECT_DIR$/static/interpunct.css" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" />
+        <option value="$PROJECT_DIR$/trainer/models.py" />
+        <option value="$PROJECT_DIR$/trainer/templates/trainer/base.html" />
       </list>
     </option>
   </component>
@@ -1011,7 +944,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496353752301</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="- task header formatting">
+      <created>1496354160095</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1496354160095</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1074,7 +1014,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added Rule model and rule import routine" />
     <MESSAGE value="Added description for intermediate class" />
     <MESSAGE value="Adjust to ManyToMany-Representation of sentence-rule-relations" />
     <MESSAGE value="Bugfix: MODE-order not consistent&#10;Bugfix: allow (,) in example sentences&#10;" />
@@ -1099,7 +1038,8 @@
     <MESSAGE value="- use static tags in templates" />
     <MESSAGE value="- rule and sentence corrections&#10;- questionnaire corrections" />
     <MESSAGE value="- authentication via url parameter (for Stud.IP embedding)&#10;- connection to django auth user system&#10;- rule counter&#10;- rule expanation formatting" />
-    <option name="LAST_COMMIT_MESSAGE" value="- authentication via url parameter (for Stud.IP embedding)&#10;- connection to django auth user system&#10;- rule counter&#10;- rule expanation formatting" />
+    <MESSAGE value="- task header formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="- task header formatting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1497,40 +1437,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="650" column="6" lean-forward="false" selection-start-line="650" selection-start-column="6" selection-end-line="650" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#748#754#1#HTML" expanded="true" />
-            <element signature="e#3562#3568#0#HTML" expanded="true" />
-            <element signature="e#3643#3649#1#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/interpunct.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="441">
-          <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1559,13 +1469,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="177" column="24" lean-forward="false" selection-start-line="177" selection-start-column="24" selection-end-line="177" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/level_progress.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        <state relative-caret-position="170">
+          <caret line="10" column="125" lean-forward="false" selection-start-line="10" selection-start-column="125" selection-end-line="10" selection-end-column="125" />
           <folding>
-            <element signature="e#845#851#1#HTML" expanded="true" />
-            <element signature="e#1193#1199#1#HTML" expanded="true" />
+            <element signature="e#827#833#1#HTML" expanded="true" />
+            <element signature="e#1175#1181#1#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="386" column="0" lean-forward="true" selection-start-line="386" selection-start-column="0" selection-end-line="386" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="568">
+          <caret line="55" column="34" lean-forward="false" selection-start-line="55" selection-start-column="34" selection-end-line="55" selection-end-column="34" />
+          <folding>
+            <element signature="e#748#754#1#HTML" expanded="true" />
+            <element signature="e#4039#4045#0#HTML" expanded="true" />
+            <element signature="e#4120#4126#1#HTML" expanded="true" />
           </folding>
         </state>
       </provider>

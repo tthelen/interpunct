@@ -385,6 +385,11 @@ class User(models.Model):
 
         return False
 
+    def current_rule(self):
+        if self.rules_activated_count == len(self.rule_order):
+            return False
+        return Rule.objects.get(code=self.rule_order[self.rules_activated_count - 1])
+
     def level_display(self):
         """Return UserRule and examples sentence data for displaying level and expanations. At most 5 rules sorted by box position."""
 
