@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User as DjangoUser
 import re  # regex support
 import random
 
@@ -262,7 +263,7 @@ class User(models.Model):
     rules_activated_count = models.IntegerField(default=0)
     rules = models.ManyToManyField(Rule, through='UserRule')
 
-
+    django_user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, default=None)
 
     rule_order = [
         "A1", # GLEICHRANG
@@ -346,6 +347,16 @@ class User(models.Model):
         self.save()
 
         return new_rule
+
+    def prepare(self, request):
+        # create a real django user
+        self.django_user = DjangoUser.objects.create_user(self.user_id, 'tobias.thelen@uni-osnabrueck.de', 'nopass')
+
+    def login(self, request):
+        """Login the corresponding django user."""
+        from django.contrib.auth import login as django_user_login
+        django_user_login(request, self.django_user)
+        return True
 
     def progress(self):
         """Advance to next level, if appropriate.

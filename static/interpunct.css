@@ -38,6 +38,16 @@ body {
     margin-top: 40px;
     font-size:144%;
 }
+
+.example {
+    margin-top: 20px;
+    font-size: 144%;
+}
+
+.counter {
+   color: #777;
+    font-size:80%;
+}
 /* ----- rounding corners -----*/
 .interpunct-commaslot{
     xborder-radius: 50px;

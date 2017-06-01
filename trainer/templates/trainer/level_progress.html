@@ -10,7 +10,8 @@
 
 <p>Du bist einen Level aufgestiegen und bist jetzt in Level {{level}}.
 
-<p>Und Du hast eine neue Regel bekommen. Die Regel heißt:
+    <p>Und Du hast eine neue Regel bekommen.</p>
+    <p>Die Regel heißt:</p>
 {%  else %}
 <h2>Deine erste Regel</h2>
 
@@ -19,13 +20,24 @@
         dem Spiel: Je nachdem, wie fehlerfrei Du sie meisterst, tauchen sie ab und an, auch in Kombinationen mit
         anderen Regeln, wieder auf.
     </p>
-
     <h4>Hier nun Deine erste Regel:</h4>
 {% endif %}
-<p class="interpunct-sentence interaction">{{ new_rule.rule }}: {{ new_rule.description|safe }}</p>
-    <h4>Beispiel:</h4>
-    <p><em>{{ new_rule.example|safe }}</em></p>
 
-    <p><a href=""><button class="btn btn-default">Hier geht es weiter.</button></a>
+    <p>&nbsp;</p>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ new_rule.rule }}</h3>
+  </div>
+  <div class="panel-body">
+      <h3>Regel:</h3>
+<p class="example">{{ new_rule.description|safe}}</p>
+    <h3>Beispiel:</h3>
+    <p class="example"><em>{{ new_rule.example|safe }}</em></p>
+
+  </div>
+</div>
+<p>&nbsp;</p>
+<p><a href=""><button class="btn btn-info">Hier geht es weiter.</button></a>
 
 {% endblock %}

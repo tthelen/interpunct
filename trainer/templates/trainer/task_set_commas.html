@@ -13,12 +13,12 @@
 {% for w in words %}{{w}}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}">&nbsp; </span>{% endif %}{% endfor %}
 {% endspaceless %}
         </div>
-        <p id="correction">&nbsp;</p>
-
+<p>&nbsp;</p>
         <p id="feedback-{{ sentence.id }}">
             <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
         </p>
     </div>
+    <p id="correction">&nbsp;</p>
 
     <script>
 

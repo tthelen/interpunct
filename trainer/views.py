@@ -20,10 +20,29 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
     are already logged in or if they have provided proper http-authorization
     and returning the view if all goes well, otherwise responding with a 401.
     """
-    #if test_func(request.username):
+
+    def check_or_create_user(uname):
+        try:
+            user = User.objects.get(user_id=uname)
+        except User.DoesNotExist:  # new user: welcome!
+            user = User(user_id=uname)
+            user.rules_activated_count = 0
+            user.prepare(request)  # create a corresponding django user and set up auth system
+            user.save()
+        user.login(request)
+        return user
+
+    if test_func(request.user):
         # Already logged in, just return the view.
         #
-    #    return view(request, *args, **kwargs)
+        return view(request, *args, **kwargs)
+    else:
+        # not logged in but uname given from stud.ip (or elsewhere)
+        #
+        uname = request.GET.get('uname',False)
+        if uname:
+            check_or_create_user(uname)
+            return view(request, *args, **kwargs)
 
     # They are not logged in. See if they provided login credentials
     #
@@ -37,7 +56,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
                 auth_bytes=bytes(auth[1], 'utf8')
                 uname, passwd = base64.b64decode(auth_bytes).split(b':')
                 if uname == passwd:
-                    request.username=uname
+                    check_or_create_user(uname)
                     return view(request, *args, **kwargs)
 
     # Either they did not provide an authorization header or
@@ -131,18 +150,19 @@ def task(request):
 
     # get user from URL or session or default
     # user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
-    uname = request.username
+    user = User.objects.get(django_user=request.user)
     new_rule = None  # new level reached? (new rule to explain)
     display_rank=True  # show the rank in output? (not on welcome and rule explanation screens)
 
-    try:
-        user = User.objects.get(user_id=uname)
-    except User.DoesNotExist:  # new user: welcome!
-        user = User(user_id=uname)
-        user.rules_activated_count=0
-        user.save()
-        display_rank=False
-        return render(request, 'trainer/welcome.html', locals())
+    #try:
+    #    user = User.objects.get(user_id=uname)
+    #except User.DoesNotExist:  # new user: welcome!
+    #    user = User(user_id=uname)
+    #    user.prepare()  # create a corresponding django user and set up auth system
+    #    user.rules_activated_count=0
+    #    user.save()
+    #    display_rank=False
+    #    return render(request, 'trainer/welcome.html', locals())
 
     if not user.data:
         display_rank=False
@@ -330,8 +350,7 @@ def task(request):
 
 @logged_in_or_basicauth("Bitte einloggen")
 def start(request):
-    uname = request.username
-    user = User.objects.get(user_id=uname)
+    user = User.objects.get(django_user=request.user)
     vector = "{}:{}-{}:{}+{}+{}:{}:{}:{}".format(
         request.GET.get('hzb',0),
         request.GET.get('abschluss',0),
@@ -382,13 +401,12 @@ def submit_task1(request):
     :param request: Django request
     :return: nothing
     """
-    uname = request.username
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     time_elapsed = request.GET.get('tim',0)
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
-    user = User.objects.get(user_id=uname)
+    user = User.objects.get(django_user=request.user)
     user.count_false_types_task1(user_solution, sentence.get_commatypelist())
     user.update_rank()
     Solution(user=user, sentence=sentence, type="set", time_elapsed=time_elapsed, solution="".join(user_solution)).save() # save solution to db
@@ -411,14 +429,13 @@ def submit_task_correct_commas(request):
     :param request: Django request
     :return: nothing
     """
-    uname = request.username
+    user = User.objects.get(django_user=request.user)
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     commas = request.GET['commas']
     time_elapsed = request.GET.get('tim',0)
     #sentence.set_comma_select(user_solution)
     #sentence.update_submits()
-    user = User.objects.get(user_id=uname)
     user.count_false_types_task_correct_commas(user_solution, commas, sentence.get_commatypelist())
 
     Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution])).save() # save solution to db
@@ -440,10 +457,9 @@ def submit_task_explain_commas(request):
     :param request: Django request
     :return: nothing
     """
-    uname = request.username
+    user = User.objects.get(django_user=request.user)
     sentence = Sentence.objects.get(id=request.POST['sentence_id'])
     sentence.update_submits()
-    user = User.objects.get(user_id=uname)
     user.update_rank()
 
 
@@ -490,12 +506,11 @@ def submit_task3(request):
     :param request: Django request
     :return: nothing
     """
-    uname = request.username
+    user = User.objects.get(django_user=request.user)
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
-    user = User.objects.get(user_id=uname)
     user.count_false_types_task3(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
@@ -510,12 +525,11 @@ def submit_task4(request):
     :param request: Django request
     :return: nothing
     """
-    uname = request.username
+    user = User.objects.get(django_user=request.user)
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
-    user = User.objects.get(user_id=uname)
     user.count_false_types_task4(user_solution, sentence.get_commatypelist())
     user.update_rank()
     return JsonResponse({'submit': 'ok'})
@@ -526,7 +540,7 @@ def delete_user(request):
     """Remove a user."""
 
     # get user from URL or session or default
-    u = User.objects.get(user_id=request.username)
+    u = User.objects.get(django_user=request.user)
     u.delete()
     return redirect("/")
 

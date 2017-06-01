@@ -1,8 +1,10 @@
+<p>&nbsp;</p>
+<p class="manual">Zum Vergleich:<br> Der korrekte Satz mit allen Kommapositionen und häufigen Fehlerstellen. Klicke auf den Regelnamen für eine Erklärung.</p>
 <div class="sentence-correct">
     {% for x in wcr %}
         {{ x.0 }}{{ x.1 }}
         {% for y in x.2 %}
-            <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-info{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> {% endif %}{{ y.rule }}</span>
+            <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-info{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>{% else %}{{ y.rule }}{% endif %}</span>
         {% endfor %}
     {% endfor %}
 </div>

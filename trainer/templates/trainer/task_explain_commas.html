@@ -10,7 +10,7 @@
     <div class="interaction">
     {% spaceless %}{% for w in words_and_commas %}{{ w.0 }}{% if not forloop.last %}<span class="{% if forloop.counter == explanation_position.0 %}explanation-position{% endif %}">{% if w.1 != 0 %},{% endif %}{% if forloop.counter0 == explanation_position.0 %} [1]{% endif %}</span> {% endif %}{% endfor %}{% endspaceless %}
     </div>
-
+<p>&nbsp;</p>
     <div class = "explanations">
         <form class="exp-form" id="form0">
             <h3>Erkläre die Kommaposition [1]</h3>
@@ -27,12 +27,12 @@
         </form>
     </div>
     <p>&nbsp;</p>
-    <p id="correction">&nbsp;</p>
 
     <p id="feedback-{{ sentence.id }}">
         <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>
     </p>
 </div>
+    <p id="correction">&nbsp;</p>
 
 <script>
     var start_time = Date.now();
