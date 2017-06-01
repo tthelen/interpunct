@@ -332,13 +332,16 @@ def task(request):
 def start(request):
     uname = request.username
     user = User.objects.get(user_id=uname)
-    vector = "{}{}{}{}{}{}".format(
+    vector = "{}:{}-{}:{}+{}+{}:{}:{}:{}".format(
+        request.GET.get('hzb',0),
         request.GET.get('abschluss',0),
         request.GET.get('semester',0),
-        request.GET.get('fach1',0),
-        request.GET.get('fach2',0),
+        request.GET.get('fach1','00'),
+        request.GET.get('fach2','00'),
+        request.GET.get('fach3', '00'),
         request.GET.get('gender',0),
-        request.GET.get('estim',0))
+        request.GET.get('selfest','-'),
+        request.GET.get('L1','-'))
     user.data = vector
     user.save()
     return redirect("task")

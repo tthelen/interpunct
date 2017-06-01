@@ -2,7 +2,7 @@
     {% for x in wcr %}
         {{ x.0 }}{{ x.1 }}
         {% for y in x.2 %}
-            <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-default{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> {% endif %}{{ y.rule }}</span>
+            <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-info{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> {% endif %}{{ y.rule }}</span>
         {% endfor %}
     {% endfor %}
 </div>

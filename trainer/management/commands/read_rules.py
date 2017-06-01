@@ -23,7 +23,8 @@ class Command(BaseCommand):
             r.rule = row[4]
             r.example = row[6]
             import re
-            r.example=re.sub(r"\([^,].*\)","",r.example)
+            r.example = re.sub(r"\(,\)", "[,]", r.example)
+            r.example=re.sub(r"\([^)]+\)","",r.example)
             r.save()
         self.stdout.write(self.style.SUCCESS('Successfully updated rules.'))
 

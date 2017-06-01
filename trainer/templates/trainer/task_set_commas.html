@@ -45,10 +45,13 @@
             for(var i=0;i<val_sample.length;i++){
                 if((val_sample[i] == 2) && (val_user[i] == 1)){
                     sentence[i].style.background="#85e278"; //green
+                    sentence[i].classList.add('markingright');
                 }else if((val_sample[i] == 1)){
                     sentence[i].style.background = "#219fff"; //blue
+                    sentence[i].classList.add('markingright');
                 }else if(val_sample[i] != val_user[i]){
                     sentence[i].style.background="#ff876e"; //red
+                    sentence[i].classList.add('markingwrong');
                 }
             }
         }

@@ -33,7 +33,7 @@
 <form id="theform" class="form-horizontal" action="start">
 
   <div class="form-group" id="formAbschlussGroup">
-    <label for="formAbschluss" class="col-sm-2 control-label">Studiengang *</label>
+    <label for="formAbschluss" class="col-sm-3 control-label">Studiengang *</label>
     <div class="col-sm-3">
     <select id="formAbschluss" name="abschluss" class="form-control" required="true">
       <option value="0">bitte auswählen</option>
@@ -52,14 +52,14 @@
         <p id="formAbschlussGroup-error">Bitte auswählen!</p>
     </div>
 
-    <div class="col-sm-2">
+    <div class="col-sm-3">
     <select id="formSem" name="semester" class="form-control">
-      <option value="0">Fachsemester?</option>
+      <option value="0">Fachsemester</option>
       <option value="1">1./2. Semester</option>
       <option value="2">3./4. Semester</option>
-      <option value="3">4./5. Semester</option>
-      <option value="4">6./7. Semester</option>
-      <option value="5">8./9. Semester</option>
+      <option value="3">5./6. Semester</option>
+      <option value="4">7./8. Semester</option>
+      <option value="5">9./10. Semester</option>
       <option value="6">höheres Semester</option>
     </select>
     </div>
@@ -67,7 +67,7 @@
   </div>
 
   <div class="form-group">
-    <div class="col-sm-2">&nbsp;</div>
+    <div class="col-sm-3">&nbsp;</div>
     <div class="col-sm-3">
     <select id="formFach1" name="fach1" class="form-control">
       <option value="00">ggf. 1. Studienfach</option>
@@ -87,16 +87,18 @@
       <option value="23">Katholische Theologie</option>
       <option value="24">Kunst/Kunstpädagogik</option>
       <option value="25">Latein</option>
-      <option value="26">Mathematik</option>
-      <option value="27">Musik</option>
-      <option value="28">Physik</option>
-      <option value="29">Psychologie</option>
-      <option value="30">Rechtswissenschaft</option>
-      <option value="31">Romanistik</option>
-      <option value="32">Sachunterricht</option>
-      <option value="33">Sport/Sportwissenschaft</option>
-      <option value="34">Textiles Gestalten</option>
-      <option value="35">Sonstiges Fach</option>
+      <option value="26">Literatur und Kultur in Europa</option>
+      <option value="27">Mathematik</option>
+      <option value="28">Musik</option>
+      <option value="29">Physik</option>
+      <option value="30">Psychologie</option>
+      <option value="31">Rechtswissenschaft</option>
+      <option value="32">Romanistik</option>
+      <option value="33">Sachunterricht</option>
+      <option value="34">Sport/Sportwissenschaft</option>
+      <option value="35">Sprache in Europa</option>
+      <option value="36">Textiles Gestalten</option>
+      <option value="37">Sonstiges Fach</option>
     </select>
     </div>
 
@@ -119,36 +121,75 @@
       <option value="23">Katholische Theologie</option>
       <option value="24">Kunst/Kunstpädagogik</option>
       <option value="25">Latein</option>
-      <option value="26">Mathematik</option>
-      <option value="27">Musik</option>
-      <option value="28">Physik</option>
-      <option value="29">Psychologie</option>
-      <option value="30">Rechtswissenschaft</option>
-      <option value="31">Romanistik</option>
-      <option value="32">Sachunterricht</option>
-      <option value="33">Sport/Sportwissenschaft</option>
-      <option value="34">Textiles Gestalten</option>
-      <option value="35">Sonstiges Fach</option>
+      <option value="26">Literatur und Kultur in Europa</option>
+      <option value="27">Mathematik</option>
+      <option value="28">Musik</option>
+      <option value="29">Physik</option>
+      <option value="30">Psychologie</option>
+      <option value="31">Rechtswissenschaft</option>
+      <option value="32">Romanistik</option>
+      <option value="33">Sachunterricht</option>
+      <option value="34">Sport/Sportwissenschaft</option>
+      <option value="35">Sprache in Europa</option>
+      <option value="36">Textiles Gestalten</option>
+      <option value="37">Sonstiges Fach</option>
     </select>
     </div>
 
   </div>
 
   <div class="form-group">
-    <label for="formGender" class="col-sm-2 control-label">Geschlecht</label>
-    <div class="col-sm-3">
+    <label for="formGender" class="col-sm-3 control-label">Geschlecht</label>
+    <div class="col-sm-2">
         <select id="formGender" name="gender" class="form-control">
             <option value="-"></option>
             <option value="w">weiblich</option>
             <option value="m">männlich</option>
         </select>
     </div>
+      <div class="col-sm-1">
+          &nbsp;
+      </div>
+    <div class="col-sm-3">
+    <select id="formFach3" name="fach3" class="form-control">
+      <option value="00">ggf. 3. Studienfach</option>
+      <option value="10">Anglistik/Englisch</option>
+      <option value="11">Betriebswirtschaftslehre</option>
+      <option value="12">Biologie</option>
+      <option value="13">Chemie</option>
+      <option value="14">Cognitive Science</option>
+      <option value="15">Erziehungswissenschaft</option>
+      <option value="16">Evangelische Theologie</option>
+      <option value="17">Französisch</option>
+      <option value="18">Geographie/Erdkunde</option>
+      <option value="19">Germanistik/Deutsch</option>
+      <option value="20">Geschichte</option>
+      <option value="21">Informatik</option>
+      <option value="22">Islamische Theologie</option>
+      <option value="23">Katholische Theologie</option>
+      <option value="24">Kunst/Kunstpädagogik</option>
+      <option value="25">Latein</option>
+      <option value="26">Literatur und Kultur in Europa</option>
+      <option value="27">Mathematik</option>
+      <option value="28">Musik</option>
+      <option value="29">Physik</option>
+      <option value="30">Psychologie</option>
+      <option value="31">Rechtswissenschaft</option>
+      <option value="32">Romanistik</option>
+      <option value="33">Sachunterricht</option>
+      <option value="34">Sport/Sportwissenschaft</option>
+      <option value="35">Sprache in Europa</option>
+      <option value="36">Textiles Gestalten</option>
+      <option value="37">Sonstiges Fach</option>
+    </select>
+    </div>
+
   </div>
 
   <div class="form-group">
-    <label for="formHZB" class="col-sm-2 control-label">Hochschulzugang</label>
+    <label for="formHZB" class="col-sm-3 control-label">Hochschulzugang</label>
     <div class="col-sm-3">
-    <select id="formFach1" name="fach2" class="form-control">
+    <select id="formFach1" name="hzb" class="form-control">
       <option value="0">bitte auswählen</option>
       <option value="1">Abitur (oder äquivalent)</option>
       <option value="2">Fachabitur (oder äquivalent)</option>
@@ -159,25 +200,46 @@
     </div>
   </div>
 
-  <div class="form-group" id="formSelfestGroup">
-    <label for="formSelfest" class="col-sm-2 control-label">Wie sicher fühlst Du Dich bei der Kommasetzung? *</label>
+
+  <div class="form-group" id="formL1Group">
+    <label for="formL1" class="col-sm-3 control-label">Muttersprache</label>
     <div class="col-sm-3">
-        <select id="formSelfest" name="fach2" class="form-control" required="true">
-            <option value="0">bitte auswählen</option>
-            <option value="1">sehr unsicher</option>
-            <option value="2">eher unsicher</option>
-            <option value="3">eher sicher</option>
-            <option value="4">sehr unsicher</option>
-        </select>
+        <input class="form-control" id="formL1" name="L1" value="deutsch">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="formSelfest" class="col-sm-6 control-label">Wie sicher fühlst Du Dich insgesamt bei der Kommasetzung? *</label>
+  </div>
+  <div class="form-group" id="formSelfestGroup">
+    <div class="col-sm-offset-3 col-sm-6">
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-default">
+            <input type="radio" name="selfest" value="1" autocomplete="off"> sehr unsicher
+          </label>
+          <label class="btn btn-default">
+            <input type="radio" name="selfest" value="2" autocomplete="off"> eher unsicher
+          </label>
+          <label class="btn btn-default">
+            <input type="radio" name="selfest" value="3" autocomplete="off"> eher sicher
+          </label>
+          <label class="btn btn-default">
+            <input type="radio" name="selfest" value="4" autocomplete="off"> sehr sicher
+          </label>
+
+        </div>
          <p id="formSelfestGroup-error">Bitte auswählen!</p>
     </div>
   </div>
 
-<div class="col-sm-offset-2 col-sm-10">
-<button type="submit" class="btn btn-default">Submit</button>
-</div>
+  <div class="form-group" id="formSelfestGroup">
+     <div class="col-sm-offset-3 col-sm-9">
+         <button type="submit" class="btn btn-primary">Absenden</button>
+     </div>
+  </div>
 </form>
 
+<p>&nbsp;</p>
 
 <script>
 $(document).ready(function () {

@@ -5,10 +5,10 @@
 {% block main %}
 <h2>Der Komma-Trainer</h2>
 
-Du bist dabei, alle deine Daten zu löschen. Danach musst du von vorne anfangen.
+    <p>Du bist dabei, alle deine Daten zu löschen. Danach musst du von vorne anfangen.</p>
 
-    <p><a href="delete_user">Ja, von vorne anfangen.</a></p>
+    <p><a href="delete_user"><button class="btn btn-danger">Ja, von vorne anfangen.</button></a></p>
 
-    <p><a href="/">Nein, ich will doch weitermachen.</a></p>
+    <p><a href="{% url 'task' %}"><button class="btn btn-default">Nein, ich will doch weitermachen.</button></a></p>
 
 {% endblock %}
