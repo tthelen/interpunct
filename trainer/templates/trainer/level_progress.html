@@ -35,6 +35,18 @@
   </div>
 </div>
 <p>&nbsp;</p>
+
+    {% if finished %}
+<h2>Hurra! Das war deine letzte Regel!</h2>
+<p>&nbsp; </p>
+
+<p>
+Damit hast du alle Regeln freigeschaltet. Du kannst noch beliebig lange weiterüben, die Regeln werden jeweils danach ausgewählt,
+wo du in letzter Zeit noch Fehler gemacht hast bzw. welche Regeln du schon besonders gut beherrschst.
+</p>
+<p>&nbsp; </p>
+    {% endif %}
+
 <p><a href=""><button class="btn btn-info">Hier geht es weiter.</button></a>
 
 {% endblock %}

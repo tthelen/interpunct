@@ -1,5 +1,3 @@
-# from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import Sentence, Solution, Rule, SentenceRule, User, UserSentence, UserRule
@@ -11,6 +9,7 @@ import base64
 from django.http import HttpResponse
 # from django.contrib.auth import authenticate, login
 
+
 #############################################################################
 #
 def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
@@ -21,11 +20,11 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
     and returning the view if all goes well, otherwise responding with a 401.
     """
 
-    def check_or_create_user(uname):
+    def check_or_create_user(username):
         try:
-            user = User.objects.get(user_id=uname)
+            user = User.objects.get(user_id=username)
         except User.DoesNotExist:  # new user: welcome!
-            user = User(user_id=uname)
+            user = User(user_id=username)
             user.rules_activated_count = 0
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
@@ -39,7 +38,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
     else:
         # not logged in but uname given from stud.ip (or elsewhere)
         #
-        uname = request.GET.get('uname',False)
+        uname = request.GET.get('uname', False)
         if uname:
             check_or_create_user(uname)
             return view(request, *args, **kwargs)
@@ -53,7 +52,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
             #
             if auth[0].lower() == "basic":
                 # print(auth[1])
-                auth_bytes=bytes(auth[1], 'utf8')
+                auth_bytes = bytes(auth[1], 'utf8')
                 uname, passwd = base64.b64decode(auth_bytes).split(b':')
                 if uname == passwd:
                     check_or_create_user(uname)
@@ -138,6 +137,7 @@ def has_perm_or_basicauth(perm, realm=""):
 
     return view_decorator
 
+
 @logged_in_or_basicauth("Bitte einloggen")
 def task(request):
     """
@@ -152,17 +152,8 @@ def task(request):
     # user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
     user = User.objects.get(django_user=request.user)
     new_rule = None  # new level reached? (new rule to explain)
-    display_rank=True  # show the rank in output? (not on welcome and rule explanation screens)
-
-    #try:
-    #    user = User.objects.get(user_id=uname)
-    #except User.DoesNotExist:  # new user: welcome!
-    #    user = User(user_id=uname)
-    #    user.prepare()  # create a corresponding django user and set up auth system
-    #    user.rules_activated_count=0
-    #    user.save()
-    #    display_rank=False
-    #    return render(request, 'trainer/welcome.html', locals())
+    display_rank = True  # show the rank in output? (not on welcome and rule explanation screens)
+    finished = False # default is: we're not yet finished
 
     if not user.data:
         display_rank=False
@@ -175,7 +166,7 @@ def task(request):
         return render(request, 'trainer/level_progress.html', locals())
 
     # normal task selection process
-    new_rule = user.progress()
+    (new_rule, finished) = user.progress()
     level = user.rules_activated_count
     rank = user.get_user_rank_display()
     leveldsp = user.level_display()
@@ -361,10 +352,19 @@ def start(request):
         request.GET.get('gender',0),
         request.GET.get('selfest','-'),
         request.GET.get('L1','-'))
-    user.data = vector
+    user.data = vector # one string with al data, now obsolete TODO: remove
+    user.data_study = request.GET.get('abschluss',0)
+    user.data_semester = request.GET.get('semester',0)
+    user.data_subject1 = request.GET.get('fach1',0)
+    user.data_subject2 = request.GET.get('fach2',0)
+    user.data_subject3 = request.GET.get('fach3', 0)
+    user.data_study_permission = request.GET.get('hzb',0)
+    user.data_sex = request.GET.get('gender',"")
+    user.data_l1 = request.GET.get('L1','')
+    user.data_selfestimation = request.GET.get('selfest','-')
     user.save()
-    return redirect("task")
 
+    return redirect("task")
 
 def profile(request):
     """

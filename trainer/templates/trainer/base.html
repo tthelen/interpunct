@@ -24,7 +24,7 @@
                     {%  for ur in leveldsp %}
                     <p>
                         <span class="counter">[{{ ur.correct|stringformat:"02d" }}/{{ ur.total|stringformat:"02d" }}]</span>
-                        <button type="button" class="btn {% if ur.user.current_rule == ur.rule %}btn-info{% endif %}" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
+                        <button type="button" class="btn {% if ur.user.current_rule == ur.rule and not finished %}btn-info{% endif %}" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
                     </p>
                     {% endfor %}
                     {% for ur in leveldsp %}
@@ -73,7 +73,8 @@
                 <p>&nbsp;</p>
 
            </div>
-    {% endif %}
+        {% endif %}
+
     </div>
     <div class="col-md-10">
         {% block main %}

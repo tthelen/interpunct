@@ -246,8 +246,33 @@ class User(models.Model):
         (2, "Kommakommandant"),
         (3, 'Kommakönig'),
     )
+
+    abschluss = {"10": "Bachelor BEU(Lehramt GHR)",
+                 "11": "Bachelor berufliche Bildung(Lehramt LBS)",
+                 "12": "Bachelor 2-Fächer (Lehramt Gym)",
+                 "13": "Bachelor 2- Fächer (kein Lehramt)",
+                 "14": "Bachelor (1 Fach)",
+                 "20": "Master(Lehramt GHR)",
+                 "21": "Master(Lehramt Gym)",
+                 "22": "Master(Lehramt LBS)",
+                 "23": "Master(kein Lehramt)",
+                 "30": "sonstiges",
+                 "40": "nicht studierend"}
+
     user_id = models.CharField(max_length = 255)
+
     data = models.CharField(max_length=255, default='')
+
+    data_study = models.IntegerField(default=0)
+    data_semester = models.IntegerField(default=0)
+    data_subject1 = models.IntegerField(default=0)
+    data_subject2 = models.IntegerField(default=0)
+    data_subject3 = models.IntegerField(default=0)
+    data_study_permission = models.IntegerField(default=0)
+    data_sex = models.CharField(max_length=2, default='')
+    data_l1 = models.CharField(max_length=255, default='')
+    data_selfestimation = models.IntegerField(default=0)
+
     user_rank = models.IntegerField(choices=RANKS, default = 0)
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
@@ -266,39 +291,36 @@ class User(models.Model):
     django_user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, default=None)
 
     rule_order = [
-        "A1", # GLEICHRANG
-        "A2", # ENTGEGEN
-        "B1.1", # NEBEN
-        "B2.1", # UMOHNESTATT
-        "C1", # PARANTHESE
-        "C2", # APPOSITION
-        "D1", # ANREDE
-        "D2", # AUSRUF
-        "A3",
-        "A4",
-        "B1.2",
-        "B1.3",
-        "B1.4.1",
-        "B1.4.2",
-        "B1.5",
-        "B2.2",
-        "B2.3",
-        "B2.4.1",
-        "B2.4.2",
-        "B2.5",
-        "C3.1",
-        "C3.2",
-        "C4.1",
-        "C4.2",
-        "C5",
-        "C6.1",
-        "C6.2",
-        "C6.3.1",
-        "C6.3.2",
-        "C6.4",
-        "C7",
-        "C8",
-        "D3"
+        "A1",  # 1 GLEICHRANG
+        "A2",  # 2 ENTGEGEN
+        "B1.1",  # 3 NEBEN
+        "B2.1",  # 4 UMOHNESTATT
+        "C1",  # 5 PARANTHESE
+        "D1",  # 6 ANREDE/AUSRUF
+        "B1.2",  # 7 NEBEN EINLEIT
+        "C2",  # 8 APPOSITION
+        "A3",  # 9 SATZREIHUNG
+        "C5",  # 10 HINWEIS
+        "B1.5",  # 11 FORMELHAFT
+        "A4",  # 12 GLEIHRANG KONJUNKT
+        "D3",  # 13 BEKTRÄFT
+        "B2.2",  # 14
+        "C3.1",  # 15
+        "B2.3",  # 16
+        "C3.2",  # 17
+        "B2.4.1",  # 18
+        "C4.1",  # 19
+        "B2.4.2",  # 20
+        "B2.5",  # 21
+        "C6.1",  #22
+        "C6.2",  # 23
+        "C6.3.1",  # 24
+        "C6.3.2",  # 25
+        "C6.4",  # 26
+        "C7",  # 27
+        "B1.3",  # 28 NEBEN KONJUNKT
+        "B1.4.1",  # 29
+        "B1.4.2",  # 30
     ]
 
     def update_rank(self):
@@ -361,12 +383,14 @@ class User(models.Model):
     def progress(self):
         """Advance to next level, if appropriate.
         
-        Returns False is no level progress, the newly activated Rule object otherwise.
+        Returns (new_rule, finished?) 
+        new_rule is False if no level progress, the newly activated Rule object otherwise.
+        finished is false if not all rules are activated and true if all Rules are activated
         """
 
         # highest level reached?
         if self.rules_activated_count == len(self.rule_order):
-            return False
+            return (False, True)
 
         # d = self.get_dictionary()
         last_rule = self.rule_order[self.rules_activated_count - 1]
@@ -381,9 +405,9 @@ class User(models.Model):
             new_ur = UserRule.objects.get(rule=new_rule, user=self)
             new_ur.active = True
             new_ur.save()
-            return new_rule
+            return (new_rule, (self.rules_activated_count == len(self.rule_order)))
 
-        return False
+        return (False, False)
 
     def current_rule(self):
         if self.rules_activated_count == len(self.rule_order):
