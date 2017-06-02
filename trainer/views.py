@@ -31,17 +31,18 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         user.login(request)
         return user
 
+    if 'uname' in request.GET:
+        # uname given from stud.ip (or elsewhere)
+        #
+        uname = request.GET.get('uname')
+        if uname:
+            check_or_create_user(uname)
+            return view(request, *args, **kwargs)
+
     if test_func(request.user):
         # Already logged in, just return the view.
         #
         return view(request, *args, **kwargs)
-    else:
-        # not logged in but uname given from stud.ip (or elsewhere)
-        #
-        uname = request.GET.get('uname', False)
-        if uname:
-            check_or_create_user(uname)
-            return view(request, *args, **kwargs)
 
     # They are not logged in. See if they provided login credentials
     #
