@@ -28,7 +28,7 @@ C6.3.2,PARTIZIPGRUPPE,muss,"Bei Partizip-, Adjektivgruppen o.ä. muss das Komma 
 C6.4,NACHTRAG:WIE,kann,"Der/Die Schreiber/in entscheidet, ob er/sie etwas durch Komma(s) als Zusatz/Nachtrag kennzeichnen will, hier bei Gefügen mit <em>wie</em>.",§78,selbst/mark,"Ihre Ausgaben(,)(C6.4) wie Fahrt- und Reisekosten(,)(C6.4) werden Ihnen erstattet.",,
 C7,EIGENNAME:KEINNACHTRAG,darf nicht,"Bei Bestandteilen von mehrteiligen Eigennamen und vorangestellten Titeln ohne Artikel, die keine Zusätze/Nachträge sind, darf kein Komma gesetzt werden.",§77 (2) E2,mark,Alexander (C7) der Große. Direktor (C7) Professor Dr. med. Heinz Steiner führte uns durch das Institut.,,
 C8,HINWEIS:GESETZ,darf nicht,"Bei mehrteíligen Hinweisen auf Gesetze und Verordnungen darf kein Komma gesetzt werden.",§77 (3),selbst,§6 (C8)Abs.2 (C8)Satz 3 der Verordnung.,,
-D1,ANREDE,muss,"Bei Anreden und Ausrufen muss ein Komma gesetzt werden.",§79 (1,2),mark,"Kinder,(D1) hört doch mal zu. Juhu,(D2) wir sind endlich fertig!",,
+D1,ANREDE,muss,"Bei Anreden und Ausrufen muss ein Komma gesetzt werden.","§79 (1)(2)"",mark,"Kinder,(D1) hört doch mal zu. Juhu,(D2) wir sind endlich fertig!",,
 D3,BEKRÄFT,muss,"Bei Bejahungen, Verneinungen, Bekräftigungen und Bitten muss ein Komma gesetzt werden.",§79 (3),mark,"Ja,(D3) wir haben endlich Platz. Nein,(D3) wir haben keine Lust mehr. Das hat er gesagt,(D3) leider. Bitte,(D3) lass mich in Ruhe. ",,
 E1,FEHLER,darf nicht,"Fehler","",mark,"In diesem Satz steht kein Komma.",,
 E2,VORFELD,darf nicht,"Nach einem komplexen, nicht-verbhaltigen Vorfeld darf kein Komma gesetzt werden, da das Vorfeld ohne Verb nicht satzwertig ist.","Häufige Fehlerstelle",mark,"Nach dem Mittagessen (E2) mache ich gerne einen kleinen Mittagsschlaf.",,
