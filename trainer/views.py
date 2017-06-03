@@ -187,9 +187,8 @@ def task(request):
     comma = sentence.get_commalist() # pack all commas [0,1,2] in a list
     words_and_commas = list(zip(words,comma+[0]))
     comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
-    #print(words)
-    #print(comma)
-    #print(comma_types)
+    comma_pairs = sentence.get_commapairlist()  # pack all comma pairs [0,0,1,...] of this sentence in a list
+
     comma_to_check=[]
     for ct in comma_types:
         if ct != [] and ct[0][0] != 'E': # rule, but no error rule
@@ -201,6 +200,7 @@ def task(request):
     comma_select = sentence.get_commaselectlist() # pack all selects in a list
     comma_select.append('0') # dirty trick to make the comma_select and comma_types the same length as words
     comma_types.append([])
+    comma_pairs.append(0)
     comma_to_check.append(0)
     # get total amount of submits
     submits = sentence.total_submits
@@ -495,44 +495,6 @@ def submit_task_explain_commas(request):
     except UserSentence.DoesNotExist:
         UserSentence(user=user, sentence=sentence, count=1).save()
 
-    return JsonResponse({'submit': 'ok'})
-
-
-@logged_in_or_basicauth("Bitte einloggen")
-def submit_task3(request):
-    """
-    Receives an AJAX GET request containing a solution bitfield for a sentence.
-    Saves solution and user_id to database.
-
-    :param request: Django request
-    :return: nothing
-    """
-    user = User.objects.get(django_user=request.user)
-    sentence = Sentence.objects.get(id=request.GET['id'])
-    user_solution = request.GET['sol']
-    sentence.set_comma_select(user_solution)
-    sentence.update_submits()
-    user.count_false_types_task3(user_solution, sentence.get_commatypelist())
-    user.update_rank()
-    return JsonResponse({'submit': 'ok'})
-
-
-@logged_in_or_basicauth("Bitte einloggen")
-def submit_task4(request):
-    """
-    Receives an AJAX GET request containing a solution bitfield for a sentence.
-    Saves solution and user_id to database.
-
-    :param request: Django request
-    :return: nothing
-    """
-    user = User.objects.get(django_user=request.user)
-    sentence = Sentence.objects.get(id=request.GET['id'])
-    user_solution = request.GET['sol']
-    sentence.set_comma_select(user_solution)
-    sentence.update_submits()
-    user.count_false_types_task4(user_solution, sentence.get_commatypelist())
-    user.update_rank()
     return JsonResponse({'submit': 'ok'})
 
 

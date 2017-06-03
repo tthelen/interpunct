@@ -7,7 +7,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         from tablib import Dataset
         imported_data = Dataset().load(open('kommaregeln.csv', encoding='utf-8').read())
-        # Rule.objects.all().delete()  # Delete all rules. TODO: Build update mechanism
         for row in imported_data:
             r=Rule.objects.get(code=row[0])
             if not r:  # rule with this code does not yet exist: create!

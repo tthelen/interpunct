@@ -11,7 +11,7 @@
 
 </head>
 <body>
-<!--<div class="container">-->
+<div id="containerdiv">
 <div class="row">
     <div class="col-xs-2">
         {% if display_rank %}
@@ -71,6 +71,7 @@
             <p>&nbsp;</p>
                 <p><a href="{% url 'help' %}"><button class="btn btn-default">Anleitung</button></a></p>
                 <p>&nbsp;</p>
+                <p style="margin-top:1em;visibility: visible;" id="detachlink"><a href="" target="_blank" class="manual">Komma-Trainer in eigenem Fenster anzeigen</a></p>
 
            </div>
         {% endif %}
@@ -82,11 +83,22 @@
 
         Hallo. Hier ist etwas schiefgelaufen.
         {% endblock %}
+
     </div>
 
 </div>
-<!--</div>-->
+</div>
 
+<script>
+    $( document ).ready(function() {
+        if (window.self == window.top) {
+            // not in an iframe:
+            // add class container to have margins
+            $("#containerdiv").addClass('container');
+            $("#detachlink").css('visibility','hidden');
+        }
+    });
+</script>
 
 </body>
 </html>

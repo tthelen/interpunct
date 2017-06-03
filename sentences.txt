@@ -25,82 +25,82 @@ Die Zubereitung erfolgt in einer Fritteuse,(A1) einer Pfanne (A4)oder im Backofe
 Die in der DDR produzierten Fischstäbchen waren allerdings keine Fischstäbchen in ihrer technischen Definition,(A2) sondern panierte Fischportionen,(B1.1) da sie nicht aus gesägten Filetblöcken,(A2) sondern ausschließlich aus zerkleinertem Fischfleisch bestanden.
 Die Fischstäbchen werden nun für wenige Sekunden kurz frittiert,(B1.1) damit die Panierung eine trockene Kruste und aromatische Röststoffe bildet.
 Ich wünsche mir einen Wetterbericht, (B1.1) der nicht so oft danebenliegt.
-Ein Student, (B1.1) der noch nie in der Bibliothek war, (B1.1) sollte keinen Abschluss bekommen.
+Ein Student, (#1,B1.1) der noch nie in der Bibliothek war, (#1,B1.1) sollte keinen Abschluss bekommen.
 Es kann ja schonmal passieren, (B1.1) dass man etwas vergisst.
-Ich finde ungebetene Anrufer, (B1.1) die noch nicht einmal ihren Namen nennen, (B1.1) ausgesprochen unhöflich.
-Hunde, (B1.1) die bellen, (B1.1) beißen nicht.
-Hatte sich schon in der Ära Kohl die Tendenz gezeigt,(B1.1) dass die deutschen Wähler die auf Bundesebene in der Opposition befindlichen Parteien bei anderen Wahlen stärkten,(B1.1) wurde jetzt die neue Oppositionspartei CDU gestützt und damit auch deren Generalsekretärin Merkel.
+Ich finde ungebetene Anrufer, (#1,B1.1) die noch nicht einmal ihren Namen nennen, (#1,B1.1) ausgesprochen unhöflich.
+Hunde, (#1,B1.1) die bellen, (#1,B1.1) beißen nicht.
+Hatte sich schon in der Ära Kohl die Tendenz gezeigt,(#1,B1.1) dass die deutschen Wähler die auf Bundesebene in der Opposition befindlichen Parteien bei anderen Wahlen stärkten,(#1,B1.1) wurde jetzt die neue Oppositionspartei CDU gestützt und damit auch deren Generalsekretärin Merkel.
 Angenommen(,)(B1.2) dass du bald wieder fit bist,(B1.1) könnten wir uns nächste Woche treffen.
 Als Frau kann man beim Kellnern unter Umständen ganz schön viel Geld verdienen,(B1.1) je nachdem(,)(B1.2) wie viele Männer am Abend da sind.
 Egal(,)(B1.2,B1.5) wie oft ich es auch versuche,(B1.1) mein Handy macht nur noch,(B1.1) was es will.
 Das geht gar nicht,(B1.1) dass du hier einfach so aufkreuzt (B1.3) und dass du dann auch noch völlig unvorbereitet bist.
 Obwohl sie dringend auf das Geld angewiesen waren (B1.3) und er es sich wirklich vorgenommen hatte,(B1.1) ging er an diesem Montagmorgen nicht zur Arbeit.
-Du nutzt diese Lern- und Übungsplattform sicherlich,(B1.1) weil du deine Kommasetzungskompetenzen verbessern möchtest (B1.3) oder einfach weil du dazu gezwungen wurdest.
+Du nutzt diese Lern- und Übungsplattform sicherlich,(B1.1) weil Du Deine Kommasetzungskompetenzen verbessern möchtest (B1.3) oder einfach weil es Deine Hausaufgabe ist.
 An Feiertagen und wenn Ferien sind,(B1.4.1) ist das Schwimmbad geschlossen.
 Sie sagte, (B1.1) aus Trotz (B1.4.2)und weil sie noch sauer auf ihn war,(B1.4.1) das geplante Treffen ab.
 Er schlief im Seminar fast ein,(B1.4.1) da er seinen morgendlichen Kaffee nicht getrunken hatte (B1.4.2) oder vielleicht auch aus purer Langeweile.
 Wenn Ferien sind (B1.3) und an Feiertagen (B1.4.2) ist das Schwimmbad geschlossen.
 Weil sie noch sauer auf ihn war (B1.3) und aus Trotz (B1.4.2) sagte sie das geplante Treffen ab.
 Da er seinen morgendlichen Kaffee nicht getrunken hatte (B1.3) oder vielleicht auch einfach aus purer Langeweile (B1.4.2) schlief er im Seminar fast ein.
-Er sollte sich(,)(B1.5) wenn möglich(,)(B1.5) am besten diese Woche noch entscheiden.
+Er sollte sich(,)(#1,B1.5) wenn möglich(,)(#1,B1.5) am besten diese Woche noch entscheiden.
 Wie üblich(,)(B1.5) treffen sich die Mitglieder des Rates auch dieses Jahr wieder jeden zweiten Freitag in der Königsallee.
-Marlene hat(,)(B1.5) wie immer(,)(B1.5) die beste Klausur geschrieben
+Marlene hat(,)(#1,B1.5) wie immer(,)(#1,B1.5) die beste Klausur geschrieben
 Ihre Antennen sind darauf spezialisiert,(B2.3) den Pheromonduft von jungen Königinnen aufzunehmen,(B2.3, B2.1, B1.1) um sich dann hoch in der Luft (im Flug) mit diesen zu paaren.
 Ohne ein weiteres Wort zu verlieren,(B2.1) verließ er den Raum.
 Hilf mir doch einfach mal,(B2.1) anstatt hier nur irgendwelche schlauen Kommentare abzulassen!
 In einem weiteren Verständnis hat die Germanistik die Aufgabe,(B2.2) die germanischen Sprachen mit ihren Kulturen und Literaturen zu erforschen.
 Die Distinktion von der Unterschicht erscheint für Pinneberg als einzige Möglichkeit,(B2.2) die vermeintlich gehobenere soziale Position zu wahren.
-Hinter dem Begriff der Varietätenlinguistik verbirgt sich die synchron-vergleichende Untersuchung von Einzelsprachen mit dem Ziel,(B2.2) Unterschiede innerhalb dieser bestimmten Sprache,(C4.1) also sprachliche Varietäten,(C4.1) herauszuarbeiten,(C4.1) z.B. verschiedene Dialekte,(A1) Soziolekte,(A1) Fachsprachen etc.
+Hinter dem Begriff der Varietätenlinguistik verbirgt sich die synchron-vergleichende Untersuchung von Einzelsprachen mit dem Ziel,(B2.2) Unterschiede innerhalb dieser bestimmten Sprache,(#1,C4.1) also sprachliche Varietäten,(#1,C4.1) herauszuarbeiten,(C4.1) z.B. verschiedene Dialekte,(A1) Soziolekte,(A1) Fachsprachen etc.
 Der Anspruch dieser Hausarbeit liegt nicht darin,(B2.3) eine vollständige literatursoziologische Untersuchung vorzunehmen.
 Pinneberg setzt alles daran,(B2.3) seine bürgerliche soziale Situierung um jeden Preis zu halten.
 Effi fand,(B1.1) dass der etwas kritische Klitzing nur zu sehr recht habe,(B1.1) vermied es aber trotzdem,(B2.3) einen Unterschied zwischen den drei Freundinnen zu machen.
-Der Gedanke(,)(B2.4.1) zu sparen(,)(B2.4.1) war ihm nicht gekommen.
-Die Motivation(,)(B2.4.1) zu lernen(,)(B2.4.1) kann ich heute einfach nicht aufbringen.
+Der Gedanke(,)(#1,B2.4.1) zu sparen(,)(#1,B2.4.1) war ihm nicht gekommen.
+Die Motivation(,)(#1,B2.4.1) zu lernen(,)(#1,B2.4.1) kann ich heute einfach nicht aufbringen.
 Zu tanzen(,)(B2.4.1) die Idee kam mir spontan.
 Ich liebe es(,)(B2.4.2) zu essen!
-Obwohl es ihm gar nicht gefiel(,)(B2.4.2) zu tanzen(,)(B1.1, B2.4.2) tat er es ihr zuliebe.
+Obwohl es ihm gar nicht gefiel(,)(B2.4.2) zu tanzen,(B1.1) tat er es ihr zuliebe.
 Sich zu beschweren,(B2.3) daran hatte er nicht gedacht.
-Dennoch ist es,(C4.1)  insbesondere vor dem Hintergrund der bisherigen Geschehnisse,(C4.1) sicherlich nicht ganz unwichtig(,)(B2.4.2) herauszustellen,(B2.4.2) wer hier wen belogen hat und wieso,(B1.1) auch(,)(B1.2) wenn ich mir selbstverständlich nicht anmaßen möchte(,)(B2.5) ohne genauere Kenntnisse der gesamten Umstände eigenmächtig zu bestimmen,(B2.1,B1.1) wer im Unrecht ist und wer nicht.
-Sebastian,(C1) so heißt mein großer Bruder,(C1) ist ein wirklich netter Kerl.
-Das ist,(C1) erlaube mir(,)(B2.5) das zu sagen,(C1) ja wirklich schrecklich!
-Bist du,(C1) sag's mir endlich,(C1) wirklich nicht sauer?
-Eleanor Roosevelt wurde als erstes Kind von Anna Roosevelt und Elliott Roosevelt,(C2) dem Bruder des späteren US-Präsidenten Theodore Roosevelt,(C2) geboren.
-Mary Ainsworth,(C2) Psychologin,(C2) bewarb sich 1950 um eine Stelle an der Tavistock-Klinik.
-H. F. K. Douglas,(C2) ein holländischer Bewunderer Spinozas,(C2) regte die Errichtung eines weiteren Denkmals an.
-Erst 1956,(C2) zum 300. Jahrestag von Spinozas Exkommunikation,(C2) flammte die Diskussion wieder auf.
-Das Porträt des Philosophen Baruch de Spinoza,(C2) Ölgemälde um 1665,(C2) befindet sich im Besitz der Gemäldesammlung der Herzog August Bibliothek in Wolfenbüttel.
+Dennoch ist es,(#1,C4.1) insbesondere vor dem Hintergrund der bisherigen Geschehnisse,(#1,C4.1) sicherlich nicht ganz unwichtig(,)(#2,B2.4.2) herauszustellen(,)(#2,B2.4.2) wer hier wen belogen hat und wieso,(B1.1) auch(,)(B1.2) wenn ich mir selbstverständlich nicht anmaßen möchte(,)(B2.5) ohne genauere Kenntnisse der gesamten Umstände eigenmächtig zu bestimmen,(B2.1,B1.1) wer im Unrecht ist und wer nicht.
+Sebastian,(#1,C1) so heißt mein großer Bruder,(#1,C1) ist ein wirklich netter Kerl.
+Das ist,(#1,C1) erlaube mir(,)(B2.5) das zu sagen,(#1,C1) ja wirklich schrecklich!
+Bist du,(#1,C1) sag's mir endlich,(#1,C1) wirklich nicht sauer?
+Eleanor Roosevelt wurde als erstes Kind von Anna Roosevelt und Elliott Roosevelt,(#1,C2) dem Bruder des späteren US-Präsidenten Theodore Roosevelt,(#1,C2) geboren.
+Mary Ainsworth,(#1,C2) Psychologin,(#1,C2) bewarb sich 1950 um eine Stelle an der Tavistock-Klinik.
+H. F. K. Douglas,(#1,C2) ein holländischer Bewunderer Spinozas,(#1,C2) regte die Errichtung eines weiteren Denkmals an.
+Erst 1956,(#1,C2) zum 300. Jahrestag von Spinozas Exkommunikation,(#1,C2) flammte die Diskussion wieder auf.
+Das Porträt des Philosophen Baruch de Spinoza,(#1,C2) Ölgemälde um 1665,(#1,C2) befindet sich im Besitz der Gemäldesammlung der Herzog August Bibliothek in Wolfenbüttel.
 Am kommenden Freitag,(C3.1) dem 02.Dezember(,)(C3.2) findet der Workshop statt.
 Frau Leutner wohnt nun in der 32 Rue Montmartre,(C3.1) 75014 Paris.
-Amelie kommt am Freitag,(C3.1) den 30.06.1985,(C3.1) Punkt 13.28 Uhr(,)(C3.2) auf der Krankenstation in der Rue d'Avignon zur Welt.
+Amelie kommt am Freitag,(#1,C3.1) den 30.06.1985,(#1,C3.1) Punkt 13.28 Uhr(,)(C3.2) auf der Krankenstation in der Rue d'Avignon zur Welt.
 Am kommenden Freitag,(C3.1) den 02. Dezember(,)(C3.2) findet der Workshop statt.
 Im Artikel zum Alkoholgenuss im Band 'Hedonismus pur',(C.3.1) Seite 78(,)(C3.2) sieht man die Entwicklung der Leber im Laufe der Zeit.
 Onkel Gerd starb letzten Montag,(C3.1) sechs Uhr abends(,)(C3.2) bei einem Autounfall.
-Altertümliche Bücher,(C4.1) insbesondere gotische,(C4.1) verschlingt sie in einigen Stunden.
-Die modernen Partnerschaften,(C4.1) vor allem die westlichen,(C4.1) werden immer egalitärer.
-Naturwissenschaftliche Fächer,(C4.1) insbesondere physikalische,(C4.1) sind sehr beliebt bei den Schülern.
+Altertümliche Bücher,(#1,C4.1) insbesondere gotische,(#1,C4.1) verschlingt sie in einigen Stunden.
+Die modernen Partnerschaften,(ä1,C4.1) vor allem die westlichen,(#1,C4.1) werden immer egalitärer.
+Naturwissenschaftliche Fächer,(#1,C4.1) insbesondere physikalische,(#1,C4.1) sind sehr beliebt bei den Schülern.
 Altertümliche,(C4.1) insbesondere gotische Bücher verschlingt sie in einigen Stunden.
 Die modernen,(C4.1) vor allem westlichen Partnerschaften werden immer egalitärer.
 Naturwissenschaftliche,(C4.1) insbesondere physikalische Fächer sind sehr beliebt bei den Schülern.
 Die Welt,(C5) sie scheint nicht mehr das zu sein,(B1.1) was sie mal war.
-Yarviv,(C5) der Minister,(C5) war ein taktisch kluger Mann.
-Wir,(C5) die neuen Praktikanten,(C5) arbeiten gern.
-Die Bundeskanzlerin(,)(C6.1) Angela Merkel(,)(C6.1) stellt sich zur nächsten Wahl wieder als Kandidatin auf.
-Die neue Miss Universe(,)(C6.1) Roz Purcell(,)(C6.1) redet über ihre Höhen und Tiefen des Lebens.
-Wir haben den anderen(,)(C6.2) durch unsere psychologische Zuschreibung(,)(C6.2) in eine Art Schublade gesteckt.
-Borussia Dortmund gewinnt(,)(C6.2) dank noch intensiverer Trainingseinheiten(,)(C6.2) haushoch gegen Bayern München.
+Yarviv,(#1,C5) der Minister,(#1,C5) war ein taktisch kluger Mann.
+Wir,(#1,C5) die neuen Praktikanten,(#1,C5) arbeiten gern.
+Die Bundeskanzlerin(,)(#1,C6.1) Angela Merkel(,)(#1,C6.1) stellt sich zur nächsten Wahl wieder als Kandidatin auf.
+Die neue Miss Universe(,)(#1,C6.1) Roz Purcell(,)(#1,C6.1) redet über ihre Höhen und Tiefen des Lebens.
+Wir haben den anderen(,)(#1,C6.2) durch unsere psychologische Zuschreibung(,)(#1,C6.2) in eine Art Schublade gesteckt.
+Borussia Dortmund gewinnt(,)(#1,C6.2) dank noch intensiverer Trainingseinheiten(,)(#1,C6.2) haushoch gegen Bayern München.
 Joseph verlässt seine Stelle(,)(C6.2) entgegen den Ratschlägen seiner Freunde.
-Er machte sich(,)(C6.3.1) freudig und nervös(,)(C6.3.1) auf den Weg,(B1.1) um seinen Traum zu erfüllen.
-Frau Liebknecht ist nun(,)(C6.3.1) befriedigt von den vielen guten Noten(,)(C6.3.1) viel geduldiger mit ihren Schülern.
-Aaron verlässt endlich(,)(C6.3.1) immer noch grübelnd(,)(C6.3.1) sein Haus.
-Newt,(C6.3.2) vertieft in seinen Gedanken,(C6.3.2) bemerkte ihre sehnsuchtsvollen Blicke nicht. (Quelle?)
-Laura,(C63.2) verbissen wie immer,(C6.3.2) kämpfte sich durch den Blätterwald.
-Sie,(C6.3.2) aus sehr einfachen Verhältnissen stammend,(C6.3.2) erwarb sich zunächst als jahrelange Lebensgefährtin die Zuneigung und Achtung des Zaren.
-Scarlett Johansson, (C6.3.2) schon oft zur attraktivsten Frau der Welt gekürt, (C6.3.2) war heute bescheidener angezogen als sonst.
+Er machte sich(,)(#1,C6.3.1) freudig und nervös(,)(#1,C6.3.1) auf den Weg,(B1.1) um seinen Traum zu erfüllen.
+Frau Liebknecht ist nun(,)(#1,C6.3.1) befriedigt von den vielen guten Noten(,)(#1,C6.3.1) viel geduldiger mit ihren Schülern.
+Aaron verlässt endlich(,)(#1,C6.3.1) immer noch grübelnd(,)(#1,C6.3.1) sein Haus.
+Friedrich,(#1,C6.3.2) vertieft in seinen Gedanken,(#1,C6.3.2) bemerkte ihre sehnsuchtsvollen Blicke nicht.
+Laura,(#1,C6.3.2) verbissen wie immer,(#1,C6.3.2) kämpfte sich durch den Blätterwald.
+Sie,(#1,C6.3.2) aus sehr einfachen Verhältnissen stammend,(#1,C6.3.2) erwarb sich zunächst als jahrelange Lebensgefährtin die Zuneigung und Achtung des Zaren.
+Scarlett Johansson, (#1,C6.3.2) schon oft zur attraktivsten Frau der Welt gekürt, (#1,C6.3.2) war heute bescheidener angezogen als sonst.
 Katharina (C7) die Große (C7) war die erste offizielle Selbstherrscherin Russlands.
 Ivan (C7) der Schreckliche (C7) war jedoch eher für seine Gräueltaten bekannt.
 Es sind sogar Zweifel laut geworden, (B1.1) ob Peter (C7) der Große (C7) tatsächlich gelebt hat.
-Laut §3 (C8)Abs.1 (C8)Satz 1 des Strafgesetzbuches ist der Täter schuldig.
-§75 (C8) Punkt 1 (C8) zufolge grenzt man Infinitivgruppen,(B1.1) die mit 'um',(A1) 'ohne',(A1) 'statt',(A1) 'anstatt',(A1) 'außer' (A4) oder 'als' eingeleitet werden,(B1.1) mit einem Komma ab.
+Laut §3 (C8) Abs.1 (C8)S atz 1 des Strafgesetzbuches ist der Täter schuldig.
+§75 (C8) Punkt 1 (C8) zufolge grenzt man Infinitivgruppen,(#1,B1.1) die mit 'um',(A1) 'ohne',(A1) 'statt',(A1) 'anstatt',(A1) 'außer' (A4) oder 'als' eingeleitet werden,(#1,B1.1) mit einem Komma ab.
 §12 (C8)Abs.7 (C8)Satz 2 wurde aus dem Ordnungsrecht gestrichen.
 Sarah,(D1) kommst du?
 Frau Präsidentin,(D1) wir gratulieren Ihnen herzlich!
@@ -108,29 +108,29 @@ Steffen,(D1) das war nicht witzig!
 Hallo,(D1) wir waren zuerst da!
 Ach, (D1) du lebst auch noch?
 Sapperlot, (D1) da hat doch der Kasperl dem Räuber wieder mal ein Schnippchen geschlagen.
-Sapperlot, (D1) da hat doch der Kasperl, (C2) der Gute, (C2) dem Räuber wieder mal ein Schnippchen geschlagen.
+Sapperlot, (D1) da hat doch der Kasperl, (#1,C2) der Gute, (#1,C2) dem Räuber wieder mal ein Schnippchen geschlagen.
 Aua,(D1) das tat weh!
 Halleluja,(D1) komplizierter geht immer,(D3) oder?
 Na ja,(D3) sie hatte nicht viel zur Auswahl.
 Vielen Dank,(D3) ihr seid echt klasse!
 Mein lieber Herr Gesangsverein, (D1) das war knapp.
 Walter, (D1) wo ist der Nachschub?
-Kann ich Dir, (D1) Gertrud, (D1) noch nachschenken?
-Darf ich Euch, (D1) Gertrud, (A1) Walter und Kevin, (D1) noch Sojaböhnchen nachlegen?
+Kann ich Dir, (#1,D1) Gertrud, (#1,D1) noch nachschenken?
+Darf ich Euch, (#1,D1) Gertrud, (A1) Walter und Kevin, (#1,D1) noch Sojaböhnchen nachlegen?
 Wir sollten gehen,(D3) oder?
 Als dann aber nach einer Stunde immer noch kein Professor erschien, (B1.1) gingen die Studierenden nach Hause.
-Sie trank die Limonade, (B1.1) die sie im Supermarkt gekauft hatte, (B1.1) in einem Zug leer.
-Die Studenten und Studentinnen, (B1.1) die genau wissen, (B1.1) wie und wo sie im Internet suchen müssen, (B1.1) bekommen schneller eine Wohnung.
-Der Schüler ging alleine nach Hause, (B1.1) weil seine Freunde eine weitere Unterrichtsstunde hatten, (B1.1) und kochte sich dort eine Suppe.
-Er traf sich mit seinen Freunden, (B1.1) obwohl er keine Lust hatte, (B1.1) und bereute es nicht.
-Erst danach, (B1.1) wenn ihnen nichts mehr auffällt, (B1.1) werde ich mich selbst einbringen.
+Sie trank die Limonade, (#1,B1.1) die sie im Supermarkt gekauft hatte, (#1,B1.1) in einem Zug leer.
+Die Studenten und Studentinnen, (#1,B1.1) die genau wissen, (B1.1) wie und wo sie im Internet suchen müssen, (#1,B1.1) bekommen schneller eine Wohnung.
+Der Schüler ging alleine nach Hause, (#1,B1.1) weil seine Freunde eine weitere Unterrichtsstunde hatten, (#1,B1.1) und kochte sich dort eine Suppe.
+Er traf sich mit seinen Freunden, (#1,B1.1) obwohl er keine Lust hatte, (#1,B1.1) und bereute es nicht.
+Erst danach, (#1,B1.1) wenn ihnen nichts mehr auffällt, (#1,B1.1) werde ich mich selbst einbringen.
 Dass er den Preis gewonnen hat, (B1.1) ist unglaublich.
 Angenommen(,) (B1.2) dass es nicht regnet, (B1.1) können wir zu Fuß gehen.
 Dass du kommst, (B1.1) freut mich sehr.
-Ich kann mir vorstellen, (B1.1) wie schwierig es ist, (B1.1, B2.3) einen günstigen Flug nach Australien zu finden.
-Aber als Impuls, (B2.1) um jetzt in zwanzig Minuten einen Text zu produzieren, (B2.1) sollte es ausreichen.
+Ich kann mir vorstellen, (#1,B1.1) wie schwierig es ist, (B2.3) einen günstigen Flug nach Australien zu finden.
+Aber als Impuls, (#1,B2.1) um jetzt in zwanzig Minuten einen Text zu produzieren, (#1,B2.1) sollte es ausreichen.
 Sie lässt ihnen dabei die Möglichkeit, (B2.2) über die Diskussion selbst zu urteilen.
-Ein junger Mann, (C1) der jüngste unter ihnen, (C1) heiratete an diesem Tag eine wunderbare Frau.
+Ein junger Mann, (#1,C1) der jüngste unter ihnen, (#1,C1) heiratete an diesem Tag eine wunderbare Frau.
 Es ist Dienstag, (C3.1) kurz nach 15 Uhr.
 Nun ja, (D3) so ganz gefällt die Hose mir dann doch nicht.
 Nach einer weiteren notwendigen Suchaktion der Polizei (E2) blieb ihr Ehemann weiterhin wie vom Erdboden verschwunden.
@@ -138,7 +138,7 @@ Nach den Angaben des Abteilungsleiters in der Besprechung am Montag (E2) ist das
 Mit dem neuen Wissen und dem entsprechenden Programm im Internet (E2) sollten die Schüler weniger Fehler machen.
 In Bezug auf die zuvor gestellte Frage (E2) habe ich noch keine Antwort gegeben.
 Am Dienstagmorgen um 15 Uhr (E2) korrigiert die Lehrerin im Lehrerzimmer mit einem roten Stift die von ihrer Klasse letzte Woche geschriebene Klausur.
-Der pensionierte und alleinlebende Musiklehrer Winfried Conradi (E1) aus Aachen (E1) ist ein Alt-68er mit Hang zu skurrilen Scherzen.
+Der pensionierte und alleinlebende Musiklehrer Winfried Conradi (#1,E1) aus Aachen (#1,E1) ist ein Alt-68er mit Hang zu skurrilen Scherzen.
 Schon seit Wochen (E2) arbeitet Ines an einer Präsentation für den Auftraggeber.
 Nach einigen Tagen (E2) reist Winfried wieder ab.
 Von da an (E2) taucht er als Toni Erdmann wiederholt in Ines Alltag auf (A4) und gibt sich wahlweise als Coach und Tennisfreund von Ion Tiriac (A4) oder als deutscher Botschafter in Rumänien aus.
@@ -157,3 +157,4 @@ In Deutschland werden jährlich (E1) cira eine Milliarde Schokoküsse verzehrt.
 Die ersten Schokoküsse (E1) sollen um 1800 in Dänemark hergestellt worden sein.
 Ein Schokokuss ist eine Süßigkeit aus weichem Schaumzucker, (B1.1) der auf eine Waffel dressiert (A4) und mit Schokolade (A4) oder Fettglasur überzogen wird.
 Sie wusste,(B1.1) worauf sie sich eingelassen hatte (B1.3) und dass es nicht leicht werden würde.
+Das, (#1,D1) mein lieber Manfred, (#1,D1) geht nicht.

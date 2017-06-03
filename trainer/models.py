@@ -68,6 +68,7 @@ class Sentence(models.Model):
     text = models.CharField(max_length=2048)
     total_submits = models.IntegerField(default='0')  #
     rules = models.ManyToManyField(Rule, through='SentenceRule')
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.text
@@ -142,6 +143,22 @@ class Sentence(models.Model):
             l.append(rl)
         return l
 
+    def get_commapairlist(self):
+        """
+        Return a list of comma pair ids for each position in the sentence (0=does not beling to a pair.
+        :return: List of integers.
+        """
+        l = []  # list of comma types (0=mustnot, 1=may, 2=must)
+
+        for pos in range(len(self.get_words())-1):
+            # for each position: get rules
+            sr = SentenceRule.objects.filter(sentence=self, position=pos+1)
+            pair = 0
+            if sr:
+                pair = sr[0].pair
+            l.append(pair)
+        return l
+
     def get_words_commas_rules(self):
         """Return a list of tuples: (word,commstring,rule) for a sentence."""
 
@@ -161,7 +178,7 @@ class Sentence(models.Model):
 
         commas = []
         for r in rules:
-            if not r or r[0].mode == 0:  # no mixed mode rules # TODO: check if that is correct
+            if not r or r[0].mode == 0:  # no mixed mode rules
                 commas.append(" ")
             elif r[0].mode == 1:
                 commas.append("(,) ")
@@ -230,6 +247,7 @@ class SentenceRule(models.Model):
     sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE)
     rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
     position = models.IntegerField()
+    pair = models.IntegerField(default=0)  # if != 0: comma pair which this comma is part of
 
     def __str__(self):
         return self.sentence.text + self.rule.code + " " + str(self.position)
@@ -550,46 +568,6 @@ class User(models.Model):
                     self.count(corr)
                     self.save()
 
-
-    def count_false_types_task3(self, user_array_str, solution_array):
-        """
-        count false types for: KannKommaLöschen
-        :param user_array_str:
-        :param solution_array:
-        """
-        dict = self.get_dictionary()
-        user_array = re.split(r'[ ,]+', user_array_str)
-        for i in range(len(solution_array) - 2):
-            if len(solution_array[i])!=0:
-                a, b = re.split(r'/', dict[solution_array[i][0]])
-                rule = Rule.objects.get(code=solution_array[i][0])
-                if rule.mode == 1 and user_array[i] == "0":
-                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                elif rule.mode == 1 and user_array[i] == "1":
-                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
-                elif rule.mode == 2 and user_array[i] == "0":
-                    dict[solution_array[i][0]] = str(int(a) + 1) + "/" + str(int(b) + 1)
-        self.save_dictionary(dict)
-
-    def count_false_types_task4(self, user_array_str, solution_array):
-        """
-        count false types for: KannKommaSetzen
-        :param user_array_str:
-        :param solution_array:
-        """
-        dict = self.get_dictionary()
-        user_array = re.split(r'[ ,]+', user_array_str)
-        for i in range(len(solution_array) - 2):
-                a, b = re.split(r'/', dict[solution_array[i][0]])
-                rule = Rule.objects.get(code=solution_array[i][0])
-                if rule.mode == 1 and user_array[i] == "0":
-                    dict[solution_array[i][0]] = str(int(a)+1)   + "/" + str(int(b) + 1)
-                elif rule.mode == 1 and user_array[i] == "1":
-                    dict[solution_array[i][0]] = str(int(a)) + "/" + str(int(b) + 1)
-                elif rule.mode == 0 and user_array[i] == "1":
-                    dict[solution_array[i][0]] = str(int(a)+1) + "/" + str(int(b) + 1)
-        self.save_dictionary(dict)
-
     def roulette_wheel_selection(self):
         """
         gets a new sentence via roulette wheel, chooses random among sentences
@@ -616,7 +594,7 @@ class User(models.Model):
         # print("Select for {}".format(rule_obj))
         # filter out all sentences that have higher rules than current user's progress
         possible_sentences = []
-        for sr in SentenceRule.objects.filter(rule=rule_obj[0]).all():
+        for sr in SentenceRule.objects.filter(rule=rule_obj[0],sentence__active=True).all():
             ok = True
             for r in sr.sentence.rules.all():
                 if r.code in self.rule_order and (self.rule_order.index(r.code) > (self.rules_activated_count-1)):
