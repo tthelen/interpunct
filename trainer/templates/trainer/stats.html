@@ -1,0 +1,28 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Statistik{% endblock %}
+
+{% block main %}
+<h2>Statistik</h2>
+<p>&nbsp;</p>
+
+<h3>Basisdaten</h3>
+<table>
+<tr><th>Kategorie</th><th>Wert</th></tr>
+<tr><td>Anzahl Nutzer</td><td>{{ count_users }}</td></tr>
+<tr><td>Anzahl Stud.IP-Nutzer &nbsp;</td><td>{{ count_studip_users }}</td></tr>
+<tr><td>Anzahl Lösungen</td><td>{{ count_solutions }}</td></tr>
+<tr><td>Anzahl Fehler</td><td>{{ count_error }}</td></tr>
+</table>
+
+<h3>Levelverteilung</h3>
+
+    <table>
+    <tr><th>Level &nbsp;</th><th>Anzahl Nutzer</th></tr>
+
+    {% for l in levels %}
+        <tr><td>{{ l.rules_activated_count }}</td><td>{{ l.the_count }}</td>
+    {% endfor %}
+
+    </table>
+{% endblock %}

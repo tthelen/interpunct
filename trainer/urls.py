@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^logout$', views.logout),
     url(r'^sentence/([0-9]+)$', views.sentence, name='sentence'),  # ajax load html for single correct sentence
     url(r'^help$', views.help, name='help'),
-
+    url(r'^stats$', views.stats, name='stats')
     # ex: /polls/5/
     #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
     # ex: /polls/5/results/

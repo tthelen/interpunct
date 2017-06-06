@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.db.models import Count
 from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule
 import re  # regex support
 import os
@@ -543,3 +544,16 @@ def sentence(request, sentence_id):
 
 def help(request):
     return render(request, 'trainer/help.html', locals())
+
+
+def stats(request):
+    count_users = User.objects.count()
+    count_studip_users = User.objects.filter(user_id__iregex=r'[0-9a-f]{32}').count()
+    count_solutions = Solution.objects.count()
+    count_error = SolutionRule.objects.count()
+
+    levels = User.objects.values('rules_activated_count')\
+        .order_by('rules_activated_count')\
+        .annotate(the_count = Count('rules_activated_count'))
+
+    return render(request, 'trainer/stats.html', locals())
