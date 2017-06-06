@@ -54,8 +54,8 @@
             }
 
             /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
-            var time_elasped = Date.now() - start_time;
-            $.getJSON( "submit_task1?id="+id+"&sol="+val+"&tim="+time_elasped, function( data ) {
+            var time_elapsed = Date.now() - start_time;
+            $.getJSON( "submit_task1?id="+id+"&sol="+val+"&tim="+time_elapsed, function( data ) {
                 /* change color of all span slots */
                 var id = element.dataset.sentence;
                 var sentence = $("#interpunct-sentence-"+id+" .interpunct-commaslot");

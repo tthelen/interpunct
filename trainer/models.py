@@ -498,102 +498,125 @@ class User(models.Model):
                 resp.append({'correct':False,  'rule': {'code': rule.code, 'mode': rule.mode}})
                 SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
             elif len(solution_array[i]) != 0: # comma at rule position
-                # TODO handle multiple comma types per comma
-                rule = Rule.objects.get(code=solution_array[i][0])
-                userrule = UserRule.objects.get(user=self, rule=rule)
-                if (rule.mode == 0 and user_array[i] == "0") or  \
-                   (rule.mode == 2 and user_array[i] == "1"):
-                    corr = True
-                elif rule.mode == 1: # optional commas - consider pairs!
-                    if pairs[i] != 0: # if comma is part of a pair
-                        # first part is always correct
-                        # second part is the error
-                        found = False
-                        if i > 0:
-                            for j in range(i):  # look at the beginning of the sentence to find 1st part of pair
-                                if pairs[j] == pairs[i]:
-                                    corr = (user_array[i] == user_array[j])
-                                    found = True
-                                    break
-                        if not found: # first occurence is always correct
+                rules = Rule.objects.filter(code=solution_array[i][0])
+                first = True  # save response in first run
+                for rule in rules:
+                    userrule = UserRule.objects.get(user=self, rule=rule)
+                    if (rule.mode == 0 and user_array[i] == "0") or  \
+                       (rule.mode == 2 and user_array[i] == "1"):
+                        corr = True
+                    elif rule.mode == 1: # optional commas - consider pairs!
+                        if pairs[i] != 0: # if comma is part of a pair
+                            # first part is always correct
+                            # second part is the error
+                            found = False
+                            if i > 0:
+                                for j in range(i):  # look at the beginning of the sentence to find 1st part of pair
+                                    if pairs[j] == pairs[i]:
+                                        corr = (user_array[i] == user_array[j])
+                                        found = True
+                                        break
+                            if not found: # first occurence is always correct
+                                corr = True
+                        else:
                             corr = True
                     else:
-                        corr = True
-                else:
-                    corr = False
-                resp.append({'correct': corr,  'rule': {'code': rule.code, 'mode': rule.mode}})
-                userrule.count(correct=corr)
-                if not rule.code.startswith('E'): # count everything but error positions
-                    self.count(corr)
-                    self.save()
-                SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
+                        corr = False
+                    if first: # save response only for first rule (others must be same)
+                        resp.append({'correct': corr,  'rule': {'code': rule.code, 'mode': rule.mode}})
+                        first = False
+                    userrule.count(correct=corr)
+                    if not rule.code.startswith('E'): # count everything but error positions
+                        self.count(corr)
+                        self.save()
+                    if not corr:
+                        SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
             else:
                 resp.append({'correct': True, 'rule': {'code':'', 'mode':0}})
         return resp
 
-    def count_false_types_task_correct_commas(self, user_array_str, comma_array_str, solution_array, solution):
+    def count_false_types_task_correct_commas(self, user_array_str, sentence, solution):
         """
         count false types for: AllKommaSetzen
-        :param user_array: contains submitted array of bools (positions marked as incorrect)
-        :param solution_array: contains comma types
+        :param user_array_str: contains submitted array of 2-bool-strings
+        :param sentence: the sentence object
+        :param solution: the solution object
         """
         user_array = re.split(r'[ ,]+', user_array_str) # contais pairs of (comma present / marked), e.g. 00, 01, 10, 11
-        comma_array = re.split(r'[ ,]+', comma_array_str)
+        solution_array = sentence.get_commatypelist()  # for every position: rules for that position
+        pairs = sentence.get_commapairlist()
+        resp = []
 
-        for i in range(len(solution_array) - 1):
+        for i in range(len(solution_array)):
 
-            if len(solution_array[i]) == 0 and int(comma_array[i]) == 1: # comma in the wild
+            if len(solution_array[i]) == 0: # non-rule position
 
                 if user_array[i] == '11':  # wrong comma without rule detected correctly
-                    pass
-                else:  # wrong comma without rule not detected correctly
-                    userrule = UserRule.objects.get(user=self, rule=Rule.objects.get(code="E1"))
+                    resp.append({'correct': True, 'rule': {'code': '', 'mode': 0}})
+                elif user_array[i] == '00': # no comma and not marked: ok
+                    resp.append({'correct': True, 'rule': {'code': '', 'mode': 0}})
+                else:  # wrong comma without rule not detected correctly or no-comma position marked
+                    rule = Rule.objects.get(code="E1")
+                    userrule = UserRule.objects.get(user=self, rule=rule)
                     userrule.count(correct=False)
+                    resp.append({'correct': False, 'rule': {'code': rule.code, 'mode': rule.mode}})
+                    SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
 
             elif len(solution_array[i]) != 0: # rule position
 
-                # TODO handle multiple comma types per comma
-                rule = Rule.objects.get(code=solution_array[i][0])
-                try:
-                    userrule = UserRule.objects.get(user=self, rule=rule)
-                except UserRule.DoesNotExist:
-                    userrule = UserRule(user=self, rule=rule)
+                rules = Rule.objects.filter(code=solution_array[i][0])
+                first = True  # save response in first run
+                for rule in rules:
 
-                # case 1: mode = 2 (MUST)
-                if rule.mode == 2:
-                    corr = user_array[i] in ['01','10']  # right if set and not marked (and vice versa)
+                    try:
+                        userrule = UserRule.objects.get(user=self, rule=rule)
+                    except UserRule.DoesNotExist:
+                        userrule = UserRule(user=self, rule=rule)
 
-                # case 2: mode = 1 (MAY)
-                if rule.mode == 1:
-                    corr = False # not user_array[i]  # marking a MAY comma slot is always false
+                    # case 1: mode = 2 (MUST)
+                    if rule.mode == 2:
+                        corr = user_array[i] in ['01','10']  # right if set and not marked (and vice versa)
 
-                # case 3: mode = 0 (MUST NOT)
-                if rule.mode == 0:
-                    corr = user_array[i] in ['00', '11']  # right if not set and not marked (and vice versa)
+                    # case 2: mode = 1 (MAY)
+                    if rule.mode == 1:
+                        # handle unbalanced MAY commas
+                        if pairs[i] != 0: # if comma is part of a pair
+                            # first part is always incorrect
+                            # second part might be correct
+                            found = False
+                            if i > 0:
+                                for j in range(i):  # look at the beginning of the sentence to find 1st part of pair
+                                    if pairs[j] == pairs[i]:
+                                        # marking if correct if first position is marked, too (and vice versa)
+                                        corr = (user_array[i][1] == user_array[j][1])
+                                        found = True
+                                        break
+                            if not found:  # first occurence is always wrong if set
+                                if user_array[i][1] == '1':
+                                    corr = False
+                                else:
+                                    corr = True
+                        else:
+                            if user_array[i][1] == '1':
+                                corr = False  # marking a MAY comma slot is always false
+                            else:
+                                corr = True
 
-                userrule.count(correct=corr)
-                if not rule.code.startswith('E'): # count everything but error positions
-                    self.count(corr)
-                    self.save()
+                    # case 3: mode = 0 (MUST NOT)
+                    if rule.mode == 0:
+                        corr = user_array[i] in ['00', '11']  # right if not set and not marked (and vice versa)
 
-    def count_false_types_task_explain_commas(self, user_array, solution_array):
-        """
-        count false types for: AllKommaErlären
-        :param user_array: contains bool per comma to explain
-        :param solution_array: contains comma types
-        """
+                    userrule.count(correct=corr)
+                    if not corr:
+                        SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
+                    if not rule.code.startswith('E'): # count everything but error positions
+                        self.count(corr)
+                        self.save()
+                    if first: # save response info only for first rule (other must be equal)
+                        resp.append({'correct': corr, 'rule': {'code': rule.code, 'mode': rule.mode}})
+                        first = False
 
-        comma_amout = 0;
-        for i in range(len(solution_array) - 1):
-            if len(solution_array[i]) != 0:
-                rule = Rule.objects.get(code=solution_array[i][0])
-                ur = UserRule.objects.get(user=self, rule=rule)
-                corr = (user_array[comma_amout] == "1")
-                ur.count(correct=corr)
-                comma_amout += 1
-                if not rule.code.startswith('E'):  # count everything but error positions
-                    self.count(corr)
-                    self.save()
+        return resp
 
     def roulette_wheel_selection(self):
         """

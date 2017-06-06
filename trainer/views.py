@@ -424,6 +424,7 @@ def submit_task1(request):
     # print(response)
     return JsonResponse({'submit': 'ok', 'response': response}, safe=False)
 
+
 @logged_in_or_basicauth("Bitte einloggen")
 def submit_task_correct_commas(request):
     """
@@ -433,16 +434,18 @@ def submit_task_correct_commas(request):
     :param request: Django request
     :return: nothing
     """
+    response = []
+
     user = User.objects.get(django_user=request.user)
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
-    commas = request.GET['commas']
     time_elapsed = request.GET.get('tim',0)
     #sentence.set_comma_select(user_solution)
     #sentence.update_submits()
 
-    solution = Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution])).save() # save solution to db
-    user.count_false_types_task_correct_commas(user_solution, commas, sentence.get_commatypelist(), solution)
+    solution = Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution]))
+    solution.save() # save solution to db
+    response = user.count_false_types_task_correct_commas(user_solution, sentence, solution)
 
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
@@ -451,7 +454,8 @@ def submit_task_correct_commas(request):
     except UserSentence.DoesNotExist:
         UserSentence(user=user, sentence=sentence, count=1).save()
 
-    return JsonResponse({'submit': 'ok'})
+    return JsonResponse({'submit': 'ok', 'response':response}, safe=False)
+
 
 @logged_in_or_basicauth("Bitte einloggen")
 def submit_task_explain_commas(request):

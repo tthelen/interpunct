@@ -89,8 +89,6 @@
         *
         * */
         function construct_solution(val_commas, val_user) {
-            console.log(val_commas);
-            console.log(val_user);
             var solution = Array();
             for(var i=0;i<val_commas.length;i++) {
                 solution.push(val_commas[i].toString() + val_user[i].toString());
@@ -104,8 +102,8 @@
             var id = element.dataset.sentence;
             var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
 
-            var markedincorrect= new Array();
-            var commas=new Array();
+            var markedincorrect = [];
+            var commas = [];
             for (var i=0; i<sentence.length; i++) {
                 markedincorrect.push(sentence[i].classList.contains('markedincorrect') ? 1 : 0);
                 commas.push((sentence[i].innerHTML.indexOf(',')>=0) ? 1 : 0);
@@ -113,21 +111,34 @@
             markedincorrect.push(0); // TODO: remove hack from view!
 
             var solution = construct_solution({{ comma_to_check }}, markedincorrect);
-
-            /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
-            var xmlhttp=new XMLHttpRequest();
-            xmlhttp.onreadystatechange=function()
-            {
-               if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-                    document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
-                    $('#correction').load('{% url 'sentence' sentence.id %}');
-                 }
-            }
-            /* change color of all span slots */
-            toggle_colors(element,{{ comma }},{{ comma_to_check }},markedincorrect);
             var time_elapsed = Date.now() - start_time;
-            xmlhttp.open("GET","submit_task_correct_commas?id="+id+"&tim="+time_elapsed+"&sol="+solution+"&commas="+commas,true);
-            xmlhttp.send();
+            $.getJSON( "submit_task_correct_commas?id=" + id + "&tim=" + time_elapsed + "&sol=" + solution, function( data ) {
+                document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
+                $('#correction').load('{% url 'sentence' sentence.id %}');
+                /* change color of all span slots */
+                var sentence = $("#interpunct-sentence-"+id+" .interpunct-commaslot");
+                for (var i=0; i<sentence.length; i++) {  // mark correct, optional and incorredt
+                    if (markedincorrect[i] && data.response[i].correct) {
+                        if (data.response[i].rule.mode == 0 || data.response[i].rule.mode == 2) { // must not comma is set or must is not set
+                            sentence[i].style.background = "#85e278"; //green
+                            sentence[i].classList.add('markingright');
+                        } else if (data.response[i].rule.mode == 1) {  // a correctly marked may comma
+                            sentence[i].style.background = "#219fff"; //blue
+                            //sentence[i].style.border = "3px solid green";
+                            sentence[i].classList.add('markingright');
+                        }
+                    } else if (data.response[i].correct) { // must comma correctly not marked
+                        if (data.response[i].rule.mode == 2) {
+                            sentence[i].style.background = "#85e278"; //green
+                            sentence[i].classList.add('markingright');
+                        }
+                    } else if (!data.response[i].correct) {
+                        sentence[i].style.background = "#ff876e"; // red
+                        sentence[i].classList.add('markingwrong');
+                    }
+                }
+            });
+
 
             submitted = true;
         }
