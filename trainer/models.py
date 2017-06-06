@@ -475,36 +475,63 @@ class User(models.Model):
         self.comma_type_false = new_dict_str[:-1]
         self.save()
 
-    def count_false_types_task1(self, user_array_str, solution_array):
+    def eval_set_commas(self, user_array_str, sentence, solution):
         """
         count false types for: AllKommaSetzen
         :param user_array: contains submitted array of bools
         :param solution_array: contains comma types
+        :param solution The Solution object
+        :return List of Dictionaries for each position: {correct:Boolean, rule:Rule}
         """
+        resp = []
+        solution_array = sentence.get_commatypelist()
+        pairs = sentence.get_commapairlist()
         user_array = re.split(r'[ ,]+', user_array_str)
-        for i in range(len(solution_array) - 1):
+        for i in range(len(solution_array)):
             if len(solution_array[i]) == 0 and int(user_array[i]) == 1: # comma in the wild
+                rule = Rule.objects.get(code="E1")
                 try:
-                    userrule = UserRule.objects.get(user=self, rule=Rule.objects.get(code="E1"))
+                    userrule = UserRule.objects.get(user=self, rule=rule)
                 except UserRule.DoesNotExist:
-                    userrule = UserRule(user=self, rule=Rule.objects.get(code="E1"))
+                    userrule = UserRule(user=self, rule=rule)
                 userrule.count(correct=False)
+                resp.append({'correct':False,  'rule': {'code': rule.code, 'mode': rule.mode}})
+                SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
             elif len(solution_array[i]) != 0: # comma at rule position
                 # TODO handle multiple comma types per comma
                 rule = Rule.objects.get(code=solution_array[i][0])
                 userrule = UserRule.objects.get(user=self, rule=rule)
                 if (rule.mode == 0 and user_array[i] == "0") or  \
-                   (rule.mode == 1) or \
                    (rule.mode == 2 and user_array[i] == "1"):
                     corr = True
+                elif rule.mode == 1: # optional commas - consider pairs!
+                    if pairs[i] != 0: # if comma is part of a pair
+                        # first part is always correct
+                        # second part is the error
+                        found = False
+                        if i > 0:
+                            for j in range(i):  # look at the beginning of the sentence to find 1st part of pair
+                                if pairs[j] == pairs[i]:
+                                    corr = (user_array[i] == user_array[j])
+                                    found = True
+                                    break
+                        if not found: # first occurence is always correct
+                            corr = True
+                    else:
+                        corr = True
                 else:
                     corr = False
+                resp.append({'correct': corr,  'rule': {'code': rule.code, 'mode': rule.mode}})
                 userrule.count(correct=corr)
                 if not rule.code.startswith('E'): # count everything but error positions
                     self.count(corr)
                     self.save()
+                SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
+            else:
+                resp.append({'correct': True, 'rule': {'code':'', 'mode':0}})
+        return resp
 
-    def count_false_types_task_correct_commas(self, user_array_str, comma_array_str, solution_array):
+    def count_false_types_task_correct_commas(self, user_array_str, comma_array_str, solution_array, solution):
         """
         count false types for: AllKommaSetzen
         :param user_array: contains submitted array of bools (positions marked as incorrect)
@@ -742,4 +769,16 @@ class Solution(models.Model):
     solution = models.CharField(max_length=255)
     time_elapsed = models.IntegerField(default=0) # time in ms
     mkdate = models.DateTimeField(auto_now_add=True)
+    rules = models.ManyToManyField(Rule, through='SolutionRule')
+
+
+class SolutionRule(models.Model):
+    """
+    Represents error in solutions for direct access to mistaken rules.
+    """
+
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
+    error = models.BooleanField(default=True)
+
 

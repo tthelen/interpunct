@@ -38,32 +38,6 @@
             }
         }
 
-        /* Changes the color of span depending on the correctness of the solution*/
-        function toggle_color(element, val_sample, val_user) {
-            var id = element.dataset.sentence;
-            var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
-            for(var i=0;i<val_sample.length;i++){
-                if((val_sample[i] == 2) && (val_user[i] == 1)){
-                    sentence[i].style.background="#85e278"; //green
-                    sentence[i].classList.add('markingright');
-                }else if((val_sample[i] == 1)){  // TODO: mark unbalanced optional commas
-                    sentence[i].style.background = "#219fff"; //blue
-                    sentence[i].classList.add('markingright');
-                }else if(val_sample[i] != val_user[i]){
-                    sentence[i].style.background="#ff876e"; //red
-                    sentence[i].classList.add('markingwrong');
-                }
-            }
-        }
-
-        function change_tooltip_visibility(){
-            var style = document.createElement("style");
-            document.head.appendChild(style);
-            sheet = style.sheet;
-            sheet.insertRule('[data-tooltip]:hover:before,[data-tooltip]:hover:after{visibility: visible; opacity: 1;}', 0);
-        }
-
-
         function submit_sentence(element) {
 
             /* find all commaslots for the submitted sentence */
@@ -80,22 +54,37 @@
             }
 
             /* send solution (bitfield, sentence id, user id) to server as AJAX get request*/
-            var xmlhttp=new XMLHttpRequest();
-            xmlhttp.onreadystatechange=function()
-            {
-               if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-                    document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
-                    $('#correction').load('{% url 'sentence' sentence.id %}');
-                }
-            }
-            /* change color of all span slots */
-            toggle_color(element,{{ comma }},val);
             var time_elasped = Date.now() - start_time;
-            xmlhttp.open("GET","submit_task1?id="+id+"&sol="+val+"&tim="+time_elasped,true);
-            xmlhttp.send();
+            $.getJSON( "submit_task1?id="+id+"&sol="+val+"&tim="+time_elasped, function( data ) {
+                /* change color of all span slots */
+                var id = element.dataset.sentence;
+                var sentence = $("#interpunct-sentence-"+id+" .interpunct-commaslot");
+                for (var i=0; i<sentence.length; i++) {  // mark correct, optional and incorredt
+                    if (data.response[i].correct) {
+                        if (data.response[i].rule.mode == 2) { // must comma is set
+                            sentence[i].style.background = "#85e278"; //green
+                            sentence[i].classList.add('markingright');
+                        } else if (data.response[i].rule.mode == 1) { // may comma is correct
+                            sentence[i].style.background = "#219fff"; //blue
+                            sentence[i].classList.add('markingright');
+                        }
+                    } else {
+                        if (data.response[i].rule.mode == 0 || data.response[i].rule.mode == 2) { // must not comma is set or must is not set
+                            sentence[i].style.background = "#ff876e"; // red
+                            sentence[i].classList.add('markingwrong');
+                        } else if (data.response[i].rule.mode == 1) { // may comma is not correct
+                            sentence[i].style.background = "#219fff"; //blue
+                            sentence[i].style.border = "3px solid red";
+                            sentence[i].classList.add('markingwrong');
+                        }
+                    }
+                }
+                document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
+                $('#correction').load('{% url 'sentence' sentence.id %}');
 
+            });
             /* make the tooltip visible */
-            change_tooltip_visibility();
+            //change_tooltip_visibility();
 
             submitted = true;
         }

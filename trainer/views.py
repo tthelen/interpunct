@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .models import Sentence, Solution, Rule, SentenceRule, User, UserSentence, UserRule
+from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule
 import re  # regex support
 import os
 
@@ -402,16 +402,18 @@ def submit_task1(request):
     :param request: Django request
     :return: nothing
     """
+    response = []
+
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     time_elapsed = request.GET.get('tim',0)
     sentence.set_comma_select(user_solution)
     sentence.update_submits()
     user = User.objects.get(django_user=request.user)
-    user.count_false_types_task1(user_solution, sentence.get_commatypelist())
+    solution = Solution(user=user, sentence=sentence, type="set", time_elapsed=time_elapsed, solution="".join(user_solution))
+    solution.save() # save solution to db
+    response = user.eval_set_commas(user_solution, sentence, solution)
     user.update_rank()
-    Solution(user=user, sentence=sentence, type="set", time_elapsed=time_elapsed, solution="".join(user_solution)).save() # save solution to db
-
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
@@ -419,7 +421,8 @@ def submit_task1(request):
     except UserSentence.DoesNotExist:
         UserSentence(user=user, sentence=sentence, count=1).save()
 
-    return JsonResponse({'submit': 'ok'})
+    # print(response)
+    return JsonResponse({'submit': 'ok', 'response': response}, safe=False)
 
 @logged_in_or_basicauth("Bitte einloggen")
 def submit_task_correct_commas(request):
@@ -437,9 +440,10 @@ def submit_task_correct_commas(request):
     time_elapsed = request.GET.get('tim',0)
     #sentence.set_comma_select(user_solution)
     #sentence.update_submits()
-    user.count_false_types_task_correct_commas(user_solution, commas, sentence.get_commatypelist())
 
-    Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution])).save() # save solution to db
+    solution = Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution])).save() # save solution to db
+    user.count_false_types_task_correct_commas(user_solution, commas, sentence.get_commatypelist(), solution)
+
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
@@ -458,11 +462,11 @@ def submit_task_explain_commas(request):
     :param request: Django request
     :return: nothing
     """
+
     user = User.objects.get(django_user=request.user)
     sentence = Sentence.objects.get(id=request.POST['sentence_id'])
     sentence.update_submits()
     user.update_rank()
-
 
     rules=[]
     try:
@@ -474,6 +478,8 @@ def submit_task_explain_commas(request):
 
     solution=[] # solution is array of the form: rule_id:correct?:chosen?, rule_id:...
 
+    error_rules = [] # all rules with errors
+
     pos = int(request.POST['position'])+1
     for r in rules:
         correct = 1 if SentenceRule.objects.filter(sentence=sentence, rule=r, position=pos) else 0  # correct if sentence has rule
@@ -482,11 +488,17 @@ def submit_task_explain_commas(request):
         if not r.code.startswith('E'):  # only count non-error rules
             ur = UserRule.objects.get(user=user, rule=r)
             ur.count((correct==chosen))  # count rule application as correct if correct rule was chosen and vice versa
+            if correct != chosen:
+                error_rules.append(r)
 
     # write solution to db
     time_elapsed = request.POST.get('tim', 0)
-    Solution(user=user, sentence=sentence, type='explain', time_elapsed=time_elapsed,
-             solution="{}|".format(pos)+",".join(solution), ).save()
+    sol = Solution(user=user, sentence=sentence, type='explain', time_elapsed=time_elapsed,
+                   solution="{}|".format(pos)+",".join(solution))
+    sol.save()
+
+    for er in error_rules:
+        SolutionRule(solution=sol, rule = er, error=True).save()
 
     try:  # count sentence as seen
         us = UserSentence.objects.get(user=user, sentence=sentence)
@@ -520,7 +532,7 @@ def sentence(request, sentence_id):
     for x in wcr:
         for y in x[2]:
             rules.append(y)
-    print(rules)
+    # print(rules)
     rules = list(set(rules))
     return render(request, 'trainer/partials/sentence.html', locals())
 
