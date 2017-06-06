@@ -547,10 +547,14 @@ def help(request):
 
 
 def stats(request):
+
+    ud = []
+
     count_users = User.objects.count()
     count_studip_users = User.objects.filter(user_id__iregex=r'[0-9a-f]{32}').count()
     count_solutions = Solution.objects.count()
     count_error = SolutionRule.objects.count()
+    users = User.objects.all()
 
     levels = User.objects.values('rules_activated_count')\
         .order_by('rules_activated_count')\

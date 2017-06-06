@@ -7,7 +7,7 @@
 <p>&nbsp;</p>
 
 <h3>Basisdaten</h3>
-<table>
+<table class="table">
 <tr><th>Kategorie</th><th>Wert</th></tr>
 <tr><td>Anzahl Nutzer</td><td>{{ count_users }}</td></tr>
 <tr><td>Anzahl Stud.IP-Nutzer &nbsp;</td><td>{{ count_studip_users }}</td></tr>
@@ -17,7 +17,7 @@
 
 <h3>Levelverteilung</h3>
 
-    <table>
+    <table class="table">
     <tr><th>Level &nbsp;</th><th>Anzahl Nutzer</th></tr>
 
     {% for l in levels %}
@@ -25,4 +25,19 @@
     {% endfor %}
 
     </table>
+
+<h3>Nutzerdaten</h3>
+
+    <table class="table">
+    <tr><th>Sem.</th><th>Abschluss</th><th>Fach 1</th><th>Fach 2</th><th>Fach 3</th>
+        <th>HZB</th><th>m/w</th><th>Muttersprache</th><th>Einschätzung</th></tr>
+    {% for u in users %}
+        <tr><td>{{ u.explicit_data_semester }}</td><td>{{ u.explicit_data_study }}</td>
+            <td>{{ u.explicit_data_subject1 }}</td><td>{{ u.explicit_data_subject2 }}</td><td>{{ u.explicit_data_subject3 }}</td>
+            <td>{{ u.explicit_data_study_permission }}</td><td>{{ u.data_sex }}</td>
+            <td>{{ u.data_l1 }}</td><td>{{ u.data_selfestimation }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
 {% endblock %}

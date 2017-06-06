@@ -265,17 +265,18 @@ class User(models.Model):
         (3, 'Kommakönig'),
     )
 
-    abschluss = {"10": "Bachelor BEU(Lehramt GHR)",
-                 "11": "Bachelor berufliche Bildung(Lehramt LBS)",
-                 "12": "Bachelor 2-Fächer (Lehramt Gym)",
-                 "13": "Bachelor 2- Fächer (kein Lehramt)",
-                 "14": "Bachelor (1 Fach)",
-                 "20": "Master(Lehramt GHR)",
-                 "21": "Master(Lehramt Gym)",
-                 "22": "Master(Lehramt LBS)",
-                 "23": "Master(kein Lehramt)",
-                 "30": "sonstiges",
-                 "40": "nicht studierend"}
+    abschluss = {0: "Nicht angegeben",
+                 10: "Bachelor BEU(Lehramt GHR)",
+                 11: "Bachelor berufliche Bildung(Lehramt LBS)",
+                 12: "Bachelor 2-Fächer (Lehramt Gym)",
+                 13: "Bachelor 2- Fächer (kein Lehramt)",
+                 14: "Bachelor (1 Fach)",
+                 20: "Master(Lehramt GHR)",
+                 21: "Master(Lehramt Gym)",
+                 22: "Master(Lehramt LBS)",
+                 23: "Master(kein Lehramt)",
+                 30: "sonstiges",
+                 40: "nicht studierend"}
 
     user_id = models.CharField(max_length = 255)
 
@@ -703,6 +704,74 @@ class User(models.Model):
         sent_obj = SentenceRule.objects.filter(rule=may_obj[rule_index])
         sent_index = random.randint(0, len(sent_obj) - 1)
         return may_obj
+
+    def explicit_data_study(self):
+        return User.abschluss.get(self.data_study,"ungültig")
+
+    def explicit_data_semester(self):
+        sems = {
+            0: "nicht angegeben",
+            1: "1./2.",
+            2: "3./4.",
+            3: "5./6.",
+            4: "7./8.",
+            5: "9./10.",
+            6: "höher"
+        }
+        return sems.get(self.data_semester, "ungültig")
+
+    def explicit_subject(self, s):
+        subs = {
+            10: "Anglistik/Englisch",
+            11: "Betriebswirtschaftslehre",
+            12: "Biologie",
+            13: "Chemie",
+            14: "Cognitive Science",
+            15: "Erziehungswissenschaft",
+            16: "Evangelische Theologie",
+            17: "Französisch",
+            18: "Geographie/Erdkunde",
+            19: "Germanistik/Deutsch",
+            20: "Geschichte",
+            21: "Informatik",
+            22: "Islamische Theologie",
+            23: "Katholische Theologie",
+            24: "Kunst/Kunstpädagogik",
+            25: "Latein",
+            26: "Literatur und Kultur in Europa",
+            27: "Mathematik",
+            28: "Musik",
+            29: "Physik",
+            30: "Psychologie",
+            31: "Rechtswissenschaft",
+            32: "Romanistik",
+            33: "Sachunterricht",
+            34: "Sport/Sportwissenschaft",
+            35: "Sprache in Europa",
+            36: "Textiles Gestalten",
+            37: "Sonstiges Fach",
+        }
+        return subs.get(s, "ungültig")
+
+    def explicit_data_subject1(self):
+        return self.explicit_subject(self.data_subject1)
+
+    def explicit_data_subject2(self):
+        return self.explicit_subject(self.data_subject2)
+
+    def explicit_data_subject3(self):
+        return self.explicit_subject(self.data_subject3)
+
+    def explicit_data_study_permission(self):
+        perms = {
+            0: "nicht angegeben",
+            1: "Abitur (oder äquivalent)",
+            2: "Fachabitur (oder äquivalent)",
+            3: "Berufsqualifikation",
+            4: "sonstige",
+            5: "nicht studierend",
+        }
+        return perms.get(self.data_study_permission, "ungültig")
 
 
 class UserRule(models.Model):
