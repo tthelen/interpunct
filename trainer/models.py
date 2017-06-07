@@ -502,7 +502,10 @@ class User(models.Model):
                 rules = Rule.objects.filter(code=solution_array[i][0])
                 first = True  # save response in first run
                 for rule in rules:
-                    userrule = UserRule.objects.get(user=self, rule=rule)
+                    try:
+                        userrule = UserRule.objects.get(user=self, rule=rule)
+                    except UserRule.DoesNotExist:
+                        userrule = UserRule(user=self, rule=rule).save()
                     if (rule.mode == 0 and user_array[i] == "0") or  \
                        (rule.mode == 2 and user_array[i] == "1"):
                         corr = True
