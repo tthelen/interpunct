@@ -781,6 +781,11 @@ class User(models.Model):
         }
         return perms.get(self.data_study_permission, "ungültig")
 
+    def tries(self):
+        return Solution.objects.filter(user=self).count()
+
+    def errors(self):
+        return SolutionRule.objects.filter(solution__user=self).count()
 
 class UserRule(models.Model):
 

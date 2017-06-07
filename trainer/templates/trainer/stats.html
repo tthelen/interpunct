@@ -29,13 +29,18 @@
 <h3>Nutzerdaten</h3>
 
     <table class="table">
-    <tr><th>Sem.</th><th>Abschluss</th><th>Fach 1</th><th>Fach 2</th><th>Fach 3</th>
-        <th>HZB</th><th>m/w</th><th>Muttersprache</th><th>Einschätzung</th></tr>
+    <tr><th>Sem.</th><th>Abschluss</th><th>Fach 1</th>
+        <th>HZB</th><th>m/w</th><th>Muttersprache</th><th>Level</th><th>Lösungen</th><th>Fehler</th><th>Einschätzung</th></tr>
     {% for u in users %}
         <tr><td>{{ u.explicit_data_semester }}</td><td>{{ u.explicit_data_study }}</td>
-            <td>{{ u.explicit_data_subject1 }}</td><td>{{ u.explicit_data_subject2 }}</td><td>{{ u.explicit_data_subject3 }}</td>
+            <td>{% if u.data_subject1 %}{{ u.explicit_data_subject1 }}{% endif %}
+                {% if u.data_subject2 %}<br>{{ u.explicit_data_subject2 }}{% endif %}
+                {% if u.data_subject3 %}<br>{{ u.explicit_data_subject3 }}{% endif %}</td>
             <td>{{ u.explicit_data_study_permission }}</td><td>{{ u.data_sex }}</td>
-            <td>{{ u.data_l1 }}</td><td>{{ u.data_selfestimation }}</td>
+            <td>{{ u.data_l1 }}</td><td>{{ u.rules_activated_count }}</td>
+            <td>{{ u.tries }}</td>
+            <td>{{ u.errors }}</td>
+            <td>{{ u.data_selfestimation }}</td>
         </tr>
     {% endfor %}
     </table>
