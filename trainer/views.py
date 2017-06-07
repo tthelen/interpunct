@@ -421,6 +421,9 @@ def submit_task1(request):
         us.save()
     except UserSentence.DoesNotExist:
         UserSentence(user=user, sentence=sentence, count=1).save()
+    except UserSentence.MultipleObjectsReturned:  # somehow multiple entries existed..
+        UserSentence.objects.filter(user=user, sentence=sentence).delete()
+        UserSentence(user=user, sentence=sentence, count=1).save()
 
     # print(response)
     return JsonResponse({'submit': 'ok', 'response': response}, safe=False)

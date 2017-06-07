@@ -653,8 +653,11 @@ class User(models.Model):
                     break
             if ok:
                 try:
-                    us = UserSentence.objects.get(user=self, sentence=sr.sentence)
-                    count = us.count
+                    try:
+                        us = UserSentence.objects.get(user=self, sentence=sr.sentence)
+                        count = us.count
+                    except UserSentence.MultipleObjectsReturned:
+                        count = 0
                 except UserSentence.DoesNotExist:
                     count = 0
                 possible_sentences.append([sr,count])  # collect sentence and per user counter for the sentence
