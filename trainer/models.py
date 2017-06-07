@@ -853,7 +853,7 @@ class UserSentence(models.Model):
     count = models.IntegerField()
 
     def __str__(self):
-        return "{}:{}:{}".format(self.user.id, self.sentence.text, count)
+        return "{}:{}:{}".format(self.user.id, self.sentence.text, self.count)
 
     class Meta:
         ordering = ('count',)
