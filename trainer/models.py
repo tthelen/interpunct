@@ -656,14 +656,16 @@ class User(models.Model):
                     break
             if ok:
                 try:
-                    try:
-                        us = UserSentence.objects.get(user=self, sentence=sr.sentence)
-                        count = us.count
-                    except UserSentence.MultipleObjectsReturned:
-                        count = 0
+                    us = UserSentence.objects.get(user=self, sentence=sr.sentence)
+                    count = us.count
+                except UserSentence.MultipleObjectsReturned:
+                    count = 0
                 except UserSentence.DoesNotExist:
                     count = 0
                 possible_sentences.append([sr,count])  # collect sentence and per user counter for the sentence
+
+        if len(possible_sentences) == 0: # HACK: No sentence? Try again # TODO: find a real solution
+            return self.roulette_wheel_selection()
 
         possible_sentences.sort(key=lambda sentence:sentence[1])  # sort ascending by counts
 
