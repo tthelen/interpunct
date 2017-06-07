@@ -250,7 +250,7 @@ class SentenceRule(models.Model):
     pair = models.IntegerField(default=0)  # if != 0: comma pair which this comma is part of
 
     def __str__(self):
-        return self.sentence.text + self.rule.code + " " + str(self.position)
+        return "Rule {} at #{}: {} (Pair {})".format(self.rule.code, self.position, self.sentence.text, self.pair)
 
 
 
@@ -858,6 +858,7 @@ class UserSentence(models.Model):
     class Meta:
         ordering = ('count',)
 
+
 class Solution(models.Model):
     """
     Represents one solutions to a sentence.
@@ -871,6 +872,9 @@ class Solution(models.Model):
     mkdate = models.DateTimeField(auto_now_add=True)
     rules = models.ManyToManyField(Rule, through='SolutionRule')
 
+    def __str__(self):
+        return "User {} for Sentence {} - {} ms".format(self.user.id, self.sentence.id, self.time_elapsed)
+
 
 class SolutionRule(models.Model):
     """
@@ -881,4 +885,10 @@ class SolutionRule(models.Model):
     rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
     error = models.BooleanField(default=True)
 
-
+    def __str__(self):
+        return "User {} for Rule {} in Sentence {} - Error: {}".format(
+            self.solution.user.id,
+            self.rule.code,
+            self.solution.sentence.id,
+            self.error
+        )

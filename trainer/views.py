@@ -36,7 +36,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         # uname given from stud.ip (or elsewhere)
         #
         uname = request.GET.get('uname')
-        if uname:
+        if uname and len(uname)>8:
             check_or_create_user(uname)
             return view(request, *args, **kwargs)
 
@@ -56,7 +56,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
                 # print(auth[1])
                 auth_bytes = bytes(auth[1], 'utf8')
                 uname, passwd = base64.b64decode(auth_bytes).split(b':')
-                if uname == passwd:
+                if len(uname) > 8 and uname == passwd:
                     check_or_create_user(uname)
                     return view(request, *args, **kwargs)
 
