@@ -457,6 +457,9 @@ def submit_task_correct_commas(request):
         us.save()
     except UserSentence.DoesNotExist:
         UserSentence(user=user, sentence=sentence, count=1).save()
+    except UserSentence.MultipleObjectsReturned:  # somehow multiple entries existed..
+        UserSentence.objects.filter(user=user, sentence=sentence).delete()
+        UserSentence(user=user, sentence=sentence, count=1).save()
 
     return JsonResponse({'submit': 'ok', 'response':response}, safe=False)
 
@@ -513,6 +516,9 @@ def submit_task_explain_commas(request):
         us.count += 1
         us.save()
     except UserSentence.DoesNotExist:
+        UserSentence(user=user, sentence=sentence, count=1).save()
+    except UserSentence.MultipleObjectsReturned:  # somehow multiple entries existed..
+        UserSentence.objects.filter(user=user, sentence=sentence).delete()
         UserSentence(user=user, sentence=sentence, count=1).save()
 
     return JsonResponse({'submit': 'ok'})
