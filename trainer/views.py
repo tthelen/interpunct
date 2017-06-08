@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.db.models import Count
+from django.db.models import Count, Sum
 from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule
 import re  # regex support
 import os
@@ -568,5 +568,9 @@ def stats(request):
     levels = User.objects.values('rules_activated_count')\
         .order_by('rules_activated_count')\
         .annotate(the_count = Count('rules_activated_count'))
+
+    error_rules = SolutionRule.objects.values('rule') \
+        .order_by('rule') \
+        .annotate(the_count = Count('rule'))
 
     return render(request, 'trainer/stats.html', locals())

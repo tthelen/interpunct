@@ -15,6 +15,17 @@
 <tr><td>Anzahl Fehler</td><td>{{ count_error }}</td></tr>
 </table>
 
+    <!--
+<h3>Fehlerverteilung</h3>
+
+    <table class="table">
+    <tr><th>Regel</th><th>Anzahl Fehler</th></tr>
+    {% for er in error_rules %}
+        <tr><td>{{ er.rule }} - {{ er.rule.description }}</td><td>{{ er.the_count }}</td></tr>
+    {% endfor %}
+    </table>
+    -->
+
 <h3>Levelverteilung</h3>
 
     <table class="table">
@@ -30,7 +41,7 @@
 
     <table class="table">
     <tr><th>Sem.</th><th>Abschluss</th><th>Fach 1</th>
-        <th>HZB</th><th>m/w</th><th>Muttersprache</th><th>Level</th><th>Lösungen</th><th>Fehler</th><th>Einschätzung</th></tr>
+        <th>HZB</th><th>m/w</th><th>Muttersprache</th><th>Level</th><th>Lösungen</th><th>Fehler</th><th>Gesamtzeit</th></th><th>Einschätzung</th></tr>
     {% for u in users %}
         <tr><td>{{ u.explicit_data_semester }}</td><td>{{ u.explicit_data_study }}</td>
             <td>{% if u.data_subject1 %}{{ u.explicit_data_subject1 }}{% endif %}
@@ -40,6 +51,7 @@
             <td>{{ u.data_l1 }}</td><td>{{ u.rules_activated_count }}</td>
             <td>{{ u.tries }}</td>
             <td>{{ u.errors }}</td>
+            <td>{{ u.total_time_formatted  }} Min.</td>
             <td>{{ u.data_selfestimation }}</td>
         </tr>
     {% endfor %}

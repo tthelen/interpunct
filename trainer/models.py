@@ -787,6 +787,16 @@ class User(models.Model):
     def errors(self):
         return SolutionRule.objects.filter(solution__user=self).count()
 
+    def total_time(self):
+        te = Solution.objects.filter(user=self).aggregate(models.Sum('time_elapsed'))['time_elapsed__sum']
+        return te or 0
+
+    def total_time_formatted(self):
+        tt = self.total_time()
+        minutes = int(tt/60000)
+        seconds = int(tt/1000) - minutes*60
+        return "{:3d}:{:02d}".format(minutes, seconds)
+
 class UserRule(models.Model):
 
     """
