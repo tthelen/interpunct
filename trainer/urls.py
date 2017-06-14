@@ -13,11 +13,6 @@ urlpatterns = [
     url(r'^logout$', views.logout),
     url(r'^sentence/([0-9]+)$', views.sentence, name='sentence'),  # ajax load html for single correct sentence
     url(r'^help$', views.help, name='help'),
-    url(r'^stats$', views.stats, name='stats')
-    # ex: /polls/5/
-    #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
-    # ex: /polls/5/results/
-    #url(r'^(?P<question_id>[0-9]+)/results/$', views.results, name='results'),
-    # ex: /polls/5/vote/
-    #url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
+    url(r'^stats$', views.stats, name='stats'),
+    url(r'^nocookies$', views.nocookies, name='nocookies')
 ]

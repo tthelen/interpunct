@@ -1,0 +1,22 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Umleitung{% endblock %}
+
+{% block main %}
+<h2>Umleitung</h2>
+<p>&nbsp;</p>
+    <p>Ihr Browser lässt das notwendige Cookie nicht zu, mit dem Ihr Fortschritt bei der Bearbeitung der Aufgaben
+        gepspeichert werden kann.</p>
+    <p>Bitte starten Sie deshalb den Kommatrainer in einem separaten Fenster:</p>
+
+    <a href="{% url 'task' %}?uname={{ uname }}" target="_blank">
+        <button class="btn btn-default">Kommatrainer starten</button>
+    </a>
+
+<p>&nbsp;&nbsp; </p>
+    <p>Falls Sie in diesem neuen Fesnter nach einem Benutzernamen und Passwort gefragt werden, müssen Sie in ihrem
+        Browser Cookies zulassen, damit Sie den Kommatrainer nutzen können. Ihr Stud.IP-Passwort o.ä. wird nicht
+        funktionieren.</p>
+    <p>Eventuell funktioniert anschließend auch die in Stud.IP eingebettete Version des Kommatrainers.</p>
+
+{% endblock %}

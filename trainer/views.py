@@ -219,15 +219,15 @@ def task(request):
     # task randomizer
     # explain task only for must or may commas, usres with at least 3 active rules and non-error rules
     if rule.mode > 0 and user.rules_activated_count >= 3 and not rule.code.startswith('E'):
-        index = random.randint(0, 1)
+        index = random.randint(0, 100)
     else:  # less than 3 active rules: only set and correct tasks
         index = 0
 
-    if index==0:
+    if index < 67:  # 1/3 chance for rule explanation
         # return render(request, 'trainer/task_set_commas.html', locals())
         # return render(request, 'trainer/task_correct_commas.html', locals())
 
-        if random.randint(0,1)==0:
+        if random.randint(0,100) > 60: # 40% chance for correct commas
             return render(request, 'trainer/task_correct_commas.html', locals())
         else:
             return render(request, 'trainer/task_set_commas.html', locals())
@@ -553,6 +553,12 @@ def sentence(request, sentence_id):
 
 def help(request):
     return render(request, 'trainer/help.html', locals())
+
+
+def nocookies(request):
+    display_rank = False  # show the rank in output? (not on welcome and rule explanation screens)
+    uname = request.GET.get('uname','')
+    return render(request, 'trainer/nocookies.html', locals())
 
 
 def stats(request):

@@ -90,12 +90,35 @@
 </div>
 
 <script>
+
+    // can we set cookie?*
+    function cookietest() {
+        document.cookie="cookietest=1";
+        var ret = document.cookie.indexOf("cookietest=") != -1;
+        document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970, 00:00:01 GMT";
+        return ret;
+    }
+
+    function get_parameter(name) {
+        if (name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
+            return decodeURIComponent(name[1]);
+        }
+    }
+
     $( document ).ready(function() {
+
+
         if (window.self == window.top) {
             // not in an iframe:
             // add class container to have margins
             $("#containerdiv").addClass('container');
             $("#detachlink").css('visibility','hidden');
+        } else {
+            // cookie might be blocked in in frame due to 3rd party cookie restriction
+            // so redirect to "launch in external window" page (if we're not already there)
+            if (!cookietest() && (window.location.href.indexOf("/nocookies") == -1)) {
+                window.location= "{% url 'nocookies' %}?uname="+get_parameter('uname');
+            }
         }
     });
 </script>
