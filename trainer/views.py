@@ -574,6 +574,10 @@ def stats(request):
     count_studip_users = User.objects.filter(rules_activated_count__gt=0, user_id__iregex=r'[0-9a-f]{32}').count()
     count_solutions = Solution.objects.count()
     count_error = SolutionRule.objects.count()
+    count_error_set = SolutionRule.objects.filter(solution__type='set').count()
+    count_error_correct = SolutionRule.objects.filter(solution__type='correct').count()
+    count_error_explain = SolutionRule.objects.filter(solution__type='explain').count()
+
     users = User.objects.filter(rules_activated_count__gt=0).all()
 
     levels = User.objects.values('rules_activated_count')\
