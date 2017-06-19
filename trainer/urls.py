@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^logout$', views.logout),
     url(r'^sentence/([0-9]+)$', views.sentence, name='sentence'),  # ajax load html for single correct sentence
     url(r'^help$', views.help, name='help'),
+    url(r'^mystats$', views.mystats, name='mystats'),
+    url(r'^mystats_rule/$', views.mystats_rule, name='mystats_rule'), # ajax load for single rule stat
     url(r'^stats$', views.stats, name='stats'),
     url(r'^nocookies$', views.nocookies, name='nocookies')
 ]

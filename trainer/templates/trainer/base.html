@@ -75,7 +75,8 @@
 
            </div>
         {% endif %}
-
+        {% block sidebar %}
+        {% endblock %}
     </div>
     <div class="col-xs-10">
         {% block main %}
@@ -106,7 +107,6 @@
     }
 
     $( document ).ready(function() {
-
 
         if (window.self == window.top) {
             // not in an iframe:

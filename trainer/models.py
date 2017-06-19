@@ -852,6 +852,10 @@ class UserRule(models.Model):
             self.score = 0
         self.save()
 
+    @property
+    def incorrect(self):
+        return self.total - self.correct
+
     def __str__(self):
         return "{} / {}: Box {}, Score {}, {}/{} correct".format(self.user.user_id, self.rule.code, self.box, self.score, self.correct, self.total)
 

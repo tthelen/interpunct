@@ -1,0 +1,25 @@
+<h4>Regel {{ userrule.rule.rule }}</h4>
+
+<p>{{ userrule.rule.description|safe }}<p>
+
+<h4>Beispiel:</h4>
+<p><em>{{ userrule.rule.example|safe }}</em></p>
+
+<h4>Statistik:</h4>
+<table>
+  <tr><td>Vorkommen in Übungen: </td><td style="text-align: right">{{ userrule.total }}</td></tr>
+  <tr><td>Davon korrekt gelöst: </td><td style="text-align: right">{{ userrule.correct }}</td></tr>
+  <tr><td>Übungshäufigkeit: </td><td>
+      {% if userrule.box == 0 %}sehr häufig{% endif %}
+      {% if userrule.box == 1 %}häufig{% endif %}
+      {% if userrule.box == 2 %}mittelmäßig oft{% endif %}
+      {% if userrule.box == 3 %}selten{% endif %}
+      {% if userrule.box == 4 %}sehr selten{% endif %}
+  </td></tr>
+</table>
+
+<h4>Aufgetretene Fehler:</h4>
+
+{% for sr in solutions %}
+    {% include 'trainer/partials/solution.html' %}
+{% endfor %}

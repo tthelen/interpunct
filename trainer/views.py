@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Count, Sum
+from django.core.urlresolvers import reverse
 from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule
 import re  # regex support
 import os
 
 
 import base64
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 # from django.contrib.auth import authenticate, login
 
 
@@ -150,6 +151,7 @@ def task(request):
     """
     import random
 
+    # get user from URL or session or default
     # get user from URL or session or default
     # user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
     user = User.objects.get(django_user=request.user)
@@ -530,8 +532,11 @@ def delete_user(request):
 
     # get user from URL or session or default
     u = User.objects.get(django_user=request.user)
+    uid = request.user.username
     u.delete()
-    return redirect("/")
+
+    request.user.delete()  # also delete the django user
+    return redirect(reverse("task")+"?uname="+uid)
 
 
 @logged_in_or_basicauth("Bitte einloggen")
@@ -580,3 +585,32 @@ def stats(request):
         .annotate(the_count = Count('rule'))
 
     return render(request, 'trainer/stats.html', locals())
+
+
+@logged_in_or_basicauth("Bitte einloggen")
+def mystats(request):
+    user = User.objects.get(django_user=request.user)
+    display_rank = False
+    level = user.rules_activated_count
+    rank = user.get_user_rank_display()
+
+    num_solutions = Solution.objects.filter(user=user).count()
+    num_errors = SolutionRule.objects.filter(solution__user=user, error=True).count()
+
+    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)
+
+    error_rules = sorted(UserRule.objects.filter(user=user, active=True), key=lambda t: t.incorrect)
+    return render(request, 'trainer/mystats.html', locals())
+
+
+@logged_in_or_basicauth("Bitte einloggen")
+def mystats_rule(request):
+    rule_id = request.GET.get('rule',False)
+    if rule_id:
+        user = User.objects.get(django_user=request.user)
+        userrule = UserRule.objects.get(user=user, rule__id=rule_id)
+        solutions = SolutionRule.objects.filter(solution__user=user, rule=rule_id, error=True)
+        return render(request, 'trainer/partials/mystats_rule.html', locals())
+    else:
+        return HttpResponseBadRequest("No rule_id given.")
+

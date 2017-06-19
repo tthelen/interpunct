@@ -1,0 +1,10 @@
+{% if sr.solution.type == 'set' %}
+{{ sr.solution.sentence.text }} - {{ sr.solution.solution }}
+SET
+{% elif sr.solution.type == 'correct' %}
+{{ sr.solution.sentence.text }} - {{ sr.solution.solution }}
+CORRECT
+{% elif sr.solution.type == 'explain' %}
+{{ sr.solution.sentence.text }} - {{ sr.solution.solution }}
+EXPLAIN
+{% endif %}
