@@ -16,5 +16,7 @@ urlpatterns = [
     url(r'^mystats$', views.mystats, name='mystats'),
     url(r'^mystats_rule/$', views.mystats_rule, name='mystats_rule'), # ajax load for single rule stat
     url(r'^stats$', views.stats, name='stats'),
+    url(r'^allstats$', views.allstats, name='allstats'),
     url(r'^nocookies$', views.nocookies, name='nocookies')
+
 ]

@@ -1,0 +1,26 @@
+{% extends "trainer/base.html" %}
+{%  load static %}
+
+{% block title %}Komma-Trainer - Deine Fehlerstatistik{% endblock %}
+
+{% block sidebar %}
+    <div class="rank">
+        <p>&nbsp;</p>
+        <h4>Globalstatstik</h4>
+    </div>
+{% endblock %}
+
+{% block main %}
+<h2>Globale Fehlerstatistik</h2>
+
+    <p>&nbsp;</p>
+    {% for s in sentences %}
+<h1>{{ s.text }}</h1>
+        {% for solution in s.solution_set.all %}
+            {% include 'trainer/partials/solution.html' %}
+        {% endfor %}
+    {% endfor %}
+</div>
+
+
+{% endblock %}

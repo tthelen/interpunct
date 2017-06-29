@@ -618,3 +618,10 @@ def mystats_rule(request):
     else:
         return HttpResponseBadRequest("No rule_id given.")
 
+@logged_in_or_basicauth("Bitte einloggen")
+def allstats(request):
+
+    page = int(request.GET.get('page',0))
+    sentences = Sentence.objects.all()[(15*page):(15*(page+1))]
+
+    return render(request, 'trainer/allstats.html', locals())

@@ -1,10 +1,26 @@
-{% if sr.solution.type == 'set' %}
-{{ sr.solution.sentence.text }} - {{ sr.solution.solution }}
-SET
-{% elif sr.solution.type == 'correct' %}
-{{ sr.solution.sentence.text }} - {{ sr.solution.solution }}
-CORRECT
-{% elif sr.solution.type == 'explain' %}
-{{ sr.solution.sentence.text }} - {{ sr.solution.solution }}
-EXPLAIN
+{% if solution.type == 'set' %}
+    {% for x in solution.for_render %}
+        {% if not x.solution_correct %}
+            {% if forloop.first %}
+                <div class="sentence-correct">
+            {% endif %}
+            {{ x.word }}<span {% if x.correct %}
+                              {% if x.rules.0.mode == 2 %} style="background-color:#85e278;" class="markingright"
+                              {% elif x.rules.0.mode == 1 %} style="background-color:#219fff;" class="markingright"
+                              {% endif %}
+                           {% elif not x.correct %}
+                              {% if x.rules.0.mode == 2 %} style="background-color:#ff876e;" class="markingwrong"
+                              {% elif x.rules.0.mode == 1 %} style="background-color:#ff876e; border:3px solid red;" class="markingwrong"
+                              {% elif x.rules.0.mode == 0 %} style="background-color:#ff876e;" class="markingwrong"
+                              {% endif %}
+                           {% endif %}
+            >{{ x.commaset }}&nbsp;</span>
+            {% for y in x.rules %}
+                <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-info{% endif %}">{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>{% else %}{{ y.rule }}{% endif %}</span>
+            {% endfor %}
+            {% if forloop.last %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
 {% endif %}

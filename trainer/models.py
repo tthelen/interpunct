@@ -164,7 +164,7 @@ class Sentence(models.Model):
 
         words = self.get_words()
 
-        rules = []  # list of comma types (0=mustnot, 1=may, 2=must)
+        rules = []  # list of rule objects
 
         for pos in range(len(self.get_words()) - 1):
             # for each position: get rules
@@ -172,7 +172,7 @@ class Sentence(models.Model):
             rl = []
             for r in ruleset:
                 if not r.code=='E1':
-                    rl.append(r)  # collect codes, not rules objects
+                    rl.append(r)  # collect rules objects
             rules.append(rl)
         rules.append([])
 
@@ -893,6 +893,76 @@ class Solution(models.Model):
 
     def __str__(self):
         return "User {} for Sentence {} - {} ms".format(self.user.id, self.sentence.id, self.time_elapsed)
+
+    def for_render(self):
+        """Returns a list of information useful for rendering a rated solution.
+        
+        Depending on type, list containts:
+        - for "set": dictionaries with keys 'word', 'commastring', 'commaset', 'rules', 'correct'
+        - for "correct": nothing yet
+        - for "explain": nothing yet
+        """
+
+        solution_correct = True # is the entire solution correct?
+
+        if self.type == 'set':
+
+            w = self.sentence.get_words_commas_rules()
+            words = [{'word': word, 'commastring': comma, 'rules': rules} for [word,comma,rules] in w]  # words is list of dictionaries
+            resp = []
+            solution_array = self.sentence.get_commatypelist()
+            pairs = self.sentence.get_commapairlist()
+            user_array = self.solution.split(',') # string of comma separated 0 and 1
+            for i in range(len(solution_array)):
+                if int(user_array[i]) == 1:  # save string for originally set/nonset comma
+                    words[i]['commaset'] = ","
+                else:
+                    words[i]['commaset'] = " "
+                print("Solution array:")
+                print(solution_array[i])
+                print(" - ")
+                print(user_array[i])
+                if len(solution_array[i]) == 0 and int(user_array[i]) == 1: # comma in the wild
+                    words[i]['correct'] = False
+                    solution_correct = False
+                    words[i]['rules'].append(Rule.objects.get(code='E1'))
+                elif len(solution_array[i]) != 0: # comma at rule position
+                    rules = Rule.objects.filter(code=solution_array[i][0])
+                    first = True  # save response in first run
+                    for rule in rules:
+                        if (rule.mode == 0 and user_array[i] == "0") or  \
+                           (rule.mode == 2 and user_array[i] == "1"):
+                            corr = True
+                        elif rule.mode == 1: # optional commas - consider pairs!
+                            if pairs[i] != 0: # if comma is part of a pair
+                                # first part is always correct
+                                # second part is the error
+                                found = False
+                                if i > 0:
+                                    for j in range(i):  # look at the beginning of the sentence to find 1st part of pair
+                                        if pairs[j] == pairs[i]:
+                                            corr = (user_array[i] == user_array[j])
+                                            found = True
+                                            break
+                                if not found: # first occurence is always correct
+                                    corr = True
+                            else:
+                                corr = True
+                        else:
+                            corr = False
+                        if first: # save response only for first rule (others must be same)
+                            if not corr:
+                                solution_correct = False
+                            words[i]['correct'] = corr
+                else:
+                    words[i]['correct'] = True
+
+            for w in words:  # add correct marker for entire solution to every fields
+                w['solution_correct'] = solution_correct
+
+            return words
+        else:
+            return []
 
 
 class SolutionRule(models.Model):
