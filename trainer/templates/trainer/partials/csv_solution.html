@@ -1,0 +1,5 @@
+{% if solution.type == 'set' %}
+{% for x in solution.for_render %}
+{{ x.word }};{% if not x.correct %}[{% endif %}{{ x.commaset }}{% if not x.correct %}]{% endif %};
+{% endfor %}
+{% endif %}

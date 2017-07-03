@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Count, Sum
 from django.core.urlresolvers import reverse
@@ -621,7 +621,18 @@ def mystats_rule(request):
 @logged_in_or_basicauth("Bitte einloggen")
 def allstats(request):
 
-    page = int(request.GET.get('page',0))
-    sentences = Sentence.objects.all()[(15*page):(15*(page+1))]
+    # id = int(request.GET.get('sid',1))
+    sentences = Sentence.objects.all()
 
     return render(request, 'trainer/allstats.html', locals())
+
+@logged_in_or_basicauth("Bitte einloggen")
+def allstats_sentence(request):
+    print("Jo")
+    sentence_id = int(request.GET.get('sentence_id',False))
+    print("sentence_id: {}".format(sentence_id))
+    if sentence_id:
+        sentence = get_object_or_404(Sentence, pk=sentence_id)
+        return render(request, 'trainer/partials/allstats_sentence.html', locals())
+    else:
+        return HttpResponseBadRequest("No rule_id given.")

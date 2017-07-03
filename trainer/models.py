@@ -918,10 +918,7 @@ class Solution(models.Model):
                     words[i]['commaset'] = ","
                 else:
                     words[i]['commaset'] = " "
-                print("Solution array:")
-                print(solution_array[i])
-                print(" - ")
-                print(user_array[i])
+
                 if len(solution_array[i]) == 0 and int(user_array[i]) == 1: # comma in the wild
                     words[i]['correct'] = False
                     solution_correct = False

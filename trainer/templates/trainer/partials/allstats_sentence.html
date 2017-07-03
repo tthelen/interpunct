@@ -1,0 +1,8 @@
+<td><button class="btn close" data-sid="{{ sentence.id }}">schließen</button></td>
+<td>
+<p>{{ sentence.text }}</p>
+{% for solution in sentence.solution_set.all %}
+    {% include 'trainer/partials/solution.html' %}
+{% endfor %}
+</td>
+<td>({{ sentence.solution_set.count }}&nbsp;Lösungen)</td>

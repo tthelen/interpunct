@@ -14,13 +14,33 @@
 <h2>Globale Fehlerstatistik</h2>
 
     <p>&nbsp;</p>
+    <div id="sss"></div>
+    <table class="table">
+
     {% for s in sentences %}
-<h1>{{ s.text }}</h1>
-        {% for solution in s.solution_set.all %}
-            {% include 'trainer/partials/solution.html' %}
-        {% endfor %}
+            <tr id="sent-{{ s.id }}">
+                <td><button class="btn details" data-sid="{{ s.id }}">Details...</button></td>
+                <td>{{ s.text }}</td>
+                <td>({{ s.solution_set.count }}&nbsp;Lösungen)</td>
+            </tr>
     {% endfor %}
+
+    </table>
+
 </div>
 
+    <script>
+
+function show_sentence_details(event) {
+    var sentence_id = event.target.dataset['sid'];
+    $("#sent-"+sentence_id).load("{% url 'allstats_sentence' %}?sentence_id="+sentence_id);
+}
+
+$(document).ready(function () {
+   $(".details").on("click", show_sentence_details);
+   $(".details").on("click", close_sentence_details);
+});
+
+</script>
 
 {% endblock %}
