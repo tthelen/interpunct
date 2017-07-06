@@ -618,7 +618,6 @@ def mystats_rule(request):
     else:
         return HttpResponseBadRequest("No rule_id given.")
 
-@logged_in_or_basicauth("Bitte einloggen")
 def allstats(request):
 
     # id = int(request.GET.get('sid',1))

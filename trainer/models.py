@@ -247,6 +247,21 @@ class Sentence(models.Model):
             result.append({'render': render_one_set_solution(w,commatypetlist,commapairlist,s['solution']), 'total': s['total']})
         return result
 
+    def for_render_summary(self):
+        """Return array of amount of commas set."""
+        sols = self.solution_set.filter(type='set').values('solution')
+        w = self.get_words()
+        sum = [0 for s in range(len(w)+1)]
+        for s in sols:
+            sol = s['solution'].split(',')
+            for x in range(len(sol)):
+                if sol[x] == '1':
+                    sum[x] += 1
+
+        return list(zip(w, sum))
+
+    def count_set_solutions(self):
+        return self.solution_set.filter(type='set').count()
 
 def render_one_set_solution(w,solution_array,pairs,solution):
 

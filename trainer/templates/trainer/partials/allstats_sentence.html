@@ -1,7 +1,10 @@
-<td><button class="btn close" data-sid="{{ sentence.id }}">schließen</button></td>
+<td></td>
 <td>
 <p>{{ sentence.text }}</p>
-{% for sfr in sentence.for_render %}
+{% if sentence.count_set_solutions %}
+    <p><div class="interaction">{% for sw in sentence.for_render_summary %}{{ sw.0 }} {% if sw.1 %},({{ sw.1 }}){% endif %} {% endfor %}</div></p>
+{% endif %}
+    {% for sfr in sentence.for_render %}
     {% for x in sfr.render %}
             {% if forloop.first %}
                 <div class="sentence-correct">
@@ -26,4 +29,4 @@
     {% endfor %}
 {% endfor %}
 </td>
-<td>({{ sentence.solution_set.count }}&nbsp;Lösungen)</td>
+<td>({{ sentence.count_set_solutions }}&nbsp;Lösungen)</td>

@@ -21,7 +21,7 @@
             <tr id="sent-{{ s.id }}">
                 <td><button class="btn details" data-sid="{{ s.id }}">Details...</button></td>
                 <td>{{ s.text }}</td>
-                <td>({{ s.solution_set.count }}&nbsp;Lösungen)</td>
+                <td>({{ s.count_set_solutions }}&nbsp;Lösungen)</td>
             </tr>
     {% endfor %}
 
