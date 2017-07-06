@@ -18,11 +18,13 @@
     <table class="table">
 
     {% for s in sentences %}
+        {% if s.count_set_solutions %}
             <tr id="sent-{{ s.id }}">
                 <td><button class="btn details" data-sid="{{ s.id }}">Details...</button></td>
                 <td>{{ s.text }}</td>
                 <td>({{ s.count_set_solutions }}&nbsp;Lösungen)</td>
             </tr>
+        {% endif %}
     {% endfor %}
 
     </table>
