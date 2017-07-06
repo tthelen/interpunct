@@ -628,9 +628,7 @@ def allstats(request):
 
 @logged_in_or_basicauth("Bitte einloggen")
 def allstats_sentence(request):
-    print("Jo")
     sentence_id = int(request.GET.get('sentence_id',False))
-    print("sentence_id: {}".format(sentence_id))
     if sentence_id:
         sentence = get_object_or_404(Sentence, pk=sentence_id)
         return render(request, 'trainer/partials/allstats_sentence.html', locals())
