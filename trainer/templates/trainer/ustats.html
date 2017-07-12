@@ -1,0 +1,10 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Statistik{% endblock %}
+
+{% block main %}
+<pre>{% for u in users %}{{ u.user_id }};{{ u.rules_activated_count }}
+{% endfor %}
+</pre>
+
+{% endblock %}
