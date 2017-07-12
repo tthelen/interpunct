@@ -10,7 +10,7 @@ class Command(BaseCommand):
         with open("data/from_ortho_sem_final.csv","r") as f:
             for line in f:
                 try:
-                    u = User.get(user_id=line.strip())
+                    u = User.objects.get(user_id=line.strip())
                     u.data_orthosem_participant = True
                     u.save()
                     count += 1
