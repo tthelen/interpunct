@@ -372,6 +372,7 @@ class User(models.Model):
     data_sex = models.CharField(max_length=2, default='')
     data_l1 = models.CharField(max_length=255, default='')
     data_selfestimation = models.IntegerField(default=0)
+    data_orthosem_participant = models.BooleanField(default=False)  # participant of an orthography seminar?
 
     user_rank = models.IntegerField(choices=RANKS, default = 0)
     # counts wrong answers for a specific comma type
