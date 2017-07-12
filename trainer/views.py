@@ -591,6 +591,10 @@ def stats(request):
     return render(request, 'trainer/stats.html', locals())
 
 
+def ustats(request):
+    users = User.objects.all()
+    return render(request, 'trainer/ustats.html', locals())
+
 @logged_in_or_basicauth("Bitte einloggen")
 def mystats(request):
     user = User.objects.get(django_user=request.user)
