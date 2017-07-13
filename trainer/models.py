@@ -976,6 +976,51 @@ class Solution(models.Model):
     def __str__(self):
         return "User {} for Sentence {} - {} ms".format(self.user.id, self.sentence.id, self.time_elapsed)
 
+
+    def for_export(self):
+        """Return cases (1 case per rule per focus position per solution) as a list of dictionaries with:
+            'solution': Solution object
+            'left': List of all positions left to current focus position (
+                    Position: Dictionary of 'word', 'commastring', 'commaset', 'rules', 'correct'
+            'right': List of all positions right of current focus position
+            'rule': current focus rule
+            'user': current focus user
+            'word': word left of focus position
+            'commastring': correct comma string for focus position
+            'commaset': set comma string for focus position
+            'correct': is comma at focus position correct?
+        """
+
+        words = self.for_render()
+        cases = []
+
+        def add_case(idx, w, r):
+            c = dict(w)
+            c['left'] = words[:idx]  # left context with current word
+            c['right'] = words[idx+1:]  # right contect without current word
+            c['solution'] = self
+            c['user'] = self.user
+            c['rule'] = r
+            cases.append(c)
+
+        for idx in range(len(words)-1):
+            w = words[idx]
+            for r in w['rules']:  # alle eingetragenen Nicht-Fehler-Regeln
+                if not r.code.startswith('E'):
+                    add_case(idx, w, r)
+
+            if not w['correct']:  # korrekte Fälle: Nur Positionen mit Nicht-Fehler-Regeln, ein Fall pro Regel!
+                found = False
+                for r in w['rules']:
+                    if r.code.startswith('E'):
+                        add_case(idx, w, r)
+                        found = True
+                if not found:
+                    add_case(idx, w, Rule.objects.get(code='E1'))  # E1-Regel hinzufügen, wenn keine anderen Regeln da
+
+        return cases
+
+
     def for_render(self, w=False, ctl=False, cpl=False):
         """Returns a list of information useful for rendering a rated solution.
         
