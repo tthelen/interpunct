@@ -15,9 +15,18 @@ class Command(BaseCommand):
                         'user_id',          # User.id
                         'rule_code',        # Rule.code
                         'rule_paragraph',   # Rule.rule
-                        'correct',          # .correct
+                        'explain_correct',  # explain_correct
+                        'explain_chosen',   # explain_chosen
+                        'solution_correct',          # solution_correct
+                        'context1_rule_code',
+                        'context1_rule_paragraph',
+                        'context1_rule_correct',
+                        'context1_rule_chosen',
+                        'context2_rule_code',
+                        'context2_rule_paragraph',
+                        'context2_rule_correct',
+                        'context2_rule_chosen',
                         'left_context',     # built from .left
-                        'comma_set',        # .commaset
                         'comma_correct',    # .commastring
                         'right_context',    # built from .right
                         'time',             # Solution.time_elapsed
@@ -40,28 +49,44 @@ class Command(BaseCommand):
 
         for s in Solution.objects.all():
 
-            sols = s.for_export()
-
+            if s.type != 'explain':
+                continue
+            sols = s.for_export_explain()
             for sol in sols:
 
                 if sol['solution'].sentence.id in [167,262,222,244,252,262,300,307,308]:
-                    print("Ignoring sentence #{}".format(sol['solution'].sentence.id))
+                    # print("Ignoring sentence #{}".format(sol['solution'].sentence.id))
                     continue
 
                 row = []
                 row.append(sol['solution'].id)
                 row.append(sol['solution'].sentence.id)
                 row.append(sol['user'].id)
-                row.append(sol['rule'].code)
-                row.append(sol['rule'].rule or sol['rule'].code)
-                row.append(1 if sol['correct'] else 0)
-                lc = "".join(["{}{}".format(w['word'], w['commaset']+(" " if w['commaset'] == ',' else ''))
-                              for w in sol['left']]) + sol['word']
+
+                row.append(sol['rule'].code) # 'rule_code',  # Rule.code
+                row.append(sol['rule'].rule or sol['rule'].code) # 'rule_paragraph',  # Rule.rule
+                row.append(sol['explain_correct'])  # explain_correct
+                row.append(sol['explain_chosen'])  # explain_chosen
+                row.append(sol['solution_correct'])  # .correct
+
+                row.append(sol['context1_rule'].code)  # 'rule_code',  # Rule.code
+                row.append(sol['context1_rule'].rule or sol['rule'].code)  # 'rule_paragraph',  # Rule.rule
+                row.append(sol['context1_correct'])  # explain_correct
+                row.append(sol['context1_chosen'])  # explain_chosen
+
+                row.append(sol['context2_rule'].code)  # 'rule_code',  # Rule.code
+                row.append(sol['context2_rule'].rule or sol['rule'].code)  # 'rule_paragraph',  # Rule.rule
+                row.append(sol['context2_correct'])  # explain_correct
+                row.append(sol['context2_chosen'])  # explain_chosen
+
+                #row.append(sol['rule'].code)
+                #row.append(sol['rule'].rule or sol['rule'].code)
+                #row.append(1 if sol['correct'] else 0)
+
+                lc = "".join(["{}{}".format(w['word'], w['commastring']) for w in sol['left']]) + sol['word']
                 row.append(lc)
-                row.append(sol['commaset'])
                 row.append(sol['commastring'])
-                rc = "".join(["{}{}".format(w['word'], w['commaset']+(" " if w['commaset'] == ',' else ''))
-                              for w in sol['right'][:-1]]) + sol['right'][-1]['word']
+                rc = "".join(["{}{}".format(w['word'], w['commastring']) for w in sol['right'][:-1]]) + sol['right'][-1]['word']
                 row.append(rc)
                 row.append(sol['solution'].time_elapsed/1000.0)
                 row.append(sol['user'].explicit_data_study())
@@ -84,7 +109,7 @@ class Command(BaseCommand):
                     self.stdout.write('{} Zeilen erstellt'.format(count))
 
         self.stdout.write("Schreibe XLSX-Datei")
-        with open('data/output_solutions.xlsx', 'wb') as f:
+        with open('data/output_solutions_explain.xlsx', 'wb') as f:
             f.write(data.xlsx)
 
         self.stdout.write(self.style.SUCCESS('Successfully exported {} solutions.'.format(count)))

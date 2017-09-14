@@ -48,5 +48,11 @@ wo du in letzter Zeit noch Fehler gemacht hast bzw. welche Regeln du schon beson
     {% endif %}
 
 <p><a href=""><button class="btn btn-info">Hier geht es weiter.</button></a>
-
+    <script>
+       $( document ).ready(function() {
+           if ({{ level }} >= 20) VanillaLM.markSuccess();
+           VanillaLM.setAttribute("Level", "{{ level }}");
+           VanillaLM.send();
+       }
+</script>
 {% endblock %}

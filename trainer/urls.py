@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^stats$', views.stats, name='stats'),
     url(r'^ustats$', views.ustats, name='ustats'),
     url(r'^allstats$', views.allstats, name='allstats'),
-    url(r'^nocookies$', views.nocookies, name='nocookies')
+    url(r'^nocookies$', views.nocookies, name='nocookies'),
+    url(r'^vanillalm$', views.vanillalm, name='vanillalm')
 
 ]

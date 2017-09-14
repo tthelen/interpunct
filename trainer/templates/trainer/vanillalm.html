@@ -1,0 +1,20 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Umleitung{% endblock %}
+
+{% block main %}
+<h2>Umleitung</h2>
+<p>&nbsp;</p>
+ <p>
+ Lernmoduldaten aus Stud.IP werden übernommen...
+ </p>
+
+    <script>
+      $( document ).ready(function() {
+        VanillaLM.getActor(function (actor) {
+            var user_id = actor.id; //a unique identified of the actor (or null)
+            window.location = "{% url 'task' %}?uname="+user_id;
+      });
+    });
+    </script>
+{% endblock %}

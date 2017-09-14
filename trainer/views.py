@@ -565,6 +565,8 @@ def nocookies(request):
     uname = request.GET.get('uname','')
     return render(request, 'trainer/nocookies.html', locals())
 
+def vanillalm(request):
+    return render(request, 'trainer/vanillalm.html', locals())
 
 def stats(request):
 
@@ -595,6 +597,7 @@ def ustats(request):
     users = User.objects.all()
     return render(request, 'trainer/ustats.html', locals())
 
+
 @logged_in_or_basicauth("Bitte einloggen")
 def mystats(request):
     user = User.objects.get(django_user=request.user)
@@ -622,12 +625,14 @@ def mystats_rule(request):
     else:
         return HttpResponseBadRequest("No rule_id given.")
 
+
 def allstats(request):
 
     # id = int(request.GET.get('sid',1))
     sentences = Sentence.objects.all()
 
     return render(request, 'trainer/allstats.html', locals())
+
 
 @logged_in_or_basicauth("Bitte einloggen")
 def allstats_sentence(request):

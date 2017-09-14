@@ -18,7 +18,10 @@ class Command(BaseCommand):
                         'correct',          # .correct
                         'left_context',     # built from .left
                         'comma_set',        # .commaset
+                        'comma_presented',
                         'comma_correct',    # .commastring
+                        'correction_type',  # explanation of correction
+                        'correction_code',  # code of correction
                         'right_context',    # built from .right
                         'time',             # Solution.time_elapsed
                         'user_study',       # Studienabschluss
@@ -40,7 +43,7 @@ class Command(BaseCommand):
 
         for s in Solution.objects.all():
 
-            sols = s.for_export()
+            sols = s.for_export_correct()
 
             for sol in sols:
 
@@ -52,14 +55,21 @@ class Command(BaseCommand):
                 row.append(sol['solution'].id)
                 row.append(sol['solution'].sentence.id)
                 row.append(sol['user'].id)
-                row.append(sol['rule'].code)
-                row.append(sol['rule'].rule or sol['rule'].code)
+                if sol['rule']:
+                    row.append(sol['rule'].code)
+                    row.append(sol['rule'].rule or sol['rule'].code)
+                else:
+                    row.append("")
+                    row.append("")
                 row.append(1 if sol['correct'] else 0)
                 lc = "".join(["{}{}".format(w['word'], w['commaset']+(" " if w['commaset'] == ',' else ''))
                               for w in sol['left']]) + sol['word']
                 row.append(lc)
                 row.append(sol['commaset'])
+                row.append(sol['commapresented'])
                 row.append(sol['commastring'])
+                row.append(sol['correction_type'])
+                row.append(sol['correction_code'])
                 rc = "".join(["{}{}".format(w['word'], w['commaset']+(" " if w['commaset'] == ',' else ''))
                               for w in sol['right'][:-1]]) + sol['right'][-1]['word']
                 row.append(rc)
@@ -84,7 +94,7 @@ class Command(BaseCommand):
                     self.stdout.write('{} Zeilen erstellt'.format(count))
 
         self.stdout.write("Schreibe XLSX-Datei")
-        with open('data/output_solutions.xlsx', 'wb') as f:
+        with open('data/output_solutions_correct.xlsx', 'wb') as f:
             f.write(data.xlsx)
 
         self.stdout.write(self.style.SUCCESS('Successfully exported {} solutions.'.format(count)))

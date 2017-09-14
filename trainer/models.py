@@ -976,8 +976,213 @@ class Solution(models.Model):
     def __str__(self):
         return "User {} for Sentence {} - {} ms".format(self.user.id, self.sentence.id, self.time_elapsed)
 
-
     def for_export(self):
+
+        if self.type == 'set':
+            return self.for_export_set()
+        elif self.type == 'explain':
+            return self.for_export_explain()
+        elif self.type == 'correct':
+            return self.for_export_correct()
+        else:
+            return []
+
+    def for_export_explain(self):
+        """Return cases (1 case per one of the 3 rules) as a list of dictionaries with:
+            'solution': Solution object
+            'left': List of all positions left to current focus position (
+                    Position: Dictionary of 'word', 'commastring', 'commaset', 'rules', 'correct'
+            'right': List of all positions right of current focus position
+            'rule': current focus rule
+            'explain_correct': is the rule correct?
+            'explain_chosen': has the rule been chosen?
+            'solution_correct': was the rule chosen correctly (combination of correct and chosen)
+            'user': current focus user
+            'word': word left of focus position
+            'commastring': correct comma string for focus position
+            'commaset': set comma string for focus position
+            'correct': is comma at focus position correct?
+            'context1_rule': other rule in selection
+            'context1_correct': other rule in selection correct?
+            'context1_chosen': other rule in selection chosen?
+            'context2_rule': other rule in selection
+            'context2_correct': other rule in selection correct?
+            'context2_chosen': other rule in selection chosen?
+        """
+        w = self.sentence.get_words_commas_rules()
+        words = [{'word': word, 'commastring': comma, 'rules': rules} for [word, comma, rules] in
+                 w]  # words is list of dictionaries
+
+        # solutions haben die Form: Kommaposition|Regel1:korrekt?:gewählt?
+        (idx, rulestring) = self.solution.split('|')
+        idx = int(idx)-1  # position is a number
+        # rules = [[rule1,correct?,chosen?], [rule2,correct?,chosen?], [rule3,correct?,chosen?]]
+        rules = [r.split(':') for r in rulestring.split(',')]
+
+        cases=[]
+        for r in [(0,1,2), (1,0,2), (2,0,1)]:
+            rule1 = rules[r[0]]
+            rule2 = rules[r[1]]
+            rule3 = rules[r[2]]
+            c = dict(words[idx])
+            c['left'] = words[:idx]  # left context with current word
+            c['right'] = words[idx+1:]  # right contect without current word
+            c['solution'] = self
+            c['user'] = self.user
+            c['rule'] = Rule.objects.get(pk=rule1[0])
+            c['explain_correct'] = rule1[1]
+            c['explain_chosen'] = rule1[2]
+            c['solution_correct'] = (rule1[1] == rule1[2])
+            c['context1_rule'] = Rule.objects.get(pk=rule2[0])
+            c['context1_correct'] = rule2[1]
+            c['context1_chosen'] = rule2[2]
+            c['context2_rule'] = Rule.objects.get(pk=rule3[0])
+            c['context2_correct'] = rule3[1]
+            c['context2_chosen'] = rule3[2]
+            cases.append(c)
+        return cases
+
+    def for_export_correct(self):
+        """Return cases (1 case per potential comma position and rule) as a list of dictionaries with:
+            'solution': Solution object
+            'left': List of all positions left to current focus position (
+                    Position: Dictionary of 'word', 'commastring', 'commaset', 'rules', 'correct'
+            'right': List of all positions right of current focus position
+            'rule': current focus rule
+            'user': current focus user
+            'word': word left of focus position
+            'commastring': correct comma string for focus position
+            'commagiven": given comma string for fouc positon
+            'commaset': set comma string for focus position
+            'correct': is comma at focus position correct?
+            'correction_type': explanation of correctness
+            'correction_code': (correct, presented, marked) = "100","101","110","111","000","001","010","011"
+        """
+
+        words = self.for_render_correct()
+        cases = []
+
+        def add_case(idx, w, r):
+            c = dict(w)
+            c['left'] = words[:idx]  # left context with current word
+            c['right'] = words[idx+1:]  # right contect without current word
+            c['solution'] = self
+            c['user'] = self.user
+            c['rule'] = r
+            cases.append(c)
+
+        for idx in range(len(words)-1):
+            w = words[idx]
+
+            found = False
+            for r in w['rules']:  # one entry per rule
+                add_case(idx, w, r)
+                found = True
+
+            if not found:  # at least one entry per position
+                add_case(idx, w, None)
+
+        return cases
+
+    def for_render_correct(self, w=False, ctl=False, cpl=False):
+        """Returns a list of information useful for rendering a rated solution.
+
+        w = result of get_words_commas_rules for the soltions's sentence
+        Depending on type, list contains:
+        - for "set": dictionaries with keys 'word', 'commastring', 'commaset', 'rules', 'correct'
+        - for "correct": nothing yet
+        - for "explain": nothing yet
+        """
+
+        solution_correct = True  # is the entire solution correct?
+
+        if self.type == 'correct':
+
+            if not w:
+                w = self.sentence.get_words_commas_rules()
+            words = [{'word': word, 'commastring': comma, 'rules': rules} for [word, comma, rules] in
+                     w]  # words is list of dictionaries
+            resp = []
+            if ctl:
+                solution_array = ctl
+            else:
+                solution_array = self.sentence.get_commatypelist()
+            if cpl:
+                pairs = cpl
+            else:
+                pairs = self.sentence.get_commapairlist()
+
+            user_array = self.solution.split(',')  # # contais pairs of (comma present / marked), e.g. 00, 01, 10, 11
+            for i in range(len(solution_array)):
+                (presented, marked) = user_array[i]
+                presented = int(presented)  # string "0" or "1" to int
+                marked = int(marked)  # string "0" or "1" to int
+                words[i]['commaset'] = "," if marked else " "  # save string for originally set/nonset comma
+                words[i]['commapresented'] = "," if presented else " " # original comma presentation
+
+                if len(solution_array[i]) == 0 and marked:  # comma in the wild
+                    words[i]['correct'] = False
+                    solution_correct = False
+                    words[i]['rules'].append(Rule.objects.get(code='E1'))
+                    words[i]['correction_type'] = "überflüssiges Komma nicht gelöscht" if presented else "überflüssiges Komma gesetzt"
+                    words[i]['correction_code'] = "011" if presented else "001"
+                elif len(solution_array[i]) == 0 and not marked:  # no comma at non-rule position
+                    words[i]['correct'] = True
+                    words[i]['correction_type'] = "überflüssiges Komma gelöscht" if presented else "korrekterweise kein Komma gesetzt"
+                    words[i]['correction_code'] = "010" if presented else "000"
+                elif len(solution_array[i]) != 0:  # comma at rule position
+                    rules = Rule.objects.filter(code=solution_array[i][0])
+                    first = True  # save response in first run
+                    for rule in rules:
+                        if (rule.mode == 0 and not marked) or \
+                                (rule.mode == 2 and marked):
+                            corr = True
+                        elif rule.mode == 1:  # optional commas - consider pairs!
+                            if pairs[i] != 0:  # if comma is part of a pair
+                                # first part is always correct
+                                # second part is the error
+                                found = False
+                                if i > 0:
+                                    for j in range(i):  # look at the beginning of the sentence to find 1st part of pair
+                                        if pairs[j] == pairs[i]:
+                                            corr = (marked == int(user_array[j][1]))
+                                            found = True
+                                            break
+                                if not found:  # first occurence is always correct
+                                    corr = True
+                            else:
+                                corr = True
+                        else:
+                            corr = False
+                        if first:  # save response only for first rule (others must be same)
+                            if not corr:
+                                solution_correct = False
+                            words[i]['correct'] = corr
+                            if corr:
+                                if marked:
+                                    words[i]['correction_type'] = "korrekt gesetztes Komma stehengelassen" if presented else "nicht vorhandenes Komma korrekt gesetzt"
+                                    words[i]['correction_code'] = "111" if presented else "101"
+                                else:
+                                    words[i]['correction_type'] = "überflüssiges Komma gelöscht" if presented else "korrekterweise kein Komma gesetzt"
+                                    words[i]['correction_code'] = "010" if presented else "000"
+                            else:
+                                if marked:
+                                    words[i]['correction_type'] = "überflüssiges Komma nicht gelöscht" if presented else "überflüssiges Komma gesetzt"
+                                    words[i]['correction_code'] = "011" if presented else "001"
+                                else:
+                                    words[i]['correction_type'] = "korrektes Komma gelöscht" if presented else "fehlendes Komma nicht gesetzt"
+                                    words[i]['correction_code'] = "110" if presented else "100"
+
+            for w in words:  # add correct marker for entire solution to every fields
+                w['solution_correct'] = solution_correct
+
+            return words
+
+        else:
+            return []
+
+
+    def for_export_set(self):
         """Return cases (1 case per rule per focus position per solution) as a list of dictionaries with:
             'solution': Solution object
             'left': List of all positions left to current focus position (
@@ -1025,7 +1230,7 @@ class Solution(models.Model):
         """Returns a list of information useful for rendering a rated solution.
         
         w = result of get_words_commas_rules for the soltions's sentence
-        Depending on type, list containts:
+        Depending on type, list contains:
         - for "set": dictionaries with keys 'word', 'commastring', 'commaset', 'rules', 'correct'
         - for "correct": nothing yet
         - for "explain": nothing yet
@@ -1094,6 +1299,7 @@ class Solution(models.Model):
                 w['solution_correct'] = solution_correct
 
             return words
+
         else:
             return []
 
