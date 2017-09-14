@@ -8,14 +8,19 @@
       <auth-required>false</auth-required>
       <introspection-schemas>*</introspection-schemas>
     </data-source>
-    <data-source name="interpunct@localhost" uuid="21f48281-0b39-4e46-9843-a8bc41fdd175">
+    <data-source name="interpunct2@localhost" uuid="21f48281-0b39-4e46-9843-a8bc41fdd175">
       <database-info product="PostgreSQL" version="9.6.3" jdbc-version="4.0" driver-name="PostgreSQL Native Driver" driver-version="PostgreSQL 9.4.1212">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
       <user-name>postgres</user-name>
-      <introspection-schemas>interpunct:public</introspection-schemas>
+      <introspection-schemas>interpunct:public|interpunct2:public</introspection-schemas>
+    </data-source>
+    <data-source name="postgres@localhost" uuid="b6e423cc-b6f4-4b99-a6b9-9e5734641951">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <secret-storage>master_key</secret-storage>
+      <first-sync>true</first-sync>
     </data-source>
   </component>
 </project>

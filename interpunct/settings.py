@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'interpunct.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'interpunct',
+        'NAME': 'interpunct2',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
