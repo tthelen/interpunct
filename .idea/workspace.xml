@@ -1,27 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="- added ustat">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/keine_kommakönige_grimm.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/keine_kommakönige_osterheider.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/kommakönige_grimm.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/kommakönige_osterheider.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/output.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/output_sentences.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/output_solutions.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/output_solutions_correct.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/output_solutions_explain.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/output_users.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/from_ortho_sem.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/kommkoenige_grimm.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/kommkoenige_neg_grimm.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/kommkoenige_neg_osterheider.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/kommkoenige_osterheider.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/user.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" />
+    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interpunct/settings.py" afterPath="$PROJECT_DIR$/interpunct/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/templates/trainer/base.html" afterPath="$PROJECT_DIR$/trainer/templates/trainer/base.html" />
     </list>
     <ignored path="interpunct.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -151,11 +133,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/base.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
               <caret line="8" column="70" lean-forward="false" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/interpunct/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="80" column="27" lean-forward="false" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -286,7 +278,6 @@
         <option value="$PROJECT_DIR$/data/from_ortho_sem.csv" />
         <option value="$PROJECT_DIR$/check.py" />
         <option value="$PROJECT_DIR$/trainer/management/commands/import_orthosem.py" />
-        <option value="$PROJECT_DIR$/interpunct/settings.py" />
         <option value="$PROJECT_DIR$/trainer/management/commands/export_solutions.py" />
         <option value="$PROJECT_DIR$/trainer/management/commands/export_solutions_explain.py" />
         <option value="$PROJECT_DIR$/trainer/management/commands/export_sentences.py" />
@@ -298,6 +289,7 @@
         <option value="$PROJECT_DIR$/trainer/templates/trainer/vanillalm.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/base.html" />
+        <option value="$PROJECT_DIR$/interpunct/settings.py" />
       </list>
     </option>
   </component>
@@ -366,65 +358,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="trainer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trainer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trainer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="images" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -826,13 +760,6 @@
       <option name="presentableId" value="Default" />
       <updated>1479331318085</updated>
     </task>
-    <task id="LOCAL-00017" summary="- Fragebogen zum Einsiteg&#10;- Umstellung auf Bootstrap">
-      <created>1495230898241</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1495230898241</updated>
-    </task>
     <task id="LOCAL-00018" summary="- neue Regel: Vorfeldkomma&#10;- Neue Beispielsätze">
       <created>1495232898937</created>
       <option name="number" value="00018" />
@@ -1169,7 +1096,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505380388170</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="- added ustat">
+      <created>1505380464037</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1505380464037</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1185,14 +1119,14 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22814499" sideWeight="0.53846157" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22814499" sideWeight="0.5362095" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15245202" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3445287" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28494042" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29685807" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39653304" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22814499" sideWeight="0.46153846" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22814499" sideWeight="0.46379045" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22318527" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
@@ -1454,14 +1388,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interpunct/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1207">
-          <caret line="71" column="9" lean-forward="false" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/b6e423cc-b6f4-4b99-a6b9-9e5734641951/console.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1648,6 +1574,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="70" lean-forward="false" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interpunct/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="80" column="27" lean-forward="false" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
           <folding />
         </state>
       </provider>
