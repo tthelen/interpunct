@@ -1,0 +1,32 @@
+<td></td>
+<td>
+<p>{{ sentence.text }}</p>
+{% if sentence.count_correct_solutions %}
+    <p><div class="interaction">{% for sw in sentence.for_render_summary_correct %}{{ sw.0 }} {% if sw.1 %},({{ sw.1 }}){% endif %} {% endfor %}</div></p>
+{% endif %}
+    {% for sfr in sentence.for_render_correct %}
+    {% for x in sfr.render %}
+            {% if forloop.first %}
+                <div class="sentence-correct">
+            {% endif %}
+            {{ x.word }}<span {% if x.correct %}
+                              {% if x.rules.0.mode == 2 %} style="background-color:#85e278;" class="markingright"
+                              {% elif x.rules.0.mode == 1 %} style="background-color:#219fff;" class="markingright"
+                              {% endif %}
+                           {% elif not x.correct %}
+                              {% if x.rules.0.mode == 2 %} style="background-color:#ff876e;" class="markingwrong"
+                              {% elif x.rules.0.mode == 1 %} style="background-color:#ff876e; border:3px solid red;" class="markingwrong"
+                              {% elif x.rules.0.mode == 0 %} style="background-color:#ff876e;" class="markingwrong"
+                              {% endif %}
+                           {% endif %}
+            >{{ x.commaset }}&nbsp;</span>
+            {% for y in x.rules %}
+                <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-info{% endif %}">{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>{% else %}{{ y.rule }}{% endif %}</span>
+            {% endfor %}
+            {% if forloop.last %}
+                 ({{ sfr.total }} Vorkommen)</div>
+            {% endif %}
+    {% endfor %}
+{% endfor %}
+</td>
+<td>({{ sentence.count_correct_solutions }}&nbsp;Lösungen)</td>

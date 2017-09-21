@@ -1,0 +1,55 @@
+{% extends "trainer/base.html" %}
+{%  load static %}
+
+{% block title %}Komma-Trainer - Deine Fehlerstatistik{% endblock %}
+
+{% block sidebar %}
+    <div class="rank">
+        <p>&nbsp;</p>
+        <h4>Globalstatstik</h4>
+    </div>
+{% endblock %}
+
+{% block main %}
+<h2>Globale Fehlerstatistik "Komma korrigieren"</h2>
+
+    <p>Legende:</p>
+    <ul>
+    <li><i>Er joggt</i> - Kein Komma vorgegeben, kein Komma gesetzt</li>
+    <li><i>Er, joggt</i> - Komma war vorgegeben und wurde nicht verändert</li>
+    <li><i>Er(,) joggt</i> - Komma war vorgegeben und wurde gelöscht</li>
+    <li><i>Er, (+) joggt</i> - Komma war nicht vorgegeben und wurde gesetzt</li>
+    </ul>
+    <p>&nbsp;</p>
+    <div id="sss"></div>
+    <table class="table">
+
+    {% for s in sentences %}
+        {% if s.count_correct_solutions %}
+            <tr id="sent-{{ s.id }}">
+                <td><button class="btn details" data-sid="{{ s.id }}">Details...</button></td>
+                <td>{{ s.text }}</td>
+                <td>({{ s.count_correct_solutions }}&nbsp;Lösungen)</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+
+    </table>
+
+</div>
+
+    <script>
+
+function show_sentence_details(event) {
+    var sentence_id = event.target.dataset['sid'];
+    $("#sent-"+sentence_id).load("{% url 'allstats_correct_sentence' %}?sentence_id="+sentence_id);
+}
+
+$(document).ready(function () {
+   $(".details").on("click", show_sentence_details);
+   $(".details").on("click", close_sentence_details);
+});
+
+</script>
+
+{% endblock %}

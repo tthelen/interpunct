@@ -247,8 +247,18 @@ class Sentence(models.Model):
             result.append({'render': render_one_set_solution(w,commatypetlist,commapairlist,s['solution']), 'total': s['total']})
         return result
 
+    def for_render_correct(self):
+        sols = self.solution_set.filter(type='correct').values('solution').annotate(total=Count('solution')).order_by('solution')
+        w = self.get_words_commas_rules()
+        commapairlist = self.get_commapairlist()
+        commatypetlist = self.get_commatypelist()
+        result = []
+        for s in sols:
+            result.append({'render': render_one_correct_solution(w,commatypetlist,commapairlist,s['solution']), 'total': s['total']})
+        return result
+
     def for_render_summary(self):
-        """Return array of amount of commas set."""
+        """Return array of amount of commas set for 'set comma' tasks."""
         sols = self.solution_set.filter(type='set').values('solution')
         w = self.get_words()
         sum = [0 for s in range(len(w)+1)]
@@ -260,8 +270,25 @@ class Sentence(models.Model):
 
         return list(zip(w, sum))
 
+    def for_render_summary_correct(self):
+        """Return array of amount of commas set for correction tasks."""
+        sols = self.solution_set.filter(type='correct').values('solution')
+        w = self.get_words()
+        sum = [0 for s in range(len(w)+1)]
+        for s in sols:
+            sol = s['solution'].split(',')
+            for x in range(len(sol)):
+                if sol[x] in ['01','11']:
+                    sum[x] += 1
+
+        return list(zip(w, sum))
+
     def count_set_solutions(self):
         return self.solution_set.filter(type='set').count()
+
+    def count_correct_solutions(self):
+        return self.solution_set.filter(type='correct').count()
+
 
 def render_one_set_solution(w,solution_array,pairs,solution):
 
@@ -315,6 +342,66 @@ def render_one_set_solution(w,solution_array,pairs,solution):
         w['solution_correct'] = solution_correct
 
     return words
+
+
+def render_one_correct_solution(w,solution_array,pairs,solution):
+
+    solution_correct = True  # is the entire solution correct?
+
+    words = [{'word': word, 'commastring': comma, 'rules': rules} for [word, comma, rules] in w]  # words is list of dictionaries
+    resp = []
+    user_presentation_array = solution.split(',')  # string of comma separated 00,01,10 and 11 (present/marked)
+    user_array = [x[1] for x in user_presentation_array]
+    for i in range(len(solution_array)):
+        if user_presentation_array[i] == '11':  # comma presented and marked # save string for originally set/nonset comma
+            words[i]['commaset'] = ","
+        elif user_presentation_array[i] == '00':
+            words[i]['commaset'] = " "
+        elif user_presentation_array[i] == '01':
+            words[i]['commaset'] = ", (+)"
+        else:
+            words[i]['commaset'] = "(,)"
+
+        if len(solution_array[i]) == 0 and int(user_array[i]) == 1:  # comma in the wild
+            words[i]['correct'] = False
+            solution_correct = False
+            words[i]['rules'].append(Rule.objects.get(code='E1'))
+        elif len(solution_array[i]) != 0:  # comma at rule position
+            rules = Rule.objects.filter(code=solution_array[i][0])
+            first = True  # save response in first run
+            for rule in rules:
+                if (rule.mode == 0 and user_array[i] == "0") or \
+                        (rule.mode == 2 and user_array[i] == "1"):
+                    corr = True
+                elif rule.mode == 1:  # optional commas - consider pairs!
+                    if pairs[i] != 0:  # if comma is part of a pair
+                        # first part is always correct
+                        # second part is the error
+                        found = False
+                        if i > 0:
+                            for j in range(i):  # look at the beginning of the sentence to find 1st part of pair
+                                if pairs[j] == pairs[i]:
+                                    corr = (user_array[i] == user_array[j])
+                                    found = True
+                                    break
+                        if not found:  # first occurence is always correct
+                            corr = True
+                    else:
+                        corr = True
+                else:
+                    corr = False
+                if first:  # save response only for first rule (others must be same)
+                    if not corr:
+                        solution_correct = False
+                    words[i]['correct'] = corr
+        else:
+            words[i]['correct'] = True
+
+    for w in words:  # add correct marker for entire solution to every fields
+        w['solution_correct'] = solution_correct
+
+    return words
+
 
 
 
@@ -863,11 +950,17 @@ class User(models.Model):
         }
         return perms.get(self.data_study_permission, "ungültig")
 
-    def tries(self):
-        return Solution.objects.filter(user=self).count()
+    def tries(self, type=None):
+        if not type:
+            return Solution.objects.filter(user=self).count()
+        else:
+            return Solution.objects.filter(user=self, type=type).count()
 
-    def errors(self):
-        return SolutionRule.objects.filter(solution__user=self).count()
+    def errors(self, type=None):
+        if not type:
+            return SolutionRule.objects.filter(solution__user=self).count()
+        else:
+            return SolutionRule.objects.filter(solution__user=self, solution__type=type).count()
 
     def total_time(self):
         te = Solution.objects.filter(user=self).aggregate(models.Sum('time_elapsed'))['time_elapsed__sum']
@@ -878,6 +971,7 @@ class User(models.Model):
         minutes = int(tt/60000)
         seconds = int(tt/1000) - minutes*60
         return "{:3d}:{:02d}".format(minutes, seconds)
+
 
 class UserRule(models.Model):
 

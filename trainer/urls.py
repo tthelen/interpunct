@@ -16,9 +16,11 @@ urlpatterns = [
     url(r'^mystats$', views.mystats, name='mystats'),
     url(r'^mystats_rule/$', views.mystats_rule, name='mystats_rule'),  # ajax load for single rule stat
     url(r'^allstats_sentence/$', views.allstats_sentence, name='allstats_sentence'),  # ajax load for single sentence stats
+    url(r'^allstats_correct_sentence/$', views.allstats_correct_sentence, name='allstats_correct_sentence'),  # ajax load for single sentence stats
     url(r'^stats$', views.stats, name='stats'),
     url(r'^ustats$', views.ustats, name='ustats'),
-    url(r'^allstats$', views.allstats, name='allstats'),
+    url(r'^allstats$', views.allstats, name='allstats'),  # sentence statistics for "set comma" task
+    url(r'^allstats_correct$', views.allstats_correct, name='allstats_correct'),  # sentence statistics for "correct comma" task
     url(r'^nocookies$', views.nocookies, name='nocookies'),
     url(r'^vanillalm$', views.vanillalm, name='vanillalm')
 

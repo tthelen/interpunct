@@ -641,3 +641,20 @@ def allstats_sentence(request):
         return render(request, 'trainer/partials/allstats_sentence.html', locals())
     else:
         return HttpResponseBadRequest("No rule_id given.")
+
+
+def allstats_correct(request):
+
+    # id = int(request.GET.get('sid',1))
+    sentences = Sentence.objects.all()
+
+    return render(request, 'trainer/allstats_correct.html', locals())
+
+
+def allstats_correct_sentence(request):
+    sentence_id = int(request.GET.get('sentence_id',False))
+    if sentence_id:
+        sentence = get_object_or_404(Sentence, pk=sentence_id)
+        return render(request, 'trainer/partials/allstats_correct_sentence.html', locals())
+    else:
+        return HttpResponseBadRequest("No rule_id given.")

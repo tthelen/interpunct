@@ -21,7 +21,14 @@ class Command(BaseCommand):
                         'user_sex',               # Geschlecht
                         'user_language',          # Muttersprache
                         'user_level',             # Maximaler Level
+                        'user_tries_set',   # Gesamtzahl Versuche "Komma setzen"
+                        'user_tries_correct', # Gesamtzahl Versuche "Komma korrigieren"
+                        'user_tries_explain', # Gesamtzahl Versuche "Komma erklären"
                         'user_total_tries',       # Gesamtzahl versuche
+
+                        'user_errors_set',
+                        'user_errors_correct',
+                        'user_errors_explain',
                         'user_total_errors',      # Gesamtzahl Fehler
                         # user_total_tries_set
                         # user_total_tries_correct
@@ -52,7 +59,13 @@ class Command(BaseCommand):
             row.append(u.data_sex)
             row.append(u.data_l1)
             row.append(u.rules_activated_count)
+            row.append(u.tries(type='set'))
+            row.append(u.tries(type='correct'))
+            row.append(u.tries(type='explain'))
             row.append(u.tries())
+            row.append(u.errors(type='set'))
+            row.append(u.errors(type='correct'))
+            row.append(u.errors(type='explain'))
             row.append(u.errors())
             row.append(1 if u.data_orthosem_participant else 0)
 
