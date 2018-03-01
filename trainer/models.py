@@ -189,6 +189,17 @@ class Sentence(models.Model):
 
         return list(zip(words,commas,rules))
 
+    def render_sentence_with_rules(self):
+        """Return a string indicating all rules names after each Position"""
+        s = ""
+        wwr = self.get_words_commas_rules()
+        for (word,comma,rules) in wwr:
+            s += word + comma
+            if rules:
+                s += "(" + ",".join([x.rule for x in rules]) + ") "
+        return s
+
+
     def get_commaval(self):
         """
         Where do the commas go?
@@ -203,6 +214,8 @@ class Sentence(models.Model):
 
     def get_explanations(self, commatype, user):
         """
+        Choose three explanations.
+
         :param commatype: current type
         :param user: user rank
         :return: solution
@@ -291,6 +304,17 @@ class Sentence(models.Model):
 
 
 def render_one_set_solution(w,solution_array,pairs,solution):
+    """Returns a list of words with additional information for rendering a solution.
+
+    Words are dictionaries with:
+      'word': (string) orthographic representation of the word
+      'commastring': (string) the correct string to be displayed in comma position after the word - " " or ", " or "(,) "
+      'rules': (list of Rule objects) the rules that apply to the comma position
+      'commaset': (string) a string representing the solution for the comma position as given by the user
+      'correct': (boolean) has the comma position after the word been set correctly
+      'solution_correct': (boolean) is the entire solution correct (given in every position)
+
+    """
 
     solution_correct = True  # is the entire solution correct?
 
@@ -302,6 +326,9 @@ def render_one_set_solution(w,solution_array,pairs,solution):
             words[i]['commaset'] = ","
         else:
             words[i]['commaset'] = " "
+
+        # most complicated question: Was the solution correct?
+        # the difficult case are pairs of optional commas which are only correct if both set or both left out
 
         if len(solution_array[i]) == 0 and int(user_array[i]) == 1:  # comma in the wild
             words[i]['correct'] = False
@@ -345,6 +372,17 @@ def render_one_set_solution(w,solution_array,pairs,solution):
 
 
 def render_one_correct_solution(w,solution_array,pairs,solution):
+    """Returns a list of words with additional information for rendering a correction solution.
+
+    Words are dictionaries with:
+      'word': (string) orthographic representation of the word
+      'commastring': (string) the correct string to be displayed in comma position after the word - " " or ", " or "(,) "
+      'rules': (list of Rule objects) the rules that apply to the comma position
+      'commaset': (string) a string representing the solution for the comma position as given by the user
+      'correct': (boolean) has the comma position after the word been set correctly
+      'solution_correct': (boolean) is the entire solution correct (given in every position)
+
+    """
 
     solution_correct = True  # is the entire solution correct?
 
@@ -512,6 +550,7 @@ class User(models.Model):
     ]
 
     def update_rank(self):
+        """ """
         rank_counter = 0
         dict = self.get_dictionary()
         for key in dict:
@@ -950,17 +989,29 @@ class User(models.Model):
         }
         return perms.get(self.data_study_permission, "ungültig")
 
-    def tries(self, type=None):
-        if not type:
-            return Solution.objects.filter(user=self).count()
-        else:
-            return Solution.objects.filter(user=self, type=type).count()
+    def tries(self, type=None, rule=None):
+        if not rule:  # for all rules/levels
+            if not type:
+                return Solution.objects.filter(user=self).count()
+            else:
+                return Solution.objects.filter(user=self, type=type).count()
+        else:  # for a single rule/level
+            if not type:
+                return Solution.objects.filter(user=self, sentence__rules=rule).count()
+            else:
+                return Solution.objects.filter(user=self, type=type, sentence__rules=rule).count()
 
-    def errors(self, type=None):
-        if not type:
-            return SolutionRule.objects.filter(solution__user=self).count()
-        else:
-            return SolutionRule.objects.filter(solution__user=self, solution__type=type).count()
+    def errors(self, type=None, rule=None):
+        if not rule:  # for all rules/levels
+            if not type:
+                return SolutionRule.objects.filter(solution__user=self).count()
+            else:
+                return SolutionRule.objects.filter(solution__user=self, solution__type=type).count()
+        else:  # for a single rule/level
+            if not type:
+                return SolutionRule.objects.filter(solution__user=self, rule=rule).count()
+            else:
+                return SolutionRule.objects.filter(solution__user=self, solution__type=type, rule=rule).count()
 
     def total_time(self):
         te = Solution.objects.filter(user=self).aggregate(models.Sum('time_elapsed'))['time_elapsed__sum']

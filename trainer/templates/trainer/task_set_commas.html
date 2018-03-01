@@ -3,10 +3,13 @@
 {% block title %}Komma-Trainer - Übung: Kommas setzen{% endblock %}
 
 {% block main %}
-    <h2 class="task_header">Übung: Komma setzen</h2>
-    <p class="manual">Anleitung: <br>Setze alle notwendigen Kommas, indem Du auf die Wortzwischenräume klickst. Optionale Kommas
-    kannst Du setzen, musst Du aber nicht.
-    </p>
+    <h2 class="task_header">Übung: Komma setzen
+            <button class="btn btn-info"
+            data-toggle="popover"
+            title="Anleitung"
+            data-content="Setze alle notwendigen Kommas, indem Du auf die Wortzwischenräume klickst.
+                          Optionale Kommas kannst Du setzen, musst Du aber nicht.">?</button>
+    </h2>
     <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
         <div class="interaction">
 {% spaceless %}

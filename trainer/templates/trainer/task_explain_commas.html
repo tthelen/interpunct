@@ -3,8 +3,12 @@
 {% block title %}Komma-Trainer - Übung: Erkläre die Kommaposition{% endblock %}
 
 {% block main %}
-    <h2 class="task_header">Übung: Erkläre die Kommaposition</h2>
-    <p class="rank">Anleitung: Wähle für die markierte Kommaposition die passenden Regeln aus. Insbesondere bei höheren Leveln können auch mehrere oder gar alle Regeln passen.</p>
+    <h2 class="task_header">Übung: Erkläre die Kommaposition
+        <button class="btn btn-info"
+            data-toggle="popover"
+            title="Anleitung"
+            data-content="Wähle für die markierte Kommaposition die passenden Regeln aus. Insbesondere bei höheren Leveln können auch mehrere oder gar alle Regeln passen.">?</button>
+    </h2>
 
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     <div class="interaction">

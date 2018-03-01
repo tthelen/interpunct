@@ -278,7 +278,7 @@ body {
 
 .markedincorrect {
     border-radius: 0px;
-    border-bottom: rgba(255,0,0,0.8) 4px solid;
+    border-bottom: rgba(0,0,200,0.5) 4px solid;
 }
 
 .markingright::after { color: green; content: "✔"; }

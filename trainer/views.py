@@ -370,6 +370,11 @@ def start(request):
 
     return redirect("task")
 
+
+def index(request):
+    """Display index page."""
+    return render(request, 'trainer/index.html', locals())
+
 def profile(request):
     """
         Receives request for a profile page
