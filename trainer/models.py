@@ -22,9 +22,6 @@ class Rule(models.Model):
     description = models.CharField(max_length=2048)
     rule = models.CharField(max_length=255)
     example = models.CharField(max_length=2048, default='')
-    # example1 = django.db.models.ForeignKey('Sentence')
-    # example2 = django.db.models.ForeignKey('Sentence')
-    # example3 = django.db.models.ForeignKey('Sentence')
 
     def __str__(self):
         return self.code
@@ -85,22 +82,6 @@ class Sentence(models.Model):
         """
         return [] # re.split(r'[,]+', self.comma_select.strip())
 
-    def set_comma_select(self, user_select_str):
-        """
-        Set how much times certain comma was selected
-        :param boolean_str: string of seleced commas
-        """
-        return
-
-        #selects = self.get_commaselectlist();
-        #user_select_arr = re.split(r'[,]+', user_select_str)
-        #for i in range(len(self.get_commalist())):
-        #    if i != len(self.get_commalist())-1:
-        #        selects[i] = str(int(selects[i]) + int(user_select_arr[i])) + ","
-        #    else:
-        #        selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
-        #self.comma_select = "".join(selects)
-        #self.save()
 
     def get_words(self):
         """
@@ -217,7 +198,7 @@ class Sentence(models.Model):
         Choose three explanations.
 
         :param commatype: current type
-        :param user: user rank
+        :param user: user object
         :return: solution
         """
 
@@ -371,7 +352,7 @@ def render_one_set_solution(w,solution_array,pairs,solution):
     return words
 
 
-def render_one_correct_solution(w,solution_array,pairs,solution):
+def render_one_correct_solution(w, solution_array, pairs, solution):
     """Returns a list of words with additional information for rendering a correction solution.
 
     Words are dictionaries with:
@@ -516,39 +497,6 @@ class User(models.Model):
 
     django_user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, default=None)
 
-    rule_order = [
-        "A1",  # 1 GLEICHRANG
-        "A2",  # 2 ENTGEGEN
-        "B1.1",  # 3 NEBEN
-        "B2.1",  # 4 UMOHNESTATT
-        "C1",  # 5 PARANTHESE
-        "D1",  # 6 ANREDE/AUSRUF
-        "B1.2",  # 7 NEBEN EINLEIT
-        "C2",  # 8 APPOSITION
-        "A3",  # 9 SATZREIHUNG
-        "C5",  # 10 HINWEIS
-        "B1.5",  # 11 FORMELHAFT
-        "A4",  # 12 GLEIHRANG KONJUNKT
-        "D3",  # 13 BEKTRÄFT
-        "B2.2",  # 14
-        "C3.1",  # 15
-        "B2.3",  # 16
-        "C3.2",  # 17
-        "B2.4.1",  # 18
-        "C4.1",  # 19
-        "B2.4.2",  # 20
-        "B2.5",  # 21
-        "C6.1",  #22
-        "C6.2",  # 23
-        "C6.3.1",  # 24
-        "C6.3.2",  # 25
-        "C6.4",  # 26
-        "C7",  # 27
-        "B1.3",  # 28 NEBEN KONJUNKT
-        "B1.4.1",  # 29
-        "B1.4.2",  # 30
-    ]
-
     def update_rank(self):
         """ """
         rank_counter = 0
@@ -558,11 +506,11 @@ class User(models.Model):
                 a, b = re.split(r'/', dict[key])
                 points = int(b)-int(a)
                 if points >= 50:
-                    rank_counter +=4
+                    rank_counter += 4
                 if points >= 25:
-                    rank_counter +=2
-                if  points >= 10:
-                    rank_counter +=1
+                    rank_counter += 2
+                if points >= 10:
+                    rank_counter += 1
         if rank_counter == len(dict)-1:
             self.user_rank = 1
             self.save()
@@ -607,35 +555,6 @@ class User(models.Model):
         django_user_login(request, self.django_user)
         return True
 
-    def progress(self):
-        """Advance to next level, if appropriate.
-        
-        Returns (new_rule, finished?) 
-        new_rule is False if no level progress, the newly activated Rule object otherwise.
-        finished is false if not all rules are activated and true if all Rules are activated
-        """
-
-        # highest level reached?
-        if self.rules_activated_count == len(self.rule_order):
-            return (False, True)
-
-        # d = self.get_dictionary()
-        last_rule = self.rule_order[self.rules_activated_count - 1]
-        ur = UserRule.objects.get(user=self, rule=Rule.objects.get(code=last_rule))
-        # advancement criterion: at least 3 tries, less than half of them wrong
-        # print("CHECK FOR PROGRESS: {},{},{}".format(ur.rule.code, ur.total, ur.correct))
-        if ur.total >= 4 and ur.correct >= (ur.total / 2):
-            self.rules_activated_count += 1
-            self.save()
-            # create and activate new rule for user
-            new_rule = Rule.objects.get(code=self.rule_order[self.rules_activated_count - 1])
-            new_ur = UserRule.objects.get(rule=new_rule, user=self)
-            new_ur.active = True
-            new_ur.save()
-            return (new_rule, (self.rules_activated_count == len(self.rule_order)))
-
-        return (False, False)
-
     def current_rule(self):
         if self.rules_activated_count == len(self.rule_order):
             return False
@@ -645,9 +564,8 @@ class User(models.Model):
         """Return UserRule and examples sentence data for displaying level and expanations. At most 5 rules sorted by box position."""
 
         limit = min(self.rules_activated_count, 5)
-        res = UserRule.objects.filter(user=self, active=1).order_by('box')[:limit]
+        res = UserRule.objects.filter(user=self, active=1).order_by('box')[:limit]  # TODO: code still depends on boxes (LeitnerStrategy)
         return res
-
 
     def count(self, correct):
 
@@ -673,7 +591,7 @@ class User(models.Model):
                 type_dict[a]=b
         return type_dict
 
-    def save_dictionary(self,update):
+    def save_dictionary(self, update):
         """
         Save updated dictionary to the database
         :param update: updated dictionary
@@ -829,90 +747,6 @@ class User(models.Model):
                         first = False
 
         return resp
-
-    def roulette_wheel_selection(self):
-        """
-        gets a new sentence via roulette wheel, chooses random among sentences
-        :return: a randomly chosen SentenceRule object
-        """
-
-        roulette_list = []
-        active_rules = 0
-        for ur in UserRule.objects.filter(user=self, active=True).all():
-            for i in range(2**(4-ur.box)):  # Spaced repetition algorithm: Each box is half probable than previous
-                roulette_list.append(ur.rule.code)
-            active_rules += 1
-
-        if active_rules >= 4:  # error rules are activated with fourth rule
-
-            for r in Rule.objects.filter(code__startswith='E').all():
-                    # all error rules are treated like box 3
-                    # TODO: treat error rules like normal rules
-                    roulette_list.append(r.code)
-                    roulette_list.append(r.code)
-        # print(roulette_list)
-        index = random.randint(0, len(roulette_list)-1)
-        rule_obj = Rule.objects.filter(code=roulette_list[index])
-        # print("Select for {}".format(rule_obj))
-        # filter out all sentences that have higher rules than current user's progress
-        possible_sentences = []
-        for sr in SentenceRule.objects.filter(rule=rule_obj[0],sentence__active=True).all():
-            ok = True
-            for r in sr.sentence.rules.all():
-                if r.code in self.rule_order and (self.rule_order.index(r.code) > (self.rules_activated_count-1)):
-                    ok = False
-                    break
-            if ok:
-                try:
-                    us = UserSentence.objects.get(user=self, sentence=sr.sentence)
-                    count = us.count
-                except UserSentence.MultipleObjectsReturned:
-                    count = 0
-                except UserSentence.DoesNotExist:
-                    count = 0
-                possible_sentences.append([sr,count])  # collect sentence and per user counter for the sentence
-
-        if len(possible_sentences) == 0: # HACK: No sentence? Try again # TODO: find a real solution
-            return self.roulette_wheel_selection()
-
-        possible_sentences.sort(key=lambda sentence:sentence[1])  # sort ascending by counts
-
-        if possible_sentences[0][1] == 0:  # first use all sentences at least once
-            num = 1                        # i.e. if least used sentence has zero count, use it
-        else:
-            num = min(3,len(possible_sentences))  # else choose from three least often used
-
-        return random.choice(possible_sentences[:num])[0]  # randomly choose and return SentenceRule object
-
-
-    def may_roulette_wheel_selection(self):
-        """
-        gets a new may sentence via roulette wheel, chooses random among sentences
-        :return: roulette_list with accumulated rules
-        """
-        may_obj = Rule.objects.filter(mode=1)
-        dict = self.get_dictionary()
-        may_roulette_list = []
-        sum = 0
-
-        for rule in range(len(may_obj) - 1):
-            a, b = re.split(r'/', dict[str(may_obj[rule])])
-            sum += int(b)
-
-        for rule in range(len(may_obj) - 1):
-            a, b = re.split(r'/', dict[str(may_obj[rule])])
-            if int(b) != 0:
-                ratio = int((int(a) / sum) * 100)
-            else:
-                ratio = 1
-            for i in range(ratio):
-                may_roulette_list.append(may_obj[rule])
-
-        rule_index = random.randint(0, len(may_roulette_list) - 1)
-        sent_obj = SentenceRule.objects.filter(rule=may_roulette_list[rule_index])
-        sent_index = random.randint(0, len(sent_obj) - 1)
-
-        return sent_obj[sent_index].sentence
 
     def sentence_selector(self):
         may_obj = Rule.objects.filter(mode=1)

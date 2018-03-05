@@ -159,64 +159,48 @@ def task(request):
     display_rank = True  # show the rank in output? (not on welcome and rule explanation screens)
     finished = False # default is: we're not yet finished
 
+    # new user: show welcome page
     if not user.data:
         display_rank=False
         return render(request, 'trainer/welcome.html', locals())
 
-    if user.rules_activated_count == 0: # new user without activated rules
+    # user without activated rules: show first rule page
+    if user.rules_activated_count == 0:
         new_rule = user.init_rules()
         display_rank=False
         level = 0
         return render(request, 'trainer/level_progress.html', locals())
 
-    # normal task selection process
-    (new_rule, finished) = user.progress()
-    level = user.rules_activated_count
-    rank = user.get_user_rank_display()
+    # fecth and prepare information about level for template
+    level = user.rules_activated_count  # user's current level
+    rank = user.get_user_rank_display()  # Django builtin get_FOO_display method: provide human readable value for choice fields
     leveldsp = user.level_display()
-    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)
+    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
 
-    if new_rule:  # level progress: show new rules instead of task
+    # select strategy
+    strategy = None
+    if 1:
+        from trainer.strategies.leitner import LeitnerStrategy
+        strategy = LeitnerStrategy()
+
+    # normal task selection process
+    (new_rule, finished) = strategy.progress(user)  # checks if additional rule should be activated or user has finished all levels
+
+    # level progress: show new rules instead of task
+    if new_rule:
         return render(request, 'trainer/level_progress.html', locals())
 
     # choose a sentence from roulette wheel (the bigger the error for
     # a certain rule, the more likely one will get a sentence with that rule)
-    #TODO: fetch errors
-    sentence_rule = user.roulette_wheel_selection()
+    # TODO: fetch errors
+    sentence_rule = strategy.roulette_wheel_selection(user)  # choose sentence and rule
     sentence = sentence_rule.sentence
     rule = sentence_rule.rule
+
+    # prepare some special views for templates
     words = sentence.get_words()  # pack all words of this sentence in a list
-
     comma = sentence.get_commalist() # pack all commas [0,1,2] in a list
-    words_and_commas = list(zip(words,comma+[0]))
-    comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
-    comma_pairs = sentence.get_commapairlist()  # pack all comma pairs [0,0,1,...] of this sentence in a list
-
-    comma_to_check=[]
-    for ct in comma_types:
-        if ct != [] and ct[0][0] != 'E': # rule, but no error rule
-            # at a rule position include comma with 50% probabily
-            comma_to_check.append(random.randint(0,1))
-        else:  # 1/6 prob. to set comma in no-comma position
-            comma_to_check.append(random.choice([1,0,0,0,0,0]))
-
-    comma_select = sentence.get_commaselectlist() # pack all selects in a list
-    comma_select.append('0') # dirty trick to make the comma_select and comma_types the same length as words
-    comma_types.append([])
-    comma_pairs.append(0)
-    comma_to_check.append(0)
-    # get total amount of submits
-    submits = sentence.total_submits
-
-    # printing out user results
-    #dictionary = user.comma_type_false
-    # generating tooltip content
-    # collection = []
-    #for i in range(len(comma_types)):
-    #    if submits != 0:
-    #        collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
-    #    else:
-    #        collection.append((comma_types[i], 0))
+    words_and_commas = list(zip(words,comma+[0]))  # make a combines list of both
 
     # task randomizer
     # explain task only for must or may commas, usres with at least 3 active rules and non-error rules
@@ -226,10 +210,17 @@ def task(request):
         index = 0
 
     if index < 67:  # 1/3 chance for rule explanation
-        # return render(request, 'trainer/task_set_commas.html', locals())
-        # return render(request, 'trainer/task_correct_commas.html', locals())
-
         if random.randint(0,100) > 60: # 40% chance for correct commas
+            comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
+            comma_types.append([])
+            comma_to_check = []
+            for ct in comma_types:
+                if ct != [] and ct[0][0] != 'E':  # rule, but no error rule
+                    # at a rule position include comma with 50% probabily
+                    comma_to_check.append(random.randint(0, 1))
+                else:  # 1/6 prob. to set comma in no-comma position
+                    comma_to_check.append(random.choice([1, 0, 0, 0, 0, 0]))
+            comma_to_check.append(0)
             return render(request, 'trainer/task_correct_commas.html', locals())
         else:
             return render(request, 'trainer/task_set_commas.html', locals())
@@ -248,8 +239,11 @@ def task(request):
             if r.mode > 0:
                 pos_rules.append(r)  # collect codes, not rules objects
         if pos_rules:
-            comma_candidates.append((pos,pos_rules))
+            comma_candidates.append((pos, pos_rules))
 
+    # data for template:
+    # guessing_candidates: the three rules to display
+    # guessing_postition: the comma slot position to explain
     explanation_position = random.choice(comma_candidates)
     guessing_position = explanation_position[0]
     guessing_candidates = []  # the rules to be displayed for guessing
@@ -269,82 +263,13 @@ def task(request):
             guessing_candidates.append(ar.rule)
     random.shuffle(guessing_candidates)
 
-
-    # data for template:
-    # guessing_candidates: the three rules to display
-    # guessing_postition: the comma slot position to explain
-    # sentence
-
-    # generating radio buttons content (2D array to be)
-
-
-    explanations = []
-    # list of indexes of correct solution (2D array to be)
-    index_arr = []
-
-    for i in range(len(comma_types)):
-        if len(comma_types[i]) != 0:
-            # In case there is only one comma type
-            if len(comma_types[i]) == 1:
-                options, solution_index = sentence.get_explanations(comma_types[i][0], user)
-                explanations.append(options)
-                index_arr.append([solution_index])
-            # If there are multiple types for one position
-            else:
-                # Initial Indexing
-                non_taken_positions = [0, 1, 2]
-                # Set of options
-                options = ["","",""]
-                # Set of answer positions
-                answers = []
-                # Check all the muss rules
-                for j in range(len(comma_types[i])):
-                    if Rule.objects.get(code=comma_types[i][j]).mode == 2:
-                        solution_index = random.choice(non_taken_positions)
-                        # Save the description of a comma
-                        options[solution_index] = Rule.objects.get(code=comma_types[i][j]).description
-                        # Save the index of a correct solution
-                        answers.append(solution_index)
-                        # "Mark" the index as "taken"
-                        non_taken_positions.remove(solution_index)
-                # If there are only kann rules, take those
-                if options == ["","",""]:
-                    for j in range(len(comma_types[i])):
-                        if Rule.objects.get(code=comma_types[i][j]).mode == 1:
-                            solution_index = random.choice(non_taken_positions)
-                            # Save the description of a comma
-                            options[solution_index] = Rule.objects.get(code=comma_types[i][j]).description
-                            # Save the index of a correct solution
-                            answers.append(solution_index)
-                            # "Mark" the index as "taken"
-                            non_taken_positions.remove(solution_index)
-                # If there are only must-not commas
-                if options == ["","",""]:
-                    print("Only must-nots")
-                    continue
-                # Save an array of answers in index array
-                index_arr.append(sorted(answers))
-                # Get neighboring explanations to the first comma (can be optimized)
-                rest_options, ignore_index = sentence.get_explanations(comma_types[i][0], user)
-                k = 0
-                # Array of indexes of rest_options
-                positions_in_rest_options = [0, 1, 2]
-                # ... without the index of a correct solution
-                positions_in_rest_options.remove(ignore_index)
-                # Do until all positions are taken
-                while len(non_taken_positions) != 0:
-                    random_sol_index = random.choice(non_taken_positions)
-                    random_rest_option = random.choice(positions_in_rest_options)
-                    options[random_sol_index] = rest_options[random_rest_option]
-                    non_taken_positions.remove(random_sol_index)
-                    positions_in_rest_options.remove(random_rest_option)
-                explanations.append(options)
     return render(request, 'trainer/task_explain_commas.html', locals())
 
 
 
 @logged_in_or_basicauth("Bitte einloggen")
 def start(request):
+    """Store questionnaire results and redirect to task."""
     user = User.objects.get(django_user=request.user)
     vector = "{}:{}-{}:{}+{}+{}:{}:{}:{}".format(
         request.GET.get('hzb',0),
@@ -402,37 +327,40 @@ def profile(request):
     return render(request, 'user_profile.html', locals())
 
 @logged_in_or_basicauth("Bitte einloggen")
-def submit_task1(request):
+def submit_task_set_commas(request):
     """
-    Receives an AJAX GET request containing a solution bitfield for a sentence.
+    Receives an AJAX GET request containing a solution bitfield for a 'set' task.
     Saves solution and user_id to database.
 
     :param request: Django request
     :return: nothing
     """
-    response = []
 
+    # extract request parameters
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     time_elapsed = request.GET.get('tim',0)
-    sentence.set_comma_select(user_solution)
-    sentence.update_submits()
-    user = User.objects.get(django_user=request.user)
+
+    # save solution
+    user = User.objects.get(django_user=request.user)  # current user
     solution = Solution(user=user, sentence=sentence, type="set", time_elapsed=time_elapsed, solution="".join(user_solution))
     solution.save() # save solution to db
-    response = user.eval_set_commas(user_solution, sentence, solution)
-    user.update_rank()
+
+    # calculate response
+    response = user.eval_set_commas(user_solution, sentence, solution)  # list of dictionaries with keys 'correct' and 'rule'
+    user.update_rank()  # TODO: check if no longer used?
+
+    # update per user counter for sentence (to avoid repetition of same sentences)
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
         us.save()
-    except UserSentence.DoesNotExist:
+    except UserSentence.DoesNotExist:  # user did not yet encouter this sentence
         UserSentence(user=user, sentence=sentence, count=1).save()
-    except UserSentence.MultipleObjectsReturned:  # somehow multiple entries existed..
+    except UserSentence.MultipleObjectsReturned:  # somehow multiple entries existed... (should not happen)
         UserSentence.objects.filter(user=user, sentence=sentence).delete()
         UserSentence(user=user, sentence=sentence, count=1).save()
 
-    # print(response)
     return JsonResponse({'submit': 'ok', 'response': response}, safe=False)
 
 
@@ -445,19 +373,21 @@ def submit_task_correct_commas(request):
     :param request: Django request
     :return: nothing
     """
-    response = []
 
-    user = User.objects.get(django_user=request.user)
+    # extract request parameters
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     time_elapsed = request.GET.get('tim',0)
-    #sentence.set_comma_select(user_solution)
-    #sentence.update_submits()
 
+    # save solution
+    user = User.objects.get(django_user=request.user)
     solution = Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution]))
     solution.save() # save solution to db
+
+    # calculate response
     response = user.count_false_types_task_correct_commas(user_solution, sentence, solution)
 
+    # update per user counter for sentence (to avoid repetition of same sentences)
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
@@ -481,11 +411,8 @@ def submit_task_explain_commas(request):
     :return: nothing
     """
 
-    user = User.objects.get(django_user=request.user)
+    # extract request parameters
     sentence = Sentence.objects.get(id=request.POST['sentence_id'])
-    sentence.update_submits()
-    user.update_rank()
-
     rules=[]
     try:
         rules.append(Rule.objects.get(code=request.POST.getlist('rule-0')[0]))
@@ -494,10 +421,10 @@ def submit_task_explain_commas(request):
     except Rule.DoesNotExist:
         return JsonResponse({'error': 'invalid rule', 'submit':'fail'})
 
-    solution=[] # solution is array of the form: rule_id:correct?:chosen?, rule_id:...
+    user = User.objects.get(django_user=request.user)
 
+    solution = [] # solution is array of the form: rule_id:correct?:chosen?, rule_id:...
     error_rules = [] # all rules with errors
-
     pos = int(request.POST['position'])+1
     for r in rules:
         correct = 1 if SentenceRule.objects.filter(sentence=sentence, rule=r, position=pos) else 0  # correct if sentence has rule
@@ -514,10 +441,10 @@ def submit_task_explain_commas(request):
     sol = Solution(user=user, sentence=sentence, type='explain', time_elapsed=time_elapsed,
                    solution="{}|".format(pos)+",".join(solution))
     sol.save()
-
     for er in error_rules:
         SolutionRule(solution=sol, rule = er, error=True).save()
 
+    # update per user counter for sentence (to avoid repetition of same sentences)
     try:  # count sentence as seen
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
@@ -550,33 +477,40 @@ def logout(request):
 
 
 def sentence(request, sentence_id):
+    """Renders a partial template for a sentence including rule information."""
+
+    # fetch sentence
     s = Sentence.objects.get(id=sentence_id)
-    wcr = s.get_words_commas_rules()
-    rules=[]
+
+    # extract rules too separate list
+    wcr = s.get_words_commas_rules()  # Return a list of tuples: (word,commstring,rule) for a sentence.
+    rules = []
     for x in wcr:
         for y in x[2]:
             rules.append(y)
-    # print(rules)
     rules = list(set(rules))
-    return render(request, 'trainer/partials/sentence.html', locals())
+    return render(request, 'trainer/partials/correct_sentence.html', locals())
 
 
 def help(request):
+    """Renders help template"""
     return render(request, 'trainer/help.html', locals())
 
 
 def nocookies(request):
+    """Renders information page if cookies could not be set."""
     display_rank = False  # show the rank in output? (not on welcome and rule explanation screens)
     uname = request.GET.get('uname','')
     return render(request, 'trainer/nocookies.html', locals())
 
 def vanillalm(request):
+    """Stud.IP Lernmodule plugin vanillalm integration."""
     return render(request, 'trainer/vanillalm.html', locals())
 
 def stats(request):
+    """Render general statistics."""
 
     ud = []
-
     count_users = User.objects.filter(rules_activated_count__gt=0).count()
     count_studip_users = User.objects.filter(rules_activated_count__gt=0, user_id__iregex=r'[0-9a-f]{32}').count()
     count_solutions = Solution.objects.count()

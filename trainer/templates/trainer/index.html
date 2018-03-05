@@ -1,0 +1,101 @@
+{% extends "trainer/base.html" %}
+{% load static %}
+{% block title %}Komma-Trainer - Übung: Kommas korrigieren{% endblock %}
+
+{% block globalmain %}
+    <header class="x-bg-primary text-white" style="background-color:#AC1035;background-image:url({% static 'images/bg.png' %})">
+      <div class="container text-center">
+            <h1>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARdSURBVGhD7ZlZiM1RHMfHOhhjmZgM2SfmYcrOGzOKrPNgH8uDKGNLlsiWGcUD5cGDUlIUyvaAyJOlMJRkeSHFlBohZAnRjM/31+9Ot5iaO3P+996p+61P5/f7nfP/nXPufzv/c7MyyiijjDKKV319fS/hbutQXV1dLiyA0/AKfjIJk2yPncKdT5nrh6WPGFhXBrYXvmJ/ptRElsNUKHZkK3bG26htpY71NKkVA5oF7+A1LGVgHb2qUakNbZdBDdTCTK9KjRjAVvgDVfETwB5CbJNsyp3C7c2qky3hZ4PO5G/Y6uHkio6r4CvM8ZBiayEfBkOFx/KE26u9Tm3WKCZhz4VvTLLSQ8kRneqG1q843UMm/N0MZoC7jUpt1NZdE/4MzznPQ9GKjvrDN7BLh0HpRr9H2ckaJCAdw7F3lUM+9mbP3c8aRCk6OQ7VdN7GQxpQiZsJK/5Y5ST3AzjmoWhER0V0opt7knxK3ewjrLIFUg7Y4nYpqI/hVhmFSK4nzH135ZczuYanUHOlHORa6K7yPiAW3Y1PB49hh9vB38yxnJS74JEFQ4vE+fxKWmrYpUR5D+wSCyHlUk7ZdDNSfaE+VhlSdDJWmSlz3O+M23DDt1TKpZyyKXO9r2A/VINIOhu+yKaPDtgTrSKglFO53dbLdoFVhJSSQq3bA+GaVQSUciq321qHLbaKkOKXKiHxH8p2HopU9KUzUuZuOJF0GJPQdVvg/gYotMpAIt81uhgEPbyv0V4VTiTVSvULzHV/PdhlEErkmwnqp9gnku9VYUXusyQ/6a78YJcZudqTe5RsyjL4bhVRiOTl8Am6uX8VglzH5NFXpL1HKA/CDauIQvxq+rJ7Cfvc7wn2uAwp8mvhuMfdaEQHi+A7xB6TOXALsq1BM8XxV5QT9CGmp2OzV9RNEh3oDXwdnmB3UQx7mpd5qpedqDh2OnQGfWW+jeJM/yM66U5nL+AydsMHFb4WlXbDxibZFHHMEtrHPq4ewgGrSIborBC0T1UNfRVjMO29bgr2Tbd1KS6S3ZioP0F7vT/GgFTkVckRA+gNt0FbOqsZgE1Ewo8tyccKC/5HHDPITbW9BNfdTa4YiBaQ+tb+CM9hW1N/UdpqN+U97dtSTgBpnFenRgxGy4pKBvKMUm/lN3AHLsAZOE/4nxcosTaC+htw0cPpIQY0FFbCfjgKH+CcV5vwV8HxOPsHRPed3lIxuH6g/arZHjLh6/3Tm7OhPS6t4Wx7KW3FQHW51VDGPwjuwlBiHeEm9h3KpHweNEsMTpt372G9h0z4+mzWcucIvMNu8U5MpGKQ20FnI7YCWAFVbmsf+BeUyk9bMUDdG/rKW+IhxQqYlDb5tIrWJpxtdKetGKwep/Zyc7sAnmLrfaFvf00iNX8jJCIGuRF0Nmwz2iczHiogdf+FJCIG3Y6BaqNbA9byZbLHDoHOxDpv2jrEgIfBSdCE9JbXEmaqV7c+MXhN6LBKD2WUUUZJV1bWXzc8FGX6MrmlAAAAAElFTkSuQmCC">
+            Der Kommatrainer</h1>
+            <p class="lead">Üben, üben<span style="border-bottom:3px solid red">&nbsp;&nbsp;</span> üben.</p>
+      </div>
+    </header>
+
+    <section id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+
+            <h2>Über den Kommatrainer</h2>
+            <p class="lead">Die Zeichensetzung ist einer der schwierigsten Bereiche in der deutschen Rechtschreibung. Zumindest ist die Unsicherheit groß: Wer kann und will
+            schon von sich behaupten, die Kommasetzung vollständig und sicher zu beherrschen?</p>
+            <ul>
+              <li>Spielerischer Ansatz: Level für Level von einfachen Fällen zum komplexen Satz.</li>
+              <li>Alle Regeln enthalten: Die Amtlichen Regeln werden nacheinander nochmal vorgestellt.</li>
+              <li>Abwechslungsreich: Viele verschiedene Beispielsätze sorgen dafür, dass keine Langweile aufkommt.</li>
+              <li>Verschiedene Kompetenzen: Nicht nur das Setzen, sondern auch das Korrigieren und Erklären von Kommas wird geübt. Ideal für Lehramtsstudierende.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="background" class="bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2>Hintergrund</h2>
+            <p class="lead">Der Komma-Trainer ist ursprünglich mit Fördermitteln auf dem "Formel+"-Programm des niedersächsischen Ministeriums
+                für Wissenschaft und Kultur an der Universität Osnabrück entstanden.</p><p>Er ist eine Gemeinschaftsarbeit des Instituts für Germanistik (Prof. Dr. Angela Grimm)
+                und des Zentrums für Digitale Lehre, Campus-Management und Hochschuldidaktik (Dr. Tobias Thelen). </p><p>Beteiligt waren:</p>
+              <ul>
+                  <li>Prof. Dr. Angela Grimm (Konzeption)</li>
+                  <li>Dr. Tobias Thelen (Konzeption, Programmierung)</li>
+                  <li>Vincent Siedeberg (Programmierung, Gestaltung)</li>
+                  <li>Alona Sakhnenko (Programmierung)</li>
+                  <li>Clara Samberg (Beispielsätze)</li>
+                  <li>Madeleine Hubert (Tests und Evaluation)</li>
+              </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="licences">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2>Lizenzen und Urheberrecht</h2>
+              <p class="lead">Der Komma-Trainer ist Open-Scource-Software (AGPL).</p>
+              <p class="lead">Die enthaltenen Beispielsätze unterliegen - sofern nicht anders angegeben - einer Creative-Commons-Lizenz (Weitergabe unter gleichen Bedingungen - CC-BY-SA)</p>
+              <p class="lead">Icons aus dem <a href="https://icons8.com">Icon pack by Icons8</a> &nbsp; <a href="https://creativecommons.org/licenses/by-nd/3.0/"><img src="{%  static 'images/cc-by-nd-88x31.png' %}"></a> </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2>Impressum</h2>
+              <p class="lead">Angaben gemäß § 5 TMG:</p>
+                <p>
+                Universität Osnabrück<br>
+                Neuer Graben 29 / Schloss<br>
+                49074 Osnabrück<br>
+                Tel. +49 541 969 0<br>
+                Fax +49 541 969 4888<br>
+                <p>
+                Die Universität Osnabrück ist eine Körperschaft des öffentlichen Rechts. Sie wird durch den Präsidenten Prof. Dr. Wolfgang Lücke gesetzlich vertreten.
+                <p>
+                Zuständige Aufsichtsbehörde: Niedersächsisches Ministerium für Wissenschaft und Kultur, Leibnizufer 9, 30169 Hannover
+                <p>
+                Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz: DE 154 285 400
+                <p>
+                Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:
+                <p>
+                Zentrum für Digitale Lehre, Campus-Management und Hochschuldidaktik<br>
+                Dr. Tobias Thelen<br>
+                Heger-Tor-Wall 12<br>
+                49074 Universität Osnabrück<br>
+                tobias.thelen@uni-osnabrueck.de
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock %}

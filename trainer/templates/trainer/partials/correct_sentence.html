@@ -1,13 +1,19 @@
 <p>&nbsp;</p>
 <p class="manual">Zum Vergleich:<br> Der korrekte Satz mit allen Kommapositionen und häufigen Fehlerstellen. Klicke auf den Regelnamen für eine Erklärung.</p>
-<div class="sentence-correct">
-    {% for x in wcr %}
+<blockquote class="blockquote">
+    <p class="mb-0">
+      {% for x in wcr %}
         {{ x.0 }}{{ x.1 }}
         {% for y in x.2 %}
-            <span class="label {% if y.code == 'E2' %}label-danger{% else %}label-info{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>{% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>{% else %}{{ y.rule }}{% endif %}</span>
+            <button type="button" class="btn btn-sm {% if y.code == 'E2' %}btn-warning{% else %}btn-info{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>
+            {% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>{% else %}{{ y.rule }}{% endif %}
+            </button>
         {% endfor %}
-    {% endfor %}
-</div>
+      {% endfor %}
+    </p>
+    <!--<footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>-->
+</blockquote>
+
 {% for r in rules %}
 <div class="modal fade" id="modal-rule-{{ r.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
