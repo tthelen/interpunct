@@ -164,7 +164,10 @@ def task(request):
         display_rank=False
         return render(request, 'trainer/welcome.html', locals())
 
+    #TODO introduction test here!
+
     # user without activated rules: show first rule page
+    #TODO select first rule
     if user.rules_activated_count == 0:
         new_rule = user.init_rules()
         display_rank=False
@@ -178,7 +181,8 @@ def task(request):
     rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
 
     # select strategy
-    strategy = None
+    #TODO make decision which strategy to choose
+    # strategy = None
     if 1:
         from trainer.strategies.leitner import LeitnerStrategy
         strategy = LeitnerStrategy()
@@ -243,7 +247,7 @@ def task(request):
 
     # data for template:
     # guessing_candidates: the three rules to display
-    # guessing_postition: the comma slot position to explain
+    # guessing_position: the comma slot position to explain
     explanation_position = random.choice(comma_candidates)
     guessing_position = explanation_position[0]
     guessing_candidates = []  # the rules to be displayed for guessing
@@ -482,7 +486,7 @@ def sentence(request, sentence_id):
     # fetch sentence
     s = Sentence.objects.get(id=sentence_id)
 
-    # extract rules too separate list
+    # extract rules to separate list
     wcr = s.get_words_commas_rules()  # Return a list of tuples: (word,commstring,rule) for a sentence.
     rules = []
     for x in wcr:
@@ -503,9 +507,11 @@ def nocookies(request):
     uname = request.GET.get('uname','')
     return render(request, 'trainer/nocookies.html', locals())
 
+
 def vanillalm(request):
     """Stud.IP Lernmodule plugin vanillalm integration."""
     return render(request, 'trainer/vanillalm.html', locals())
+
 
 def stats(request):
     """Render general statistics."""

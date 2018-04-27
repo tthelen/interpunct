@@ -496,6 +496,39 @@ class User(models.Model):
     rules = models.ManyToManyField(Rule, through='UserRule')
 
     django_user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, default=None)
+    # order of rules (increasing difficulty)
+    rule_order = [
+        "A1",  # 1 GLEICHRANG
+        "A2",  # 2 ENTGEGEN
+        "B1.1",  # 3 NEBEN
+        "B2.1",  # 4 UMOHNESTATT
+        "C1",  # 5 PARANTHESE
+        "D1",  # 6 ANREDE/AUSRUF
+        "B1.2",  # 7 NEBEN EINLEIT
+        "C2",  # 8 APPOSITION
+        "A3",  # 9 SATZREIHUNG
+        "C5",  # 10 HINWEIS
+        "B1.5",  # 11 FORMELHAFT
+        "A4",  # 12 GLEIHRANG KONJUNKT
+        "D3",  # 13 BEKTRÄFT
+        "B2.2",  # 14
+        "C3.1",  # 15
+        "B2.3",  # 16
+        "C3.2",  # 17
+        "B2.4.1",  # 18
+        "C4.1",  # 19
+        "B2.4.2",  # 20
+        "B2.5",  # 21
+        "C6.1",  # 22
+        "C6.2",  # 23
+        "C6.3.1",  # 24
+        "C6.3.2",  # 25
+        "C6.4",  # 26
+        "C7",  # 27
+        "B1.3",  # 28 NEBEN KONJUNKT
+        "B1.4.1",  # 29
+        "B1.4.2",  # 30
+    ]
 
     def update_rank(self):
         """ """
