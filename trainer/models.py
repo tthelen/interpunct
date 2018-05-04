@@ -488,6 +488,7 @@ class User(models.Model):
 
     # selection strategy for to use for this user
     strategy = models.IntegerField(choices=STRATS, default = 0)
+
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
     sentences = models.ManyToManyField(Sentence, through='UserSentence')
@@ -577,8 +578,8 @@ class User(models.Model):
             from trainer.strategies.leitner import LeitnerStrategy
             return LeitnerStrategy(self)
         elif self.strategy == self.BAYES:
-            # TODO: new bayes strategy
-            raise Exception("Not implemented: Bayes Strategy")
+            from trainer.strategies.bayes import BayesStrategy
+            return BayesStrategy(self)
         else:
             raise Exception("Invalid strategy: {}".format(self.strategy))
 
@@ -732,7 +733,7 @@ class User(models.Model):
                         self.count(corr)
                         self.save()
                     if first: # save response info only for first rule (other must be equal)
-                        resp.append({'correct': corr, 'rule': {'code': rule.code, 'mode': rule.mode}})
+                        resp.append({'correct': corr, 'ruleobject': rule, 'rule': {'code': rule.code, 'mode': rule.mode}})
                         first = False
 
         return resp
@@ -863,6 +864,14 @@ class UserRule(models.Model):
     score = models.FloatField(default=0.0)  # score counter for advancing/degrading rule to boxes
     total = models.IntegerField(default=0)  # total rule solution counter
     correct = models.IntegerField(default=0)  # correct rule solution counter
+
+    staticnet = models.FloatField(default=0.0) # float value for static bayesian net (see strategies/bayes.py)
+    dynamicnet_active = models.BooleanField(default=False)  # is rule part of user's current dynamic net? (see strategies/bayes.py)
+    dynamicnet_current = models.BooleanField(default=False) # is rule current (=main focus) rule?
+    dynamicnet_count = models.IntegerField(default=0) # how often has rule been
+    dynamicnet_history1 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_SET)
+    dynamicnet_history2 = models.IntegerField(default=0)  # Bitfield for history of task type 2 (COMMA_CORRECT)
+    dynamicnet_history3 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_EXPLAIN)
 
     def count(self, correct=True, tries=1):
         """Register solution for a rule.

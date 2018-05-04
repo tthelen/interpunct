@@ -166,16 +166,16 @@ def task(request):
 
     #TODO introduction test here!
 
+    # select strategy
+    strategy = user.get_strategy()
+
     # user without activated rules: show first rule page
     #TODO select first rule
     if user.rules_activated_count == 0:
-        new_rule = user.init_rules()
+        new_rule = strategy.init_rules()
         display_rank=False
         level = 0
         return render(request, 'trainer/level_progress.html', locals())
-
-    # select strategy
-    strategy = user.get_strategy()
 
     # fecth and prepare information about level for template
     level = user.rules_activated_count  # user's current level # TODO: strategy
@@ -323,6 +323,10 @@ def submit_task_set_commas(request):
     # calculate response
     response = user.eval_set_commas(user_solution, sentence, solution)  # list of dictionaries with keys 'correct' and 'rule'
 
+    # update internal states for strategy according to answer
+    for single_solution in response:
+        user.strategy.update(single_solution['rule'], 1, single_solution['correct'])
+
     # update per user counter for sentence (to avoid repetition of same sentences)
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
@@ -359,6 +363,10 @@ def submit_task_correct_commas(request):
 
     # calculate response
     response = user.count_false_types_task_correct_commas(user_solution, sentence, solution)
+
+    # update internal states for strategy according to answer (2=COMMA_CORRECT)
+    for single_solution in response:
+        user.strategy.update(single_solution['ruleobject'], 2, single_solution['correct'])
 
     # update per user counter for sentence (to avoid repetition of same sentences)
     try:
@@ -403,6 +411,10 @@ def submit_task_explain_commas(request):
         correct = 1 if SentenceRule.objects.filter(sentence=sentence, rule=r, position=pos) else 0  # correct if sentence has rule
         chosen = 1 if r.code in request.POST else 0  # chosen if box was checked
         solution.append("{}:{}:{}".format(r.id, correct, chosen))
+
+        # update strategy model (3=COMMA_EXPLAIN)
+        user.strategy.update(r, 3, correct)
+
         if not r.code.startswith('E'):  # only count non-error rules
             ur = UserRule.objects.get(user=user, rule=r)
             ur.count((correct==chosen))  # count rule application as correct if correct rule was chosen and vice versa

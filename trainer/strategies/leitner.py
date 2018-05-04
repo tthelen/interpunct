@@ -43,6 +43,28 @@ class LeitnerStrategy:
             "B1.4.2",  # 30
         ]
 
+    def init_rules(self):
+        """Initialize active rules for user."""
+
+        # create correct rules
+        for r in self.rule_order:
+            ur = UserRule(rule=Rule.objects.get(code=r), user=self.user, active=False)
+            ur.save()
+        # create error rules
+        ur = UserRule(rule=Rule.objects.get(code="E1"), user=self.user, active=False)
+        ur.save()
+        ur = UserRule(rule=Rule.objects.get(code="E2"), user=self.user, active=False)
+        ur.save()
+
+        # activate first rule
+        new_rule = Rule.objects.get(code=self.rule_order[0])
+        ur = UserRule.objects.get(rule=new_rule, user=self.user)
+        ur.active = True
+        ur.save()
+
+        self.user.rules_activated_count = 1  # activate first rule for next request
+        self.user.save()
+
     def get_active_rules(self):
         """Return UserRule and examples sentence data for displaying level and expanations.
            At most 5 rules sorted by box position."""
@@ -54,14 +76,15 @@ class LeitnerStrategy:
     def progress(self):
         """Advance to next level, if appropriate.
 
-        Returns (new_rule, finished?)
+        Returns (new_rule, finished?, forgottenrule?)
         new_rule is False if no level progress, the newly activated Rule object otherwise.
         finished is false if not all rules are activated and true if all Rules are activated
+        forgotterule is always false here (would enable repeating forgotten rules) # TODO: check if appropriate here
         """
 
         # highest level reached?
         if self.user.rules_activated_count == len(self.rule_order):
-            return False, True
+            return False, True, False
 
         # user objects have a property #rules_actived_count, i.e. the level
         # in this strategy, we simply check if the rule for the current level
@@ -78,9 +101,9 @@ class LeitnerStrategy:
             new_ur = UserRule.objects.get(rule=new_rule, user=self.user)
             new_ur.active = True  # activate new rule
             new_ur.save()
-            return new_rule, (self.user.rules_activated_count == len(self.rule_order))
+            return new_rule, (self.user.rules_activated_count == len(self.rule_order)), False
 
-        return False, False
+        return False, False, False
 
     def roulette_wheel_selection(self):
         """
@@ -150,3 +173,7 @@ class LeitnerStrategy:
             num = min(3, len(possible_sentences))  # else choose from three least often used
 
         return random.choice(possible_sentences[:num])[0]  # randomly choose and return SentenceRule object
+
+    def update(self):
+        """Updates internal state of strategy."""
+        pass

@@ -1,0 +1,27 @@
+Rules that should be covered by the introduction test
+"A3":	97.592,
+"A4":	76.809,
+"B1.2":	95.471,
+"B1.3":	79.8385,
+"B1.5":	85.081,
+"B2.4.1":	87.7055,
+"B2.4.2":	87.7055,
+"B2.5":	96.038,
+"C3.1":	81.5305,
+"C3.2":	81.5305,
+"C6.1":	87.4245,
+"C6.2":	84.33,
+"C6.3.1":	81.628,
+"C6.4":	81.628,
+"C7":	77.7395,
+"C8":	81.5305,
+"D1":	75.5315,
+
+Structure of test
+
+1. Welcome text: "Dear User, before we start the learning experience, we will test your skills..."
+2. Provide user with "Komma erklären"-Questions of the above rule
+3. Give the user a first feedback of his current level
+    - for this update static model based on the introduction test and classify him according to his overall performance
+    - maybe display "strength and weakness"
+4. Start the "real" learning program
