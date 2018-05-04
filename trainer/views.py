@@ -28,6 +28,8 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
+            user.strategy = user.BAYES # TODO: random strategy selection for new user
+            # user.strategy = user.LEITNER
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -183,7 +185,7 @@ def task(request):
     rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
 
     # normal task selection process
-    (new_rule, finished) = strategy.progress()  # checks if additional rule should be activated or user has finished all levels
+    (new_rule, finished, forgotten) = strategy.progress()  # checks if additional rule should be activated or user has finished all levels
 
     # level progress: show new rules instead of task
     if new_rule:

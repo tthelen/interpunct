@@ -538,30 +538,6 @@ class User(models.Model):
         "B1.4.2",  # 30
     ]
 
-    def init_rules(self):
-        """Initialize active rules for user."""
-
-        # create correct rules
-        for r in self.rule_order:
-            ur = UserRule(rule=Rule.objects.get(code=r), user=self, active=False)
-            ur.save()
-        # create error rules
-        ur = UserRule(rule=Rule.objects.get(code="E1"), user=self, active=False)
-        ur.save()
-        ur = UserRule(rule=Rule.objects.get(code="E2"), user=self, active=False)
-        ur.save()
-
-        # activate first rule
-        new_rule = Rule.objects.get(code=self.rule_order[0])
-        ur = UserRule.objects.get(rule=new_rule, user=self)
-        ur.active = True
-        ur.save()
-
-        self.rules_activated_count = 1  # activate first rule for next request
-        self.save()
-
-        return new_rule
-
     def prepare(self, request):
         # create a real django user
         self.django_user = DjangoUser.objects.create_user(self.user_id, 'tobias.thelen@uni-osnabrueck.de', 'nopass')
