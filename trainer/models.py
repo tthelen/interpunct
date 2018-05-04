@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
 from django.db.models import Count
+
 import re  # regex support
 import random
 
@@ -202,7 +203,6 @@ class Sentence(models.Model):
         :return: solution
         """
 
-        rank = user.user_rank
         # Rule Representation: e.g : A,1,0,0 and Difference List
         rule_obj = Rule.objects.get(code=commatype)
         decode_list = rule_obj.decode()
@@ -255,14 +255,14 @@ class Sentence(models.Model):
         """Return array of amount of commas set for 'set comma' tasks."""
         sols = self.solution_set.filter(type='set').values('solution')
         w = self.get_words()
-        sum = [0 for s in range(len(w)+1)]
+        summed = [0 for s in range(len(w)+1)]
         for s in sols:
             sol = s['solution'].split(',')
             for x in range(len(sol)):
                 if sol[x] == '1':
-                    sum[x] += 1
+                    summed[x] += 1
 
-        return list(zip(w, sum))
+        return list(zip(w, summed))
 
     def for_render_summary_correct(self):
         """Return array of amount of commas set for correction tasks."""
@@ -439,8 +439,6 @@ class SentenceRule(models.Model):
     def __str__(self):
         return "Rule {} at #{}: {} (Pair {})".format(self.rule.code, self.position, self.sentence.text, self.pair)
 
-
-
 class User(models.Model):
     def __str__(self):
         return self.user_id
@@ -450,6 +448,14 @@ class User(models.Model):
         (1, 'Kommakönner'),
         (2, "Kommakommandant"),
         (3, 'Kommakönig'),
+    )
+
+    # rule selection strategy
+    LEITNER = 0
+    BAYES = 1
+    STRATS = (
+        (LEITNER, 'Leitnerbox'),  # simple leitner box algorithm
+        (BAYES, 'Bayes')        # bayesian net (anna pillar)
     )
 
     abschluss = {0: "Nicht angegeben",
@@ -480,7 +486,8 @@ class User(models.Model):
     data_selfestimation = models.IntegerField(default=0)
     data_orthosem_participant = models.BooleanField(default=False)  # participant of an orthography seminar?
 
-    user_rank = models.IntegerField(choices=RANKS, default = 0)
+    # selection strategy for to use for this user
+    strategy = models.IntegerField(choices=STRATS, default = 0)
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
     sentences = models.ManyToManyField(Sentence, through='UserSentence')
@@ -530,30 +537,6 @@ class User(models.Model):
         "B1.4.2",  # 30
     ]
 
-    def update_rank(self):
-        """ """
-        rank_counter = 0
-        dict = self.get_dictionary()
-        for key in dict:
-            if key != "E1":
-                a, b = re.split(r'/', dict[key])
-                points = int(b)-int(a)
-                if points >= 50:
-                    rank_counter += 4
-                if points >= 25:
-                    rank_counter += 2
-                if points >= 10:
-                    rank_counter += 1
-        if rank_counter == len(dict)-1:
-            self.user_rank = 1
-            self.save()
-        if rank_counter == 2 * (len(dict)-1):
-            self.user_rank = 2
-            self.save()
-        if rank_counter == 4 * (len(dict) - 1):
-            self.user_rank = 3
-            self.save()
-
     def init_rules(self):
         """Initialize active rules for user."""
 
@@ -588,52 +571,25 @@ class User(models.Model):
         django_user_login(request, self.django_user)
         return True
 
-    def current_rule(self):
-        if self.rules_activated_count == len(self.rule_order):
-            return False
-        return Rule.objects.get(code=self.rule_order[self.rules_activated_count - 1])
-
-    def level_display(self):
-        """Return UserRule and examples sentence data for displaying level and expanations. At most 5 rules sorted by box position."""
-
-        limit = min(self.rules_activated_count, 5)
-        res = UserRule.objects.filter(user=self, active=1).order_by('box')[:limit]  # TODO: code still depends on boxes (LeitnerStrategy)
-        return res
+    def get_strategy(self):
+        """Returns an appropriate strategy object for current user."""
+        if self.strategy == self.LEITNER:
+            from trainer.strategies.leitner import LeitnerStrategy
+            return LeitnerStrategy(self)
+        elif self.strategy == self.BAYES:
+            # TODO: new bayes strategy
+            raise Exception("Not implemented: Bayes Strategy")
+        else:
+            raise Exception("Invalid strategy: {}".format(self.strategy))
 
     def count(self, correct):
-
+        """Set internal total correct/wrong counter"""
+        # TODO: check if still in use
         self.counter += 1
         if correct:
             self.counter_correct += 1
         else:
             self.counter_wrong += 1
-
-
-    def get_dictionary(self, only_activated=False):
-        """
-        Dictionary with comma types as keys and a value tuple of erros and total amount of trials
-        :return: dictionary
-        """
-        type_dict = {}
-        tmp = re.split(r'[ ,]+', self.comma_type_false)
-
-        activated_rules = self.rule_order[:self.rules_activated_count]
-        for elem in tmp:
-            [a,b] = re.split(r':',elem)
-            if not only_activated or a in activated_rules:
-                type_dict[a]=b
-        return type_dict
-
-    def save_dictionary(self, update):
-        """
-        Save updated dictionary to the database
-        :param update: updated dictionary
-        """
-        new_dict_str = ""
-        for key in update:
-            new_dict_str += key + ":" + update[key] + ","
-        self.comma_type_false = new_dict_str[:-1]
-        self.save()
 
     def eval_set_commas(self, user_array_str, sentence, solution):
         """

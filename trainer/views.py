@@ -174,21 +174,16 @@ def task(request):
         level = 0
         return render(request, 'trainer/level_progress.html', locals())
 
+    # select strategy
+    strategy = user.get_strategy()
+
     # fecth and prepare information about level for template
-    level = user.rules_activated_count  # user's current level
-    rank = user.get_user_rank_display()  # Django builtin get_FOO_display method: provide human readable value for choice fields
-    leveldsp = user.level_display()
+    level = user.rules_activated_count  # user's current level # TODO: strategy
+    activerules = strategy.get_active_rules()
     rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
 
-    # select strategy
-    #TODO make decision which strategy to choose
-    # strategy = None
-    if 1:
-        from trainer.strategies.leitner import LeitnerStrategy
-        strategy = LeitnerStrategy()
-
     # normal task selection process
-    (new_rule, finished) = strategy.progress(user)  # checks if additional rule should be activated or user has finished all levels
+    (new_rule, finished) = strategy.progress()  # checks if additional rule should be activated or user has finished all levels
 
     # level progress: show new rules instead of task
     if new_rule:
@@ -197,7 +192,7 @@ def task(request):
     # choose a sentence from roulette wheel (the bigger the error for
     # a certain rule, the more likely one will get a sentence with that rule)
     # TODO: fetch errors
-    sentence_rule = strategy.roulette_wheel_selection(user)  # choose sentence and rule
+    sentence_rule = strategy.roulette_wheel_selection()  # choose sentence and rule
     sentence = sentence_rule.sentence
     rule = sentence_rule.rule
 
@@ -304,31 +299,6 @@ def index(request):
     """Display index page."""
     return render(request, 'trainer/index.html', locals())
 
-def profile(request):
-    """
-        Receives request for a profile page
-
-        :param request: Django request
-        :return: response
-    """
-    user_id = "testuser"
-    user = User.objects.get(user_id="testuser")
-    dictionary = user.get_dictionary()
-    new_dictionary = {}
-    for i in dictionary:
-        if i != 'KK':
-            a, b = re.split(r'/', dictionary[i])
-            rule_desc = Rule.objects.get(code=i).slug
-            if b != '0':
-                new_dictionary[rule_desc] = str(100-int((int(a)/int(b))*100))
-            else:
-                new_dictionary[rule_desc] = str(0)
-    rank = user.get_user_rank_display()
-    tasks = []
-    for roots, directs, files in os.walk("trainer/templates/trainer"):
-        for file in files:
-            tasks.append(file[:-5]);
-    return render(request, 'user_profile.html', locals())
 
 @logged_in_or_basicauth("Bitte einloggen")
 def submit_task_set_commas(request):
@@ -352,7 +322,6 @@ def submit_task_set_commas(request):
 
     # calculate response
     response = user.eval_set_commas(user_solution, sentence, solution)  # list of dictionaries with keys 'correct' and 'rule'
-    user.update_rank()  # TODO: check if no longer used?
 
     # update per user counter for sentence (to avoid repetition of same sentences)
     try:
