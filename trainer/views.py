@@ -170,6 +170,7 @@ def task(request):
 
     # select strategy
     strategy = user.get_strategy()
+    strategy_debug = strategy.debug_output()
 
     # user without activated rules: show first rule page
     #TODO select first rule
@@ -324,11 +325,13 @@ def submit_task_set_commas(request):
 
     # calculate response
     response = user.eval_set_commas(user_solution, sentence, solution)  # list of dictionaries with keys 'correct' and 'rule'
+    print(response)
 
     # update internal states for strategy according to answer
     for single_solution in response:
-        user.strategy.update(single_solution['rule'], 1, single_solution['correct'])
-
+        if single_solution['rule']['code']:
+            print("checking " + single_solution['rule']['code'])
+            user.get_strategy().update(Rule.objects.get(code=single_solution['rule']['code']), 1, single_solution['correct'])
     # update per user counter for sentence (to avoid repetition of same sentences)
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
@@ -365,10 +368,13 @@ def submit_task_correct_commas(request):
 
     # calculate response
     response = user.count_false_types_task_correct_commas(user_solution, sentence, solution)
+    print(response)
 
     # update internal states for strategy according to answer (2=COMMA_CORRECT)
     for single_solution in response:
-        user.strategy.update(single_solution['ruleobject'], 2, single_solution['correct'])
+        if single_solution['rule']['code']:
+            print("checking "+single_solution['rule']['code'])
+            user.get_strategy().update(Rule.objects.get(code=single_solution['rule']['code']), 2, single_solution['correct'])
 
     # update per user counter for sentence (to avoid repetition of same sentences)
     try:
@@ -415,7 +421,7 @@ def submit_task_explain_commas(request):
         solution.append("{}:{}:{}".format(r.id, correct, chosen))
 
         # update strategy model (3=COMMA_EXPLAIN)
-        user.strategy.update(r, 3, correct)
+        user.get_strategy().update(r, 3, correct)
 
         if not r.code.startswith('E'):  # only count non-error rules
             ur = UserRule.objects.get(user=user, rule=r)

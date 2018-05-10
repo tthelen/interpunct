@@ -177,3 +177,6 @@ class LeitnerStrategy:
     def update(self):
         """Updates internal state of strategy."""
         pass
+
+    def debug_output(self):
+        return "<p>Strategy: Leitner, no debug info</p>"

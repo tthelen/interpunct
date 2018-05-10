@@ -260,7 +260,7 @@ class BayesStrategy:
         :param StaticNet: network containing all rules, shall be updated with values from Dynamic net
         :return: new updated version of the static net
         """
-        node = DynamicNode(self.user, rule.code)
+        node = DynamicNode(self, self.user, rule.code)
         node.storeAnswer(taskNumber, correct)
 
     def selectNewRule(self):
@@ -506,5 +506,17 @@ class BayesStrategy:
         # Kommachaot if 0,7 percent uner threshold or one complete section
         else: return 0
 
-
-
+    def debug_output(self):
+        out="<table><tr><td>Rule</td><td>staticnet</td><td>dynactive</td><td>dyncurrent</td>"+\
+            "<td>dyncount</td><td>history1</td><td>history2</td><td>history3</td></tr>\n";
+        for r in Rule.objects.all():
+            try:
+                ur = UserRule.objects.get(rule=r, user=self.user)
+                out += "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>".format(
+                    ur.rule.code, ur.staticnet, ur.dynamicnet_active, ur.dynamicnet_current, ur.dynamicnet_count)
+                out += "<td>"+bin(ur.dynamicnet_history1)+"</td><td>"+bin(ur.dynamicnet_history2)+"</td><td>" + \
+                   bin(ur.dynamicnet_history3)+"</td></tr>\n"
+            except UserRule.DoesNotExist:
+                pass
+        out += "</table>\n"
+        return out

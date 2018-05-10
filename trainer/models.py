@@ -709,7 +709,7 @@ class User(models.Model):
                         self.count(corr)
                         self.save()
                     if first: # save response info only for first rule (other must be equal)
-                        resp.append({'correct': corr, 'ruleobject': rule, 'rule': {'code': rule.code, 'mode': rule.mode}})
+                        resp.append({'correct': corr, 'rule': {'code': rule.code, 'mode': rule.mode}})
                         first = False
 
         return resp
