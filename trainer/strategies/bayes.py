@@ -314,7 +314,17 @@ class BayesStrategy:
         # limit = min(self.user.rules_activated_count, 5)
         # res = UserRule.objects.filter(user=self.user, active=1).order_by('box')[:limit]
         # return res
+        # returns UserRuleObjects
         return UserRule.objects.filter(user=self.user, dynamicnet_active=True)[:5]
+
+    def get_active_rules_as_ruleObject(self):
+        tmp=  UserRule.objects.filter(user=self.user, dynamicnet_active=True)[:5]
+        active = list()
+        print(tmp)
+        for i in tmp:
+            active.append(tmp.rule.all())
+        return list(tmp)
+
 
     def progress(self):
         """
@@ -402,27 +412,34 @@ class BayesStrategy:
         index = random.randint(0, len(pool) - 1)  # pick a random number
         rule_obj = Rule.objects.filter(code=pool[index])  # and select a random rule code
 
-        # select a sentence
-        possible_sentences = []
-        contains = None
+        possible_sentences = [] #contains SentenceRuleObjects
+        contains = False
         activeRules = list()
+
         for node in self.dynamicNet.Net:
             activeRules.append(node.ur.rule.code)
+
         # check all active sentences taht include a position for the selected rule
         for sr in SentenceRule.objects.filter(rule=rule_obj[0], sentence__active=True).all():
-
-            includedRules = sr.sentence.rules.all()  # store all rules included in that sentence
-            # check whether the rules included in the sentence are a sublist of all active list
+            #print(sr)
             contains = True
-            for node in includedRules:
-                if node not in activeRules:
-                    contains = False
+            contained_rules = list()
+            for i in sr.sentence.rules.all():
+                contained_rules.append(i.code)
+
+            #check weather the sentence contains rules not activated by the user
+            if set(contained_rules).difference(set(activeRules)):
+                contains = False
 
             if contains:
-                us = UserSentence.objects.get(user=self.user, sentence=sr.sentence)
-                count = us.count
+                try:
+                    us = UserSentence.objects.get(user=self.user, sentence=sr.sentence)
+                    count = us.count
+                except UserSentence.MultipleObjectsReturned:  # shouldn't happen: multiple database entries
+                    count = 0
+                except UserSentence.DoesNotExist:  # No counter for that sentence yet
+                    count = 0
                 possible_sentences.append([sr, count])  # store all possible sentences
-                possible_sentences.sort(key=lambda sentence: sentence[1])  # sort ascending by counts
 
         if len(possible_sentences) == 0:  # HACK: No sentence? Try again # TODO: find a real solution
             print("HACK! Try another sentence...")
@@ -432,19 +449,19 @@ class BayesStrategy:
         possible_sentences.sort(key=lambda sentence: sentence[1])  # sort ascending by counts
         # are there possible sentences containing a weak rule?
         priorSentence = list()
-        for node in possible_sentences:
-            assert isinstance(node, SentenceRule)
-            #todo how do I iterate over a foreign key
-            rulesOfSentence = SentenceRule.objects.filter(sentence=node.sentence)
-            if rulesOfSentence.count() > 2: #if sentence contains more than two rules
+        for i in possible_sentences:
+            #assert isinstance(node, SentenceRule)
+            rulesOfSentence = i[0].rule.code
+            if len(rulesOfSentence) > 2:  # if sentence contains more than two rules
                 union = list(set().union(rulesOfSentence, weakRules))
-                if len(union) > 1: #if there is a greater union than 1, copy directly
+                if len(union) > 1:  # if there is a greater union than 1, copy directly
                     priorSentence.append(node)
                 else:
-                    assert isinstance(union[0], Rule) #otherwise check that the union is not the selected rule
-                    #(union[0].code == rule_obj would happen, if the current selected rule is a weak one
-                    if union[0].code != rule_obj: #in this case we rule_obj is not a weak one and we have only one match
-                        #with a weak rule
+                    assert isinstance(union[0], Rule)  # otherwise check that the union is not the selected rule
+                    # (union[0].code == rule_obj would happen, if the current selected rule is a weak one
+                    if union[
+                        0].code != rule_obj:  # in this case we rule_obj is not a weak one and we have only one match
+                        # with a weak rule
                         priorSentence.append(node)
 
         sentence = None
@@ -455,10 +472,10 @@ class BayesStrategy:
         elif len(priorSentence) == 1:
             sentence = priorSentence[0]
         elif len(priorSentence) > 1:
-            ran =  random.randint(0, len(priorSentence) - 1)
+            ran = random.randint(0, len(priorSentence) - 1)
             sentence = priorSentence[ran]
         else:
-            num = min(3, len(possible_sentences)) #otherwise return one sentence which is used less than 3 times
+            num = min(3, len(possible_sentences))  # otherwise return one sentence which is used less than 3 times
             sentence = random.choice(possible_sentences[:num])[0]
 
         return sentence
