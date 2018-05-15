@@ -162,15 +162,15 @@ class DynamicNode:
             # move bits in integer to left and fill new position with 0 (default) or 1 (if correct)
             self.ur.dynamicnet_history1 = self.ur.dynamicnet_history1 << 1
             if correct:
-                self.ur.dynamicnet_history1 &= 1
+                self.ur.dynamicnet_history1 |= 1
         if taskNumber == 2:
             self.ur.dynamicnet_history2 = self.ur.dynamicnet_history2 << 1
             if correct:
-                self.ur.dynamicnet_history2 &= 1
+                self.ur.dynamicnet_history2 |= 1
         if taskNumber == 3:
             self.ur.dynamicnet_history3 = self.ur.dynamicnet_history3 << 1
             if correct:
-                self.ur.dynamicnet_history3 &= 1
+                self.ur.dynamicnet_history3 |= 1
 
         self.value = self.get_value()
         self.ur.save()
@@ -234,13 +234,11 @@ class BayesStrategy:
 
         # create correct rules
         for r in Rule.objects.all():
-            try:
-                ur = UserRule(rule=r, user=self.user, active=False,
-                              dynamicnet_active=False,
-                              staticnet=self.start_values[r.code])
-                ur.save()
-            except KeyError: # ignore rules without start_value
-                pass
+            ur = UserRule(rule=r, user=self.user, active=False,
+                          dynamicnet_active=False,
+                          staticnet=self.start_values.get(r.code,0))
+            ur.save()
+
 
         # activate first rule
         new_rule = Rule.objects.get(code="A1")

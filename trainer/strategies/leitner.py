@@ -174,7 +174,7 @@ class LeitnerStrategy:
 
         return random.choice(possible_sentences[:num])[0]  # randomly choose and return SentenceRule object
 
-    def update(self):
+    def update(self, rule, mode, correctness):
         """Updates internal state of strategy."""
         pass
 
