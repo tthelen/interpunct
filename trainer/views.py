@@ -257,7 +257,7 @@ def task(request):
 
     # add other active rules until we have three rules as guessing candidates
     # beacuse explanation tasks will not occur before rule 3 is activated, there always are enough active rules
-    active_rules = UserRule.objects.filter(user=user, active=1)
+    active_rules = strategy.get_active_rules()
     for ar in active_rules:
         if len(guessing_candidates) == 3:
             break
@@ -266,7 +266,6 @@ def task(request):
     random.shuffle(guessing_candidates)
 
     return render(request, 'trainer/task_explain_commas.html', locals())
-
 
 
 @logged_in_or_basicauth("Bitte einloggen")

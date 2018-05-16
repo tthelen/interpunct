@@ -845,6 +845,9 @@ class UserRule(models.Model):
     dynamicnet_active = models.BooleanField(default=False)  # is rule part of user's current dynamic net? (see strategies/bayes.py)
     dynamicnet_current = models.BooleanField(default=False) # is rule current (=main focus) rule?
     dynamicnet_count = models.IntegerField(default=0) # how often has rule been
+    dynamicnet_count1 = models.IntegerField(default=0)  # how often has rule been for task type 1
+    dynamicnet_count2 = models.IntegerField(default=0)  # how often has rule been for task type 2
+    dynamicnet_count3 = models.IntegerField(default=0)  # how often has rule been for task type 3
     dynamicnet_history1 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_SET)
     dynamicnet_history2 = models.IntegerField(default=0)  # Bitfield for history of task type 2 (COMMA_CORRECT)
     dynamicnet_history3 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_EXPLAIN)
