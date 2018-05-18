@@ -107,7 +107,6 @@ class LeitnerStrategy:
             self.user.rules_activated_count = last_pos +1
         self.user.save()
 
-        print("Pretest processed. New rule is {}".format(new_rule.code))
         return self.activate_first_rule(new_rule)
 
     def get_active_rules(self):
