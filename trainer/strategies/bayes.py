@@ -260,11 +260,11 @@ class BayesStrategy:
             print(pretest_result)
             if pretest_result.result:  # is it a positive result?
                 ur = UserRule.objects.get(rule=pretest_result.rule, user=self.user)  # fetch UserRule object
+                if not ur.dynamicnet_active:
+                    count_pos += 1 # count as newly activated rule
                 ur.dynamicnet_active = True  # set as active in user's dynamic net
                 ur.active = True # TODO: check: not needed for bayes strategy?
                 ur.save()  # and store back to db
-                if not ur.dynamicnet_active:
-                    count_pos += 1 # count as newly activated rule
         # increase level for user
         self.user.rules_activated_count += count_pos
         self.user.save()
