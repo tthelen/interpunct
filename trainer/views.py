@@ -204,6 +204,7 @@ def task(request):
         words_and_commas = list(zip(words, comma + [0]))  # make a combines list of both
         return render(request, 'trainer/task_explain_commas.html', {**template_params, **locals()})
 
+
     # get user from URL or session or default
     # get user from URL or session or default
     # user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
@@ -265,6 +266,12 @@ def task(request):
     rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
 
     # ------------------------------------------------------------------------
+    # adaptivity form
+    # show and process form (processing will set data_adaptivity)
+    if user.rules_activated_count>18 and not user.data_adaptivity:
+        return render(request, 'trainer/adaptivity_questionaire.html')
+
+    # ------------------------------------------------------------------------
     # normal task selection process
     (new_rule, finished, forgotten) = strategy.progress()  # checks if additional rule should be activated or user has finished all levels
 
@@ -310,8 +317,6 @@ def task(request):
         return render_task_explain_commas(request, sentence, strategy, template_params=locals())
 
 
-
-
 @logged_in_or_basicauth("Bitte einloggen")
 def start(request):
     """Store questionnaire results and redirect to task."""
@@ -341,6 +346,23 @@ def start(request):
     return redirect("task")
 
 
+@logged_in_or_basicauth("Bitte einloggen")
+def submit_adaptivity_questionnaire(request):
+    """Receive adaptivity questionnaire answers and save to data_study field"""
+    user = User.objects.get(django_user=request.user)
+    user.data_adaptivity = "{}:{}:{}:{}:{}:{}:{}".format(
+        request.GET.get('q1',0),
+        request.GET.get('q2',0),
+        request.GET.get('q3',0),
+        request.GET.get('q4',0),
+        request.GET.get('q5',0),
+        request.GET.get('q6',0),
+        request.GET.get('q7',0))
+    user.save()
+
+    return redirect("task")  # go on with tasks
+
+
 def index(request):
     """Display index page."""
     return render(request, 'trainer/index.html', locals())
@@ -368,7 +390,6 @@ def submit_task_set_commas(request):
 
     # calculate response
     response = user.eval_set_commas(user_solution, sentence, solution)  # list of dictionaries with keys 'correct' and 'rule'
-    print(response)
 
     # update internal states for strategy according to answer
     for single_solution in response:

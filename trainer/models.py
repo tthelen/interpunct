@@ -505,6 +505,8 @@ class User(models.Model):
     data_selfestimation = models.IntegerField(default=0)
     data_orthosem_participant = models.BooleanField(default=False)  # participant of an orthography seminar?
 
+    data_adaptivity = models.CharField(max_length=255, default='')  # for adaptivity study / questionnaire results
+
     # selection strategy for to use for this user
     strategy = models.IntegerField(choices=STRATS, default = 0)
 
