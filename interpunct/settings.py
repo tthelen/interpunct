@@ -25,7 +25,7 @@ SECRET_KEY = ')=&zs!opq7krx1bsh5l5sub!rl6gx#k-+7+bof6@x@p94$2oh$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pycoa.de','www.pycoa.de','127.0.0.1']
+ALLOWED_HOSTS = ['pycoa.de','www.pycoa.de','127.0.0.1','localhost']
 
 
 # Application definition
@@ -76,15 +76,15 @@ WSGI_APPLICATION = 'interpunct.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'xdefault': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'interpunct',
+        'NAME': 'interpunct2',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5432'
     },
-    'xdefault': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }

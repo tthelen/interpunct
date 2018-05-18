@@ -5,10 +5,12 @@ from . import views
 urlpatterns = [
     # ex: /polls/
     url(r'^$', views.task, name='task'),
+    url(r'^index$', views.index, name='index'),
     url(r'^start$', views.start, name='start'),
-    url(r'^submit_task1$', views.submit_task1),
+    url(r'^submit_task_set_commas$', views.submit_task_set_commas),
     url(r'^submit_task_correct_commas$', views.submit_task_correct_commas),
     url(r'^submit_task_explain_commas$', views.submit_task_explain_commas, name='submit_task_explain_commas'),
+    url(r'^submit_adaptivity_questionnaire$', views.submit_adaptivity_questionnaire, name='submit_adaptivity_questionnaire'),
     url(r'^delete_user$', views.delete_user),
     url(r'^logout$', views.logout),
     url(r'^sentence/([0-9]+)$', views.sentence, name='sentence'),  # ajax load html for single correct sentence

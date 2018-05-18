@@ -1,0 +1,89 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Willkommen beim Komma-Trainer!{% endblock %}
+
+{% block main %}
+
+    <h1>Sie haben es bald geschafft!</h1>
+
+    <p>Die Aufgabenauswahl für den Kommatrainer nehmen verschiedene Algorithmen vor, die Ihre bisheringen Leistungen berücksichtigen
+    und Vermutungen darüber anstellen, welche Regeln Sie bereits wie gut und sicher beherrschen.</p>
+    <p>Um die Leistungsfähigkeit verschiedener solcher Auswahlalgorithmen miteinander vergleichen zu können,
+    bitten wir Sie, die folgenden Fragen zu beantworten. Die Antwortern werden pseudonymisiert gespeichert und für eine
+    Bachelor-Arbeit im Fach Cognitive Science verwendet.</p>
+
+    <h2>Fragebogen</h2>
+
+<form id="theform" class="form-horizontal" action="{% url 'submit_adaptivity_questionnaire' %}">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Aussage</th>
+            <th>trifft voll zu</th>
+            <th>trifft eher zu</th>
+            <th>trifft eher nicht zu</th>
+            <th>trifft überhaupt nicht zu</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Ich hatte das Gefühl, dass sich der Kommatrainer durch den Einführungstest an mich angepasst hat.</td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q1" value="1" aria-label="voll+" required></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q1" value="2" aria-label="eher+"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q1" value="3" aria-label="eher-"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q1" value="4" aria-label="voll-"></div></td>
+        </tr>
+        <tr>
+            <td>Vor dem Einführen einer neuen Regel wurde die zuletzt eingeführte Regel ausreichend geübt.</td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q2" value="1" aria-label="voll+" required></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q2" value="2" aria-label="eher+"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q2" value="3" aria-label="eher-"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q2" value="4" aria-label="voll-"></div></td>
+        </tr>
+        <tr>
+            <td>Das Programm hat darauf reagiert, wenn ich eine Regel vergessen habe, die bereits eingeführt wurde.</td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q3" value="1" aria-label="voll+" required></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q3" value="2" aria-label="eher+"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q3" value="3" aria-label="eher-"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q3" value="4" aria-label="voll-"></div></td>
+        </tr>
+        <tr>
+            <td>Ich hatte das Gefühl, dass meine Interaktion mit dem Programm keinen Einfluss auf die ausgewählten Aufgaben hatte.</td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q4" value="1" aria-label="voll+" required></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q4" value="2" aria-label="eher+"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q4" value="3" aria-label="eher-"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q4" value="4" aria-label="voll-"></div></td>
+        </tr>
+        <tr>
+            <td>Die Schwierigkeit der eingeführten Regel stieg mit höherem Level.</td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q5" value="1" aria-label="voll+" required></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q5" value="2" aria-label="eher+"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q5" value="3" aria-label="eher-"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q5" value="4" aria-label="voll-"></div></td>
+        </tr>
+        <tr>
+            <td>Ich hatte das Gefühl, dass Aufgaben mit neuen Regeln und Regeln, bei denen ich häufig Fehler machte, öfter getestet wurden.</td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q6" value="1" aria-label="voll+" required></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q6" value="2" aria-label="eher+"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q6" value="3" aria-label="eher-"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q6" value="4" aria-label="voll-"></div></td>
+        </tr>
+        <tr>
+            <td>Die Auswahl der Regeln für die Aufgaben erschien willkürlich.</td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q7" value="1" aria-label="voll+" required></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q7" value="2" aria-label="eher+"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q7" value="3" aria-label="eher-"></div></td>
+            <td><div class="form-check"><input class="form-check-input position-static" type="radio" name="q7" value="4" aria-label="voll-"></div></td>
+        </tr>
+    </tbody>
+</table>
+
+  <div class="form-group" id="formSelfestGroup">
+         <button type="submit" class="btn btn-primary">Absenden</button>
+  </div>
+</form>
+
+<p>&nbsp;</p>
+
+
+{% endblock %}

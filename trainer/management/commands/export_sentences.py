@@ -12,8 +12,10 @@ class Command(BaseCommand):
         data = tablib.Dataset()
         data.headers = ['sentence_id',      # Sentence.id
                         'sentence',         # satz
-                        'solutions',        # anzahl lösungen (typ1)
-                        'false_variants',   # anzahl verschiedener falscher lösungen (typ1)
+                        'set_solutions',        # anzahl lösungen (typ1)
+                        'set_false_variants',   # anzahl verschiedener falscher lösungen (typ1)
+                        'correct_solutions',        # anzahl lösungen (typ2)
+                        'correct_false_variants',   # anzahl verschiedener falscher lösungen (typ2)
                         ]
 
         count = 0
@@ -25,7 +27,7 @@ class Command(BaseCommand):
 
             row = []
             row.append(s.id)
-            row.append(s.text)
+            row.append(s.render_sentence_with_rules())
             row.append(s.count_set_solutions())
 
             false_variants = 0
@@ -34,6 +36,12 @@ class Command(BaseCommand):
                     false_variants += 1
             row.append(false_variants)
 
+            row.append(s.count_correct_solutions())
+            false_variants = 0
+            for sfr in s.for_render_correct():
+                if not sfr['render'][0]['solution_correct']:
+                    false_variants += 1
+            row.append(false_variants)
 
             data.append(row)
             count += 1

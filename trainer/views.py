@@ -2,10 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Count, Sum
 from django.core.urlresolvers import reverse
-from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule
-import re  # regex support
-import os
-
+from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule, UserPretest
+import random
 
 import base64
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -28,6 +26,8 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
+            # user.strategy = user.BAYES # TODO: random strategy selection for new user
+            user.strategy = user.LEITNER
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -149,7 +149,63 @@ def task(request):
     :param request: Django request
     :return: nothing
     """
-    import random
+
+    def render_task_explain_commas(request, sent, select_rules=None, template_params={}):
+        # pick one comma slot from the sentence
+        # there must at least be one non-error and non-'must not' rule (ensured above)
+        comma_candidates = []
+        # comma candidates is a list of tuples: (position, rule list for this position)
+        for pos in range(len(sent.get_words()) - 1):
+            # for each position: get rules
+            rules = sent.rules.filter(sentencerule__position=pos + 1).all()
+            pos_rules = []  # rules at this position
+            for r in rules:
+                if select_rules and select_rules[0] == r:  # if we know which rule to select
+                    if r not in pos_rules:
+                        pos_rules.append(r)
+                elif not select_rules and r.mode > 0:  # otherwise append all rules that are "may" or "must" commas
+                    if r not in pos_rules:
+                        pos_rules.append(r)
+            if pos_rules:
+                comma_candidates.append((pos, pos_rules))
+        # data for template:
+        # guessing_candidates: the three rules to display
+        # guessing_position: the comma slot position to explain
+        print("comma_candidates:",comma_candidates)
+        explanation_position = random.choice(comma_candidates)
+        guessing_position = explanation_position[0]
+        guessing_candidates = []  # the rules to be displayed for guessing
+        correct_rules_js = "[" + ",".join(
+            ['"{}"'.format(r.code) for r in explanation_position[1]]) + "]"  # javascript list of correct rules
+        if len(explanation_position[1]) > 3:
+            guessing_candidates = explanation_position[1][:3]
+        else:
+            guessing_candidates = explanation_position[1]
+        # add other active rules until we have three rules as guessing candidates
+        # if there aren't enough active rules (e.g. in pretest!),
+        # we consider all rules
+        active_rules = strategy.get_active_rules()
+        rule_candidates = []
+        if select_rules:  # we already know whoch rules to take
+            rule_candidates = [select_rules[1], select_rules[2]]
+        elif len(active_rules) < 3:  # less than 3 active rules -> not enough
+            rule_candidates = list(Rule.objects.exclude(code__startswith='E').all())
+        else:  # at least 3 active rules
+            rule_candidates = [x.rule for x in active_rules]
+        random.shuffle(rule_candidates)
+        for ar in rule_candidates:
+            if len(guessing_candidates) == 3:
+                break
+            if ar not in guessing_candidates:
+                guessing_candidates.append(ar)
+        random.shuffle(guessing_candidates)
+        sentence=sent
+        # prepare some special views for templates
+        words = sentence.get_words()  # pack all words of this sentence in a list
+        comma = sentence.get_commalist()  # pack all commas [0,1,2] in a list
+        words_and_commas = list(zip(words, comma + [0]))  # make a combines list of both
+        return render(request, 'trainer/task_explain_commas.html', {**template_params, **locals()})
+
 
     # get user from URL or session or default
     # get user from URL or session or default
@@ -157,66 +213,89 @@ def task(request):
     user = User.objects.get(django_user=request.user)
     new_rule = None  # new level reached? (new rule to explain)
     display_rank = True  # show the rank in output? (not on welcome and rule explanation screens)
+    rankimg = ""
     finished = False # default is: we're not yet finished
+    in_pretest = False
+    # select strategy
+    strategy = user.get_strategy()
+    strategy_debug = strategy.debug_output()
 
+    # -----------------------------------------------------------------------
+    # new user: show welcome page
     if not user.data:
         display_rank=False
-        return render(request, 'trainer/welcome.html', locals())
+        # return render(request, 'trainer/welcome.html', locals())
+        user.data="No questionnaire in this run."
+        user.save()
+        strategy.init_rules() # set all knowledge about user to start
+        return render(request, 'trainer/welcome_noquestionnaire.html', locals())
 
-    if user.rules_activated_count == 0: # new user without activated rules
-        new_rule = user.init_rules()
+    # -----------------------------------------------------------------------
+    # pretest
+    if not user.pretest:
+        if not request.GET.get('skip_pretest',False) and user.pretest_count < len(strategy.pretest_rules):
+            rule = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][0])
+            # print("Sentences for {}".format(strategy.pretest_rules[user.pretest_count]))
+            # sentences = rule.find_sentences()
+            sentences = Sentence.objects.filter(rules=rule, active=True) # all sentences with this rule
+            if not sentences:
+                error_msg="No sentence for pretest, rule {}".format(rule.code)
+                return render(request, 'trainer/error.html', locals())
+            # pick sentence for current pretest rule
+            s = random.choice(sentences)
+            in_pretest = True
+            pretest_counter = user.pretest_count+1
+            pretest_max = len(strategy.pretest_rules)
+            display_rank=False
+            rule2 = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][1])
+            rule3 = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][2])
+            return render_task_explain_commas(request, random.choice(sentences),
+                                              select_rules=(rule,rule2,rule3), template_params=locals())
+        else: # pretest finished
+            new_rule = strategy.process_pretest() # evaluate pretest and activate known rules, set level etc.
+            user.pretest=True
+            user.save()
+            display_rank = 0
+            return render(request, 'trainer/level_progress.html', locals())
+
+    # -----------------------------------------------------------------------
+    # pretest passed
+    # user without activated rules: show first rule page
+    if user.rules_activated_count == 0:
+        new_rule = strategy.activate_first_rule()
         display_rank=False
         level = 0
         return render(request, 'trainer/level_progress.html', locals())
 
-    # normal task selection process
-    (new_rule, finished) = user.progress()
-    level = user.rules_activated_count
-    rank = user.get_user_rank_display()
-    leveldsp = user.level_display()
-    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)
+    # fetch and prepare information about level for template
+    level = user.rules_activated_count  # user's current level
+    activerules = strategy.get_active_rules()
+    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
 
-    if new_rule:  # level progress: show new rules instead of task
+    # ------------------------------------------------------------------------
+    # adaptivity form
+    # show and process form (processing will set data_adaptivity)
+    if user.rules_activated_count>18 and not user.data_adaptivity:
+        return render(request, 'trainer/adaptivity_questionaire.html')
+
+    # ------------------------------------------------------------------------
+    # normal task selection process
+    (new_rule, finished, forgotten) = strategy.progress()  # checks if additional rule should be activated or user has finished all levels
+
+    # level progress: show new rules instead of task
+    if new_rule:
         return render(request, 'trainer/level_progress.html', locals())
 
     # choose a sentence from roulette wheel (the bigger the error for
     # a certain rule, the more likely one will get a sentence with that rule)
-    #TODO: fetch errors
-    sentence_rule = user.roulette_wheel_selection()
+    sentence_rule = strategy.roulette_wheel_selection()  # choose sentence and rule
     sentence = sentence_rule.sentence
     rule = sentence_rule.rule
+
+    # prepare some special views for templates
     words = sentence.get_words()  # pack all words of this sentence in a list
-
     comma = sentence.get_commalist() # pack all commas [0,1,2] in a list
-    words_and_commas = list(zip(words,comma+[0]))
-    comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
-    comma_pairs = sentence.get_commapairlist()  # pack all comma pairs [0,0,1,...] of this sentence in a list
-
-    comma_to_check=[]
-    for ct in comma_types:
-        if ct != [] and ct[0][0] != 'E': # rule, but no error rule
-            # at a rule position include comma with 50% probabily
-            comma_to_check.append(random.randint(0,1))
-        else:  # 1/6 prob. to set comma in no-comma position
-            comma_to_check.append(random.choice([1,0,0,0,0,0]))
-
-    comma_select = sentence.get_commaselectlist() # pack all selects in a list
-    comma_select.append('0') # dirty trick to make the comma_select and comma_types the same length as words
-    comma_types.append([])
-    comma_pairs.append(0)
-    comma_to_check.append(0)
-    # get total amount of submits
-    submits = sentence.total_submits
-
-    # printing out user results
-    #dictionary = user.comma_type_false
-    # generating tooltip content
-    # collection = []
-    #for i in range(len(comma_types)):
-    #    if submits != 0:
-    #        collection.append((comma_types[i], int((int(comma_select[i])/submits)*100)))
-    #    else:
-    #        collection.append((comma_types[i], 0))
+    words_and_commas = list(zip(words,comma+[0]))  # make a combines list of both
 
     # task randomizer
     # explain task only for must or may commas, usres with at least 3 active rules and non-error rules
@@ -226,125 +305,28 @@ def task(request):
         index = 0
 
     if index < 67:  # 1/3 chance for rule explanation
-        # return render(request, 'trainer/task_set_commas.html', locals())
-        # return render(request, 'trainer/task_correct_commas.html', locals())
-
         if random.randint(0,100) > 60: # 40% chance for correct commas
+            comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
+            # comma_types.append([])  # bugfix: no comma after last position
+            comma_to_check = []
+            for ct in comma_types:
+                if ct != [] and ct[0][0] != 'E':  # rule, but no error rule
+                    # at a rule position include comma with 50% probabily
+                    comma_to_check.append(random.randint(0, 1))
+                else:  # 1/6 prob. to set comma in no-comma position
+                    comma_to_check.append(random.choice([1, 0, 0, 0, 0, 0]))
+            comma_to_check.append(0)
             return render(request, 'trainer/task_correct_commas.html', locals())
         else:
             return render(request, 'trainer/task_set_commas.html', locals())
-
-    # EXPLANATION task
-
-    # pick one comma slot from the sentence
-    # there must at least be one non-error and non-'must not' rule (ensured above)
-    comma_candidates= []
-    # comma candidates is a list of tuples: (position, rule list for this position)
-    for pos in range(len(sentence.get_words()) - 1):
-        # for each position: get rules
-        rules = sentence.rules.filter(sentencerule__position=pos + 1).all()
-        pos_rules = []  # rules at this position
-        for r in rules:
-            if r.mode > 0:
-                pos_rules.append(r)  # collect codes, not rules objects
-        if pos_rules:
-            comma_candidates.append((pos,pos_rules))
-
-    explanation_position = random.choice(comma_candidates)
-    guessing_position = explanation_position[0]
-    guessing_candidates = []  # the rules to be displayed for guessing
-    correct_rules_js = "["+",".join(['"{}"'.format(r.code) for r in explanation_position[1]])+"]"; # javascript list of correct rules
-    if len(explanation_position[1]) > 3:
-        guessing_candidates = explanation_position[1][:3]
     else:
-        guessing_candidates = explanation_position[1][:3]
-
-    # add other active rules until we have three rules as guessing candidates
-    # beacuse explanation tasks will not occur before rule 3 is activated, there always are enough active rules
-    active_rules = UserRule.objects.filter(user=user, active=1)
-    for ar in active_rules:
-        if len(guessing_candidates) == 3:
-            break
-        if not ar.rule in guessing_candidates:
-            guessing_candidates.append(ar.rule)
-    random.shuffle(guessing_candidates)
-
-
-    # data for template:
-    # guessing_candidates: the three rules to display
-    # guessing_postition: the comma slot position to explain
-    # sentence
-
-    # generating radio buttons content (2D array to be)
-
-
-    explanations = []
-    # list of indexes of correct solution (2D array to be)
-    index_arr = []
-
-    for i in range(len(comma_types)):
-        if len(comma_types[i]) != 0:
-            # In case there is only one comma type
-            if len(comma_types[i]) == 1:
-                options, solution_index = sentence.get_explanations(comma_types[i][0], user)
-                explanations.append(options)
-                index_arr.append([solution_index])
-            # If there are multiple types for one position
-            else:
-                # Initial Indexing
-                non_taken_positions = [0, 1, 2]
-                # Set of options
-                options = ["","",""]
-                # Set of answer positions
-                answers = []
-                # Check all the muss rules
-                for j in range(len(comma_types[i])):
-                    if Rule.objects.get(code=comma_types[i][j]).mode == 2:
-                        solution_index = random.choice(non_taken_positions)
-                        # Save the description of a comma
-                        options[solution_index] = Rule.objects.get(code=comma_types[i][j]).description
-                        # Save the index of a correct solution
-                        answers.append(solution_index)
-                        # "Mark" the index as "taken"
-                        non_taken_positions.remove(solution_index)
-                # If there are only kann rules, take those
-                if options == ["","",""]:
-                    for j in range(len(comma_types[i])):
-                        if Rule.objects.get(code=comma_types[i][j]).mode == 1:
-                            solution_index = random.choice(non_taken_positions)
-                            # Save the description of a comma
-                            options[solution_index] = Rule.objects.get(code=comma_types[i][j]).description
-                            # Save the index of a correct solution
-                            answers.append(solution_index)
-                            # "Mark" the index as "taken"
-                            non_taken_positions.remove(solution_index)
-                # If there are only must-not commas
-                if options == ["","",""]:
-                    print("Only must-nots")
-                    continue
-                # Save an array of answers in index array
-                index_arr.append(sorted(answers))
-                # Get neighboring explanations to the first comma (can be optimized)
-                rest_options, ignore_index = sentence.get_explanations(comma_types[i][0], user)
-                k = 0
-                # Array of indexes of rest_options
-                positions_in_rest_options = [0, 1, 2]
-                # ... without the index of a correct solution
-                positions_in_rest_options.remove(ignore_index)
-                # Do until all positions are taken
-                while len(non_taken_positions) != 0:
-                    random_sol_index = random.choice(non_taken_positions)
-                    random_rest_option = random.choice(positions_in_rest_options)
-                    options[random_sol_index] = rest_options[random_rest_option]
-                    non_taken_positions.remove(random_sol_index)
-                    positions_in_rest_options.remove(random_rest_option)
-                explanations.append(options)
-    return render(request, 'trainer/task_explain_commas.html', locals())
-
+        # EXPLANATION task
+        return render_task_explain_commas(request, sentence, template_params=locals())
 
 
 @logged_in_or_basicauth("Bitte einloggen")
 def start(request):
+    """Store questionnaire results and redirect to task."""
     user = User.objects.get(django_user=request.user)
     vector = "{}:{}-{}:{}+{}+{}:{}:{}:{}".format(
         request.GET.get('hzb',0),
@@ -370,64 +352,68 @@ def start(request):
 
     return redirect("task")
 
-def profile(request):
-    """
-        Receives request for a profile page
-
-        :param request: Django request
-        :return: response
-    """
-    user_id = "testuser"
-    user = User.objects.get(user_id="testuser")
-    dictionary = user.get_dictionary()
-    new_dictionary = {}
-    for i in dictionary:
-        if i != 'KK':
-            a, b = re.split(r'/', dictionary[i])
-            rule_desc = Rule.objects.get(code=i).slug
-            if b != '0':
-                new_dictionary[rule_desc] = str(100-int((int(a)/int(b))*100))
-            else:
-                new_dictionary[rule_desc] = str(0)
-    rank = user.get_user_rank_display()
-    tasks = []
-    for roots, directs, files in os.walk("trainer/templates/trainer"):
-        for file in files:
-            tasks.append(file[:-5]);
-    return render(request, 'user_profile.html', locals())
 
 @logged_in_or_basicauth("Bitte einloggen")
-def submit_task1(request):
+def submit_adaptivity_questionnaire(request):
+    """Receive adaptivity questionnaire answers and save to data_study field"""
+    user = User.objects.get(django_user=request.user)
+    user.data_adaptivity = "{}:{}:{}:{}:{}:{}:{}".format(
+        request.GET.get('q1',0),
+        request.GET.get('q2',0),
+        request.GET.get('q3',0),
+        request.GET.get('q4',0),
+        request.GET.get('q5',0),
+        request.GET.get('q6',0),
+        request.GET.get('q7',0))
+    user.save()
+
+    return redirect("task")  # go on with tasks
+
+
+def index(request):
+    """Display index page."""
+    return render(request, 'trainer/index.html', locals())
+
+
+@logged_in_or_basicauth("Bitte einloggen")
+def submit_task_set_commas(request):
     """
-    Receives an AJAX GET request containing a solution bitfield for a sentence.
+    Receives an AJAX GET request containing a solution bitfield for a 'set' task.
     Saves solution and user_id to database.
 
     :param request: Django request
     :return: nothing
     """
-    response = []
 
+    # extract request parameters
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     time_elapsed = request.GET.get('tim',0)
-    sentence.set_comma_select(user_solution)
-    sentence.update_submits()
-    user = User.objects.get(django_user=request.user)
+
+    # save solution
+    user = User.objects.get(django_user=request.user)  # current user
     solution = Solution(user=user, sentence=sentence, type="set", time_elapsed=time_elapsed, solution="".join(user_solution))
     solution.save() # save solution to db
-    response = user.eval_set_commas(user_solution, sentence, solution)
-    user.update_rank()
+
+    # calculate response
+    response = user.eval_set_commas(user_solution, sentence, solution)  # list of dictionaries with keys 'correct' and 'rule'
+
+    # update internal states for strategy according to answer
+    for single_solution in response:
+        if single_solution['rule']['code']:
+            # print("checking " + single_solution['rule']['code'])
+            user.get_strategy().update(Rule.objects.get(code=single_solution['rule']['code']), 1, single_solution['correct'])
+    # update per user counter for sentence (to avoid repetition of same sentences)
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
         us.save()
-    except UserSentence.DoesNotExist:
+    except UserSentence.DoesNotExist:  # user did not yet encouter this sentence
         UserSentence(user=user, sentence=sentence, count=1).save()
-    except UserSentence.MultipleObjectsReturned:  # somehow multiple entries existed..
+    except UserSentence.MultipleObjectsReturned:  # somehow multiple entries existed... (should not happen)
         UserSentence.objects.filter(user=user, sentence=sentence).delete()
         UserSentence(user=user, sentence=sentence, count=1).save()
 
-    # print(response)
     return JsonResponse({'submit': 'ok', 'response': response}, safe=False)
 
 
@@ -440,19 +426,28 @@ def submit_task_correct_commas(request):
     :param request: Django request
     :return: nothing
     """
-    response = []
 
-    user = User.objects.get(django_user=request.user)
+    # extract request parameters
     sentence = Sentence.objects.get(id=request.GET['id'])
     user_solution = request.GET['sol']
     time_elapsed = request.GET.get('tim',0)
-    #sentence.set_comma_select(user_solution)
-    #sentence.update_submits()
 
+    # save solution
+    user = User.objects.get(django_user=request.user)
     solution = Solution(user=user, sentence=sentence, type="correct", time_elapsed=time_elapsed, solution="".join([str(x) for x in user_solution]))
     solution.save() # save solution to db
-    response = user.count_false_types_task_correct_commas(user_solution, sentence, solution)
 
+    # calculate response
+    response = user.count_false_types_task_correct_commas(user_solution, sentence, solution)
+    # print(response)
+
+    # update internal states for strategy according to answer (2=COMMA_CORRECT)
+    for single_solution in response:
+        if single_solution['rule']['code']:
+            # print("checking "+single_solution['rule']['code'])
+            user.get_strategy().update(Rule.objects.get(code=single_solution['rule']['code']), 2, single_solution['correct'])
+
+    # update per user counter for sentence (to avoid repetition of same sentences)
     try:
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
@@ -476,11 +471,8 @@ def submit_task_explain_commas(request):
     :return: nothing
     """
 
-    user = User.objects.get(django_user=request.user)
+    # extract request parameters
     sentence = Sentence.objects.get(id=request.POST['sentence_id'])
-    sentence.update_submits()
-    user.update_rank()
-
     rules=[]
     try:
         rules.append(Rule.objects.get(code=request.POST.getlist('rule-0')[0]))
@@ -489,30 +481,43 @@ def submit_task_explain_commas(request):
     except Rule.DoesNotExist:
         return JsonResponse({'error': 'invalid rule', 'submit':'fail'})
 
-    solution=[] # solution is array of the form: rule_id:correct?:chosen?, rule_id:...
+    user = User.objects.get(django_user=request.user)
 
+    solution = [] # solution is array of the form: rule_id:correct?:chosen?, rule_id:...
     error_rules = [] # all rules with errors
-
     pos = int(request.POST['position'])+1
     for r in rules:
         correct = 1 if SentenceRule.objects.filter(sentence=sentence, rule=r, position=pos) else 0  # correct if sentence has rule
         chosen = 1 if r.code in request.POST else 0  # chosen if box was checked
         solution.append("{}:{}:{}".format(r.id, correct, chosen))
-        if not r.code.startswith('E'):  # only count non-error rules
-            ur = UserRule.objects.get(user=user, rule=r)
-            ur.count((correct==chosen))  # count rule application as correct if correct rule was chosen and vice versa
-            if correct != chosen:
-                error_rules.append(r)
+        # are we in pretest?
+        if not user.pretest:
+            if user.get_strategy().pretest_rules[user.pretest_count][0] == r.code:  # do we look at the rule to test?
+                # save pretest result
+                up = UserPretest(user=user, rule=r, result=(correct==chosen))
+                up.save()
+                user.pretest_count += 1  # increase pretest counter
+                user.save()
+                return JsonResponse({'submit': 'ok'})
+        else:  # not on pretest
+            # update strategy model (3=COMMA_EXPLAIN)
+            user.get_strategy().update(r, 3, (correct == chosen))
+
+            if not r.code.startswith('E'):  # only count non-error rules
+                ur = UserRule.objects.get(user=user, rule=r)
+                ur.count((correct == chosen))  # count rule application as correct if correct rule was chosen and vice versa
+                if correct != chosen:
+                    error_rules.append(r)
 
     # write solution to db
     time_elapsed = request.POST.get('tim', 0)
     sol = Solution(user=user, sentence=sentence, type='explain', time_elapsed=time_elapsed,
                    solution="{}|".format(pos)+",".join(solution))
     sol.save()
-
     for er in error_rules:
         SolutionRule(solution=sol, rule = er, error=True).save()
 
+    # update per user counter for sentence (to avoid repetition of same sentences)
     try:  # count sentence as seen
         us = UserSentence.objects.get(user=user, sentence=sentence)
         us.count += 1
@@ -545,33 +550,42 @@ def logout(request):
 
 
 def sentence(request, sentence_id):
+    """Renders a partial template for a sentence including rule information."""
+
+    # fetch sentence
     s = Sentence.objects.get(id=sentence_id)
-    wcr = s.get_words_commas_rules()
-    rules=[]
+
+    # extract rules to separate list
+    wcr = s.get_words_commas_rules()  # Return a list of tuples: (word,commstring,rule) for a sentence.
+    rules = []
     for x in wcr:
         for y in x[2]:
             rules.append(y)
-    # print(rules)
     rules = list(set(rules))
-    return render(request, 'trainer/partials/sentence.html', locals())
+    return render(request, 'trainer/partials/correct_sentence.html', locals())
 
 
 def help(request):
+    """Renders help template"""
     return render(request, 'trainer/help.html', locals())
 
 
 def nocookies(request):
+    """Renders information page if cookies could not be set."""
     display_rank = False  # show the rank in output? (not on welcome and rule explanation screens)
     uname = request.GET.get('uname','')
     return render(request, 'trainer/nocookies.html', locals())
 
+
 def vanillalm(request):
+    """Stud.IP Lernmodule plugin vanillalm integration."""
     return render(request, 'trainer/vanillalm.html', locals())
 
+
 def stats(request):
+    """Render general statistics."""
 
     ud = []
-
     count_users = User.objects.filter(rules_activated_count__gt=0).count()
     count_studip_users = User.objects.filter(rules_activated_count__gt=0, user_id__iregex=r'[0-9a-f]{32}').count()
     count_solutions = Solution.objects.count()

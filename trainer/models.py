@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
 from django.db.models import Count
+
 import re  # regex support
 import random
 
@@ -22,9 +23,6 @@ class Rule(models.Model):
     description = models.CharField(max_length=2048)
     rule = models.CharField(max_length=255)
     example = models.CharField(max_length=2048, default='')
-    # example1 = django.db.models.ForeignKey('Sentence')
-    # example2 = django.db.models.ForeignKey('Sentence')
-    # example3 = django.db.models.ForeignKey('Sentence')
 
     def __str__(self):
         return self.code
@@ -46,6 +44,25 @@ class Rule(models.Model):
             elif decode_list[i] != "0":
                 encode_list += str(decode_list[i])
         return encode_list
+
+    def find_sentences(self, allowed_other_rules=[]):
+        """Find sentences for this rule, with restrictions to other rules in the sentences.
+        :param allowed_other_rules (List of Rule objects) Which other rules are allowed in the sentences?
+        """
+
+        def all_rules_valid(sentence):
+            for r in sentence.rules.all(): # all rules for this sentence
+                if r != self and r not in allowed_other_rules:
+                    return False
+            return True
+
+        result = []  # all sentences that meet the conditions
+        sentences = self.sentence_set.all()  # all sentences for this rule
+        for s in sentences:
+            if all_rules_valid(s):  # only contains allowed rules?
+                result.append(s)  # add to results
+
+        return result
 
 
 class Sentence(models.Model):
@@ -85,22 +102,6 @@ class Sentence(models.Model):
         """
         return [] # re.split(r'[,]+', self.comma_select.strip())
 
-    def set_comma_select(self, user_select_str):
-        """
-        Set how much times certain comma was selected
-        :param boolean_str: string of seleced commas
-        """
-        return
-
-        #selects = self.get_commaselectlist();
-        #user_select_arr = re.split(r'[,]+', user_select_str)
-        #for i in range(len(self.get_commalist())):
-        #    if i != len(self.get_commalist())-1:
-        #        selects[i] = str(int(selects[i]) + int(user_select_arr[i])) + ","
-        #    else:
-        #        selects[i] = str(int(selects[i]) + int(user_select_arr[i]))
-        #self.comma_select = "".join(selects)
-        #self.save()
 
     def get_words(self):
         """
@@ -189,6 +190,17 @@ class Sentence(models.Model):
 
         return list(zip(words,commas,rules))
 
+    def render_sentence_with_rules(self):
+        """Return a string indicating all rules names after each Position"""
+        s = ""
+        wwr = self.get_words_commas_rules()
+        for (word,comma,rules) in wwr:
+            s += word + comma
+            if rules:
+                s += "(" + ",".join([x.rule for x in rules]) + ") "
+        return s
+
+
     def get_commaval(self):
         """
         Where do the commas go?
@@ -203,12 +215,13 @@ class Sentence(models.Model):
 
     def get_explanations(self, commatype, user):
         """
+        Choose three explanations.
+
         :param commatype: current type
-        :param user: user rank
+        :param user: user object
         :return: solution
         """
 
-        rank = user.user_rank
         # Rule Representation: e.g : A,1,0,0 and Difference List
         rule_obj = Rule.objects.get(code=commatype)
         decode_list = rule_obj.decode()
@@ -261,14 +274,14 @@ class Sentence(models.Model):
         """Return array of amount of commas set for 'set comma' tasks."""
         sols = self.solution_set.filter(type='set').values('solution')
         w = self.get_words()
-        sum = [0 for s in range(len(w)+1)]
+        summed = [0 for s in range(len(w)+1)]
         for s in sols:
             sol = s['solution'].split(',')
             for x in range(len(sol)):
                 if sol[x] == '1':
-                    sum[x] += 1
+                    summed[x] += 1
 
-        return list(zip(w, sum))
+        return list(zip(w, summed))
 
     def for_render_summary_correct(self):
         """Return array of amount of commas set for correction tasks."""
@@ -291,6 +304,17 @@ class Sentence(models.Model):
 
 
 def render_one_set_solution(w,solution_array,pairs,solution):
+    """Returns a list of words with additional information for rendering a solution.
+
+    Words are dictionaries with:
+      'word': (string) orthographic representation of the word
+      'commastring': (string) the correct string to be displayed in comma position after the word - " " or ", " or "(,) "
+      'rules': (list of Rule objects) the rules that apply to the comma position
+      'commaset': (string) a string representing the solution for the comma position as given by the user
+      'correct': (boolean) has the comma position after the word been set correctly
+      'solution_correct': (boolean) is the entire solution correct (given in every position)
+
+    """
 
     solution_correct = True  # is the entire solution correct?
 
@@ -302,6 +326,9 @@ def render_one_set_solution(w,solution_array,pairs,solution):
             words[i]['commaset'] = ","
         else:
             words[i]['commaset'] = " "
+
+        # most complicated question: Was the solution correct?
+        # the difficult case are pairs of optional commas which are only correct if both set or both left out
 
         if len(solution_array[i]) == 0 and int(user_array[i]) == 1:  # comma in the wild
             words[i]['correct'] = False
@@ -344,7 +371,18 @@ def render_one_set_solution(w,solution_array,pairs,solution):
     return words
 
 
-def render_one_correct_solution(w,solution_array,pairs,solution):
+def render_one_correct_solution(w, solution_array, pairs, solution):
+    """Returns a list of words with additional information for rendering a correction solution.
+
+    Words are dictionaries with:
+      'word': (string) orthographic representation of the word
+      'commastring': (string) the correct string to be displayed in comma position after the word - " " or ", " or "(,) "
+      'rules': (list of Rule objects) the rules that apply to the comma position
+      'commaset': (string) a string representing the solution for the comma position as given by the user
+      'correct': (boolean) has the comma position after the word been set correctly
+      'solution_correct': (boolean) is the entire solution correct (given in every position)
+
+    """
 
     solution_correct = True  # is the entire solution correct?
 
@@ -420,8 +458,6 @@ class SentenceRule(models.Model):
     def __str__(self):
         return "Rule {} at #{}: {} (Pair {})".format(self.rule.code, self.position, self.sentence.text, self.pair)
 
-
-
 class User(models.Model):
     def __str__(self):
         return self.user_id
@@ -431,6 +467,14 @@ class User(models.Model):
         (1, 'Kommakönner'),
         (2, "Kommakommandant"),
         (3, 'Kommakönig'),
+    )
+
+    # rule selection strategy
+    LEITNER = 0
+    BAYES = 1
+    STRATS = (
+        (LEITNER, 'Leitnerbox'),  # simple leitner box algorithm
+        (BAYES, 'Bayes')        # bayesian net (anna pillar)
     )
 
     abschluss = {0: "Nicht angegeben",
@@ -461,7 +505,11 @@ class User(models.Model):
     data_selfestimation = models.IntegerField(default=0)
     data_orthosem_participant = models.BooleanField(default=False)  # participant of an orthography seminar?
 
-    user_rank = models.IntegerField(choices=RANKS, default = 0)
+    data_adaptivity = models.CharField(max_length=255, default='')  # for adaptivity study / questionnaire results
+
+    # selection strategy for to use for this user
+    strategy = models.IntegerField(choices=STRATS, default = 0)
+
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
     sentences = models.ManyToManyField(Sentence, through='UserSentence')
@@ -471,13 +519,17 @@ class User(models.Model):
     counter_correct = models.IntegerField(default=0)
     counter_wrong = models.IntegerField(default=0)
 
+    # has user passed pretest (to which level)?
+    pretest = models.BooleanField(default=False)
+    pretest_count = models.IntegerField(default=0)
+
     # rules_activated: user progress in terms of available rules.
     # Starts at 0, continues to ~40
     rules_activated_count = models.IntegerField(default=0)
     rules = models.ManyToManyField(Rule, through='UserRule')
 
     django_user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, default=None)
-
+    # order of rules (increasing difficulty)
     rule_order = [
         "A1",  # 1 GLEICHRANG
         "A2",  # 2 ENTGEGEN
@@ -500,7 +552,7 @@ class User(models.Model):
         "C4.1",  # 19
         "B2.4.2",  # 20
         "B2.5",  # 21
-        "C6.1",  #22
+        "C6.1",  # 22
         "C6.2",  # 23
         "C6.3.1",  # 24
         "C6.3.2",  # 25
@@ -510,53 +562,6 @@ class User(models.Model):
         "B1.4.1",  # 29
         "B1.4.2",  # 30
     ]
-
-    def update_rank(self):
-        rank_counter = 0
-        dict = self.get_dictionary()
-        for key in dict:
-            if key != "E1":
-                a, b = re.split(r'/', dict[key])
-                points = int(b)-int(a)
-                if points >= 50:
-                    rank_counter +=4
-                if points >= 25:
-                    rank_counter +=2
-                if  points >= 10:
-                    rank_counter +=1
-        if rank_counter == len(dict)-1:
-            self.user_rank = 1
-            self.save()
-        if rank_counter == 2 * (len(dict)-1):
-            self.user_rank = 2
-            self.save()
-        if rank_counter == 4 * (len(dict) - 1):
-            self.user_rank = 3
-            self.save()
-
-    def init_rules(self):
-        """Initialize active rules for user."""
-
-        # create correct rules
-        for r in self.rule_order:
-            ur = UserRule(rule=Rule.objects.get(code=r), user=self, active=False)
-            ur.save()
-        # create error rules
-        ur = UserRule(rule=Rule.objects.get(code="E1"), user=self, active=False)
-        ur.save()
-        ur = UserRule(rule=Rule.objects.get(code="E2"), user=self, active=False)
-        ur.save()
-
-        # activate first rule
-        new_rule = Rule.objects.get(code=self.rule_order[0])
-        ur = UserRule.objects.get(rule=new_rule, user=self)
-        ur.active = True
-        ur.save()
-
-        self.rules_activated_count = 1  # activate first rule for next request
-        self.save()
-
-        return new_rule
 
     def prepare(self, request):
         # create a real django user
@@ -568,82 +573,25 @@ class User(models.Model):
         django_user_login(request, self.django_user)
         return True
 
-    def progress(self):
-        """Advance to next level, if appropriate.
-        
-        Returns (new_rule, finished?) 
-        new_rule is False if no level progress, the newly activated Rule object otherwise.
-        finished is false if not all rules are activated and true if all Rules are activated
-        """
-
-        # highest level reached?
-        if self.rules_activated_count == len(self.rule_order):
-            return (False, True)
-
-        # d = self.get_dictionary()
-        last_rule = self.rule_order[self.rules_activated_count - 1]
-        ur = UserRule.objects.get(user=self, rule=Rule.objects.get(code=last_rule))
-        # advancement criterion: at least 3 tries, less than half of them wrong
-        # print("CHECK FOR PROGRESS: {},{},{}".format(ur.rule.code, ur.total, ur.correct))
-        if ur.total >= 4 and ur.correct >= (ur.total / 2):
-            self.rules_activated_count += 1
-            self.save()
-            # create and activate new rule for user
-            new_rule = Rule.objects.get(code=self.rule_order[self.rules_activated_count - 1])
-            new_ur = UserRule.objects.get(rule=new_rule, user=self)
-            new_ur.active = True
-            new_ur.save()
-            return (new_rule, (self.rules_activated_count == len(self.rule_order)))
-
-        return (False, False)
-
-    def current_rule(self):
-        if self.rules_activated_count == len(self.rule_order):
-            return False
-        return Rule.objects.get(code=self.rule_order[self.rules_activated_count - 1])
-
-    def level_display(self):
-        """Return UserRule and examples sentence data for displaying level and expanations. At most 5 rules sorted by box position."""
-
-        limit = min(self.rules_activated_count, 5)
-        res = UserRule.objects.filter(user=self, active=1).order_by('box')[:limit]
-        return res
-
+    def get_strategy(self):
+        """Returns an appropriate strategy object for current user."""
+        if self.strategy == self.LEITNER:
+            from trainer.strategies.leitner import LeitnerStrategy
+            return LeitnerStrategy(self)
+        elif self.strategy == self.BAYES:
+            from trainer.strategies.bayes import BayesStrategy
+            return BayesStrategy(self)
+        else:
+            raise Exception("Invalid strategy: {}".format(self.strategy))
 
     def count(self, correct):
-
+        """Set internal total correct/wrong counter"""
+        # TODO: check if still in use
         self.counter += 1
         if correct:
             self.counter_correct += 1
         else:
             self.counter_wrong += 1
-
-
-    def get_dictionary(self, only_activated=False):
-        """
-        Dictionary with comma types as keys and a value tuple of erros and total amount of trials
-        :return: dictionary
-        """
-        type_dict = {}
-        tmp = re.split(r'[ ,]+', self.comma_type_false)
-
-        activated_rules = self.rule_order[:self.rules_activated_count]
-        for elem in tmp:
-            [a,b] = re.split(r':',elem)
-            if not only_activated or a in activated_rules:
-                type_dict[a]=b
-        return type_dict
-
-    def save_dictionary(self,update):
-        """
-        Save updated dictionary to the database
-        :param update: updated dictionary
-        """
-        new_dict_str = ""
-        for key in update:
-            new_dict_str += key + ":" + update[key] + ","
-        self.comma_type_false = new_dict_str[:-1]
-        self.save()
 
     def eval_set_commas(self, user_array_str, sentence, solution):
         """
@@ -791,90 +739,6 @@ class User(models.Model):
 
         return resp
 
-    def roulette_wheel_selection(self):
-        """
-        gets a new sentence via roulette wheel, chooses random among sentences
-        :return: a randomly chosen SentenceRule object
-        """
-
-        roulette_list = []
-        active_rules = 0
-        for ur in UserRule.objects.filter(user=self, active=True).all():
-            for i in range(2**(4-ur.box)):  # Spaced repetition algorithm: Each box is half probable than previous
-                roulette_list.append(ur.rule.code)
-            active_rules += 1
-
-        if active_rules >= 4:  # error rules are activated with fourth rule
-
-            for r in Rule.objects.filter(code__startswith='E').all():
-                    # all error rules are treated like box 3
-                    # TODO: treat error rules like normal rules
-                    roulette_list.append(r.code)
-                    roulette_list.append(r.code)
-        # print(roulette_list)
-        index = random.randint(0, len(roulette_list)-1)
-        rule_obj = Rule.objects.filter(code=roulette_list[index])
-        # print("Select for {}".format(rule_obj))
-        # filter out all sentences that have higher rules than current user's progress
-        possible_sentences = []
-        for sr in SentenceRule.objects.filter(rule=rule_obj[0],sentence__active=True).all():
-            ok = True
-            for r in sr.sentence.rules.all():
-                if r.code in self.rule_order and (self.rule_order.index(r.code) > (self.rules_activated_count-1)):
-                    ok = False
-                    break
-            if ok:
-                try:
-                    us = UserSentence.objects.get(user=self, sentence=sr.sentence)
-                    count = us.count
-                except UserSentence.MultipleObjectsReturned:
-                    count = 0
-                except UserSentence.DoesNotExist:
-                    count = 0
-                possible_sentences.append([sr,count])  # collect sentence and per user counter for the sentence
-
-        if len(possible_sentences) == 0: # HACK: No sentence? Try again # TODO: find a real solution
-            return self.roulette_wheel_selection()
-
-        possible_sentences.sort(key=lambda sentence:sentence[1])  # sort ascending by counts
-
-        if possible_sentences[0][1] == 0:  # first use all sentences at least once
-            num = 1                        # i.e. if least used sentence has zero count, use it
-        else:
-            num = min(3,len(possible_sentences))  # else choose from three least often used
-
-        return random.choice(possible_sentences[:num])[0]  # randomly choose and return SentenceRule object
-
-
-    def may_roulette_wheel_selection(self):
-        """
-        gets a new may sentence via roulette wheel, chooses random among sentences
-        :return: roulette_list with accumulated rules
-        """
-        may_obj = Rule.objects.filter(mode=1)
-        dict = self.get_dictionary()
-        may_roulette_list = []
-        sum = 0
-
-        for rule in range(len(may_obj) - 1):
-            a, b = re.split(r'/', dict[str(may_obj[rule])])
-            sum += int(b)
-
-        for rule in range(len(may_obj) - 1):
-            a, b = re.split(r'/', dict[str(may_obj[rule])])
-            if int(b) != 0:
-                ratio = int((int(a) / sum) * 100)
-            else:
-                ratio = 1
-            for i in range(ratio):
-                may_roulette_list.append(may_obj[rule])
-
-        rule_index = random.randint(0, len(may_roulette_list) - 1)
-        sent_obj = SentenceRule.objects.filter(rule=may_roulette_list[rule_index])
-        sent_index = random.randint(0, len(sent_obj) - 1)
-
-        return sent_obj[sent_index].sentence
-
     def sentence_selector(self):
         may_obj = Rule.objects.filter(mode=1)
         rule_index = random.randint(0, len(may_obj) - 1)
@@ -950,17 +814,29 @@ class User(models.Model):
         }
         return perms.get(self.data_study_permission, "ungültig")
 
-    def tries(self, type=None):
-        if not type:
-            return Solution.objects.filter(user=self).count()
-        else:
-            return Solution.objects.filter(user=self, type=type).count()
+    def tries(self, type=None, rule=None):
+        if not rule:  # for all rules/levels
+            if not type:
+                return Solution.objects.filter(user=self).count()
+            else:
+                return Solution.objects.filter(user=self, type=type).count()
+        else:  # for a single rule/level
+            if not type:
+                return Solution.objects.filter(user=self, sentence__rules=rule).count()
+            else:
+                return Solution.objects.filter(user=self, type=type, sentence__rules=rule).count()
 
-    def errors(self, type=None):
-        if not type:
-            return SolutionRule.objects.filter(solution__user=self).count()
-        else:
-            return SolutionRule.objects.filter(solution__user=self, solution__type=type).count()
+    def errors(self, type=None, rule=None):
+        if not rule:  # for all rules/levels
+            if not type:
+                return SolutionRule.objects.filter(solution__user=self).count()
+            else:
+                return SolutionRule.objects.filter(solution__user=self, solution__type=type).count()
+        else:  # for a single rule/level
+            if not type:
+                return SolutionRule.objects.filter(solution__user=self, rule=rule).count()
+            else:
+                return SolutionRule.objects.filter(solution__user=self, solution__type=type, rule=rule).count()
 
     def total_time(self):
         te = Solution.objects.filter(user=self).aggregate(models.Sum('time_elapsed'))['time_elapsed__sum']
@@ -989,6 +865,17 @@ class UserRule(models.Model):
     score = models.FloatField(default=0.0)  # score counter for advancing/degrading rule to boxes
     total = models.IntegerField(default=0)  # total rule solution counter
     correct = models.IntegerField(default=0)  # correct rule solution counter
+
+    staticnet = models.FloatField(default=0.0) # float value for static bayesian net (see strategies/bayes.py)
+    dynamicnet_active = models.BooleanField(default=False)  # is rule part of user's current dynamic net? (see strategies/bayes.py)
+    dynamicnet_current = models.BooleanField(default=False) # is rule current (=main focus) rule?
+    dynamicnet_count = models.IntegerField(default=0) # how often has rule been
+    dynamicnet_count1 = models.IntegerField(default=0)  # how often has rule been for task type 1
+    dynamicnet_count2 = models.IntegerField(default=0)  # how often has rule been for task type 2
+    dynamicnet_count3 = models.IntegerField(default=0)  # how often has rule been for task type 3
+    dynamicnet_history1 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_SET)
+    dynamicnet_history2 = models.IntegerField(default=0)  # Bitfield for history of task type 2 (COMMA_CORRECT)
+    dynamicnet_history3 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_EXPLAIN)
 
     def count(self, correct=True, tries=1):
         """Register solution for a rule.
@@ -1052,6 +939,15 @@ class UserSentence(models.Model):
 
     class Meta:
         ordering = ('count',)
+
+
+class UserPretest(models.Model):
+    """
+    Store pretest results for user/rule.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
+    result = models.BooleanField(default=False)
 
 
 class Solution(models.Model):
