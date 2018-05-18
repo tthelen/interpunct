@@ -1,0 +1,32 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Willkommen beim Komma-Trainer!{% endblock %}
+
+{% block main %}
+
+    <h1>Komma-Trainer</h1>
+
+    <p>Herzlich Willkommen zum Komma-Trainer! Du möchtest auf motivierende und herausfordernde Weise an deinen Kommasetzungs-Fähigkeiten arbeiten?
+    Kein Problem - die Kommas sind nur noch wenige Klicks entfernt. Lange Anleitungen und Vorreden gibt es nicht, dafür aber jede Menge
+    interessanter Sätze, spielerischer Elemente und dazu noch die Möglichkeit, etwas für die Wissenschaft zu tun.
+    </p>
+
+    <h2>Wissenschaftliche Auswertung</h2>
+
+    <p>
+    Wir wollen Leistungen und Schwierigkeiten Studierender bei der Kommasetzung untersuchen, um dieses Programm zu
+    verbessern, aber auch, um etwas über typische (und untypische) Problemstellen herauszufinden.
+    </p>
+
+    <p>Alle anfallenden Daten werden pseudonym gespeichert, d.h. das Programm merkt sich Deinen Übungsstand und
+    präsentiert Dir jeweils passende Übungen. An keiner Stelle sind dabei aber Rückschlüsse auf Deine Identität
+    und Deinen Namen möglich. Technisch funktioniert das so, dass Stud.IP aus deinem Benutzernamen einen
+    verschlüsselten Wert (kryptographisches Hashing) bildet und das Komma-Programm nur diesen Wert kennt.
+    Es nutzt eine eigene Datenbank und hat keinerlei Zugriff auf Stud.IP-Daten.</p>
+
+    <p>Alle Fragen zum Programm und zum Datenschutz beantwortet Dr. Tobias Thelen, Zentrum für Informationsmanagement und
+    virtuelle Lehre, <a href="mailto:tobias.thelen@uni-osnabrueck.de">tobias.thelen@uni-osnabrueck.de</a>, Telefon 0541/969-6502.</p>
+
+    <p><a class="btn btn-primary" href="{% url 'task' %}">Starten</a></p>
+
+{% endblock %}

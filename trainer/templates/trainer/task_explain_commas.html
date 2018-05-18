@@ -3,12 +3,14 @@
 {% block title %}Komma-Trainer - Übung: Erkläre die Kommaposition{% endblock %}
 
 {% block main %}
+
     <h2 class="task_header">Übung: Erkläre die Kommaposition
         <button class="btn btn-info"
             data-toggle="popover"
             title="Anleitung"
             data-content="Wähle für die markierte Kommaposition die passenden Regeln aus. Insbesondere bei höheren Leveln können auch mehrere oder gar alle Regeln passen.">?</button>
     </h2>
+
 
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     <div class="interaction">
@@ -25,9 +27,9 @@
             <input type="hidden" name="rule-0" value="{{ guessing_candidates.0.code }}">
             <input type="hidden" name="rule-1" value="{{ guessing_candidates.1.code }}">
             <input type="hidden" name="rule-2" value="{{ guessing_candidates.2.code }}">
-            <p id="p-expl-0"><input id="expl-0" type="checkbox" name="{{ guessing_candidates.0.code }}"> <label for="expl-0">{{ guessing_candidates.0.description|safe }}</label></p>
-            <p id="p-expl-1"><input id="expl-1" type="checkbox" name="{{ guessing_candidates.1.code }}"> <label for="expl-1">{{ guessing_candidates.1.description|safe }}</label></p>
-            <p id="p-expl-2"><input id="expl-2" type="checkbox" name="{{ guessing_candidates.2.code }}"> <label for="expl-2">{{ guessing_candidates.2.description|safe }}</label></p>
+            <p id="p-expl-0" class="form-check"><input id="expl-0" class="form-check align-middle" type="checkbox" name="{{ guessing_candidates.0.code }}"> <label class="form-check" for="expl-0">{{ guessing_candidates.0.description|safe }}</label></p>
+            <p id="p-expl-1" class="form-check"><input id="expl-1" class="form-check" type="checkbox" name="{{ guessing_candidates.1.code }}"> <label class="form-check" for="expl-1">{{ guessing_candidates.1.description|safe }}</label></p>
+            <p id="p-expl-2" class="form-check"><input id="expl-2" class="form-check" type="checkbox" name="{{ guessing_candidates.2.code }}"> <label class="form-check" for="expl-2">{{ guessing_candidates.2.description|safe }}</label></p>
         </form>
     </div>
     <p>&nbsp;</p>

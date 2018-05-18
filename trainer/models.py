@@ -45,6 +45,25 @@ class Rule(models.Model):
                 encode_list += str(decode_list[i])
         return encode_list
 
+    def find_sentences(self, allowed_other_rules=[]):
+        """Find sentences for this rule, with restrictions to other rules in the sentences.
+        :param allowed_other_rules (List of Rule objects) Which other rules are allowed in the sentences?
+        """
+
+        def all_rules_valid(sentence):
+            for r in sentence.rules.all(): # all rules for this sentence
+                if r != self and r not in allowed_other_rules:
+                    return False
+            return True
+
+        result = []  # all sentences that meet the conditions
+        sentences = self.sentence_set.all()  # all sentences for this rule
+        for s in sentences:
+            if all_rules_valid(s):  # only contains allowed rules?
+                result.append(s)  # add to results
+
+        return result
+
 
 class Sentence(models.Model):
     """
@@ -498,6 +517,10 @@ class User(models.Model):
     counter_correct = models.IntegerField(default=0)
     counter_wrong = models.IntegerField(default=0)
 
+    # has user passed pretest (to which level)?
+    pretest = models.BooleanField(default=False)
+    pretest_count = models.IntegerField(default=0)
+
     # rules_activated: user progress in terms of available rules.
     # Starts at 0, continues to ~40
     rules_activated_count = models.IntegerField(default=0)
@@ -914,6 +937,15 @@ class UserSentence(models.Model):
 
     class Meta:
         ordering = ('count',)
+
+
+class UserPretest(models.Model):
+    """
+    Store pretest results for user/rule.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
+    result = models.BooleanField(default=False)
 
 
 class Solution(models.Model):

@@ -1,4 +1,4 @@
-from trainer.models import User, Rule, UserRule, SentenceRule, UserSentence, models
+from trainer.models import User, Rule, UserRule, SentenceRule, UserSentence, models, UserPretest
 
 from itertools import repeat
 import random
@@ -191,6 +191,9 @@ class BayesStrategy:
         "E2": 0.0,
     }
 
+    pretest_rules = ["A3", "A4", "B1.2", "B1.3", "B1.5", "B2.4.1", "B2.4.2", "B2.5",
+                     "C3.1", "C3.2", "C6.1", "C6.2", "C6.3.1", "C7", "C8", "D1"]
+
     def __init__(self, user, threshold=0.75, necReps=8):
         """
         works as konstruktor, at initializing two models are created.
@@ -217,7 +220,9 @@ class BayesStrategy:
                               dynamicnet_active=False, staticnet=self.start_values.get(r.code,0))
             ur.save()
 
-        # activate first rule
+    def activate_first_rule(self):
+        """Activate the first rule."""
+
         new_rule = Rule.objects.get(code="A1")
         ur = UserRule.objects.get(rule=new_rule, user=self.user)
         ur.dynamicnet_current = True
@@ -248,7 +253,23 @@ class BayesStrategy:
             else:
                 pass
 
+    def process_pretest(self):
+        """Process the pretest results. For every positive result set corresponding rule as active in dynamic net."""
+        count_pos=0
+        for pretest_result in UserPretest.objects.filter(user=self.user):  # all pretest results for this user
+            print(pretest_result)
+            if pretest_result.result:  # is it a positive result?
+                ur = UserRule.objects.get(rule=pretest_result.rule, user=self.user)  # fetch UserRule object
+                ur.dynamicnet_active = True  # set as active in user's dynamic net
+                ur.active = True # TODO: check: not needed for bayes strategy?
+                ur.save()  # and store back to db
+                if not ur.dynamicnet_active:
+                    count_pos += 1 # count as newly activated rule
+        # increase level for user
+        self.user.rules_activated_count += count_pos
+        self.user.save()
 
+        return True
 
     @property
     def selectNewRule(self):

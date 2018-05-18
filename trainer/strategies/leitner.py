@@ -1,4 +1,4 @@
-from trainer.models import Rule, UserRule, SentenceRule, UserSentence
+from trainer.models import Rule, UserRule, SentenceRule, UserSentence, UserPretest
 import random
 
 
@@ -43,6 +43,8 @@ class LeitnerStrategy:
             "B1.4.2",  # 30
         ]
 
+    pretest_rules = ["A1", "A2", "B1.1", "B2.1", "C1", "D1", "B1.2", "C2", "A3", "C5"]
+
     def init_rules(self):
         """Initialize active rules for user."""
 
@@ -56,7 +58,8 @@ class LeitnerStrategy:
         ur = UserRule(rule=Rule.objects.get(code="E2"), user=self.user, active=False)
         ur.save()
 
-        # activate first rule
+    def activate_first_rule(self):
+        """Activate first rule"""
         new_rule = Rule.objects.get(code=self.rule_order[0])
         ur = UserRule.objects.get(rule=new_rule, user=self.user)
         ur.active = True
@@ -64,6 +67,33 @@ class LeitnerStrategy:
 
         self.user.rules_activated_count = 1  # activate first rule for next request
         self.user.save()
+
+    def process_pretest(self):
+        """Process the results of the pretest.
+        Problem for current leitner representation: Rule order is fixed. So set level to last level befor first error."""
+
+        last_pos = -1  # highest position in self.rule_order for whoch the pretest was positive
+
+        for rule_idx in range(len(self.rule_order)):
+            pretest_result = None
+            try:
+                pretest_result = UserPretest.objects.get(user=self.user, rule__code=self.rule_order[rule_idx])
+                if pretest_result.result:
+                    last_pos=rule_idx  # new best position
+                    new_ur = UserRule.objects.get(rule__code=self.rule_order[rule_idx], user=self.user)
+                    new_ur.active = True  # activate new rule
+                    new_ur.save()
+                else:
+                    break
+            except UserPretest.DoesNotExist:
+                break
+
+        # increase level for user
+        if last_pos+1 > self.user.rules_activated_count:
+            self.user.rules_activated_count = last_pos +1
+        self.user.save()
+
+        return True
 
     def get_active_rules(self):
         """Return UserRule and examples sentence data for displaying level and expanations.
