@@ -191,8 +191,23 @@ class BayesStrategy:
         "E2": 0.0,
     }
 
-    pretest_rules = ["A3", "A4", "B1.2", "B1.3", "B1.5", "B2.4.1", "B2.4.2", "B2.5",
-                     "C3.1", "C3.2", "C6.1", "C6.2", "C6.3.1", "C7", "C8", "D1"]
+    pretest_rules = [("A3", "A2", "A1"),
+                     ("A4", "A3", "A2"),
+                     ("B1.2", "B1.1", "B1.3"),
+                     ("B1.3", "B1.1", "B1.2"),
+                     ("B1.5", "B1.4", "B1.3"),
+                     ("B2.4.1", "B2.4.2", "B2.3"),
+                     ("B2.4.2", "B2.4.1", "B2.3"),
+                     ("B2.5", "B2.1", "B2.3"),
+                     ("C3.1", "C3.2", "C1"),
+                     ("C3.2", "C3.1", "C1"),
+                     ("C6.1", "C6.2", "C4.1"),
+                     ("C6.2", "C6.1", "C4.1"),
+                     ("C6.3.1", "B2.3", "B2.5"),
+                     ("C7", "C6.1", "D1"),
+                     ("C8", "D3", "C1"),
+                     ("D1", "C7", "C6.1")
+                     ]
 
     def __init__(self, user, threshold=0.75, necReps=8):
         """
@@ -269,7 +284,7 @@ class BayesStrategy:
         self.user.rules_activated_count += count_pos
         self.user.save()
 
-        return True
+        return self.activate_first_rule()
 
     @property
     def selectNewRule(self):
@@ -311,7 +326,7 @@ class BayesStrategy:
         #else:
         min = 1
         min_node = None
-        for i in UserRule.objects.filter(dynamicnet_active=False):
+        for i in UserRule.objects.filter(user=self.user, dynamicnet_active=False):
             node = DynamicNode(BayesStrategy,self.user, i.rule.code, self.dynamicNet)
             if node.value < min:
                 min = node.value
@@ -338,7 +353,6 @@ class BayesStrategy:
             active.append(tmp.rule.all())
         return list(tmp)
 
-
     def progress(self):
         """
         method needs to activate userRule by userRule.active = true
@@ -351,7 +365,6 @@ class BayesStrategy:
         # 1. User is finished, return false true false
         # 2. User is not finished but needs a new rule, return new rule and false and if it is a reminder
         # 3. User still needs to practise current rule, return false false false
-
 
         self.user.rules_activated_count = self.dynamicNet.count_known()+1
         self.user.save()

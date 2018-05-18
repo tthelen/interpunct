@@ -26,8 +26,8 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
-            user.strategy = user.BAYES # TODO: random strategy selection for new user
-            # user.strategy = user.LEITNER
+            # user.strategy = user.BAYES # TODO: random strategy selection for new user
+            user.strategy = user.LEITNER
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -150,7 +150,7 @@ def task(request):
     :return: nothing
     """
 
-    def render_task_explain_commas(request, sent, strategy, select_rule=None, template_params={}):
+    def render_task_explain_commas(request, sent, select_rules=None, template_params={}):
         # pick one comma slot from the sentence
         # there must at least be one non-error and non-'must not' rule (ensured above)
         comma_candidates = []
@@ -160,10 +160,10 @@ def task(request):
             rules = sent.rules.filter(sentencerule__position=pos + 1).all()
             pos_rules = []  # rules at this position
             for r in rules:
-                if select_rule == r:  # if we know which rule to select
+                if select_rules and select_rules[0] == r:  # if we know which rule to select
                     if r not in pos_rules:
                         pos_rules.append(r)
-                elif not select_rule and r.mode > 0:  # otherwise append all rules that are "may" or "must" commas
+                elif not select_rules and r.mode > 0:  # otherwise append all rules that are "may" or "must" commas
                     if r not in pos_rules:
                         pos_rules.append(r)
             if pos_rules:
@@ -186,7 +186,9 @@ def task(request):
         # we consider all rules
         active_rules = strategy.get_active_rules()
         rule_candidates = []
-        if len(active_rules) < 3:  # less than 3 active rules -> not enough
+        if select_rules:  # we already know whoch rules to take
+            rule_candidates = [select_rules[1], select_rules[2]]
+        elif len(active_rules) < 3:  # less than 3 active rules -> not enough
             rule_candidates = list(Rule.objects.exclude(code__startswith='E').all())
         else:  # at least 3 active rules
             rule_candidates = [x.rule for x in active_rules]
@@ -232,7 +234,7 @@ def task(request):
     # pretest
     if not user.pretest:
         if not request.GET.get('skip_pretest',False) and user.pretest_count < len(strategy.pretest_rules):
-            rule = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count])
+            rule = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][0])
             # print("Sentences for {}".format(strategy.pretest_rules[user.pretest_count]))
             # sentences = rule.find_sentences()
             sentences = Sentence.objects.filter(rules=rule, active=True) # all sentences with this rule
@@ -245,11 +247,16 @@ def task(request):
             pretest_counter = user.pretest_count+1
             pretest_max = len(strategy.pretest_rules)
             display_rank=False
-            return render_task_explain_commas(request, random.choice(sentences), strategy, select_rule=rule, template_params=locals())
+            rule2 = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][1])
+            rule3 = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][2])
+            return render_task_explain_commas(request, random.choice(sentences),
+                                              select_rules=(rule,rule2,rule3), template_params=locals())
         else: # pretest finished
-            strategy.process_pretest() # evaluate pretest and activate known rules, set level etc.
+            new_rule = strategy.process_pretest() # evaluate pretest and activate known rules, set level etc.
             user.pretest=True
             user.save()
+            display_rank = 0
+            return render(request, 'trainer/level_progress.html', locals())
 
     # -----------------------------------------------------------------------
     # pretest passed
@@ -261,7 +268,7 @@ def task(request):
         return render(request, 'trainer/level_progress.html', locals())
 
     # fetch and prepare information about level for template
-    level = user.rules_activated_count  # user's current level # TODO: strategy
+    level = user.rules_activated_count  # user's current level
     activerules = strategy.get_active_rules()
     rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
 
@@ -314,7 +321,7 @@ def task(request):
             return render(request, 'trainer/task_set_commas.html', locals())
     else:
         # EXPLANATION task
-        return render_task_explain_commas(request, sentence, strategy, template_params=locals())
+        return render_task_explain_commas(request, sentence, template_params=locals())
 
 
 @logged_in_or_basicauth("Bitte einloggen")
@@ -485,7 +492,7 @@ def submit_task_explain_commas(request):
         solution.append("{}:{}:{}".format(r.id, correct, chosen))
         # are we in pretest?
         if not user.pretest:
-            if user.get_strategy().pretest_rules[user.pretest_count] == r.code:  # do we look at the rule to test?
+            if user.get_strategy().pretest_rules[user.pretest_count][0] == r.code:  # do we look at the rule to test?
                 # save pretest result
                 up = UserPretest(user=user, rule=r, result=(correct==chosen))
                 up.save()

@@ -43,7 +43,16 @@ class LeitnerStrategy:
             "B1.4.2",  # 30
         ]
 
-    pretest_rules = ["A1", "A2", "B1.1", "B2.1", "C1", "D1", "B1.2", "C2", "A3", "C5"]
+    pretest_rules = [("A1",   "A3",   "C1"),
+                     ("A2",   "C4.1", "C1"),
+                     ("B1.1", "B1.5", "C5"),
+                     ("B2.1", "B2.2", "B2.3"),
+                     ("C1",   "C2",   "C5"),
+                     ("D1",   "C1",   "A1"),
+                     ("B1.2", "B1.1", "B1.5"),
+                     ("C2",   "C5",   "C1"),
+                     ("A3",   "C4.1", "B2.5"),
+                     ("C5",   "C6.1", "C6.2")]
 
     def init_rules(self):
         """Initialize active rules for user."""
@@ -58,32 +67,37 @@ class LeitnerStrategy:
         ur = UserRule(rule=Rule.objects.get(code="E2"), user=self.user, active=False)
         ur.save()
 
-    def activate_first_rule(self):
+    def activate_first_rule(self, new_rule=None):
         """Activate first rule"""
-        new_rule = Rule.objects.get(code=self.rule_order[0])
+        if not new_rule:
+            new_rule = Rule.objects.get(code=self.rule_order[0])
         ur = UserRule.objects.get(rule=new_rule, user=self.user)
         ur.active = True
         ur.save()
 
-        self.user.rules_activated_count = 1  # activate first rule for next request
+        self.user.rules_activated_count += 1  # activate first rule for next request
         self.user.save()
+        return new_rule
 
     def process_pretest(self):
         """Process the results of the pretest.
         Problem for current leitner representation: Rule order is fixed. So set level to last level befor first error."""
 
         last_pos = -1  # highest position in self.rule_order for whoch the pretest was positive
-
+        new_rule = None
         for rule_idx in range(len(self.rule_order)):
             pretest_result = None
             try:
                 pretest_result = UserPretest.objects.get(user=self.user, rule__code=self.rule_order[rule_idx])
                 if pretest_result.result:
-                    last_pos=rule_idx  # new best position
+                    last_pos = rule_idx  # new best position
                     new_ur = UserRule.objects.get(rule__code=self.rule_order[rule_idx], user=self.user)
                     new_ur.active = True  # activate new rule
+                    new_ur.box = 4 # lowest box
                     new_ur.save()
                 else:
+                    # WARNING: pretest must be shorter than rule list, otherwise we might fail here
+                    new_rule = Rule.objects.get(code=self.rule_order[rule_idx])
                     break
             except UserPretest.DoesNotExist:
                 break
@@ -93,7 +107,8 @@ class LeitnerStrategy:
             self.user.rules_activated_count = last_pos +1
         self.user.save()
 
-        return True
+        print("Pretest processed. New rule is {}".format(new_rule.code))
+        return self.activate_first_rule(new_rule)
 
     def get_active_rules(self):
         """Return UserRule and examples sentence data for displaying level and expanations.
@@ -120,6 +135,8 @@ class LeitnerStrategy:
         # in this strategy, we simply check if the rule for the current level
         # has more than 3 tries, less than half of them wrong
         last_rule = self.rule_order[self.user.rules_activated_count - 1]  # rule code
+        print("Rules activated count: {}".format(self.user.rules_activated_count))
+        print("Last rule: {}".format(last_rule))
         # UserRule objects count a user's tries for a certain rule
         ur = UserRule.objects.get(user=self.user, rule=Rule.objects.get(code=last_rule))
         # advancement criterion: more than 3 tries, less than half of them wrong
@@ -130,6 +147,7 @@ class LeitnerStrategy:
             new_rule = Rule.objects.get(code=self.rule_order[self.user.rules_activated_count - 1])
             new_ur = UserRule.objects.get(rule=new_rule, user=self.user)
             new_ur.active = True  # activate new rule
+            new_ur.box = 1
             new_ur.save()
             return new_rule, (self.user.rules_activated_count == len(self.rule_order)), False
 
