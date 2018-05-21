@@ -90,7 +90,7 @@
             {% endif %}
         {% if display_rank %}
             {% with 'images/'|add:rankimg as image_static %}
-                <img style="width:100%" src="{% static image_static %}">
+                <img style="display:block;width:160px;" src="{% static image_static %}">
             {% endwith %}
             <div class="rank">
             <p>&nbsp;</p>
