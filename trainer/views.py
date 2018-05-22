@@ -170,7 +170,7 @@ def task(request):
         # data for template:
         # guessing_candidates: the three rules to display
         # guessing_position: the comma slot position to explain
-        print("comma_candidates:",comma_candidates)
+        # print("comma_candidates:",comma_candidates)
         explanation_position = random.choice(comma_candidates)
         guessing_position = explanation_position[0]
         guessing_candidates = []  # the rules to be displayed for guessing

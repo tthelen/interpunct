@@ -11,7 +11,7 @@ class StaticNet:
         """
         self.dynamicNet = dynamicNet
         self.auf = ["A1","A2","A4","A3"]
-        self.teil = ["B1.1","B1.2","B1.3","B1.4.1","B1.4.2","B2.1","B2.2","B2.3","B2.4.1","B.2.4.2","B2.5","B1.5"]
+        self.teil = ["B1.1","B1.2","B1.3","B1.4.1","B1.4.2","B2.1","B2.2","B2.3","B2.4.1","B2.4.2","B2.5","B1.5"]
         self.zus = ["C1","C2","C3.1","C3.2","C4.1","C5","C6.1","C6.3.1","C7","C8","C6.2","C6.4","C6.3.1","D1","D3"]
         self.aufValue = 1
         self.teilValue = 1
@@ -93,7 +93,7 @@ class DynamicNet(models.Model):
         self.updateNet()
         self.current.ur.dynamicnet_current = False
         self.current.ur.save()
-        print(rule.code)
+        # print(rule.code)
         for node in self.Net:
             if node.ruleCode == rule.code:
                 print("find new current")
@@ -103,7 +103,8 @@ class DynamicNet(models.Model):
                 self.current.ur.save()
                 break
         else:
-            print("not found")
+            # print("not found")
+            pass
 
     def count_known(self):
         "Count known Rules"
@@ -152,7 +153,7 @@ class DynamicNode:
         if self.ur.dynamicnet_active:
             # calculate value
             self.value = self.get_value()
-            print("Node value",self.value)
+            # print("Node value",self.value)
             self.ur.save()
         else: # activate this rule in user's dynamic net
             self.value = BayesStrategy.start_values[self.ruleCode]
@@ -189,10 +190,10 @@ class DynamicNode:
             sum2 = bin(self.ur.dynamicnet_history2 % 2 ** (toconsider)).count('1')/toconsider
 
         #if task3 was not shown yet calculate value only by sum1 and sum2
-        print (self.ur.dynamicnet_count3, self.ur.rule.code)
+        # print (self.ur.dynamicnet_count3, self.ur.rule.code)
         if self.ur.dynamicnet_count3 == 0:
             value = sum1 * 0.4 + sum2 * 0.6
-            print(self.ur.rule.code, "value = {} * 0.4 + {} * 0.6 = {}".format(sum1, sum2, value))
+            # print(self.ur.rule.code, "value = {} * 0.4 + {} * 0.6 = {}".format(sum1, sum2, value))
             return value
 
         #calculating value for node "task3"
@@ -202,7 +203,7 @@ class DynamicNode:
         else:
             sum3 = bin(self.ur.dynamicnet_history3 % 2 ** (toconsider)).count('1')/toconsider
         value = sum1 * 0.25 + sum2 * 0.4 + sum3 * 0.35
-        print(self.ur.rule.code , "value = {} * 0.25 + {} * 0.4 + {} * 0.35 = {}".format(sum1, sum2, sum3, value))
+        # print(self.ur.rule.code , "value = {} * 0.25 + {} * 0.4 + {} * 0.35 = {}".format(sum1, sum2, sum3, value))
         return value
 
 
@@ -216,17 +217,17 @@ class DynamicNode:
         self.ur.dynamicnet_count += 1  # increase count
         if taskNumber == 1:
         # move bits in integer to left and fill new position with 0 (default) or 1 (if correct)
-            self.ur.dynamicnet_history1 = self.ur.dynamicnet_history1 << 1
+            self.ur.dynamicnet_history1 = (self.ur.dynamicnet_history1 << 1) % (2**31)
             self.ur.dynamicnet_count1 += 1
             if correct:
                 self.ur.dynamicnet_history1 |= 1
         if taskNumber == 2:
-            self.ur.dynamicnet_history2 = self.ur.dynamicnet_history2 << 1
+            self.ur.dynamicnet_history2 = (self.ur.dynamicnet_history2 << 1) % (2**31)
             self.ur.dynamicnet_count2 += 1
             if correct:
                 self.ur.dynamicnet_history2 |= 1
         if taskNumber == 3:
-            self.ur.dynamicnet_history3 = self.ur.dynamicnet_history3 << 1
+            self.ur.dynamicnet_history3 = (self.ur.dynamicnet_history3 << 1) % (2**31)
             self.ur.dynamicnet_count3 += 1
             if correct:
                 self.ur.dynamicnet_history3 |= 1
@@ -362,7 +363,7 @@ class BayesStrategy:
         """Process the pretest results. For every positive result set corresponding rule as active in dynamic net."""
         count_pos=0
         for pretest_result in UserPretest.objects.filter(user=self.user):  # all pretest results for this user
-            print(pretest_result)
+            # print(pretest_result)
             if pretest_result.result:  # is it a positive result?
                 ur = UserRule.objects.get(rule=pretest_result.rule, user=self.user)  # fetch UserRule object
                 if not ur.dynamicnet_active:
@@ -555,7 +556,7 @@ class BayesStrategy:
             #set rule active
             #nodeToActive = self.getNodefromNet(newRule)
             #nodeToActive.activateNode()
-            print("new rule passed")
+            # print("new rule passed")
             return newRule, False, forgotten
         # otherwise return false
         else:
@@ -607,7 +608,7 @@ class BayesStrategy:
 
 
         random.shuffle(pool) # shuffle the elements in the list
-        print("pool is",pool)
+        # print("pool is",pool)
         codeOfnewRule = pool[0] #select the first element from the shuffled list
         rule_obj = Rule.objects.filter(code=codeOfnewRule)  # and access the rule object
 
@@ -640,7 +641,7 @@ class BayesStrategy:
                 possible_sentences.append([sr, count])  # store all possible sentences
 
         if len(possible_sentences) == 0:  # HACK: No sentence? Try again # TODO: find a real solution
-            print("HACK! Try another sentence...")
+            # print("HACK! Try another sentence...")
             return self.roulette_wheel_selection()
 
         # pick least often used of the possible sentences
