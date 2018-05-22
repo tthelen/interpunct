@@ -1,7 +1,59 @@
 from trainer.models import User, Rule, UserRule, SentenceRule, UserSentence, models, UserPretest
 
-from itertools import repeat
+from itertools import repeat, chain
 import random
+
+class StaticNet:
+    def __init__(self, dynamicNet):
+        """
+        static net which represent the knowledge state of the user across the 3 sections
+        :param dynamicNet: the "working net" which gives the learning results
+        """
+        self.dynamicNet = dynamicNet
+        self.auf = ["A1","A2","A4","A3"]
+        self.teil = ["B1.1","B1.2","B1.3","B1.4.1","B1.4.2","B2.1","B2.2","B2.3","B2.4.1","B.2.4.2","B2.5","B1.5"]
+        self.zus = ["C1","C2","C3.1","C3.2","C4.1","C5","C6.1","C6.3.1","C7","C8","C6.2","C6.4","C6.3.1","D1","D3"]
+        self.aufValue = 1
+        self.teilValue = 1
+        self.zusValue = 1
+
+        self.updateStatic(dynamicNet)
+
+    def updateStatic(self, dynamicNet):
+        # calculate the values for the skeleton
+        countauf = 0
+        countteil = 0
+        countzus = 0
+        for i in self.dynamicNet.Net:
+            assert (isinstance(i, DynamicNode))
+            # multiply node values according to their parent node
+            if i.ruleCode in self.auf:
+                self.aufValue *= i.get_value()
+                countauf *= 1
+            elif i.ruleCode in self.teil:
+                self.teilValue *= i.get_value()
+                countteil += 1
+            elif i.ruleCode in self.zus:
+                self.zusValue *= i.get_value()
+                countzus += 1
+            else:
+                raise RuntimeError("No parent node can be assigned")
+        # and divide by count to get the average performance
+        if countauf != 0:
+            self.aufValue /= countauf
+        else:
+            countauf = 0
+        if countteil != 0:
+            self.teilValue /= countteil
+        else:
+            countteil = 0
+        if countzus != 0:
+            self.zusValue /= countzus
+        else:
+            self.zusValue = 0
+        # get the overall value
+        self.overall = (self.aufValue * self.teilValue * self.zusValue)/3
+
 
 class DynamicNet(models.Model):
 
@@ -23,7 +75,7 @@ class DynamicNet(models.Model):
          #   i.activateNode()
 
     def updateNet(self):
-        for i in UserRule.objects.filter(user=self.user, dynamicnet_active=True):
+        for i in UserRule.objects.filter(user=self.user,dynamicnet_active= True): # i is an user rule object
             try:
                 node = DynamicNode(self.strategy, self.user, i.rule.code, self)
                 if i.dynamicnet_current:
@@ -33,6 +85,11 @@ class DynamicNet(models.Model):
             self.Net.append(node)
 
     def setCurrent(self,rule):
+        """
+        updates the current rule of the net
+        :param rule: rule which should be set as the current rule
+        :return:
+        """
         self.updateNet()
         self.current.ur.dynamicnet_current = False
         self.current.ur.save()
@@ -106,26 +163,52 @@ class DynamicNode:
         self.ur.save()
 
     def get_value(self):
-        """Calculate value from history"""
-        max = 8# arraysize
-        if self.ur.dynamicnet_count < max:
-            return BayesStrategy.start_values[self.ruleCode]
-        # true python magic: count bits
-        else:
-            sum1 = bin(self.ur.dynamicnet_history1 % 2 ** (max)).count('1')/self.ur.dynamicnet_count1 if self.ur.dynamicnet_count1 else BayesStrategy.start_values[self.ruleCode]
-            sum2 = bin(self.ur.dynamicnet_history2 % 2 ** (max)).count('1')/self.ur.dynamicnet_count2 if self.ur.dynamicnet_count2 else BayesStrategy.start_values[self.ruleCode]
-            sum3 = bin(self.ur.dynamicnet_history3 % 2 ** (max)).count('1')/self.ur.dynamicnet_count3 if self.ur.dynamicnet_count3 else BayesStrategy.start_values[self.ruleCode]
-            if len(self.dynamicNet.Net)<3:
-                value = sum1 * 0.4 + sum2 * 0.6
-                print("value = {} * 0.4 + {} * 0.6 = {}".format(sum1, sum2, value))
+        max = 4 #maximum amount of repititions a rule needs
+        toconsider = 6 #only the last 6 answers are going to be considered
+        sum1 = 0
+        sum2 = 0
+        sum3 = 0
+        total_count = self.ur.total
+
+        # calculating value for node "task 1"
+        if self.ur.dynamicnet_count1 < 6:
+            if self.ur.dynamicnet_count1 == 0:
+                sum1=BayesStrategy.start_values[self.ruleCode]
             else:
-                value = sum1 * 0.25 + sum2 * 0.45 + sum3 * 0.3
-                print("value = {} * 0.25 + {} * 0.45 + {} * 0.3 = {}".format(sum1, sum2, sum3, value))
+                sum1 = bin(self.ur.dynamicnet_history1 % 2 ** (self.ur.dynamicnet_count1)).count('1')/self.ur.dynamicnet_count1 if self.ur.dynamicnet_count1 else BayesStrategy.start_values[self.ruleCode]
+        else:
+            sum1 = bin(self.ur.dynamicnet_history1 % 2 ** (toconsider)).count('1')/toconsider
+
+        #calculating value for node "task2"
+        if self.ur.dynamicnet_count2 < 6:
+            if self.ur.dynamicnet_count2 == 0:
+                sum2 = BayesStrategy.start_values[self.ruleCode]
+            else:
+                sum2 = bin(self.ur.dynamicnet_history2 % 2 ** (self.ur.dynamicnet_count2)).count('1')/self.ur.dynamicnet_count2 if self.ur.dynamicnet_count2 else BayesStrategy.start_values[self.ruleCode]
+        else:
+            sum2 = bin(self.ur.dynamicnet_history2 % 2 ** (toconsider)).count('1')/toconsider
+
+        #if task3 was not shown yet calculate value only by sum1 and sum2
+        print (self.ur.dynamicnet_count3, self.ur.rule.code)
+        if self.ur.dynamicnet_count3 == 0:
+            value = sum1 * 0.4 + sum2 * 0.6
+            print(self.ur.rule.code, "value = {} * 0.4 + {} * 0.6 = {}".format(sum1, sum2, value))
+            return value
+
+        #calculating value for node "task3"
+        if self.ur.dynamicnet_count3 < 6:
+            assert(self.ur.dynamicnet_count3 != 0), "This value should not be 0"
+            sum3 = bin(self.ur.dynamicnet_history3 % 2 ** (self.ur.dynamicnet_count3)).count('1')/self.ur.dynamicnet_count3 if self.ur.dynamicnet_count3 else BayesStrategy.start_values[self.ruleCode]
+        else:
+            sum3 = bin(self.ur.dynamicnet_history3 % 2 ** (toconsider)).count('1')/toconsider
+        value = sum1 * 0.25 + sum2 * 0.4 + sum3 * 0.35
+        print(self.ur.rule.code , "value = {} * 0.25 + {} * 0.4 + {} * 0.35 = {}".format(sum1, sum2, sum3, value))
         return value
+
 
     def known(self):
         """Is the rule known (true) or forgotten (false)"""
-        known = (self.ur.dynamicnet_count > 8) and (self.get_value() >= 0.75)
+        known = (self.ur.dynamicnet_count > 4) and (self.get_value() >= 0.75)
         return known
 
     def storeAnswer(self, taskNumber, correct):
@@ -195,7 +278,7 @@ class BayesStrategy:
                      ("A4", "A3", "A2"),
                      ("B1.2", "B1.1", "B1.3"),
                      ("B1.3", "B1.1", "B1.2"),
-                     ("B1.5", "B1.4", "B1.3"),
+                     ("B1.5", "C1", "B1.3"),
                      ("B2.4.1", "B2.4.2", "B2.3"),
                      ("B2.4.2", "B2.4.1", "B2.3"),
                      ("B2.5", "B2.1", "B2.3"),
@@ -209,7 +292,7 @@ class BayesStrategy:
                      ("D1", "C7", "C6.1")
                      ]
 
-    def __init__(self, user, threshold=0.75, necReps=8):
+    def __init__(self, user, threshold=0.75, necReps=4):
         """
         works as konstruktor, at initializing two models are created.
         model 1 contains all rules (static model)
@@ -222,8 +305,8 @@ class BayesStrategy:
         self.user = user
         self.threshold = threshold
         self.necReps = necReps  # numbers of minimum repititions a rule needs to have been applied to
-        #self.staticNet = StaticNet()
         self.dynamicNet = DynamicNet(self, self.user)
+        self.staticNet = StaticNet(self.dynamicNet)
 
 
     def init_rules(self):
@@ -244,6 +327,13 @@ class BayesStrategy:
         ur.dynamicnet_active = True
         ur.save()
 
+        # other way over findNewRule
+        # new_rule = self.findNextRule()
+        # ur = UserRule.objects.get(rule=new_rule, user = self.user)
+        # ur.dynamicnet_current = True
+        # ur.dynamicnet_active = True
+        # ur.save()
+
         self.user.rules_activated_count = 1  # activate first rule for next request
         self.user.save()
         return new_rule
@@ -256,17 +346,17 @@ class BayesStrategy:
         :param StaticNet: network containing all rules, shall be updated with values from Dynamic net
         :return: new updated version of the static net
         """
-
         #access correct node from net
         net = self.dynamicNet.Net
-        currentNode = None
+        tasknode = None
         for node in net:
             if node.ruleCode == rule.code:
-                currentNode = node
-                currentNode.storeAnswer(taskNumber, correct)
+                tasknode = node
+                tasknode.storeAnswer(taskNumber, correct)
                 break
             else:
                 pass
+
 
     def process_pretest(self):
         """Process the pretest results. For every positive result set corresponding rule as active in dynamic net."""
@@ -284,9 +374,8 @@ class BayesStrategy:
         self.user.rules_activated_count += count_pos
         self.user.save()
 
-        return self.activate_first_rule()
+        return self.activate_first_rule() #todo could this work with find_next_rule function
 
-    @property
     def selectNewRule(self):
         """
         function for selecting the next rule.
@@ -302,38 +391,38 @@ class BayesStrategy:
         # before choosing new rule from static net, check whether a rule was forgotten
         possibleRules = list()
         nextRule = None
-        #look for all forgotten rules
-        #todo forgetting
-        # for i in self.dynamicNet.Net:
-        #     if i.ur.dynamicNet_active = True & (not i.known()):
-        #             possibleRules.append(i)
-        # if possibleRules: # if there are forgotten rules
-        #     nextRule = possibleRules[0]
-        #     assert isinstance(nextRule,DynamicNode)
-        #     for i in possibleRules:
-        #         if i.value < nextRule.value:
-        #             nextRule = i # and  choose the one with the worst performance
 
-            # if nextRule.ur.dynamicnet_count < self.necReps:  # if the rule was already in the iniial dynamic net, jus show the rule
-            #     # introduce the rule
-            #     reminder = False
-            #     return nextRule.ur.rule, reminder
-            # else:
-            #     reminder = True
-            # return nextRule.ur.rule, reminder
+        #look for all forgotten rules
+        for i in self.dynamicNet.Net:
+            if i.ur.dynamicnet_active & (not i.known()):
+                    possibleRules.append(i)
+        if possibleRules: # if there are forgotten rules
+            nextRule = possibleRules[0]
+            assert isinstance(nextRule,DynamicNode)
+            for i in possibleRules:
+                if i.value < nextRule.value:
+                    nextRule = i # and  choose the one with the worst performance
+
+            if nextRule.ur.dynamicnet_count < self.necReps:  # if the rule was already in the iniial dynamic net, jus show the rule
+                # introduce the rule
+                reminder = False
+                return nextRule.ur.rule, reminder
+            else:
+                reminder = True
+            return nextRule.ur.rule, reminder
 
         #if all rules in the dynamic net are known choose an appropriate next rule from the dynamic net
         #else:
-        min = 1
+        minValue = 1
         min_node = None
         for i in UserRule.objects.filter(user=self.user, dynamicnet_active=False):
             node = DynamicNode(BayesStrategy,self.user, i.rule.code, self.dynamicNet)
-            if node.value < min:
-                min = node.value
+            if node.value < minValue:
+                minValue = node.value
                 if node.ruleCode.startswith("E"):
                     pass
                 else:
-                    min = node.value
+                    minValue = node.value
                     min_node = node
         nextRule = Rule.objects.get(code=min_node.ruleCode)
         return nextRule, False
@@ -344,14 +433,95 @@ class BayesStrategy:
         # res = UserRule.objects.filter(user=self.user, active=1).order_by('box')[:limit]
         # return res
         # returns UserRuleObjects
-        return UserRule.objects.filter(user=self.user, dynamicnet_active=True)[:5]
+        # choose thoose under 85% performance, if more sort them
+        weak = list()
+        Net = self.dynamicNet.Net
+        for i in Net: #append all rules the user does not know yet
+            if not i.known():
+                weak.append(i.ur)
+        if len(weak) < 5: #if there are less than 5 rules, look for rules with a performance lower than 85%
+            weaker = list()
+            for rule in Net:
+                if rule.get_value() < .85 and i.get_value() > 0.75 : #make sure it is not in list yet
+                    weaker.append(rule.ur)
+        #if there are still less than 5 rules just return as it is
+        return weak
 
-    def get_active_rules_as_ruleObject(self):
-        tmp=  UserRule.objects.filter(user=self.user, dynamicnet_active=True)[:5]
-        active = list()
-        for i in tmp:
-            active.append(tmp.rule.all())
-        return list(tmp)
+
+    def findNextRule(self): #returns Rule object
+        #     """
+        #     function for selecting the next rule.
+        #     Considers "forgotten" rules (rules below threshold in dynamic net) first
+        #     :return: next rule to be presented, True if rule is a reminder, false if it is a new rule
+        #     """
+        possibleRules = list()
+        next_Rule = None
+
+        #first check wheather there is a forgotten rule
+        #look for all forgotten rules
+        for i in self.dynamicNet.Net:
+            if i.ur.dynamicnet_active & (not i.known()): #is there a rule which is active and not known
+                possibleRules.append(i)
+        if possibleRules: # if there are forgotten rules
+            nextRule = possibleRules[0]
+            assert isinstance(nextRule,DynamicNode)
+            for i in possibleRules:
+                if i.value < nextRule.value:
+                    nextRule = i # and  choose the one with the worst performance
+
+            #todo compare node with list from intro test -> is this the right way to check whether or not node was
+            #activated by pretest?
+            if UserPretest.objects.filter(user=self.user, rule=nextRule.ur.rule, result=True): # if the rule was already in the initial dynamic net, jus show the rule
+                # introduce the rule
+                reminder = False
+                return nextRule.ur.rule, reminder
+            else:
+                reminder = True
+            return nextRule.ur.rule, reminder
+
+        #check the static net for the next rule to be selected
+
+        self.staticNet.updateStatic(self.dynamicNet)
+        activeNodes = UserRule.objects.filter(user=self.user, dynamicnet_active=True)
+        activeCodes = list()
+        for i in activeNodes:
+            activeCodes.append(i.rule.code)
+        #get the values for the three sections
+        auf = self.staticNet.aufValue
+        zus = self.staticNet.zusValue
+        teil = self.staticNet.teilValue
+        worstnode  = min(auf,zus,teil)
+
+        #and choose the section the user has the lowest score in
+
+        if self.staticNet.aufValue == worstnode:
+            possibleRules = self.staticNet.auf
+        elif self.staticNet.teilValue  == worstnode:
+            possibleRules = self.staticNet.teil
+        elif self.staticNet.zusValue  == worstnode:
+            possibleRules = self.staticNet.zus
+        else:
+            raise RuntimeError("No next parent to select")
+
+        #and the rule which has the highest prior probability (most likely to be learned
+        possibleRules = set(possibleRules) - set(activeCodes) #exclude all active nodes from the list of possible rules
+
+        if not possibleRules: # aera with lowest value (worstnode) is already activated completely
+            nextRule, reminder = self.selectNewRule()
+            return nextRule, reminder
+
+        maxValue = 0
+        max_node = None
+        for i in possibleRules:
+            try:
+                value = BayesStrategy.start_values[i]
+            except KeyError:
+                pass
+            if value > maxValue:
+                maxValue = value
+                max_node = i
+        nextRule = Rule.objects.get(code=max_node)
+        return nextRule, False
 
     def progress(self):
         """
@@ -359,13 +529,12 @@ class BayesStrategy:
         :param self:
         :return: the new rule and whether the user is finished, and if it was a forgotten rule (3 values)
         """
-
-        # TODO: access dynamic net for self.user
         # three cases:
         # 1. User is finished, return false true false
         # 2. User is not finished but needs a new rule, return new rule and false and if it is a reminder
         # 3. User still needs to practise current rule, return false false false
 
+        #get a count of all KNOWN rules -> if activated count > 33 all rules are known and not only activated!
         self.user.rules_activated_count = self.dynamicNet.count_known()+1
         self.user.save()
         # Is user already finished?
@@ -378,7 +547,7 @@ class BayesStrategy:
 
         # if it is known, find a new rule
         if currentRule.known():
-            newRule,forgotten = self.selectNewRule
+            newRule,forgotten = self.findNextRule()
             nextur = UserRule.objects.get(user=self.user, rule=newRule)
             nextur.dynamicnet_active = True
             nextur.save()
@@ -404,26 +573,28 @@ class BayesStrategy:
         # 95% 2 times
         # 100% 1 time
 
-        # TODO: access dynamic net from self.user
         RuleNodes = self.dynamicNet.Net # contains a list of all rule nodes
         assert isinstance(self.dynamicNet, DynamicNet)
+        currentRule = self.dynamicNet.current.ruleCode
+
 
         pool = list()
+        pool.extend(repeat(currentRule,30))
         weakRules = list() #contains all rules under 80%
         #create a pool of rules with different weights, makes it more likely to select weak rules
         for node in RuleNodes:
             assert isinstance(node, DynamicNode)
             assert isinstance(node.value, float)
             if node.value < 0.75:
-                pool.extend(repeat(node.ruleCode, 10))
+                pool.extend(repeat(node.ruleCode, 15))
                 weakRules.append(node.ruleCode)
             elif node.value < 0.8:
                 pool.extend(repeat(node.ruleCode, 8))
                 weakRules.append(node.ruleCode)
             elif node.value < 0.85:
-                pool.extend(repeat(node.ruleCode, 6))
-            elif node.value < 0.9:
                 pool.extend(repeat(node.ruleCode, 4))
+            elif node.value < 0.9:
+                pool.extend(repeat(node.ruleCode, 3))
             elif node.value < 0.95:
                 pool.extend(repeat(node.ruleCode, 2))
             elif node.value <= 1:
@@ -433,14 +604,10 @@ class BayesStrategy:
         if len(RuleNodes) >= 4:
             pool.append("E1")
             pool.append("E2")
-            # for r in Rule.objects.filter(code__startswith='E').all():
-            #     # all error rules are treated like box 3
-            #     # TODO: treat error rules like normal rules
-            #     pool.extend(r.code)
-            #     pool.extend(r.code)
 
-        print("pool is",pool)
+
         random.shuffle(pool) # shuffle the elements in the list
+        print("pool is",pool)
         codeOfnewRule = pool[0] #select the first element from the shuffled list
         rule_obj = Rule.objects.filter(code=codeOfnewRule)  # and access the rule object
 
@@ -478,6 +645,9 @@ class BayesStrategy:
 
         # pick least often used of the possible sentences
         possible_sentences.sort(key=lambda sentence: sentence[1])  # sort ascending by counts
+
+        #todo does this really work? Never reached so far!
+
         # are there possible sentences containing a weak rule?
         priorSentence = list()
         for i in possible_sentences:
@@ -486,6 +656,7 @@ class BayesStrategy:
                 union = list(set().union(rulesOfSentence, weakRules))
                 if len(union) > 1:  # if there is a greater union than 1, copy directly
                     priorSentence.append(i[0])
+
                 else:
                     assert isinstance(union[0], Rule)  # otherwise check that the union is not the selected rule
                     # (union[0].code == rule_obj would happen, if the current selected rule is a weak one

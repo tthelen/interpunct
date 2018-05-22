@@ -26,8 +26,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
-            # user.strategy = user.BAYES # TODO: random strategy selection for new user
-            user.strategy = user.LEITNER
+            user.strategy = random.choice([user.BAYES,user.LEITNER])
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -305,7 +304,7 @@ def task(request):
         index = 0
 
     if index < 67:  # 1/3 chance for rule explanation
-        if random.randint(0,100) > 60: # 40% chance for correct commas
+        if random.randint(0,100) > 50: # 50% chance for correct commas
             comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
             # comma_types.append([])  # bugfix: no comma after last position
             comma_to_check = []

@@ -77,15 +77,15 @@
 
         Hallo. Hier ist etwas schiefgelaufen.
         {% endblock %}
-<div>{{ strategy_debug|safe }}</div>
+<div id="debug_info" style="display:none">{{ strategy_debug|safe }}</div>
     </div>
           <div class="col-lg-2 mx-auto">
             {% if in_pretest %}
                 <div class="alert alert-info" role="alert">
                     <h4 class="alert-heading">Aufwärmen</h4>
                     <p>Einstufungstest<br>{{ pretest_counter }} von {{ pretest_max }}</p>
-                <hr>
-                <p><a class="btn btn-secondary" href="{% url 'task' %}?skip_pretest=1">Überspringen</a></p>
+                <!--<hr>
+                <p><a class="btn btn-secondary" href="{% url 'task' %}?skip_pretest=1">Überspringen</a></p>-->
                 </div>
             {% endif %}
         {% if display_rank %}
