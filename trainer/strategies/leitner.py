@@ -75,7 +75,7 @@ class LeitnerStrategy:
         ur.active = True
         ur.save()
 
-        self.user.rules_activated_count += 1  # activate first rule for next request
+        self.user.rules_activated_count = self.rule_order.index(new_rule.code)+1  # activate first rule for next request
         self.user.save()
         return new_rule
 
@@ -126,6 +126,16 @@ class LeitnerStrategy:
         forgotterule is always false here (would enable repeating forgotten rules) # TODO: check if appropriate here
         """
 
+        # bugix: previous version set rule_activated_count too high
+        # decrease level or activate first rule
+        check_rule = UserRule.objects.get(user=self.user, rule__code=self.rule_order[self.user.rules_activated_count-1])
+        if not check_rule.active:
+            if self.user.rules_activated_count>0:
+                self.user.rules_activated_count -= 1
+                self.user.save()
+            else:
+                self.activate_first_rule()
+
         # highest level reached?
         if self.user.rules_activated_count == len(self.rule_order):
             return False, True, False
@@ -134,8 +144,8 @@ class LeitnerStrategy:
         # in this strategy, we simply check if the rule for the current level
         # has more than 3 tries, less than half of them wrong
         last_rule = self.rule_order[self.user.rules_activated_count - 1]  # rule code
-        print("Rules activated count: {}".format(self.user.rules_activated_count))
-        print("Last rule: {}".format(last_rule))
+        #print("Rules activated count: {}".format(self.user.rules_activated_count))
+        #print("Last rule: {}".format(last_rule))
         # UserRule objects count a user's tries for a certain rule
         ur = UserRule.objects.get(user=self.user, rule=Rule.objects.get(code=last_rule))
         # advancement criterion: more than 3 tries, less than half of them wrong
