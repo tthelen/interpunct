@@ -851,7 +851,7 @@ class User(models.Model):
     def adaptivity_answer(self, n):
         a = self.data_adaptivity.split(":")
         kats=['--','-','+','++','?']
-        if len(a)==6:
+        if len(a)==7:
             return kats[a[n]]
         else:
             return ''
@@ -880,6 +880,9 @@ class User(models.Model):
     def adaptivity_answer6(self):
         return self.adaptivity_answer(6)
 
+    @property
+    def adaptivity_answer7(self):
+        return self.adaptivity_answer(7)
 
 class UserRule(models.Model):
 
