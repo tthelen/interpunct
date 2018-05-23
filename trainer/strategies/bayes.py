@@ -539,7 +539,7 @@ class BayesStrategy:
         self.user.rules_activated_count = self.dynamicNet.count_known()+1
         self.user.save()
         # Is user already finished?
-        if self.user.rules_activated_count == 33:
+        if self.user.rules_activated_count == 30:
             return False, True, False  # new rule = false, finished = true
 
         # check the current rule
