@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Count, Sum
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule, UserPretest
 import random
 
@@ -57,7 +57,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
                 auth_bytes = bytes(auth[1], 'utf8')
                 uname, passwd = base64.b64decode(auth_bytes).split(b':')
                 if len(uname) > 8 and uname == passwd:
-                    check_or_create_user(uname)
+                    check_or_create_user(uname.decode('utf-8'))
                     return view(request, *args, **kwargs)
 
     # Either they did not provide an authorization header or
@@ -105,7 +105,7 @@ def logged_in_or_basicauth(realm=""):
     def view_decorator(func):
         def wrapper(request, *args, **kwargs):
             return view_or_basicauth(func, request,
-                                     lambda u: u.is_authenticated(),
+                                     lambda u: u.is_authenticated,
                                      realm, *args, **kwargs)
 
         return wrapper

@@ -83,6 +83,8 @@ class LeitnerStrategy:
         """Process the results of the pretest.
         Problem for current leitner representation: Rule order is fixed. So set level to last level befor first error."""
 
+        self.user.pretest = True
+        self.user.save()
         last_pos = -1  # highest position in self.rule_order for whoch the pretest was positive
         new_rule = None
         for rule_idx in range(len(self.rule_order)):
@@ -91,7 +93,7 @@ class LeitnerStrategy:
                 pretest_result = UserPretest.objects.get(user=self.user, rule__code=self.rule_order[rule_idx])
                 if pretest_result.result:
                     last_pos = rule_idx  # new best position
-                    new_ur = UserRule.objects.get(rule__code=self.rule_order[rule_idx], user=self.user)
+                    new_ur = UserRule.objects.filter(rule__code=self.rule_order[rule_idx], user=self.user).first()
                     new_ur.active = True  # activate new rule
                     new_ur.box = 4 # lowest box
                     new_ur.save()

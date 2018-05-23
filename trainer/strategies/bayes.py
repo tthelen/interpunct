@@ -1,4 +1,5 @@
 from trainer.models import User, Rule, UserRule, SentenceRule, UserSentence, models, UserPretest
+from django.db.models import Count
 
 from itertools import repeat, chain
 import random
@@ -358,14 +359,13 @@ class BayesStrategy:
             else:
                 pass
 
-
     def process_pretest(self):
         """Process the pretest results. For every positive result set corresponding rule as active in dynamic net."""
         count_pos=0
         for pretest_result in UserPretest.objects.filter(user=self.user):  # all pretest results for this user
             # print(pretest_result)
             if pretest_result.result:  # is it a positive result?
-                ur = UserRule.objects.get(rule=pretest_result.rule, user=self.user)  # fetch UserRule object
+                ur = UserRule.objects.filter(rule=pretest_result.rule, user=self.user).first()  # fetch UserRule object
                 if not ur.dynamicnet_active:
                     count_pos += 1 # count as newly activated rule
                 ur.dynamicnet_active = True  # set as active in user's dynamic net
@@ -641,7 +641,15 @@ class BayesStrategy:
                 possible_sentences.append([sr, count])  # store all possible sentences
 
         if len(possible_sentences) == 0:  # HACK: No sentence? Try again # TODO: find a real solution
-            # print("HACK! Try another sentence...")
+            # ab hier mein neuer Teil
+            # but if there is no sentence for the current rule, use it anyway but minimize it
+            if codeOfnewRule == self.dynamicNet.current.ruleCode:
+                # get all sentences which contain this rule
+                r=rule_obj[0]
+                possible_sentences = SentenceRule.objects.filter(rule=r, sentence__active=True).annotate(
+                    rule_count=Count('sentence__rules')).order_by('rule_count')
+                if possible_sentences:
+                    return possible_sentences[0] # first = sentence with least num of rules
             return self.roulette_wheel_selection()
 
         # pick least often used of the possible sentences

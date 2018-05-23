@@ -19,8 +19,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        if 'deactivate' in options:  # deactivate all sentences
-            Sentence.objects.all().update(active=False)
+        #if 'deactivate' in options:  # deactivate all sentences
+        #    Sentence.objects.all().update(active=False)
 
         for fn in options['filename']:  # read all given files
             with open(fn, "r", encoding="utf-8") as f:
