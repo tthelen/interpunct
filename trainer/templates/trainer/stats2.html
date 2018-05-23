@@ -1,0 +1,39 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Statistik{% endblock %}
+
+{% block main %}
+<h2>Statistik für Bayes/Leitner-Versuch</h2>
+<p>&nbsp;</p>
+
+<h3>Basisdaten</h3>
+<table class="table">
+<tr><th>Kategorie</th><th>Wert</th></tr>
+<tr><td>Anzahl Nutzer</td><td>{{ count_users }}</td></tr>
+<tr><td>Anzahl Stud.IP-Nutzer &nbsp;</td><td>{{ count_studip_users }}</td></tr>
+</table>
+
+<h3>Nutzerdaten</h3>
+
+    <table class="table">
+    <tr><th>Strategie (0=Leiter, 1=Bayes)</th>
+        <th>Level</th><th>Versuche</th><th>Fehler</th>
+        <th>Frage 1: Ich hatte das Gefühl, dass sich der Kommatrainer durch den Einführungstest an mich angepasst hat.</th>
+        <th>Frage 2: Vor dem Einführen einer neuen Regel wurde die zuletzt eingeführte Regel ausreichend geübt.</th>
+        <th>Frage 3: Das Programm hat darauf reagiert, wenn ich eine Regel vergessen habe, die bereits eingeführt wurde.</th>
+        <th>Frage 6: Ich hatte das Gefühl, dass Aufgaben mit neuen Regeln und Regeln, bei denen ich häufig Fehler machte, öfter getestet wurden.</th>
+    </tr>
+    {% for u in users %}
+        <tr><td>{{ u.strategy }}</td>
+            <td>{{ u.rules_activated_count }}</td>
+            <td>{{ u.tries }}</td>
+            <td>{{ u.errors }}</td>
+            <td>{{ u.adaptivity_answer1 }}</td>
+            <td>{{ u.adaptivity_answer2 }}</td>
+            <td>{{ u.adaptivity_answer3 }}</td>
+            <td>{{ u.adaptivity_answer6 }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+{% endblock %}

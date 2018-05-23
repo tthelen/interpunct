@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^allstats_sentence/$', views.allstats_sentence, name='allstats_sentence'),  # ajax load for single sentence stats
     url(r'^allstats_correct_sentence/$', views.allstats_correct_sentence, name='allstats_correct_sentence'),  # ajax load for single sentence stats
     url(r'^stats$', views.stats, name='stats'),
+    url(r'^stats2$', views.stats2, name='stats2'), # stats for leitner/bayes experiment
     url(r'^ustats$', views.ustats, name='ustats'),
     url(r'^allstats$', views.allstats, name='allstats'),  # sentence statistics for "set comma" task
     url(r'^allstats_correct$', views.allstats_correct, name='allstats_correct'),  # sentence statistics for "correct comma" task

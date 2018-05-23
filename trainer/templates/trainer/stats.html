@@ -46,7 +46,7 @@
     <tr><th>Sem.</th><th>Abschluss</th><th>Fach 1</th>
         <th>HZB</th><th>m/w</th><th>Muttersprache</th><th>Level</th><th>Lösungen</th><th>Fehler</th><th>Gesamtzeit</th></th><th>Einschätzung</th></tr>
     {% for u in users %}
-        <tr><td>{{ u.explicit_data_semester }}</td><td>{{ u.explicit_data_study }}</td>
+        <tr><td>{{ u.explicit_data_semester }} (#{{ u.id }})</td><td>{{ u.explicit_data_study }}</td>
             <td>{% if u.data_subject1 %}{{ u.explicit_data_subject1 }}{% endif %}
                 {% if u.data_subject2 %}<br>{{ u.explicit_data_subject2 }}{% endif %}
                 {% if u.data_subject3 %}<br>{{ u.explicit_data_subject3 }}{% endif %}</td>

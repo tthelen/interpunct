@@ -848,6 +848,38 @@ class User(models.Model):
         seconds = int(tt/1000) - minutes*60
         return "{:3d}:{:02d}".format(minutes, seconds)
 
+    def adaptivity_answer(self, n):
+        a = self.data_adaptivity.split(":")
+        kats=['--','-','+','++','?']
+        if len(a)==6:
+            return kats[a[n]]
+        else:
+            return ''
+
+    @property
+    def adaptivity_answer1(self):
+        return self.adaptivity_answer(1)
+
+    @property
+    def adaptivity_answer2(self):
+        return self.adaptivity_answer(2)
+
+    @property
+    def adaptivity_answer3(self):
+        return self.adaptivity_answer(3)
+
+    @property
+    def adaptivity_answer4(self):
+        return self.adaptivity_answer(4)
+
+    @property
+    def adaptivity_answer5(self):
+        return self.adaptivity_answer(5)
+
+    @property
+    def adaptivity_answer6(self):
+        return self.adaptivity_answer(6)
+
 
 class UserRule(models.Model):
 

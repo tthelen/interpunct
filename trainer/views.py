@@ -605,6 +605,31 @@ def stats(request):
 
     return render(request, 'trainer/stats.html', locals())
 
+def stats2(request):
+    """Render general statistics for leitner/bayes experiment."""
+
+    ud = []
+    count_users = User.objects.filter(rules_activated_count__gt=0, id__gt=809).count()
+    count_studip_users = User.objects.filter(rules_activated_count__gt=0, user_id__iregex=r'[0-9a-f]{32}', id__gt=809).count()
+    count_solutions = Solution.objects.count()
+    count_error = SolutionRule.objects.count()
+    count_error_set = SolutionRule.objects.filter(solution__type='set').count()
+    count_error_correct = SolutionRule.objects.filter(solution__type='correct').count()
+    count_error_explain = SolutionRule.objects.filter(solution__type='explain').count()
+
+    users = User.objects.filter(rules_activated_count__gt=0, id__gt=809).all()
+
+    levels = User.objects.values('rules_activated_count')\
+        .order_by('rules_activated_count')\
+        .annotate(the_count = Count('rules_activated_count'))
+
+    error_rules = SolutionRule.objects.values('rule') \
+        .order_by('rule') \
+        .annotate(the_count = Count('rule'))
+
+    return render(request, 'trainer/stats2.html', locals())
+
+
 
 def ustats(request):
     users = User.objects.all()
