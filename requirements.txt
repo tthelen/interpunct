@@ -1,2 +1,1 @@
-django >= 2
-psycopg2-binary
+django-lti-provider

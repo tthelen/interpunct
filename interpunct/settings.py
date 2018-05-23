@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'trainer',
+    'lti_provider',  # provide LTI access
+    'trainer',  # the comma trainer main app
 ]
 
 MIDDLEWARE = [
@@ -109,6 +110,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+  'django.contrib.auth.backends.ModelBackend',
+  'lti_provider.auth.LTIBackend',
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -133,3 +139,34 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/images/',
 ]
+
+
+ # LTI configuration
+
+LTI_TOOL_CONFIGURATION = {
+    'title': 'Komma-Trainer 2.0',
+    'description': 'Trainiere deine Komma-Fähigkeiten.',
+    'launch_url': 'lti/',
+    'embed_url': '', # ''<the view endpoint for an embed tool>' or '',
+    'embed_icon_url': '', # ''<the icon url to use for an embed tool>' or '',
+    'embed_tool_id': '', # ''<the embed tool id>' or '',
+    'landing_url': '', # ''<the view landing page>',
+    'course_aware': False, # <True or False>,
+    'course_navigation': False, # <True or False>,
+    'new_tab': False, # <True or False>,
+    'frame_width': 800, # <width in pixels>,
+    'frame_height': 1084, # <height in pixels>,
+    'assignments': {
+        #'<name>': '<landing_url>',
+        #'<name>': '<landing_url>',
+        #'<name>': '<landing_url>'
+    }
+}
+
+PYLTI_CONFIG = {
+    'consumers': {
+        '69962864477638755864': {
+            'secret': '11572054722073844529'
+        }
+    }
+}
