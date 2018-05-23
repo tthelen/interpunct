@@ -851,8 +851,8 @@ class User(models.Model):
     def adaptivity_answer(self, n):
         a = self.data_adaptivity.split(":")
         kats=['--','-','+','++','?']
-        if len(a)==7:
-            return kats[a[n]]
+        if len(a) == 7:
+            return kats[int(a[n-1])]
         else:
             return ''
 
