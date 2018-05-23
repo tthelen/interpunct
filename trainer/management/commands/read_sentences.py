@@ -23,7 +23,7 @@ class Command(BaseCommand):
             Sentence.objects.all().update(active=False)
 
         for fn in options['filename']:  # read all given files
-            with open("sentences.txt", "r", encoding="utf-8") as f:
+            with open(fn, "r", encoding="utf-8") as f:
                 for line in f:  # all lines in file
                     with transaction.atomic():  # all db actions as one transaction
                         shortcut_string=line.strip()
