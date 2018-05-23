@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trainer/views.py" afterPath="$PROJECT_DIR$/trainer/views.py" />
+    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="- bugfix: check for highest level adjusted">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/data/sentences.txt" afterPath="$PROJECT_DIR$/data/sentences.txt" />
+      <change beforePath="$PROJECT_DIR$/trainer/models.py" afterPath="$PROJECT_DIR$/trainer/models.py" />
     </list>
     <ignored path="interpunct.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -17,97 +19,62 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/interpunct$scratch_1.coverage" NAME="scratch_1 Coverage Results" MODIFIED="1498598049357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
-    <SUITE FILE_PATH="coverage/interpunct$check.coverage" NAME="check Coverage Results" MODIFIED="1499892345903" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/interpunct$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1498560329090" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
+    <SUITE FILE_PATH="coverage/interpunct$check.coverage" NAME="check Coverage Results" MODIFIED="1499892345903" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="C:\Users\Tobias\PycharmProjects\interpunct" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
     <option name="GROUP_SCHEMA" value="true" />
     <option name="GROUP_CONTENTS" value="false" />
     <option name="SORT_POSITIONED" value="false" />
     <option name="SHOW_TABLE_DETAILS" value="true" />
     <option name="SHOW_EMPTY_GROUPS" value="false" />
     <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$Root" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="interpunct2@localhost" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-    </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$Root" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="interpunct2@localhost" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="interpunct2" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="public" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-    </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$Root" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="interpunct2@localhost" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="interpunct2" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="public" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$GroupNode" />
-      </PATH_ELEMENT>
-    </PATH>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="interpunct2@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="interpunct2@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="postgres@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="Sqlite (Xerial) - db.sqlite3" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="Sqlite (Xerial) - db.sqlite3" type="feb32156:DbDataSourceImpl" />
+        <item name="main: schema" type="90513b60:SqliteImplModel$Schema" />
+      </path>
+    </expand>
+    <select />
   </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" module-name="interpunct" is-module-sdk="true">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
     <option name="myUseModuleSdk" value="true" />
     <option name="myModuleName" value="interpunct" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="interpunct" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="635" column="0" lean-forward="true" selection-start-line="635" selection-start-column="0" selection-end-line="635" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="vanillalm.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/vanillalm.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="9" lean-forward="false" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
+            <state relative-caret-position="231">
+              <caret line="611" column="42" lean-forward="false" selection-start-line="611" selection-start-column="42" selection-end-line="611" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -116,62 +83,69 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="22" column="57" lean-forward="false" selection-start-line="22" selection-start-column="57" selection-end-line="22" selection-end-column="57" />
+            <state relative-caret-position="420">
+              <caret line="22" column="33" lean-forward="false" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="level_progress.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/level_progress.html">
+      <file leaf-file-name="adaptivity_questionaire.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/adaptivity_questionaire.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="52" column="31" lean-forward="false" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+            <state relative-caret-position="362">
+              <caret line="70" column="139" lean-forward="false" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="139" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/base.html">
+      <file leaf-file-name="stats2.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/stats2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-272">
-              <caret line="8" column="104" lean-forward="false" selection-start-line="8" selection-start-column="104" selection-end-line="8" selection-end-column="104" />
+            <state relative-caret-position="252">
+              <caret line="12" column="79" lean-forward="false" selection-start-line="12" selection-start-column="79" selection-end-line="12" selection-end-column="79" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interpunct/settings.py">
+      <file leaf-file-name="stats.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/stats.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1360">
-              <caret line="80" column="27" lean-forward="false" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
+            <state relative-caret-position="418">
+              <caret line="48" column="60" lean-forward="false" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Chaot_1.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/images/Chaot_1.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="König_10.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/images/König_10.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="export_solutions_correct.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/management/commands/export_solutions_correct.py">
+      <file leaf-file-name="leitner.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trainer/strategies/leitner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1479">
-              <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+            <state relative-caret-position="2667">
+              <caret line="236" column="0" lean-forward="false" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#82#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="trainer_user" pinned="false" current-in-tab="false">
+        <entry file="das://table:/d08381e1/948627af-16bd-4562-8b76-47857f843b8b/main.trainer_user">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trainer/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="397">
+              <caret line="852" column="24" lean-forward="false" selection-start-line="852" selection-start-column="24" selection-end-line="852" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -190,18 +164,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>UserSentence</find>
-      <find>expli</find>
-      <find>Hintergrun</find>
-      <find>start</find>
-      <find>alert</find>
-      <find>senten</find>
-      <find>Sentence</find>
-      <find>include</find>
-      <find>Solution</find>
-      <find>finished</find>
-      <find>Sol</find>
-      <find>print</find>
       <find>sr</find>
       <find>Fischstä</find>
       <find>self</find>
@@ -220,6 +182,18 @@
       <find>correct</find>
       <find>url</find>
       <find>interpunct2</find>
+      <find>activated</find>
+      <find>BAYES</find>
+      <find>value =</find>
+      <find>selectNew</find>
+      <find>adap</find>
+      <find>nextRule</find>
+      <find>known</find>
+      <find>min</find>
+      <find>print</find>
+      <find>adapti</find>
+      <find>storeAns</find>
+      <find>stats</find>
     </findStrings>
     <replaceStrings>
       <replace>col-sm-</replace>
@@ -239,11 +213,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/trainer/templates/trainer/KannKommaLoeschen.html" />
-        <option value="$PROJECT_DIR$/trainer/templates/trainer/AllKommaSetzenUndErklaeren.html" />
-        <option value="$PROJECT_DIR$/trainer/templates/trainer/AllKommaSetzen.html" />
-        <option value="dbtable:/d08381e1/948627af-16bd-4562-8b76-47857f843b8b/main.trainer_solution" />
-        <option value="$PROJECT_DIR$/trainer/templates/trainer/_task_explain_commas.html" />
         <option value="$PROJECT_DIR$/todo.txt" />
         <option value="$PROJECT_DIR$/trainer/management/commands/read_rules.py" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/reset.html" />
@@ -265,7 +234,6 @@
         <option value="$PROJECT_DIR$/trainer/templates/trainer/partials/solution.hmtl.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/mystats.html" />
         <option value="$PROJECT_DIR$/trainer/management/commands/cleanup_users.py" />
-        <option value="$PROJECT_DIR$/trainer/templates/trainer/stats.html" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/partials/mystats_rule.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/partials/solution.html" />
@@ -282,14 +250,20 @@
         <option value="$PROJECT_DIR$/trainer/management/commands/export_solutions_explain.py" />
         <option value="$PROJECT_DIR$/trainer/management/commands/export_sentences.py" />
         <option value="$PROJECT_DIR$/trainer/management/commands/export_solutions_correct.py" />
-        <option value="$PROJECT_DIR$/trainer/models.py" />
         <option value="$PROJECT_DIR$/trainer/management/commands/export_users.py" />
-        <option value="$PROJECT_DIR$/trainer/urls.py" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/vanillalm.html" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" />
         <option value="$PROJECT_DIR$/interpunct/settings.py" />
+        <option value="$PROJECT_DIR$/trainer/strategies/leitner.py" />
         <option value="$PROJECT_DIR$/trainer/templates/trainer/base.html" />
+        <option value="$PROJECT_DIR$/trainer/templates/trainer/adaptivity_questionaire.html" />
+        <option value="$PROJECT_DIR$/data/sentences.txt" />
+        <option value="$PROJECT_DIR$/trainer/strategies/bayes.py" />
+        <option value="$PROJECT_DIR$/trainer/urls.py" />
+        <option value="$PROJECT_DIR$/trainer/templates/trainer/stats.html" />
+        <option value="$PROJECT_DIR$/trainer/templates/trainer/stats2.html" />
         <option value="$PROJECT_DIR$/trainer/views.py" />
+        <option value="$PROJECT_DIR$/trainer/models.py" />
       </list>
     </option>
   </component>
@@ -299,11 +273,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-1928" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-1971" />
+    <option name="y" value="359" />
+    <option name="width" value="1934" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -321,77 +295,47 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trainer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interpunct" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
+          <expand>
+            <path>
+              <item name="interpunct" type="b2602c69:ProjectViewProjectNode" />
+              <item name="interpunct" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="interpunct" type="b2602c69:ProjectViewProjectNode" />
+              <item name="interpunct" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="interpunct" type="b2602c69:ProjectViewProjectNode" />
+              <item name="interpunct" type="462c0819:PsiDirectoryNode" />
+              <item name="trainer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="interpunct" type="b2602c69:ProjectViewProjectNode" />
+              <item name="interpunct" type="462c0819:PsiDirectoryNode" />
+              <item name="trainer" type="462c0819:PsiDirectoryNode" />
+              <item name="strategies" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="interpunct" type="b2602c69:ProjectViewProjectNode" />
+              <item name="interpunct" type="462c0819:PsiDirectoryNode" />
+              <item name="trainer" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="interpunct" type="b2602c69:ProjectViewProjectNode" />
+              <item name="interpunct" type="462c0819:PsiDirectoryNode" />
+              <item name="trainer" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="trainer" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -414,17 +358,17 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\static" />
+      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer" />
+      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer\old" />
+      <recent name="C:\Users\Tobias\PycharmProjects\interpunct" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\management\commands" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\data" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer\partials" />
-      <recent name="C:\Users\Tobias\PycharmProjects\interpunct" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\static" />
-      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer" />
-      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer\old" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct" />
     </key>
   </component>
@@ -441,45 +385,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.check">
-    <configuration default="false" name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="interpunct" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="scratch_1" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="interpunct" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="check" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="check" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -496,7 +402,67 @@
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
-      <method />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="interpunct" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="scratch_1" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="interpunct" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="interpunct" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="interpunct" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
     </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -562,6 +528,25 @@
       <option name="ADDITIONAL_ARGS" value="" />
       <method />
     </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="interpunct" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -585,25 +570,6 @@
       <option name="customRunCommand" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="interpunct" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -617,20 +583,31 @@
       <module name="interpunct" />
       <method />
     </configuration>
-    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
-      <method />
-    </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
       <command value="run" />
       <scripts />
       <node-interpreter value="project" />
       <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="interpunct" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -653,6 +630,14 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Nosetests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -668,7 +653,6 @@
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;.&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -684,7 +668,6 @@
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;.&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="py.test">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -701,30 +684,6 @@
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;.&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method />
-    </configuration>
-    <configuration default="false" name="interpunct" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="interpunct" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
-      <method />
     </configuration>
     <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Django server.interpunct" />
@@ -739,26 +698,6 @@
         <item index="2" class="java.lang.String" itemvalue="Python.scratch" />
       </list>
     </recent_temporary>
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="interpunct" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -773,55 +712,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1479331318085</updated>
-    </task>
-    <task id="LOCAL-00021" summary="- Count sentence uses for user, select least often used sentences&#10;- bootstrap grid&#10;- correct count of correction task&#10;- statistics per rule&#10;- minor changes">
-      <created>1495573593962</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1495573593962</updated>
-    </task>
-    <task id="LOCAL-00022" summary="- complete rework of explanation tasks&#10;- interface tweaks&#10;- css nicer&#10;- example sentences">
-      <created>1495629764338</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1495629764338</updated>
-    </task>
-    <task id="LOCAL-00023" summary="- corrected redirection after registration for subdir installations">
-      <created>1495630118561</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1495630118561</updated>
-    </task>
-    <task id="LOCAL-00024" summary="- corrected redirection after registration for subdir installations">
-      <created>1495630242166</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1495630242166</updated>
-    </task>
-    <task id="LOCAL-00025" summary="- display correct sentence with rule hints after task submission">
-      <created>1495660964056</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1495660964056</updated>
-    </task>
-    <task id="LOCAL-00026" summary="- display correct sentence with rule hints after task submission">
-      <created>1495663008126</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1495663008126</updated>
-    </task>
-    <task id="LOCAL-00027" summary="- use static tags in templates">
-      <created>1495786194464</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1495786194464</updated>
     </task>
     <task id="LOCAL-00028" summary="- rule and sentence corrections&#10;- questionnaire corrections">
       <created>1496326985048</created>
@@ -1117,7 +1007,56 @@
       <option name="project" value="LOCAL" />
       <updated>1505381050281</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="- bugfix: level too high after pretest (with code to fix corrupted accounts)">
+      <created>1526972661573</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1526972661574</updated>
+    </task>
+    <task id="LOCAL-00071" summary="- bugfixes&#10;- additional option for questionnaire&#10;- activated strategy selection">
+      <created>1526980362116</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1526980362116</updated>
+    </task>
+    <task id="LOCAL-00072" summary="- bugfix: history values could grow larger than MAXINT. Now restricted to 2^31+something&#10;- commented out debug messages">
+      <created>1527017067982</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1527017067983</updated>
+    </task>
+    <task id="LOCAL-00073" summary="- bugfix: check for highest level adjusted">
+      <created>1527062788263</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1527062788263</updated>
+    </task>
+    <task id="LOCAL-00074" summary="- additional statistics view for leitner/bayes experiment">
+      <created>1527068548611</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1527068548611</updated>
+    </task>
+    <task id="LOCAL-00075" summary="- bugfix: proper answer formatting for stats2">
+      <created>1527068745637</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1527068745637</updated>
+    </task>
+    <task id="LOCAL-00076" summary="- improved statistics for stats2">
+      <created>1527069106496</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1527069106496</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1130,23 +1069,26 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-2409" y="-8" width="2418" height="1318" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23081024" sideWeight="0.5300462" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15245202" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10546541" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" x="0" y="0" width="434" height="856" />
+      <window_info id="manage.py@interpunct" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20069505" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2985244" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39530843" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3445287" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29685807" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39653304" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23081024" sideWeight="0.46995378" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22318527" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14688301" sideWeight="0.37643677" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15243381" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14688301" sideWeight="0.62356323" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="manage.py@interpunct" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3026874" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31419286" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1166,7 +1108,7 @@
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="processedProjectFiles" value="true" />
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -1180,13 +1122,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- task header formatting" />
-    <MESSAGE value="- highlight current rule" />
-    <MESSAGE value="- changed rule order&#10;- reduced number of rules to 30&#10;- metadata is stored explicitly&#10;- finishing message on uplevel screen" />
-    <MESSAGE value="- fixed bug in rule file formatting" />
-    <MESSAGE value="- bootstrap grid changed to col-xs-&#10;- uname parameter wins over session cookie" />
-    <MESSAGE value="- no container" />
-    <MESSAGE value="- introduce active and inactive sentences&#10;- sentence import script handles multiple files and can deactivate all old sentences&#10;- introduce comma pairs&#10;- make boostrap container depend on iframe embedding" />
     <MESSAGE value="- SolutionRules introduced&#10;- Fixed minor bugs in rule list&#10;- Handling of unbalanced optional commas for 'set comma' task&#10;- Reworked client evaluation code for 'set comma' task" />
     <MESSAGE value="- Handling of unbalanced optional commas for 'correct comma' task&#10;- Reworked client evaluation code for 'correct comma' task" />
     <MESSAGE value="- include simple stats" />
@@ -1205,7 +1140,14 @@
     <MESSAGE value="- added excel export of solutions" />
     <MESSAGE value="- Stud.IP-Lernmodule-Support" />
     <MESSAGE value="- added ustat" />
-    <option name="LAST_COMMIT_MESSAGE" value="- added ustat" />
+    <MESSAGE value="- bugfix: level too high after pretest (with code to fix corrupted accounts)" />
+    <MESSAGE value="- bugfixes&#10;- additional option for questionnaire&#10;- activated strategy selection" />
+    <MESSAGE value="- bugfix: history values could grow larger than MAXINT. Now restricted to 2^31+something&#10;- commented out debug messages" />
+    <MESSAGE value="- bugfix: check for highest level adjusted" />
+    <MESSAGE value="- additional statistics view for leitner/bayes experiment" />
+    <MESSAGE value="- bugfix: proper answer formatting for stats2" />
+    <MESSAGE value="- improved statistics for stats2" />
+    <option name="LAST_COMMIT_MESSAGE" value="- improved statistics for stats2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1214,109 +1156,8 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trainer/management/commands/import_rules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="88" lean-forward="false" selection-start-line="8" selection-start-column="88" selection-end-line="8" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct.public.auth_user">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/partials/sentence.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="32" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
-          <caret line="76" column="69" lean-forward="false" selection-start-line="76" selection-start-column="56" selection-end-line="76" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="818">
-          <caret line="84" column="51" lean-forward="false" selection-start-line="84" selection-start-column="51" selection-end-line="84" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="10" lean-forward="false" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kommaregeln.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="33" column="36" lean-forward="true" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/partials/csv_solution.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="98" lean-forward="false" selection-start-line="2" selection-start-column="98" selection-end-line="2" selection-end-column="98" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/partials/mystats_rule.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/mystats.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="65" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/interpunct.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/partials/solution.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="25" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sentences.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/seminar_osterheider.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/sentences.txt" />
+    <entry file="file://$PROJECT_DIR$/data/seminar_osterheider.csv" />
     <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/ustats.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1324,60 +1165,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/user.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9044">
-          <caret line="532" column="33" lean-forward="false" selection-start-line="532" selection-start-column="33" selection-end-line="532" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/user.csv" />
     <entry file="file://$PROJECT_DIR$/data/from_ortho_sem_grimm.csv" />
-    <entry file="file://$PROJECT_DIR$/data/from_ortho_sem.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/from_ortho_sem_final.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/check.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="9" column="61" lean-forward="false" selection-start-line="9" selection-start-column="61" selection-end-line="9" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/from_ortho_sem.csv" />
+    <entry file="file://$PROJECT_DIR$/data/from_ortho_sem_final.csv" />
+    <entry file="file://$PROJECT_DIR$/check.py" />
     <entry file="file://$PROJECT_DIR$/data/kommkoenige_neg_grimm.csv" />
     <entry file="file://$PROJECT_DIR$/data/kommkoenige_neg_osterheider.csv" />
     <entry file="file://$PROJECT_DIR$/data/kommkoenige_osterheider.csv" />
     <entry file="file://$PROJECT_DIR$/data/kommkoenige_grimm.csv" />
-    <entry file="file://$PROJECT_DIR$/data/seminar_grimm.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/management/commands/import_orthosem.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="37" lean-forward="false" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/stats.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="54" column="19" lean-forward="false" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/seminar_grimm.csv" />
+    <entry file="file://$PROJECT_DIR$/trainer/management/commands/import_orthosem.py" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/b6e423cc-b6f4-4b99-a6b9-9e5734641951/console.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1392,35 +1190,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_sentencerule">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" text="sentence_id=235">
-            <filter text="sentence_id=235" />
-            <filter text="sentence_id=229" />
-            <filter text="sentence_id=184" />
-            <filter text="sentence_id=172" />
-          </filtering>
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_rule">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_sentencerule" />
+    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_rule" />
     <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/welcome.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="444">
@@ -1456,31 +1227,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_sentence">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_sentence" />
     <entry file="file://$PROJECT_DIR$/trainer/management/commands/export_solutions_correct.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1479">
+        <state relative-caret-position="1827">
           <caret line="89" column="0" lean-forward="false" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18105">
-          <caret line="1069" column="33" lean-forward="false" selection-start-line="1069" selection-start-column="33" selection-end-line="1069" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1496,18 +1247,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_solution">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="dbDummy://dbtable:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_solution" />
     <entry file="file://$PROJECT_DIR$/trainer/management/commands/export_solutions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -1515,26 +1255,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="22" column="57" lean-forward="false" selection-start-line="22" selection-start-column="57" selection-end-line="22" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/vanillalm.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
+        <state relative-caret-position="336">
           <caret line="16" column="9" lean-forward="false" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/level_progress.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="52" column="31" lean-forward="false" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
           <folding />
         </state>
       </provider>
@@ -1551,24 +1275,151 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/interpunct/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1360">
+        <state relative-caret-position="1680">
           <caret line="80" column="27" lean-forward="false" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/level_progress.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="51" column="31" lean-forward="false" selection-start-line="51" selection-start-column="31" selection-end-line="51" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_rule">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-272">
-          <caret line="8" column="104" lean-forward="false" selection-start-line="8" selection-start-column="104" selection-end-line="8" selection-end-column="104" />
+        <state relative-caret-position="1806">
+          <caret line="86" column="20" lean-forward="false" selection-start-line="86" selection-start-column="20" selection-end-line="86" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/sentences.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="70" column="54" lean-forward="false" selection-start-line="70" selection-start-column="54" selection-end-line="70" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/kommaregeln.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/strategies/bayes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="541" column="48" lean-forward="false" selection-start-line="541" selection-start-column="48" selection-end-line="541" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#96#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct.public.trainer_rule">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="22" column="33" lean-forward="false" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/stats.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="48" column="60" lean-forward="false" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/stats2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="79" lean-forward="false" selection-start-line="12" selection-start-column="79" selection-end-line="12" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/d08381e1/948627af-16bd-4562-8b76-47857f843b8b/main.trainer_user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct.public.trainer_user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/d08381e1/21f48281-0b39-4e46-9843-a8bc41fdd175/interpunct2.public.trainer_user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/strategies/leitner.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2667">
+          <caret line="236" column="0" lean-forward="false" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trainer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="635" column="0" lean-forward="true" selection-start-line="635" selection-start-column="0" selection-end-line="635" selection-end-column="0" />
+        <state relative-caret-position="231">
+          <caret line="611" column="42" lean-forward="false" selection-start-line="611" selection-start-column="42" selection-end-line="611" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/templates/trainer/adaptivity_questionaire.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="70" column="139" lean-forward="false" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="139" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="852" column="24" lean-forward="false" selection-start-line="852" selection-start-column="24" selection-end-line="852" selection-end-column="24" />
           <folding />
         </state>
       </provider>
