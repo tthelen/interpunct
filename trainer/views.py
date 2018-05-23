@@ -26,7 +26,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
-            user.strategy = random.choice([user.BAYES,user.LEITNER])
+            user.strategy = random.choice([user.BAYES, user.BAYES, user.LEITNER])
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
