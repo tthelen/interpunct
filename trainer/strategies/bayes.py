@@ -419,9 +419,8 @@ class BayesStrategy:
         for i in UserRule.objects.filter(user=self.user, dynamicnet_active=False):
             node = DynamicNode(BayesStrategy,self.user, i.rule.code, self.dynamicNet)
             if node.value < minValue:
-                minValue = node.value
                 if node.ruleCode.startswith("E"):
-                    pass
+                    continue
                 else:
                     minValue = node.value
                     min_node = node

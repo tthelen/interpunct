@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
-from trainer.models import Rule, Sentence, SentenceRule, User
+from trainer.models import Rule, Sentence, SentenceRule, User, UserRule
 from django.db.models import Count
+from trainer.strategies.bayes import DynamicNode, BayesStrategy
 
 
 class Command(BaseCommand):
