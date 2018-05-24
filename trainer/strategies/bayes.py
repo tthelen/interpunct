@@ -13,7 +13,7 @@ class StaticNet:
         self.dynamicNet = dynamicNet
         self.auf = ["A1","A2","A4","A3"]
         self.teil = ["B1.1","B1.2","B1.3","B1.4.1","B1.4.2","B2.1","B2.2","B2.3","B2.4.1","B2.4.2","B2.5","B1.5"]
-        self.zus = ["C1","C2","C3.1","C3.2","C4.1","C5","C6.1","C6.3.1","C7","C8","C6.2","C6.4","C6.3.1","D1","D3"]
+        self.zus = ["C1","C2","C3.1","C3.2","C4.1","C5","C6.1","C6.3.1","C7","C8","C6.2","C6.4","C6.3.2","D1","D3"]
         self.aufValue = 1
         self.teilValue = 1
         self.zusValue = 1
@@ -38,7 +38,7 @@ class StaticNet:
                 self.zusValue *= i.get_value()
                 countzus += 1
             else:
-                raise RuntimeError("No parent node can be assigned")
+                raise RuntimeError("No parent node can be assigned, rule code is {}".format(i.ruleCode))
         # and divide by count to get the average performance
         if countauf != 0:
             self.aufValue /= countauf
