@@ -608,12 +608,54 @@ def stats(request):
 def stats2(request):
     """Render general statistics for leitner/bayes experiment."""
 
-    user_from=810 # value for production system uni osnabrück # HACK
-    # user_from=0  # value for test system
+    #user_from=810 # value for production system uni osnabrück # HACK
+    user_from=0  # value for test system
     ud = []
     count_users = User.objects.filter(rules_activated_count__gt=0, id__gte=user_from).count()
     count_studip_users = User.objects.filter(rules_activated_count__gt=0, user_id__iregex=r'[0-9a-f]{32}', id__gte=user_from).count()
     users = User.objects.filter(rules_activated_count__gt=0, id__gte=user_from).all()
+
+    count_leitner = User.objects.filter(rules_activated_count__gt=0, strategy=User.LEITNER, id__gte=user_from).count()
+    count_bayes = User.objects.filter(rules_activated_count__gt=0, strategy=User.BAYES, id__gte=user_from).count()
+    count_leitner_finished = User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from).count()
+    count_bayes_finished = User.objects.filter(rules_activated_count__gt=19, strategy=User.BAYES, id__gte=user_from).count()
+
+    ql1=ql2=ql3=ql4=ql5=ql6=[]
+    qb1=qb2=qb3=qb4=qb5=qb6=[]
+
+    for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from):
+        answers = u.data_adaptivity.split(":")
+        if len(answers)>=6:
+            if answers[0] < 5: ql1.append(answers[0])
+            if answers[1] < 5: ql2.append(answers[0])
+            if answers[2] < 5: ql3.append(answers[0])
+            if answers[3] < 5: ql4.append(answers[0])
+            if answers[4] < 5: ql5.append(answers[0])
+            if answers[5] < 5: ql6.append(answers[0])
+
+    for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.BAYES, id__gte=user_from):
+        answers = u.data_adaptivity.split(":")
+        if len(answers)>=6:
+            if answers[0] < 5: qb1.append(answers[0])
+            if answers[1] < 5: qb2.append(answers[0])
+            if answers[2] < 5: qb3.append(answers[0])
+            if answers[3] < 5: qb4.append(answers[0])
+            if answers[4] < 5: qb5.append(answers[0])
+            if answers[5] < 5: qb6.append(answers[0])
+
+    ql1 = sum(ql1) / len(ql1)
+    ql2 = sum(ql2) / len(ql2)
+    ql3 = sum(ql3) / len(ql3)
+    ql4 = sum(ql4) / len(ql4)
+    ql5 = sum(ql5) / len(ql5)
+    ql6 = sum(ql6) / len(ql6)
+    qb1 = sum(qb1) / len(qb1)
+    qb2 = sum(qb2) / len(qb2)
+    qb3 = sum(qb3) / len(qb3)
+    qb4 = sum(qb4) / len(qb4)
+    qb5 = sum(qb5) / len(qb5)
+    qb6 = sum(qb6) / len(qb6)
+
     return render(request, 'trainer/stats2.html', locals())
 
 

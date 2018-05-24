@@ -11,6 +11,9 @@
 <tr><th>Kategorie</th><th>Wert</th></tr>
 <tr><td>Anzahl Nutzer</td><td>{{ count_users }}</td></tr>
 <tr><td>Anzahl Stud.IP-Nutzer &nbsp;</td><td>{{ count_studip_users }}</td></tr>
+<tr><td>Anzahl Leitner-Strategie (davon inkl. Fragebogen)&nbsp;</td><td>{{ count_leitner }} ({{ count_leitner_finished }})</td></tr>
+<tr><td>Anzahl Bayes-Strategie (davon inkl. Fragebogen) &nbsp;</td><td>{{ count_bayes }} ({{ count_bayes_finished }})</td></tr>
+
 </table>
 
 <h3>Nutzerdaten</h3>
@@ -34,6 +37,8 @@
             <td>{{ u.adaptivity_answer6 }}</td>
         </tr>
     {% endfor %}
+    <tr><td>Average Leitner</td><td></td><td></td><td></td><td>{{ ql1 }}</td><td>{{ ql2 }}</td><td>{{ ql3 }}</td><td>{{ ql6 }}</td></tr>
+    <tr><td>Average Bayes</td><td></td><td></td><td></td><td>{{ qb1 }}</td><td>{{ qb2 }}</td><td>{{ qb3 }}</td><td>{{ qb6 }}</td></tr>
     </table>
 
 {% endblock %}
