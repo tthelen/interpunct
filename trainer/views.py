@@ -620,12 +620,22 @@ def stats2(request):
     count_leitner_finished = User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from).count()
     count_bayes_finished = User.objects.filter(rules_activated_count__gt=19, strategy=User.BAYES, id__gte=user_from).count()
 
-    ql1=ql2=ql3=ql4=ql5=ql6=[]
-    qb1=qb2=qb3=qb4=qb5=qb6=[]
+    ql1=[]
+    ql2=[]
+    ql3=[]
+    ql4=[]
+    ql5=[]
+    ql6=[]
+    qb1=[]
+    qb2=[]
+    qb3=[]
+    qb4=[]
+    qb5=[]
+    qb6=[]
 
     for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from):
         answers = [int(x) for x in u.data_adaptivity.split(":")]
-        if len(answers)>=6:
+        if len(answers) >= 6:
             if answers[0] < 5: ql1.append(answers[0])
             if answers[1] < 5: ql2.append(answers[1])
             if answers[2] < 5: ql3.append(answers[2])
@@ -635,7 +645,7 @@ def stats2(request):
 
     for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.BAYES, id__gte=user_from):
         answers = [int(x) for x in u.data_adaptivity.split(":")]
-        if len(answers)>=6:
+        if len(answers) >= 6:
             if answers[0] < 5: qb1.append(answers[0])
             if answers[1] < 5: qb2.append(answers[1])
             if answers[2] < 5: qb3.append(answers[2])
@@ -655,7 +665,7 @@ def stats2(request):
     qb4 = sum(qb4) / len(qb4)
     qb5 = sum(qb5) / len(qb5)
     qb6 = sum(qb6) / len(qb6)
-
+    print(ql1,ql2,ql3,ql4,ql5,ql6)
     return render(request, 'trainer/stats2.html', locals())
 
 
