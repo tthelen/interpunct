@@ -150,7 +150,7 @@ LTI_TOOL_CONFIGURATION = {
     'embed_url': '', # ''<the view endpoint for an embed tool>' or '',
     'embed_icon_url': '', # ''<the icon url to use for an embed tool>' or '',
     'embed_tool_id': '', # ''<the embed tool id>' or '',
-    'landing_url': '', # ''<the view landing page>',
+    'landing_url': '/', # ''<the view landing page>',
     'course_aware': False, # <True or False>,
     'course_navigation': False, # <True or False>,
     'new_tab': False, # <True or False>,
@@ -167,6 +167,7 @@ PYLTI_CONFIG = {
     'consumers': {
         '69962864477638755864': {
             'secret': '11572054722073844529'
-        }
+        },
+        '1': {'secret': '1'},
     }
 }

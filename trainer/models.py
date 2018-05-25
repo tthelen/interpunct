@@ -459,8 +459,7 @@ class SentenceRule(models.Model):
         return "Rule {} at #{}: {} (Pair {})".format(self.rule.code, self.position, self.sentence.text, self.pair)
 
 class User(models.Model):
-    def __str__(self):
-        return self.user_id
+    """A comma trainer user."""
 
     RANKS = (
         (0, 'Kommachaot'),
@@ -490,7 +489,14 @@ class User(models.Model):
                  30: "sonstiges",
                  40: "nicht studierend"}
 
+    ORIGIN_UNKNOWN = 0
+    ORIGIN_STUDIP = 1
+    ORIGIN_VANILLA = 2
+    ORIGIN_LTI = 3
+    ORIGIN_BASICAUTH = 4
+
     user_id = models.CharField(max_length = 255)
+    origin = models.IntegerField(default=ORIGIN_UNKNOWN)
 
     data = models.CharField(max_length=255, default='')
 
@@ -570,7 +576,13 @@ class User(models.Model):
     def login(self, request):
         """Login the corresponding django user."""
         from django.contrib.auth import login as django_user_login
-        django_user_login(request, self.django_user)
+
+        if self.origin == User.ORIGIN_LTI:
+            backend = 'lti_provider.auth.LTIBackend'
+        else:
+            backend = 'django.contrib.auth.backends.ModelBackend'
+
+        django_user_login(request, self.django_user, backend=backend)
         return True
 
     def get_strategy(self):
@@ -883,6 +895,10 @@ class User(models.Model):
     @property
     def adaptivity_answer7(self):
         return self.adaptivity_answer(7)
+
+    def __str__(self):
+        return self.user_id
+
 
 class UserRule(models.Model):
 
@@ -1345,3 +1361,17 @@ class SolutionRule(models.Model):
             self.solution.sentence.id,
             self.error
         )
+
+
+class LTILog(models.Model):
+    """
+    Log successful and unsuccesful LTI Outcome posts
+    """
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    success = models.BooleanField()
+    url = models.CharField(max_length=255)
+    sourcedid = models.CharField(max_length=255)
+    score = models.FloatField()
+    info = models.TextField(default='')
+    mkdate = models.DateTimeField(auto_now=True)

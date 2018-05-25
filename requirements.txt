@@ -1,1 +1,5 @@
 django-lti-provider
+django >= 2
+tablib
+lti
+psycopg2-binary

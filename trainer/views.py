@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.db.models import Count, Sum
+from django.db.models import Count
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.contrib.auth import authenticate
+from lti_provider.lti import LTI
 from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule, UserPretest
 import random
-
 import base64
-from django.http import HttpResponse, HttpResponseBadRequest
-# from django.contrib.auth import authenticate, login
 
 
 #############################################################################
@@ -20,32 +21,52 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
     and returning the view if all goes well, otherwise responding with a 401.
     """
 
-    def check_or_create_user(username):
+    def check_or_create_user(username, origin, django_user=None):
         try:
             user = User.objects.get(user_id=username)
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
+            user.origin = origin
             user.rules_activated_count = 0
             user.strategy = random.choice([user.BAYES, user.BAYES, user.LEITNER])
-            user.prepare(request)  # create a corresponding django user and set up auth system
+            if user.origin == User.ORIGIN_LTI:
+                user.django_user = django_user
+            else:
+                user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
         return user
 
+    # 1. Check if uname is given (highes priority)
+    #
     if 'uname' in request.GET:
         # uname given from stud.ip (or elsewhere)
         #
         uname = request.GET.get('uname')
-        if uname and len(uname)>8:
-            check_or_create_user(uname)
+        if uname and len(uname) > 8:
+            check_or_create_user(uname, User.ORIGIN_STUDIP)
             return view(request, *args, **kwargs)
 
+    # 2. They are not logged in. See if it's an LTI request.
+    # validate the user via oauth
+    if request.POST.get('lti_message_type','') == 'basic-lti-launch-request':
+        lti = LTI('any', 'any')  # auth type (request, ...) and role_type (student, instructor, ...)
+        ltiuser = authenticate(request=request, lti=lti)  # perform lti auth, has to be registered in settings.py!
+        if ltiuser:  # success
+            check_or_create_user(username=lti.consumer_user_id(request), origin=User.ORIGIN_LTI, django_user=ltiuser)
+            return view(request, *args, **kwargs)
+        else:  # failure
+            lti.clear_session(request)
+            return HttpResponseRedirect(reverse('lti-fail-auth'))
+
+    # 3. Check if user is already authenticated
+    #
     if test_func(request.user):
         # Already logged in, just return the view.
         #
         return view(request, *args, **kwargs)
 
-    # They are not logged in. See if they provided login credentials
+    # 4. They are not logged in. See if they provided basic auth login credentials
     #
     if 'HTTP_AUTHORIZATION' in request.META:
         auth = request.META['HTTP_AUTHORIZATION'].split()
@@ -57,7 +78,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
                 auth_bytes = bytes(auth[1], 'utf8')
                 uname, passwd = base64.b64decode(auth_bytes).split(b':')
                 if len(uname) > 8 and uname == passwd:
-                    check_or_create_user(uname.decode('utf-8'))
+                    check_or_create_user(uname.decode('utf-8'), User.ORIGIN_BASICAUTH)
                     return view(request, *args, **kwargs)
 
     # Either they did not provide an authorization header or
@@ -113,33 +134,7 @@ def logged_in_or_basicauth(realm=""):
     return view_decorator
 
 
-#############################################################################
-#
-def has_perm_or_basicauth(perm, realm=""):
-    """
-    This is similar to the above decorator 'logged_in_or_basicauth'
-    except that it requires the logged in user to have a specific
-    permission.
-
-    Use:
-
-    @logged_in_or_basicauth('asforums.view_forumcollection')
-    def your_view:
-        ...
-
-    """
-
-    def view_decorator(func):
-        def wrapper(request, *args, **kwargs):
-            return view_or_basicauth(func, request,
-                                     lambda u: u.has_perm(perm),
-                                     realm, *args, **kwargs)
-
-        return wrapper
-
-    return view_decorator
-
-
+@csrf_exempt
 @logged_in_or_basicauth("Bitte einloggen")
 def task(request):
     """
@@ -149,9 +144,11 @@ def task(request):
     :return: nothing
     """
 
-    def render_task_explain_commas(request, sent, select_rules=None, template_params={}):
+    def render_task_explain_commas(sent, select_rules=None, template_params=None):
         # pick one comma slot from the sentence
         # there must at least be one non-error and non-'must not' rule (ensured above)
+        if not template_params:
+            template_params = {}
         comma_candidates = []
         # comma candidates is a list of tuples: (position, rule list for this position)
         for pos in range(len(sent.get_words()) - 1):
@@ -198,7 +195,7 @@ def task(request):
             if ar not in guessing_candidates:
                 guessing_candidates.append(ar)
         random.shuffle(guessing_candidates)
-        sentence=sent
+        sentence = sent
         # prepare some special views for templates
         words = sentence.get_words()  # pack all words of this sentence in a list
         comma = sentence.get_commalist()  # pack all commas [0,1,2] in a list
@@ -248,8 +245,8 @@ def task(request):
             display_rank=False
             rule2 = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][1])
             rule3 = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][2])
-            return render_task_explain_commas(request, random.choice(sentences),
-                                              select_rules=(rule,rule2,rule3), template_params=locals())
+            return render_task_explain_commas(random.choice(sentences), select_rules=(rule, rule2, rule3),
+                                              template_params=locals())
         else: # pretest finished
             new_rule = strategy.process_pretest() # evaluate pretest and activate known rules, set level etc.
             user.pretest=True
@@ -283,6 +280,30 @@ def task(request):
 
     # level progress: show new rules instead of task
     if new_rule:
+
+        # save as LTI outcome
+        if user.origin == User.ORIGIN_LTI:
+            from .models import LTILog
+            lti = LTI('any', 'any')
+
+            # test: outcome request
+            from lti import OutcomeRequest
+            oreq = OutcomeRequest({'consumer_key': '1',
+                                   'consumer_secret': '1',
+                                   'lis_outcome_service_url': request.session.get('lis_outcome_service_url', ''),
+                                   'lis_result_sourcedid': request.session.get('lis_result_sourcedid', ''),
+                                   'operation': 'replaceResult'})
+            oreq.post_replace_result(score=user.rules_activated_count/30) # score is level/30 = 0...1
+            ltilog = LTILog(user=user,
+                        url = request.session.get('lis_outcome_service_url', ''),
+                        sourcedid = request.session.get('lis_result_sourcedid', ''),
+                        score = user.rules_activated_count/30)
+            if oreq.was_outcome_post_successful():
+                ltilog.success=True
+            else:
+                ltilog.success=False
+            ltilog.save()
+
         return render(request, 'trainer/level_progress.html', locals())
 
     # choose a sentence from roulette wheel (the bigger the error for
@@ -320,7 +341,7 @@ def task(request):
             return render(request, 'trainer/task_set_commas.html', locals())
     else:
         # EXPLANATION task
-        return render_task_explain_commas(request, sentence, template_params=locals())
+        return render_task_explain_commas(sentence, template_params=locals())
 
 
 @logged_in_or_basicauth("Bitte einloggen")
@@ -328,25 +349,25 @@ def start(request):
     """Store questionnaire results and redirect to task."""
     user = User.objects.get(django_user=request.user)
     vector = "{}:{}-{}:{}+{}+{}:{}:{}:{}".format(
-        request.GET.get('hzb',0),
-        request.GET.get('abschluss',0),
-        request.GET.get('semester',0),
-        request.GET.get('fach1','00'),
-        request.GET.get('fach2','00'),
+        request.GET.get('hzb', 0),
+        request.GET.get('abschluss', 0),
+        request.GET.get('semester', 0),
+        request.GET.get('fach1', '00'),
+        request.GET.get('fach2', '00'),
         request.GET.get('fach3', '00'),
-        request.GET.get('gender',0),
-        request.GET.get('selfest','-'),
-        request.GET.get('L1','-'))
-    user.data = vector # one string with al data, now obsolete TODO: remove
-    user.data_study = request.GET.get('abschluss',0)
-    user.data_semester = request.GET.get('semester',0)
-    user.data_subject1 = request.GET.get('fach1',0)
-    user.data_subject2 = request.GET.get('fach2',0)
+        request.GET.get('gender', 0),
+        request.GET.get('selfest', '-'),
+        request.GET.get('L1', '-'))
+    user.data = vector  # one string with al data, now obsolete TODO: remove
+    user.data_study = request.GET.get('abschluss', 0)
+    user.data_semester = request.GET.get('semester', 0)
+    user.data_subject1 = request.GET.get('fach1', 0)
+    user.data_subject2 = request.GET.get('fach2', 0)
     user.data_subject3 = request.GET.get('fach3', 0)
-    user.data_study_permission = request.GET.get('hzb',0)
-    user.data_sex = request.GET.get('gender',"")
-    user.data_l1 = request.GET.get('L1','')
-    user.data_selfestimation = request.GET.get('selfest','-')
+    user.data_study_permission = request.GET.get('hzb', 0)
+    user.data_sex = request.GET.get('gender', "")
+    user.data_l1 = request.GET.get('L1', '')
+    user.data_selfestimation = request.GET.get('selfest', '-')
     user.save()
 
     return redirect("task")
@@ -357,13 +378,13 @@ def submit_adaptivity_questionnaire(request):
     """Receive adaptivity questionnaire answers and save to data_study field"""
     user = User.objects.get(django_user=request.user)
     user.data_adaptivity = "{}:{}:{}:{}:{}:{}:{}".format(
-        request.GET.get('q1',0),
-        request.GET.get('q2',0),
-        request.GET.get('q3',0),
-        request.GET.get('q4',0),
-        request.GET.get('q5',0),
-        request.GET.get('q6',0),
-        request.GET.get('q7',0))
+        request.GET.get('q1', 0),
+        request.GET.get('q2', 0),
+        request.GET.get('q3', 0),
+        request.GET.get('q4', 0),
+        request.GET.get('q5', 0),
+        request.GET.get('q6', 0),
+        request.GET.get('q7', 0))
     user.save()
 
     return redirect("task")  # go on with tasks
@@ -620,38 +641,50 @@ def stats2(request):
     count_leitner_finished = User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from).count()
     count_bayes_finished = User.objects.filter(rules_activated_count__gt=19, strategy=User.BAYES, id__gte=user_from).count()
 
-    ql1=[]
-    ql2=[]
-    ql3=[]
-    ql4=[]
-    ql5=[]
-    ql6=[]
-    qb1=[]
-    qb2=[]
-    qb3=[]
-    qb4=[]
-    qb5=[]
-    qb6=[]
+    ql1 = []
+    ql2 = []
+    ql3 = []
+    ql4 = []
+    ql5 = []
+    ql6 = []
+    qb1 = []
+    qb2 = []
+    qb3 = []
+    qb4 = []
+    qb5 = []
+    qb6 = []
 
     for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from):
         answers = [int(x) for x in u.data_adaptivity.split(":")]
         if len(answers) >= 6:
-            if answers[0] < 5: ql1.append(answers[0])
-            if answers[1] < 5: ql2.append(answers[1])
-            if answers[2] < 5: ql3.append(answers[2])
-            if answers[3] < 5: ql4.append(answers[3])
-            if answers[4] < 5: ql5.append(answers[4])
-            if answers[5] < 5: ql6.append(answers[5])
+            if answers[0] < 5:
+                ql1.append(answers[0])
+            if answers[1] < 5:
+                ql2.append(answers[1])
+            if answers[2] < 5:
+                ql3.append(answers[2])
+            if answers[3] < 5:
+                ql4.append(answers[3])
+            if answers[4] < 5:
+                ql5.append(answers[4])
+            if answers[5] < 5:
+                ql6.append(answers[5])
 
     for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.BAYES, id__gte=user_from):
         answers = [int(x) for x in u.data_adaptivity.split(":")]
         if len(answers) >= 6:
-            if answers[0] < 5: qb1.append(answers[0])
-            if answers[1] < 5: qb2.append(answers[1])
-            if answers[2] < 5: qb3.append(answers[2])
-            if answers[3] < 5: qb4.append(answers[3])
-            if answers[4] < 5: qb5.append(answers[4])
-            if answers[5] < 5: qb6.append(answers[5])
+            if answers[0] < 5:
+                qb1.append(answers[0])
+            if answers[1] < 5:
+                qb2.append(answers[1])
+            if answers[2] < 5:
+                qb3.append(answers[2])
+            if answers[3] < 5:
+                qb4.append(answers[3])
+            if answers[4] < 5:
+                qb5.append(answers[4])
+            if answers[5] < 5:
+                qb6.append(answers[5])
 
     ql1 = sum(ql1) / len(ql1)
     ql2 = sum(ql2) / len(ql2)
@@ -665,9 +698,7 @@ def stats2(request):
     qb4 = sum(qb4) / len(qb4)
     qb5 = sum(qb5) / len(qb5)
     qb6 = sum(qb6) / len(qb6)
-    print(ql1,ql2,ql3,ql4,ql5,ql6)
     return render(request, 'trainer/stats2.html', locals())
-
 
 
 def ustats(request):
@@ -685,7 +716,7 @@ def mystats(request):
     num_solutions = Solution.objects.filter(user=user).count()
     num_errors = SolutionRule.objects.filter(solution__user=user, error=True).count()
 
-    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)
+    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level - 1) / 10)], int((level - 1) % 10) + 1)
 
     error_rules = sorted(UserRule.objects.filter(user=user, active=True), key=lambda t: t.incorrect)
     return render(request, 'trainer/mystats.html', locals())
@@ -693,7 +724,7 @@ def mystats(request):
 
 @logged_in_or_basicauth("Bitte einloggen")
 def mystats_rule(request):
-    rule_id = request.GET.get('rule',False)
+    rule_id = request.GET.get('rule', False)
     if rule_id:
         user = User.objects.get(django_user=request.user)
         userrule = UserRule.objects.get(user=user, rule__id=rule_id)
@@ -735,3 +766,25 @@ def allstats_correct_sentence(request):
         return render(request, 'trainer/partials/allstats_correct_sentence.html', locals())
     else:
         return HttpResponseBadRequest("No rule_id given.")
+
+
+# ----------------------------------------------------------------------------------
+# LTI views
+
+from django.views.generic.base import TemplateView
+from lti_provider.mixins import LTIAuthMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class LTIAssignment1View(LTIAuthMixin, LoginRequiredMixin, TemplateView):
+
+    template_name = 'lti/assignment.html'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'is_student': self.lti.lis_result_sourcedid(self.request),
+            'course_title': self.lti.course_title(self.request),
+            'number': 1
+}

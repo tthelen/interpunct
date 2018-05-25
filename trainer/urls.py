@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^allstats$', views.allstats, name='allstats'),  # sentence statistics for "set comma" task
     url(r'^allstats_correct$', views.allstats_correct, name='allstats_correct'),  # sentence statistics for "correct comma" task
     url(r'^nocookies$', views.nocookies, name='nocookies'),
-    url(r'^vanillalm$', views.vanillalm, name='vanillalm')
+    url(r'^vanillalm$', views.vanillalm, name='vanillalm'),
+    url(r'^assignment/1/', views.LTIAssignment1View.as_view()),
 
 ]
