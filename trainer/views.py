@@ -295,9 +295,9 @@ def task(request):
                                    'operation': 'replaceResult'})
             oreq.post_replace_result(score=user.rules_activated_count/30) # score is level/30 = 0...1
             ltilog = LTILog(user=user,
-                        url = request.session.get('lis_outcome_service_url', ''),
-                        sourcedid = request.session.get('lis_result_sourcedid', ''),
-                        score = user.rules_activated_count/30)
+                            url = request.session.get('lis_outcome_service_url', ''),
+                            sourcedid = request.session.get('lis_result_sourcedid', ''),
+                            score = user.rules_activated_count/30)
             if oreq.was_outcome_post_successful():
                 ltilog.success=True
             else:
