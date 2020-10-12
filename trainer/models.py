@@ -477,6 +477,17 @@ class User(models.Model):
         (BAYES, 'Bayes')        # bayesian net (anna pillar)
     )
 
+    GAMIFICATION_NONE = 0
+    GAMIFICATION_CLASSIC = 1
+    GAMIFICATION_INDIVIDUAL = 2
+    GAMIFICATION_GROUP = 3
+    GAMIFICATIONS = (
+        (GAMIFICATION_NONE, 'Keine Gamification'),
+        (GAMIFICATION_CLASSIC, 'Level-System'),
+        (GAMIFICATION_INDIVIDUAL, 'Level-System + individuelles Ranking'),
+        (GAMIFICATION_GROUP, 'Level-System + Gruppen-Ranking'),
+    )
+
     abschluss = {0: "Nicht angegeben",
                  10: "Bachelor BEU(Lehramt GHR)",
                  11: "Bachelor berufliche Bildung(Lehramt LBS)",
@@ -509,6 +520,15 @@ class User(models.Model):
 
     # selection strategy for to use for this user
     strategy = models.IntegerField(choices=STRATS, default = 0)
+
+    # gamification type (by thesis herrmann)
+    gamification = models.IntegerField(choices=GAMIFICATIONS, default=0, db_index=True)
+    gamification_group = models.CharField(max_length=32, db_index=True, null=True)
+    gamification_nickname = models.CharField(max_length=64, null=True)
+    gamification_score = models.IntegerField(default=0, db_index=True)
+    data_gamification_1 = models.CharField(max_length=255, default='')  # for gamification study / questionnaire results
+    data_gamification_2 = models.CharField(max_length=255, default='')  # for gamification study / questionnaire results
+    data_gamification_3 = models.CharField(max_length=255, default='')  # for gamification study / questionnaire results
 
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
@@ -593,6 +613,77 @@ class User(models.Model):
         else:
             self.counter_wrong += 1
 
+    def update_score(self, resp):
+        """
+        Updates user score for gamification
+        """
+
+        if self.gamification == self.GAMIFICATION_INDIVIDUAL:
+            # save for gamification scoring history
+            completely_correct = True
+            for r in resp:
+                if not r['correct']:
+                    completely_correct = False
+                    break
+            hist = UserHistory(user=self, correct=completely_correct)
+            hist.save()
+
+            # activity is number of tasks in the last 48 hours
+            from datetime import datetime, timedelta
+            twodaysago = datetime.now()-timedelta(days=2)
+            activity = UserHistory.objects.filter(user=self, mkdate__gte=twodaysago).count()
+
+            # hist is correctness value for last 30 tasks (with degrading contribution to value)
+            hist = UserHistory.objects.filter(user=self).order_by('-mkdate')
+            value = 0  # error value
+            for h in hist[0:10]:  # the 10 latest task submissions (0-9)
+                if not h.correct:
+                    value += 2.0
+            for h in hist[10:20]:  # the 10 latest before that (10-19)
+                if not h.correct:
+                    value += 1.5
+            for h in hist[20:30]:  # the 10 latest before that (20-29)
+                if not h.correct:
+                    value += 1.25
+
+            # print("Update score for {}: {}, {} (with history={})".format(self.gamification_nickname, activity, value, hist))
+            self.gamification_score = activity - value
+            self.save()
+
+        elif self.gamification == User.GAMIFICATION_GROUP:
+            # save for gamification scoring history
+            completely_correct = True
+            for r in resp:
+                if not r['correct']:
+                    completely_correct = False
+                    break
+            hist = GroupHistory(group=self.gamification_group, correct=completely_correct)
+            hist.save()
+
+            # activity is number of tasks in the last 48 hours
+            from datetime import datetime, timedelta
+            twodaysago = datetime.now()-timedelta(days=2)
+            activity = GroupHistory.objects.filter(group=self.gamification_group, mkdate__gte=twodaysago).count()
+
+            # hist is correctness value for last 300 tasks (with degrading contribution to value)
+            hist = GroupHistory.objects.filter(group=self.gamification_group).order_by('-mkdate')
+            value = 0  # error value
+            for h in hist[0:100]:  # the 100 latest task submissions (0-99)
+                if not h.correct:
+                    value += 2.0
+            for h in hist[100:200]:  # the 100 latest before that (100-199)
+                if not h.correct:
+                    value += 1.5
+            for h in hist[200:300]:  # the 100 latest before that (200-299)
+                if not h.correct:
+                    value += 1.25
+
+            # print("Update score for {}: {}, {} (with history={})".format(self.gamification_group, activity, value, hist))
+            group, created = GroupScore.objects.get_or_create(group=self.gamification_group)
+            group.score = activity - value
+            group.save()
+
+
     def eval_set_commas(self, user_array_str, sentence, solution):
         """
         count false types for: AllKommaSetzen
@@ -654,6 +745,9 @@ class User(models.Model):
                         SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
             else:
                 resp.append({'correct': True, 'rule': {'code':'', 'mode':0}})
+
+        self.update_score(resp)
+
         return resp
 
     def count_false_types_task_correct_commas(self, user_array_str, sentence, solution):
@@ -737,6 +831,7 @@ class User(models.Model):
                         resp.append({'correct': corr, 'rule': {'code': rule.code, 'mode': rule.mode}})
                         first = False
 
+        self.update_score(resp)
         return resp
 
     def sentence_selector(self):
@@ -983,6 +1078,39 @@ class UserPretest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
     result = models.BooleanField(default=False)
+
+
+class UserHistory(models.Model):
+    """
+    Maintain history of tasks with correctness value
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mkdate = models.DateTimeField(auto_now_add=True)
+    correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{} ({})={}".format(self.user.gamification_nickname, self.mkdate, self.correct)
+
+
+class GroupScore(models.Model):
+    """
+    Maintain history of tasks with correctness value
+    """
+    group = models.CharField(max_length=32, db_index=True)
+    score = models.IntegerField(default=0)
+
+
+class GroupHistory(models.Model):
+    """
+    Maintain history of tasks with correctness value
+    """
+    group = models.CharField(max_length=32, db_index=True)
+    mkdate = models.DateTimeField(auto_now_add=True)
+    correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{} ({})={}".format(self.group, self.mkdate, self.correct)
+
 
 
 class Solution(models.Model):

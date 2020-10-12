@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, F
 from django.urls import reverse
-from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule, UserPretest
+from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule, UserPretest, GroupScore
 import random
 
 import base64
@@ -26,7 +26,8 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
-            user.strategy = random.choice([user.BAYES, user.BAYES, user.LEITNER])
+            user.strategy = user.LEITNER  #  random.choice([user.BAYES, user.BAYES, user.LEITNER])
+            user.gamification = random.choice([user.GAMIFICATION_CLASSIC, user.GAMIFICATION_INDIVIDUAL, user.GAMIFICATION_GROUP])
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -223,16 +224,20 @@ def task(request):
     # new user: show welcome page
     if not user.data:
         display_rank=False
-        # return render(request, 'trainer/welcome.html', locals())
-        user.data="No questionnaire in this run."
-        user.save()
-        strategy.init_rules() # set all knowledge about user to start
-        return render(request, 'trainer/welcome_noquestionnaire.html', locals())
+        return render(request, 'trainer/welcome_gamification.html', locals())  # questionnaire BA Herrmann
+
+        # return render(request, 'trainer/welcome.html', locals())  # questionnaire MA Hubert
+
+        #user.data="No questionnaire in this run."
+        #user.save()
+        #strategy.init_rules() # set all knowledge about user to start
+        #return render(request, 'trainer/welcome_noquestionnaire.html', locals())
 
     # -----------------------------------------------------------------------
     # pretest
     if not user.pretest:
-        if not request.GET.get('skip_pretest',False) and user.pretest_count < len(strategy.pretest_rules):
+        # pretest deactivated! (was used for bayesian strategy)
+        if False and not request.GET.get('skip_pretest',False) and user.pretest_count < len(strategy.pretest_rules):
             rule = Rule.objects.get(code=strategy.pretest_rules[user.pretest_count][0])
             # print("Sentences for {}".format(strategy.pretest_rules[user.pretest_count]))
             # sentences = rule.find_sentences()
@@ -251,6 +256,7 @@ def task(request):
             return render_task_explain_commas(request, random.choice(sentences),
                                               select_rules=(rule,rule2,rule3), template_params=locals())
         else: # pretest finished
+            strategy.init_rules()
             new_rule = strategy.process_pretest() # evaluate pretest and activate known rules, set level etc.
             user.pretest=True
             user.save()
@@ -270,12 +276,25 @@ def task(request):
     level = user.rules_activated_count  # user's current level
     activerules = strategy.get_active_rules()
     rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
+    show_ranking = False
 
     # ------------------------------------------------------------------------
     # adaptivity form
     # show and process form (processing will set data_adaptivity)
-    if user.rules_activated_count>18 and not user.data_adaptivity:
-        return render(request, 'trainer/adaptivity_questionaire.html')
+    # if user.rules_activated_count>18 and not user.data_adaptivity:
+    #    return render(request, 'trainer/adaptivity_questionaire.html')
+
+    # ------------------------------------------------------------------------
+    # gamification questionnaire form
+    if user.rules_activated_count >= 5 and not user.data_gamification_1:
+        iteration=1
+        return render(request, 'trainer/gamification_questionaire.html', locals())
+    if user.rules_activated_count >= 15 and not user.data_gamification_2:
+        iteration=2
+        return render(request, 'trainer/gamification_questionaire.html', locals())
+    if user.rules_activated_count >= 30 and not user.data_gamification_3:
+        iteration=3
+        return render(request, 'trainer/gamification_questionaire.html', locals())
 
     # ------------------------------------------------------------------------
     # normal task selection process
@@ -284,6 +303,59 @@ def task(request):
     # level progress: show new rules instead of task
     if new_rule:
         return render(request, 'trainer/level_progress.html', locals())
+
+    show_ranking=True
+
+    # prepare highscore list
+    if user.gamification == User.GAMIFICATION_INDIVIDUAL:
+        raw_scores = User.objects.filter(gamification=User.GAMIFICATION_INDIVIDUAL).order_by('-gamification_score')
+
+        # find user rank (same scores count as same rank)
+        user_rank = 0
+        last_score = -1
+        counter = 1
+        rank = 1
+        for rsi in range(len(raw_scores)):
+            if rsi > 0 and raw_scores[rsi].gamification_score != last_score:
+                rank = counter
+            if user == raw_scores[rsi]:
+                user_rank = counter
+                break
+            last_score = raw_scores[rsi].gamification_score
+            counter = counter + 1
+
+        # build scores list
+        scores=[]
+        last_score = -1
+        counter = 1
+        rank = 1
+        for rsi in range(len(raw_scores)):
+            if rsi > 0 and raw_scores[rsi].gamification_score != last_score:
+                rank = counter
+            if rsi < 3:
+                scores.append((rank, raw_scores[rsi]))
+            elif abs(rank-user_rank) < 3:
+                scores.append((rank, raw_scores[rsi]))
+            elif rsi > 0:
+                if scores[-1] != (-1,None):
+                    scores.append((-1,None))
+            last_score = raw_scores[rsi].gamification_score
+            counter = counter + 1
+
+    elif user.gamification == User.GAMIFICATION_GROUP:
+        raw_scores = GroupScore.objects.order_by('-score')
+        # build scores list
+        scores=[]
+        last_score = -1
+        counter = 1
+        rank = 1
+        for rsi in range(len(raw_scores)):
+            if rsi > 0 and raw_scores[rsi].score != last_score:
+                rank = counter
+            scores.append((rank,raw_scores[rsi]))
+            last_score = raw_scores[rsi].score
+            counter = counter + 1
+
 
     # choose a sentence from roulette wheel (the bigger the error for
     # a certain rule, the more likely one will get a sentence with that rule)
@@ -346,8 +418,26 @@ def start(request):
     user.data_study_permission = request.GET.get('hzb',0)
     user.data_sex = request.GET.get('gender',"")
     user.data_l1 = request.GET.get('L1','')
-    user.data_selfestimation = request.GET.get('selfest','-')
+    user.data_selfestimation = request.GET.get('selfest',-1)
+    user.gamification_group = request.GET.get('group', None)
+    nickname = request.GET.get('nickname', None)
+    if nickname: # chekc if nickname is taken, then add numbers until it's unique
+        ok = False
+        appendix = ''
+        while not ok:
+            try:
+                otheruser = User.objects.get(gamification_nickname=nickname+appendix)
+                if appendix == '':
+                    appendix='1'
+                else:
+                    appendix = "{}".format(int(appendix)+1)
+            except User.DoesNotExist:
+                nickname = nickname+appendix
+                ok = True
+    user.gamification_nickname = nickname
     user.save()
+    if user.gamification_group:
+        group, created = GroupScore.objects.get_or_create(group=user.gamification_group)
 
     return redirect("task")
 
@@ -368,6 +458,26 @@ def submit_adaptivity_questionnaire(request):
 
     return redirect("task")  # go on with tasks
 
+@logged_in_or_basicauth("Bitte einloggen")
+def submit_gamification_questionnaire(request):
+    """Receive gamification questionnaire answers and save to data_gamification_{1,2,3} field"""
+    user = User.objects.get(django_user=request.user)
+    data = "{}:{}:{}:{}:{}".format(
+        request.GET.get('q1',0),
+        request.GET.get('q2',0),
+        request.GET.get('q3',0),
+        request.GET.get('q4',0),
+        request.GET.get('q5',0),
+    )
+    if request.GET.get('iteration', None) == '1':
+        user.data_gamification_1 = data
+    elif request.GET.get('iteration', None) == '2':
+        user.data_gamification_2 = data
+    elif request.GET.get('iteration', None) == '3':
+        user.data_gamification_3 = data
+    user.save()
+
+    return redirect("task")  # go on with tasks
 
 def index(request):
     """Display index page."""
@@ -668,6 +778,153 @@ def stats2(request):
     print(ql1,ql2,ql3,ql4,ql5,ql6)
     return render(request, 'trainer/stats2.html', locals())
 
+
+def stats3(request):
+    """Render general statistics for leitner/bayes experiment."""
+
+    ud = []
+    count_users = User.objects.filter(rules_activated_count__gt=0, gamification__gte=1).count()
+    count_studip_users = User.objects.filter(rules_activated_count__gt=0, user_id__iregex=r'[0-9a-f]{32}', gamification__gte=1).count()
+    users = User.objects.filter(rules_activated_count__gt=0, gamification__gte=1).all()
+
+    count_classic = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_CLASSIC).count()
+    count_classic_finished1 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_CLASSIC).exclude(data_gamification_1='').count()
+    count_classic_finished2 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_CLASSIC).exclude(data_gamification_2='').count()
+    count_classic_finished3 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_CLASSIC).exclude(data_gamification_3='').count()
+
+    count_individual = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_INDIVIDUAL).count()
+    count_individual_finished1 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_INDIVIDUAL).exclude(data_gamification_1='').count()
+    count_individual_finished2 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_INDIVIDUAL).exclude(data_gamification_2='').count()
+    count_individual_finished3 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_INDIVIDUAL).exclude(data_gamification_3='').count()
+
+    count_group = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_GROUP).count()
+    count_group_finished1 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_GROUP).exclude(data_gamification_1='').count()
+    count_group_finished2 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_GROUP).exclude(data_gamification_2='').count()
+    count_group_finished3 = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_GROUP).exclude(data_gamification_3='').count()
+
+    # individuals
+    individuals = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_INDIVIDUAL).order_by('-gamification_score')
+    i_level = 0
+    i_tries = 0
+    i_errors = 0
+    i_num = 0
+    for i in individuals:
+        i_num += 1
+        i_level += i.rules_activated_count
+        i_tries += i.tries()
+        i_errors += i.errors()
+        i.q = [['', '', '', ''], ['', '', '', ''], ['', '', '', '']]
+        if i.data_gamification_1:
+            answers = [int(x) for x in i.data_gamification_1.split(":")]
+            for j in range(4):
+                if answers[j] < 5: i.q[0][j] = answers[j]
+        if i.data_gamification_2:
+            answers = [int(x) for x in i.data_gamification_3.split(":")]
+            for j in range(4):
+                if answers[j] < 5: i.q[1][j] = answers[j]
+        if i.data_gamification_3:
+            answers = [int(x) for x in i.data_gamification_3.split(":")]
+            for j in range(4):
+                if answers[j] < 5: i.q[2][j] = answers[j]
+    if i_num > 0:
+        i_level = i_level / i_num
+        i_tries = i_tries / i_num
+        i_errors = i_errors / i_num
+
+    # groups
+    groups = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_GROUP).order_by('gamification_group')
+    g_level = 0
+    g_tries = 0
+    g_errors = 0
+    g_num = 0
+    for i in groups:
+        g_num += 1
+        g_level += i.rules_activated_count
+        g_tries += i.tries()
+        g_errors += i.errors()
+        i.q = [['', '', '', '', ''], ['', '', '', '', ''], ['', '', '', '', '']]
+        if i.data_gamification_1:
+            answers = [int(x) for x in i.data_gamification_1.split(":")]
+            for j in range(5):
+                if answers[j] < 5: i.q[0][j] = answers[j]
+        if i.data_gamification_2:
+            answers = [int(x) for x in i.data_gamification_3.split(":")]
+            for j in range(5):
+                if answers[j] < 5: i.q[1][j] = answers[j]
+        if i.data_gamification_3:
+            answers = [int(x) for x in i.data_gamification_3.split(":")]
+            for j in range(5):
+                if answers[j] < 5: i.q[2][j] = answers[j]
+        i.groupscore=GroupScore.objects.get(group=i.gamification_group).score
+    if g_num > 0:
+        g_level = g_level / g_num
+        g_tries = g_tries / g_num
+        g_errors = g_errors / g_num
+
+    # classics
+    classics = User.objects.filter(rules_activated_count__gt=0, gamification=User.GAMIFICATION_CLASSIC)
+    c_level = 0
+    c_tries = 0
+    c_errors = 0
+    c_num = 0
+    for i in classics:
+        c_num += 1
+        c_level += i.rules_activated_count
+        c_tries += i.tries()
+        c_errors += i.errors()
+        i.q = [['', ''], ['', ''], ['', '']]
+        if i.data_gamification_1:
+            answers = [int(x) for x in i.data_gamification_1.split(":")]
+            for j in range(2):
+                if answers[j] < 5: i.q[0][j] = answers[j]
+        if i.data_gamification_2:
+            answers = [int(x) for x in i.data_gamification_3.split(":")]
+            for j in range(2):
+                if answers[j] < 5: i.q[1][j] = answers[j]
+        if i.data_gamification_3:
+            answers = [int(x) for x in i.data_gamification_3.split(":")]
+            for j in range(2):
+                if answers[j] < 5: i.q[2][j] = answers[j]
+    if c_num > 0:
+        c_level = c_level / c_num
+        c_tries = c_tries / c_num
+        c_errors = c_errors / c_num
+
+
+    #for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from):
+    #    answers = [int(x) for x in u.data_adaptivity.split(":")]
+    #    if len(answers) >= 6:
+    #        if answers[0] < 5: ql1.append(answers[0])
+    #        if answers[1] < 5: ql2.append(answers[1])
+    #        if answers[2] < 5: ql3.append(answers[2])
+    #        if answers[3] < 5: ql4.append(answers[3])
+    #        if answers[4] < 5: ql5.append(answers[4])
+    #        if answers[5] < 5: ql6.append(answers[5])
+
+    #for u in User.objects.filter(rules_activated_count__gt=19, strategy=User.LEITNER, id__gte=user_from):
+    #    answers = [int(x) for x in u.data_adaptivity.split(":")]
+    #    if len(answers) >= 6:
+    #        if answers[0] < 5: ql1.append(answers[0])
+    #        if answers[1] < 5: ql2.append(answers[1])
+    #        if answers[2] < 5: ql3.append(answers[2])
+    #        if answers[3] < 5: ql4.append(answers[3])
+    #        if answers[4] < 5: ql5.append(answers[4])
+    #        if answers[5] < 5: ql6.append(answers[5])
+
+
+    #ql1 = sum(ql1) / len(ql1)
+    #ql2 = sum(ql2) / len(ql2)
+    #ql3 = sum(ql3) / len(ql3)
+    #ql4 = sum(ql4) / len(ql4)
+    #ql5 = sum(ql5) / len(ql5)
+    #ql6 = sum(ql6) / len(ql6)
+    #qb1 = sum(qb1) / len(qb1)
+    #qb2 = sum(qb2) / len(qb2)
+    #qb3 = sum(qb3) / len(qb3)
+    #qb4 = sum(qb4) / len(qb4)
+    #qb5 = sum(qb5) / len(qb5)
+    #qb6 = sum(qb6) / len(qb6)
+    return render(request, 'trainer/stats3.html', locals())
 
 
 def ustats(request):

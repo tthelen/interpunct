@@ -1,0 +1,129 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Komma-Trainer - Statistik{% endblock %}
+
+{% block main %}
+<h2>Statistik für Bayes/Leitner-Versuch</h2>
+<p>&nbsp;</p>
+
+<h3>Basisdaten</h3>
+<table class="table">
+<tr><th>Kategorie</th><th>Wert</th></tr>
+<tr><td>Anzahl Nutzer</td><td>{{ count_users }}</td></tr>
+<tr><td>Anzahl Stud.IP-Nutzer &nbsp;</td><td>{{ count_studip_users }}</td></tr>
+<tr><td>Anzahl Gamification 'Classic' (davon inkl. Fragebogen 1/2/3)</td><td>{{ count_classic }} ({{ count_classic_finished1 }}/{{ count_classic_finished2  }}/{{ count_classic_finished3 }})</td></tr>
+<tr><td>Anzahl Gamification 'Individual' (davon inkl. Fragebogen 1/2/3)</td><td>{{ count_individual }} ({{ count_individual_finished1 }}/{{ count_individual_finished2  }}/{{ count_individual_finished3 }})</td></tr>
+<tr><td>Anzahl Gamification 'Group' (davon inkl. Fragebogen 1/2/3)</td><td>{{ count_group }} ({{ count_group_finished1 }}/{{ count_group_finished2  }}/{{ count_group_finished3 }})</td></tr>
+
+</table>
+<p>&nbsp;</p>
+    <h3>Durchschnittsdaten</h3>
+
+    <table class="table">
+        <tr>
+            <th>Variante</th><th>Personen</th><th>Level</th><th>Versuche</th><th>Fehler</th>
+        </tr>
+        <tr>
+            <td>GAMIFICATION_CLASSIC</td>
+            <td>{{ count_classic }}</td>
+            <td>{{ c_level|floatformat }}</td>
+            <td>{{ c_tries|floatformat }}</td>
+            <td>{{ c_errors|floatformat }}</td>
+        </tr>
+        <tr>
+            <td>GAMIFICATION_INDIVIDUDAL</td>
+            <td>{{ count_individual }}</td>
+            <td>{{ i_level|floatformat }}</td>
+            <td>{{ i_tries|floatformat }}</td>
+            <td>{{ i_errors|floatformat }}</td>
+        </tr>
+        <tr>
+            <td>GAMIFICATION_GROUP</td>
+            <td>{{ count_group }}</td>
+            <td>{{ g_level|floatformat }}</td>
+            <td>{{ g_tries|floatformat }}</td>
+            <td>{{ g_errors|floatformat }}</td>
+        </tr>
+    </table>
+<p>&nbsp;</p>
+
+    <h3>Nutzerdaten GAMIFICATION_CLASSIC</h3>
+
+    <table class="table">
+    <tr><th>Lfd. Nr.</th>
+        <th>Punkte</th><th>Level</th><th>Versuche</th><th>Fehler</th>
+        <th colspan="3">Frage 1: Der Kommatrainer hat mich motiviert.</th>
+        <th colspan="3">Frage 2: Ich habe Lernerfolge erlebt.</th>
+    </tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td colspan="6"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
+    {% for u in classics %}
+        <tr><td>{{ forloop.counter }}</td>
+            <td>{{ u.gamification_score }}</td>
+            <td>{{ u.rules_activated_count }}</td>
+            <td>{{ u.tries }}</td>
+            <td>{{ u.errors }}</td>
+            <td>{{ u.q.0.0 }}</td><td>{{ u.q.1.0 }}</td><td>{{ u.q.2.0 }}</td>
+            <td>{{ u.q.0.1 }}</td><td>{{ u.q.1.1 }}</td><td>{{ u.q.2.1 }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+<p>&nbsp;</p>
+
+<h3>Nutzerdaten GAMIFICATION_INDIVIDUAL</h3>
+
+    <table class="table">
+    <tr><th>Nickname</th>
+        <th>Punkte</th><th>Level</th><th>Versuche</th><th>Fehler</th>
+        <th colspan="3">Frage 1: Der Kommatrainer hat mich motiviert.</th>
+        <th colspan="3">Frage 2: Ich habe Lernerfolge erlebt.</th>
+        <th colspan="3">Frage 3: Ich habe mich motiviert gefühlt, gegen andere Benutzer anzutreten.</th>
+        <th colspan="3">Frage 4: Ich habe aufgrund der Ränge der anderen Benutzer Druck verspürt.</th>
+    </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td colspan="12"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
+    {% for u in individuals %}
+        <tr><td>{{ u.gamification_nickname }}</td>
+            <td>{{ u.gamification_score }}</td>
+            <td>{{ u.rules_activated_count }}</td>
+            <td>{{ u.tries }}</td>
+            <td>{{ u.errors }}</td>
+            <td>{{ u.q.0.0 }}</td><td>{{ u.q.1.0 }}</td><td>{{ u.q.2.0 }}</td>
+            <td>{{ u.q.0.1 }}</td><td>{{ u.q.1.1 }}</td><td>{{ u.q.2.1 }}</td>
+            <td>{{ u.q.0.2 }}</td><td>{{ u.q.1.2 }}</td><td>{{ u.q.2.2 }}</td>
+            <td>{{ u.q.0.3 }}</td><td>{{ u.q.1.3 }}</td><td>{{ u.q.2.3 }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+<p>&nbsp;</p>
+
+
+<h3>Nutzerdaten GAMIFICATION_GROUP</h3>
+
+    <table class="table">
+    <tr><th>Nutzer</th>
+        <th>Gruppe</th>
+        <th>Gruppenpunkte</th><th>Level</th><th>Versuche</th><th>Fehler</th>
+        <th colspan="3">Frage 1: Der Kommatrainer hat mich motiviert. (1=stimme voll zu, 4=stimme gar nicht zu)</th>
+        <th colspan="3">Frage 2: Ich habe Lernerfolge erlebt.</th>
+        <th colspan="3">Frage 3: Ich fühlte mich dem Team zugehörig oder habe eine Teamzusammenarbeit gespürt.</th>
+        <th colspan="3">Frage 4: Ich habe Druck durch die Ergebnisse der anderen Teams verspürt.</th>
+        <th colspan="3">Frage 5: Ich habe mich motiviert gefühlt, gegen andere Teams anzutreten.</th>
+    </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td colspan="15"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
+    {% for u in groups %}
+        <tr><td>{{ forloop.counter }}</td>
+            <td>{{ u.gamification_group }}</td>
+            <td>{{ u.groupscore }}</td>
+            <td>{{ u.rules_activated_count }}</td>
+            <td>{{ u.tries }}</td>
+            <td>{{ u.errors }}</td>
+            <td>{{ u.q.0.0 }}</td><td>{{ u.q.1.0 }}</td><td>{{ u.q.2.0 }}</td>
+            <td>{{ u.q.0.1 }}</td><td>{{ u.q.1.1 }}</td><td>{{ u.q.2.1 }}</td>
+            <td>{{ u.q.0.2 }}</td><td>{{ u.q.1.2 }}</td><td>{{ u.q.2.2 }}</td>
+            <td>{{ u.q.0.3 }}</td><td>{{ u.q.1.3 }}</td><td>{{ u.q.2.3 }}</td>
+            <td>{{ u.q.0.4 }}</td><td>{{ u.q.1.4 }}</td><td>{{ u.q.2.4 }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+
+{% endblock %}

@@ -22,6 +22,15 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'css/scrolling-nav.css'%}" rel="stylesheet">
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{%  static 'jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="{%  static 'js/scrolling-nav.js' %}"></script>
 
     <script src="{% static 'VanillaLM.js' %}"></script>
 
@@ -93,6 +102,7 @@
                 <img style="display:block;width:160px;" src="{% static image_static %}">
             {% endwith %}
             <div class="rank">
+            <p>Du bist in Level {{ level }}.</p>
             <p>&nbsp;</p>
                 <h4>Regeln im Fokus:</h4>
                     {%  for ur in activerules %}
@@ -140,11 +150,27 @@
                           </div>
                         </div>
                     {% endfor %}
-                <p>&nbsp;&nbsp;</p>
-                <h4>Du bist in Level {{ level }}.</h4>
-            <p>&nbsp;</p>
-                <p><a href="{% url 'help' %}"><button class="btn btn-default">Anleitung</button></a></p>
                 <p>&nbsp;</p>
+                {% if show_ranking and user.gamification == user.GAMIFICATION_CLASSIC %}
+                    <p>no additional gamification</p>
+                {% elif show_ranking and user.gamification == user.GAMIFICATION_INDIVIDUAL %}
+                    <h4>Individuelles Ranking:</h4>
+                    {% for score in scores %}
+                        {% if score.1 %}
+                           {{ score.0 }}. {% if score.1 == user %}<b>{% endif %}{{ score.1.gamification_nickname }} ({{ score.1.gamification_score }}){% if score.1 == user %}</b>{% endif %}<br>
+                        {% else %}
+                         ...<br>
+                        {% endif %}
+                    {% endfor %}
+                {% elif show_ranking and user.gamification == user.GAMIFICATION_GROUP %}
+                    <h4>Gruppen-Ranking:</h4>
+                    {% for score in scores %}
+                           {{ score.0 }}. {% if score.1.group == user.gamification_group %}<b>{% endif %}{{ score.1.group }} ({{ score.1.score }}){% if score.1.group == user.gamification_group %}</b>{% endif %}<br>
+                    {% endfor %}
+
+                {% endif %}
+                <p>&nbsp;</p>
+                <p><a href="{% url 'help' %}"><button class="btn btn-default">Anleitung</button></a></p>
                 <p style="margin-top:1em;visibility: visible;" id="detachlink"><a href="" target="_blank" class="manual">Komma-Trainer in eigenem Fenster anzeigen</a></p>
 
            </div>
@@ -162,24 +188,13 @@
       <div class="container">
         <p class="m-0 text-center text-white">
             Ein Angebot der &nbsp;
-            <img src="https://www.uni-osnabrueck.de/fileadmin/templates_global/public/img/header_logo.gif" width="200px" style="margin-top:-10px">
-            &nbsp; 2017-2018</p>
+            <img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo.png" width="200px" style="margin-top:-10px">
+            &nbsp; 2017-2020</p>
       </div>
 
       <!-- /.container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="{% static 'jquery/jquery.min.js'%}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="{%  static 'jquery-easing/jquery.easing.min.js' %}"></script>
-
-    <!-- Custom JavaScript for this theme -->
-    <script src="{%  static 'js/scrolling-nav.js' %}"></script>
-
-    <script src="{% static 'VanillaLM.js' %}"></script>
 
   <script>
 

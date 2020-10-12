@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^submit_task_correct_commas$', views.submit_task_correct_commas),
     url(r'^submit_task_explain_commas$', views.submit_task_explain_commas, name='submit_task_explain_commas'),
     url(r'^submit_adaptivity_questionnaire$', views.submit_adaptivity_questionnaire, name='submit_adaptivity_questionnaire'),
+    url(r'^submit_gamification_questionnaire$', views.submit_gamification_questionnaire, name='submit_gamification_questionnaire'),
     url(r'^delete_user$', views.delete_user),
     url(r'^logout$', views.logout),
     url(r'^sentence/([0-9]+)$', views.sentence, name='sentence'),  # ajax load html for single correct sentence
@@ -21,6 +22,7 @@ urlpatterns = [
     url(r'^allstats_correct_sentence/$', views.allstats_correct_sentence, name='allstats_correct_sentence'),  # ajax load for single sentence stats
     url(r'^stats$', views.stats, name='stats'),
     url(r'^stats2$', views.stats2, name='stats2'), # stats for leitner/bayes experiment
+    url(r'^stats3$', views.stats3, name='stats3'), # stats for gamification experiment
     url(r'^ustats$', views.ustats, name='ustats'),
     url(r'^allstats$', views.allstats, name='allstats'),  # sentence statistics for "set comma" task
     url(r'^allstats_correct$', views.allstats_correct, name='allstats_correct'),  # sentence statistics for "correct comma" task
