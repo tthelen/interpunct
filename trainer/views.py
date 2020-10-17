@@ -319,29 +319,29 @@ def task(request):
             if rsi > 0 and raw_scores[rsi].gamification_score != last_score:
                 rank = counter
             if user == raw_scores[rsi]:
-                user_rank = counter
+                user_rank = rank
                 break
             last_score = raw_scores[rsi].gamification_score
             counter = counter + 1
-
+        print("Rank is: {} out of {}".format(user_rank, raw_scores))
         # build scores list
         scores=[]
         last_score = -1
         counter = 1
         rank = 1
         for rsi in range(len(raw_scores)):
-            if rsi > 0 and raw_scores[rsi].gamification_score != last_score:
+            if raw_scores[rsi].gamification_score != last_score:  # only new rank if score differs (but then rank is number of people, not ranks)
                 rank = counter
-            if rsi < 3:
+            if rsi < 3:  # always include first three ranks
                 scores.append((rank, raw_scores[rsi]))
-            elif abs(rank-user_rank) < 3:
+            elif abs(rank-user_rank) < 3:  # show people around me
                 scores.append((rank, raw_scores[rsi]))
             elif rsi > 0:
                 if scores[-1] != (-1,None):
                     scores.append((-1,None))
             last_score = raw_scores[rsi].gamification_score
             counter = counter + 1
-
+        print(scores)
     elif user.gamification == User.GAMIFICATION_GROUP:
         raw_scores = GroupScore.objects.order_by('-score')
         # build scores list
@@ -406,7 +406,7 @@ def start(request):
         request.GET.get('fach1','00'),
         request.GET.get('fach2','00'),
         request.GET.get('fach3', '00'),
-        request.GET.get('gender',0),
+        request.GET.get('sex',0),
         request.GET.get('selfest','-'),
         request.GET.get('L1','-'))
     user.data = vector # one string with al data, now obsolete TODO: remove
@@ -416,7 +416,7 @@ def start(request):
     user.data_subject2 = request.GET.get('fach2',0)
     user.data_subject3 = request.GET.get('fach3', 0)
     user.data_study_permission = request.GET.get('hzb',0)
-    user.data_sex = request.GET.get('gender',"")
+    user.data_sex = request.GET.get('sex',"")
     user.data_l1 = request.GET.get('L1','')
     user.data_selfestimation = request.GET.get('selfest',-1)
     user.gamification_group = request.GET.get('group', None)
@@ -593,12 +593,14 @@ def submit_task_explain_commas(request):
     user = User.objects.get(django_user=request.user)
 
     solution = [] # solution is array of the form: rule_id:correct?:chosen?, rule_id:...
+    resp = []  # array for score update
     error_rules = [] # all rules with errors
     pos = int(request.POST['position'])+1
     for r in rules:
         correct = 1 if SentenceRule.objects.filter(sentence=sentence, rule=r, position=pos) else 0  # correct if sentence has rule
         chosen = 1 if r.code in request.POST else 0  # chosen if box was checked
         solution.append("{}:{}:{}".format(r.id, correct, chosen))
+        resp.append({'correct': (correct==chosen)})
         # are we in pretest?
         if not user.pretest:
             if user.get_strategy().pretest_rules[user.pretest_count][0] == r.code:  # do we look at the rule to test?
@@ -611,12 +613,14 @@ def submit_task_explain_commas(request):
         else:  # not on pretest
             # update strategy model (3=COMMA_EXPLAIN)
             user.get_strategy().update(r, 3, (correct == chosen))
-
             if not r.code.startswith('E'):  # only count non-error rules
                 ur = UserRule.objects.get(user=user, rule=r)
                 ur.count((correct == chosen))  # count rule application as correct if correct rule was chosen and vice versa
                 if correct != chosen:
                     error_rules.append(r)
+
+    # recalculate individual or group score
+    user.update_score(resp)
 
     # write solution to db
     time_elapsed = request.POST.get('tim', 0)

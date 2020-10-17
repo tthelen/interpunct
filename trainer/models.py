@@ -616,47 +616,59 @@ class User(models.Model):
     def update_score(self, resp):
         """
         Updates user score for gamification
+
+        resp = list of comma position analyses, each classified as correct or wrong
         """
 
+        # 1. If current user has individual ranking
         if self.gamification == self.GAMIFICATION_INDIVIDUAL:
-            # save for gamification scoring history
-            completely_correct = True
+
+            # save current task for gamification scoring history
+            completely_correct = True  # assume that tas was correct until we find an error
             for r in resp:
                 if not r['correct']:
-                    completely_correct = False
+                    completely_correct = False  # error found
                     break
-            hist = UserHistory(user=self, correct=completely_correct)
-            hist.save()
+            hist = UserHistory(user=self, correct=completely_correct)  # create a new UserHistory database entry
+            hist.save()  # end save it
 
             # activity is number of tasks in the last 48 hours
+            # find in database all UserHistory entries for current user that are not older than 2 days
             from datetime import datetime, timedelta
             twodaysago = datetime.now()-timedelta(days=2)
             activity = UserHistory.objects.filter(user=self, mkdate__gte=twodaysago).count()
 
             # hist is correctness value for last 30 tasks (with degrading contribution to value)
+            # a) find in database all UserHistory entries for current user sorted descending by date (newest first)
             hist = UserHistory.objects.filter(user=self).order_by('-mkdate')
             value = 0  # error value
+            # b) check 10 most recent
             for h in hist[0:10]:  # the 10 latest task submissions (0-9)
                 if not h.correct:
-                    value += 2.0
+                    value += 2.0  # recent mistake results in -2 points
+            # c) check 10th-19th most recent
             for h in hist[10:20]:  # the 10 latest before that (10-19)
                 if not h.correct:
-                    value += 1.5
+                    value += 1.5  # mid-recent mistake results in -1.5 points
+            # d) check 20th-29th most recent
             for h in hist[20:30]:  # the 10 latest before that (20-29)
                 if not h.correct:
-                    value += 1.25
+                    value += 1.25 # less-recent mistake results in -1.5 points
 
-            # print("Update score for {}: {}, {} (with history={})".format(self.gamification_nickname, activity, value, hist))
-            self.gamification_score = activity - value
-            self.save()
+            # score = activity value - error value
+            self.gamification_score = activity - value  # set score for current user
+            self.save()  # and save to database
 
+        # 1. If current user has group ranking
         elif self.gamification == User.GAMIFICATION_GROUP:
+
             # save for gamification scoring history
             completely_correct = True
             for r in resp:
                 if not r['correct']:
                     completely_correct = False
                     break
+            # save result to a new entry in the GroupHistory table
             hist = GroupHistory(group=self.gamification_group, correct=completely_correct)
             hist.save()
 
@@ -678,7 +690,6 @@ class User(models.Model):
                 if not h.correct:
                     value += 1.25
 
-            # print("Update score for {}: {}, {} (with history={})".format(self.gamification_group, activity, value, hist))
             group, created = GroupScore.objects.get_or_create(group=self.gamification_group)
             group.score = activity - value
             group.save()
@@ -852,7 +863,13 @@ class User(models.Model):
             3: "5./6.",
             4: "7./8.",
             5: "9./10.",
-            6: "höher"
+            6: "höher",
+            7: "BA 1./2.",
+            8: "BA 3./4.",
+            9: "BA >=5.",
+            10: "MA 1./2.",
+            11: "MA >=3.",
+            12: "kein Stud."
         }
         return sems.get(self.data_semester, "ungültig")
 
@@ -886,6 +903,12 @@ class User(models.Model):
             35: "Sprache in Europa",
             36: "Textiles Gestalten",
             37: "Sonstiges Fach",
+            40: "Naturwissenschaften, Mathematik, Informatik",
+            41: "Technische Wissenschaften, Ingenieurwissenschaften",
+            42: "Psychologie, Humanmedizin und Gesundheitswissenschaften",
+            43: "Agrarwissenschaften und Vetrinärmedizin",
+            44: "Sozialwissenschaften, Rechtswissenschaft, Wirtschaftswissenschaft",
+            45: "Geisteswissenschaften",
         }
         return subs.get(s, "ungültig")
 

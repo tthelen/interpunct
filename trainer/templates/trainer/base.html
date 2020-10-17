@@ -104,6 +104,28 @@
             <div class="rank">
             <p>Du bist in Level {{ level }}.</p>
             <p>&nbsp;</p>
+            {% if show_ranking and user.gamification == user.GAMIFICATION_CLASSIC %}
+                &nbsp;
+            {% elif show_ranking and user.gamification == user.GAMIFICATION_INDIVIDUAL %}
+                <h4>Individuelles Ranking:</h4>
+                <div style="font-size:80%">
+                {% for score in scores %}
+                    {% if score.1 %}
+                        {% if score.1 == user %}<span style="background-color:lightyellow;border:2px solid yellow;"><b>{% endif %}{{ score.0 }}. {{ score.1.gamification_nickname }} ({{ score.1.gamification_score }}){% if score.1 == user %}</b></span>{% endif %}<br>
+                    {% else %}
+                     ...<br>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% elif show_ranking and user.gamification == user.GAMIFICATION_GROUP %}
+                <h4>Gruppen-Ranking:</h4>
+                <div style="font-size:80%">
+                {% for score in scores %}
+                       {% if score.1.group == user.gamification_group %}<span style="background-color:lightyellow; border:2px solid yellow;"><b>{% endif %}{{ score.0 }}. {{ score.1.group }} ({{ score.1.score }}){% if score.1.group == user.gamification_group %}</b></span>{% endif %}<br>
+                {% endfor %}
+                </div>
+            {% endif %}
+            <p>&nbsp;</p>
                 <h4>Regeln im Fokus:</h4>
                     {%  for ur in activerules %}
                     <p>
@@ -150,25 +172,6 @@
                           </div>
                         </div>
                     {% endfor %}
-                <p>&nbsp;</p>
-                {% if show_ranking and user.gamification == user.GAMIFICATION_CLASSIC %}
-                    <p>no additional gamification</p>
-                {% elif show_ranking and user.gamification == user.GAMIFICATION_INDIVIDUAL %}
-                    <h4>Individuelles Ranking:</h4>
-                    {% for score in scores %}
-                        {% if score.1 %}
-                           {{ score.0 }}. {% if score.1 == user %}<b>{% endif %}{{ score.1.gamification_nickname }} ({{ score.1.gamification_score }}){% if score.1 == user %}</b>{% endif %}<br>
-                        {% else %}
-                         ...<br>
-                        {% endif %}
-                    {% endfor %}
-                {% elif show_ranking and user.gamification == user.GAMIFICATION_GROUP %}
-                    <h4>Gruppen-Ranking:</h4>
-                    {% for score in scores %}
-                           {{ score.0 }}. {% if score.1.group == user.gamification_group %}<b>{% endif %}{{ score.1.group }} ({{ score.1.score }}){% if score.1.group == user.gamification_group %}</b>{% endif %}<br>
-                    {% endfor %}
-
-                {% endif %}
                 <p>&nbsp;</p>
                 <p><a href="{% url 'help' %}"><button class="btn btn-default">Anleitung</button></a></p>
                 <p style="margin-top:1em;visibility: visible;" id="detachlink"><a href="" target="_blank" class="manual">Komma-Trainer in eigenem Fenster anzeigen</a></p>

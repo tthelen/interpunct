@@ -51,13 +51,24 @@
 
     <table class="table">
     <tr><th>Lfd. Nr.</th>
-        <th>Punkte</th><th>Level</th><th>Versuche</th><th>Fehler</th>
+        <th>Studium</th>
+        <th>Fach</th>
+        <th>Sex</th>
+        <th>Komma?</th>
+        <th>Punkte</th>
+        <th>Level</th>
+        <th>Versuche</th>
+        <th>Fehler</th>
         <th colspan="3">Frage 1: Der Kommatrainer hat mich motiviert.</th>
-        <th colspan="3">Frage 2: Ich habe Lernerfolge erlebt.</th>
+        <th colspan="3">Frage 2: Ich habe Lernerfolge erzielt.</th>
     </tr>
-        <tr><td></td><td></td><td></td><td></td><td></td><td colspan="6"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
+        <tr><td colspan="8"></td><td colspan="6"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
     {% for u in classics %}
         <tr><td>{{ forloop.counter }}</td>
+            <td>{{ u.explicit_data_semester }}</td>
+            <td>{{ u.explicit_data_subject1 }}</td>
+            <td>{{ u.data_sex }}</td>
+            <td>{{ u.data_selfestimation }}</td>
             <td>{{ u.gamification_score }}</td>
             <td>{{ u.rules_activated_count }}</td>
             <td>{{ u.tries }}</td>
@@ -73,16 +84,25 @@
 
     <table class="table">
     <tr><th>Nickname</th>
-        <th>Punkte</th><th>Level</th><th>Versuche</th><th>Fehler</th>
+        <th>Punkte</th>
+        <th>Studium</th>
+        <th>Fach</th>
+        <th>Sex</th>
+        <th>Komma?</th>
+        <th>Level</th><th>Versuche</th><th>Fehler</th>
         <th colspan="3">Frage 1: Der Kommatrainer hat mich motiviert.</th>
-        <th colspan="3">Frage 2: Ich habe Lernerfolge erlebt.</th>
+        <th colspan="3">Frage 2: Ich habe Lernerfolge erzielt.</th>
         <th colspan="3">Frage 3: Ich habe mich motiviert gefühlt, gegen andere Benutzer anzutreten.</th>
-        <th colspan="3">Frage 4: Ich habe aufgrund der Ränge der anderen Benutzer Druck verspürt.</th>
+        <th colspan="3">Frage 4: Ich habe mich aufgrund der Ränge der anderen Benutzer unter Druck gesetzt gefühlt.</th>
     </tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td colspan="12"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
+    <tr><td colspan="9"></td><td colspan="12"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
     {% for u in individuals %}
         <tr><td>{{ u.gamification_nickname }}</td>
             <td>{{ u.gamification_score }}</td>
+            <td>{{ u.explicit_data_semester }}</td>
+            <td>{{ u.explicit_data_subject1 }}</td>
+            <td>{{ u.data_sex }}</td>
+            <td>{{ u.data_selfestimation }}</td>
             <td>{{ u.rules_activated_count }}</td>
             <td>{{ u.tries }}</td>
             <td>{{ u.errors }}</td>
@@ -101,18 +121,29 @@
     <table class="table">
     <tr><th>Nutzer</th>
         <th>Gruppe</th>
-        <th>Gruppenpunkte</th><th>Level</th><th>Versuche</th><th>Fehler</th>
+        <th>Gruppenpunkte</th>
+        <th>Studium</th>
+        <th>Fach</th>
+        <th>Sex</th>
+        <th>Komma?</th>
+        <th>Level</th>
+        <th>Versuche</th>
+        <th>Fehler</th>
         <th colspan="3">Frage 1: Der Kommatrainer hat mich motiviert. (1=stimme voll zu, 4=stimme gar nicht zu)</th>
-        <th colspan="3">Frage 2: Ich habe Lernerfolge erlebt.</th>
-        <th colspan="3">Frage 3: Ich fühlte mich dem Team zugehörig oder habe eine Teamzusammenarbeit gespürt.</th>
-        <th colspan="3">Frage 4: Ich habe Druck durch die Ergebnisse der anderen Teams verspürt.</th>
+        <th colspan="3">Frage 2: Ich habe Lernerfolge erzielt.</th>
+        <th colspan="3">Frage 3: Ich fühlte mich dem Team zugehörig oder habe eine Teamzusammenarbeit wahrgenommen.</th>
+        <th colspan="3">Frage 4: Ich habe mich aufgrund der Ergebnisse anderer Teams unter Druck gesetzt gefühlt.</th>
         <th colspan="3">Frage 5: Ich habe mich motiviert gefühlt, gegen andere Teams anzutreten.</th>
     </tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td colspan="15"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
+    <tr><td colspan="10"></td><td colspan="15"><span style="font-size:80%">(1=stimme voll zu, 2=stimme eher zu, 3=stimme eher nicht zu, 4=stimme gar nicht zu)</span></td></tr>
     {% for u in groups %}
         <tr><td>{{ forloop.counter }}</td>
             <td>{{ u.gamification_group }}</td>
             <td>{{ u.groupscore }}</td>
+            <td>{{ u.explicit_data_semester }}</td>
+            <td>{{ u.explicit_data_subject1 }}</td>
+            <td>{{ u.data_sex }}</td>
+            <td>{{ u.data_selfestimation }}</td>
             <td>{{ u.rules_activated_count }}</td>
             <td>{{ u.tries }}</td>
             <td>{{ u.errors }}</td>
