@@ -1,9 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
 from django.db.models import Count
+from django.utils import timezone
 
 import re  # regex support
 import random
+
+class LastRecalc(models.Model):
+    date = models.DateTimeField(auto_now=True)
 
 
 class Rule(models.Model):
@@ -613,7 +617,34 @@ class User(models.Model):
         else:
             self.counter_wrong += 1
 
-    def update_score(self, resp):
+    def update_group_score(self, groupname=None):
+
+        if not groupname:
+            groupname = self.gamification_group
+
+        # activity is number of tasks in the last 48 hours
+        twodaysago = timezone.now() - timezone.timedelta(days=2)
+
+        activity = GroupHistory.objects.filter(group=groupname, mkdate__gte=twodaysago).count()
+
+        # hist is correctness value for last 300 tasks (with degrading contribution to value)
+        hist = GroupHistory.objects.filter(group=groupname).order_by('-mkdate')
+        value = 0  # error value
+        for h in hist[0:100]:  # the 100 latest task submissions (0-99)
+            if not h.correct:
+                value += 2.0
+        for h in hist[100:200]:  # the 100 latest before that (100-199)
+            if not h.correct:
+                value += 1.5
+        for h in hist[200:300]:  # the 100 latest before that (200-299)
+            if not h.correct:
+                value += 1.25
+
+        group, created = GroupScore.objects.get_or_create(group=groupname)
+        group.score = activity - value
+        group.save()
+
+    def update_score(self, resp=None):
         """
         Updates user score for gamification
 
@@ -624,18 +655,18 @@ class User(models.Model):
         if self.gamification == self.GAMIFICATION_INDIVIDUAL:
 
             # save current task for gamification scoring history
-            completely_correct = True  # assume that tas was correct until we find an error
-            for r in resp:
-                if not r['correct']:
-                    completely_correct = False  # error found
-                    break
-            hist = UserHistory(user=self, correct=completely_correct)  # create a new UserHistory database entry
-            hist.save()  # end save it
+            if resp:
+                completely_correct = True  # assume that tas was correct until we find an error
+                for r in resp:
+                    if not r['correct']:
+                        completely_correct = False  # error found
+                        break
+                hist = UserHistory(user=self, correct=completely_correct)  # create a new UserHistory database entry
+                hist.save()  # end save it
 
             # activity is number of tasks in the last 48 hours
             # find in database all UserHistory entries for current user that are not older than 2 days
-            from datetime import datetime, timedelta
-            twodaysago = datetime.now()-timedelta(days=2)
+            twodaysago = timezone.now() - timezone.timedelta(days=2)
             activity = UserHistory.objects.filter(user=self, mkdate__gte=twodaysago).count()
 
             # hist is correctness value for last 30 tasks (with degrading contribution to value)
@@ -659,40 +690,35 @@ class User(models.Model):
             self.gamification_score = activity - value  # set score for current user
             self.save()  # and save to database
 
+            onehourago = timezone.now() - timezone.timedelta(hours=1)
+            c = LastRecalc.objects.filter(date__gte=onehourago).count()
+            if not c: # have all users' points been recalculated in the last 1 hour? If not, do so now...
+                LastRecalc.objects.all().delete()
+                LastRecalc().save()
+                recalc_users = User.objects.filter(gamification=User.GAMIFICATION_INDIVIDUAL)
+                for u in recalc_users:
+                    u.update_score()
+
         # 1. If current user has group ranking
         elif self.gamification == User.GAMIFICATION_GROUP:
 
             # save for gamification scoring history
-            completely_correct = True
-            for r in resp:
-                if not r['correct']:
-                    completely_correct = False
-                    break
-            # save result to a new entry in the GroupHistory table
-            hist = GroupHistory(group=self.gamification_group, correct=completely_correct)
-            hist.save()
+            if resp:
+                completely_correct = True
+                for r in resp:
+                    if not r['correct']:
+                        completely_correct = False
+                        break
+                # save result to a new entry in the GroupHistory table
+                hist = GroupHistory(group=self.gamification_group, correct=completely_correct)
+                hist.save()
 
-            # activity is number of tasks in the last 48 hours
-            from datetime import datetime, timedelta
-            twodaysago = datetime.now()-timedelta(days=2)
-            activity = GroupHistory.objects.filter(group=self.gamification_group, mkdate__gte=twodaysago).count()
+                self.update_group_score()
 
-            # hist is correctness value for last 300 tasks (with degrading contribution to value)
-            hist = GroupHistory.objects.filter(group=self.gamification_group).order_by('-mkdate')
-            value = 0  # error value
-            for h in hist[0:100]:  # the 100 latest task submissions (0-99)
-                if not h.correct:
-                    value += 2.0
-            for h in hist[100:200]:  # the 100 latest before that (100-199)
-                if not h.correct:
-                    value += 1.5
-            for h in hist[200:300]:  # the 100 latest before that (200-299)
-                if not h.correct:
-                    value += 1.25
+            # always update all groups
+            for g in GroupScore.objects.all():
+                self.update_group_score(g.group)
 
-            group, created = GroupScore.objects.get_or_create(group=self.gamification_group)
-            group.score = activity - value
-            group.save()
 
 
     def eval_set_commas(self, user_array_str, sentence, solution):

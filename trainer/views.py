@@ -308,6 +308,7 @@ def task(request):
 
     # prepare highscore list
     if user.gamification == User.GAMIFICATION_INDIVIDUAL:
+        user.update_score()
         raw_scores = User.objects.filter(gamification=User.GAMIFICATION_INDIVIDUAL).order_by('-gamification_score')
 
         # find user rank (same scores count as same rank)
@@ -323,7 +324,7 @@ def task(request):
                 break
             last_score = raw_scores[rsi].gamification_score
             counter = counter + 1
-        print("Rank is: {} out of {}".format(user_rank, raw_scores))
+        # print("Rank is: {} out of {}".format(user_rank, raw_scores))
         # build scores list
         scores=[]
         last_score = -1
@@ -343,6 +344,7 @@ def task(request):
             counter = counter + 1
         print(scores)
     elif user.gamification == User.GAMIFICATION_GROUP:
+        user.update_score()
         raw_scores = GroupScore.objects.order_by('-score')
         # build scores list
         scores=[]
@@ -779,7 +781,6 @@ def stats2(request):
     qb4 = sum(qb4) / len(qb4)
     qb5 = sum(qb5) / len(qb5)
     qb6 = sum(qb6) / len(qb6)
-    print(ql1,ql2,ql3,ql4,ql5,ql6)
     return render(request, 'trainer/stats2.html', locals())
 
 
