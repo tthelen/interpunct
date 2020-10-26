@@ -820,17 +820,26 @@ def stats3(request):
         i_errors += i.errors()
         i.q = [['', '', '', ''], ['', '', '', ''], ['', '', '', '']]
         if i.data_gamification_1:
-            answers = [int(x) for x in i.data_gamification_1.split(":")]
-            for j in range(4):
-                if answers[j] < 5: i.q[0][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_1.split(":")]
+                for j in range(4):
+                    if answers[j] < 5: i.q[0][j] = answers[j]
+            except ValueError:
+                pass
         if i.data_gamification_2:
-            answers = [int(x) for x in i.data_gamification_3.split(":")]
-            for j in range(4):
-                if answers[j] < 5: i.q[1][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                for j in range(4):
+                    if answers[j] < 5: i.q[1][j] = answers[j]
+            except ValueError:
+                pass
         if i.data_gamification_3:
-            answers = [int(x) for x in i.data_gamification_3.split(":")]
-            for j in range(4):
-                if answers[j] < 5: i.q[2][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                for j in range(4):
+                    if answers[j] < 5: i.q[2][j] = answers[j]
+            except ValueError:
+                pass
     if i_num > 0:
         i_level = i_level / i_num
         i_tries = i_tries / i_num
@@ -849,17 +858,26 @@ def stats3(request):
         g_errors += i.errors()
         i.q = [['', '', '', '', ''], ['', '', '', '', ''], ['', '', '', '', '']]
         if i.data_gamification_1:
-            answers = [int(x) for x in i.data_gamification_1.split(":")]
-            for j in range(5):
-                if answers[j] < 5: i.q[0][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_1.split(":")]
+                for j in range(5):
+                    if answers[j] < 5: i.q[0][j] = answers[j]
+            except ValueError:
+                pass
         if i.data_gamification_2:
-            answers = [int(x) for x in i.data_gamification_3.split(":")]
-            for j in range(5):
-                if answers[j] < 5: i.q[1][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                for j in range(5):
+                    if answers[j] < 5: i.q[1][j] = answers[j]
+            except ValueError:
+                pass
         if i.data_gamification_3:
-            answers = [int(x) for x in i.data_gamification_3.split(":")]
-            for j in range(5):
-                if answers[j] < 5: i.q[2][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                for j in range(5):
+                    if answers[j] < 5: i.q[2][j] = answers[j]
+            except ValueError:
+                pass
         i.groupscore=GroupScore.objects.get(group=i.gamification_group).score
     if g_num > 0:
         g_level = g_level / g_num
@@ -879,17 +897,26 @@ def stats3(request):
         c_errors += i.errors()
         i.q = [['', ''], ['', ''], ['', '']]
         if i.data_gamification_1:
-            answers = [int(x) for x in i.data_gamification_1.split(":")]
-            for j in range(2):
-                if answers[j] < 5: i.q[0][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_1.split(":")]
+                for j in range(2):
+                    if answers[j] < 5: i.q[0][j] = answers[j]
+            except ValueError:
+                pass
         if i.data_gamification_2:
-            answers = [int(x) for x in i.data_gamification_3.split(":")]
-            for j in range(2):
-                if answers[j] < 5: i.q[1][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                for j in range(2):
+                    if answers[j] < 5: i.q[1][j] = answers[j]
+            except ValueError:
+                pass
         if i.data_gamification_3:
-            answers = [int(x) for x in i.data_gamification_3.split(":")]
-            for j in range(2):
-                if answers[j] < 5: i.q[2][j] = answers[j]
+            try:
+                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                for j in range(2):
+                    if answers[j] < 5: i.q[2][j] = answers[j]
+            except ValueError:
+                pass
     if c_num > 0:
         c_level = c_level / c_num
         c_tries = c_tries / c_num
