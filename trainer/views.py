@@ -224,14 +224,14 @@ def task(request):
     # new user: show welcome page
     if not user.data:
         display_rank=False
-        return render(request, 'trainer/welcome_gamification.html', locals())  # questionnaire BA Herrmann
+        # return render(request, 'trainer/welcome_gamification.html', locals())  # questionnaire BA Herrmann
 
         # return render(request, 'trainer/welcome.html', locals())  # questionnaire MA Hubert
 
-        #user.data="No questionnaire in this run."
-        #user.save()
-        #strategy.init_rules() # set all knowledge about user to start
-        #return render(request, 'trainer/welcome_noquestionnaire.html', locals())
+        user.data="No questionnaire in this run."
+        user.save()
+        # strategy.init_rules() # set all knowledge about user to start
+        return render(request, 'trainer/welcome_noquestionnaire.html', locals())
 
     # -----------------------------------------------------------------------
     # pretest
@@ -828,7 +828,7 @@ def stats3(request):
                 pass
         if i.data_gamification_2:
             try:
-                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                answers = [int(x) for x in i.data_gamification_2.split(":")]
                 for j in range(4):
                     if answers[j] < 5: i.q[1][j] = answers[j]
             except ValueError:
@@ -840,6 +840,20 @@ def stats3(request):
                     if answers[j] < 5: i.q[2][j] = answers[j]
             except ValueError:
                 pass
+
+        # fetch all timestamps and determine activity streaks
+        timestamps = Solution.objects.filter(user=i).order_by('mkdate')
+        i.sessions = 1
+        last = None
+        for t in timestamps:
+            if last:
+                if (t.mkdate - last).total_seconds() >= 3600:  # over an hour between two solutions
+                    i.sessions += 1
+            last = t.mkdate
+
+        # string with 0 or 1 for all solutions
+        i.solutions = solutions_for_user(i)
+
     if i_num > 0:
         i_level = i_level / i_num
         i_tries = i_tries / i_num
@@ -866,7 +880,7 @@ def stats3(request):
                 pass
         if i.data_gamification_2:
             try:
-                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                answers = [int(x) for x in i.data_gamification_2.split(":")]
                 for j in range(5):
                     if answers[j] < 5: i.q[1][j] = answers[j]
             except ValueError:
@@ -879,6 +893,20 @@ def stats3(request):
             except ValueError:
                 pass
         i.groupscore=GroupScore.objects.get(group=i.gamification_group).score
+
+        # fetch all timestamps and determine activity streaks
+        timestamps = Solution.objects.filter(user=i).order_by('mkdate')
+        i.sessions = 1
+        last = None
+        for t in timestamps:
+            if last:
+                if (t.mkdate - last).total_seconds() >= 3600:  # over an hour between two solutions
+                    i.sessions += 1
+            last = t.mkdate
+
+        # string with 0 or 1 for all solutions
+        i.solutions = solutions_for_user(i)
+
     if g_num > 0:
         g_level = g_level / g_num
         g_tries = g_tries / g_num
@@ -905,7 +933,7 @@ def stats3(request):
                 pass
         if i.data_gamification_2:
             try:
-                answers = [int(x) for x in i.data_gamification_3.split(":")]
+                answers = [int(x) for x in i.data_gamification_2.split(":")]
                 for j in range(2):
                     if answers[j] < 5: i.q[1][j] = answers[j]
             except ValueError:
@@ -917,6 +945,20 @@ def stats3(request):
                     if answers[j] < 5: i.q[2][j] = answers[j]
             except ValueError:
                 pass
+
+        # fetch all timestamps and determine activity streaks
+        timestamps = Solution.objects.filter(user=i).order_by('mkdate')
+        i.sessions = 1
+        last = None
+        for t in timestamps:
+            if last:
+                if (t.mkdate - last).total_seconds() >= 3600:  # over an hour between two solutions
+                    i.sessions += 1
+            last = t.mkdate
+
+        # string with 0 or 1 for all solutions
+        i.solutions = solutions_for_user(i)
+
     if c_num > 0:
         c_level = c_level / c_num
         c_tries = c_tries / c_num
@@ -957,6 +999,17 @@ def stats3(request):
     #qb5 = sum(qb5) / len(qb5)
     #qb6 = sum(qb6) / len(qb6)
     return render(request, 'trainer/stats3.html', locals())
+
+
+def solutions_for_user(u):
+
+    u_txt=[]
+    for s in Solution.objects.filter(user=u):
+        if SolutionRule.objects.filter(solution=s, error=True).count() > 0:
+            u_txt.append("0")
+        else:
+            u_txt.append("1")
+    return (",".join(u_txt))
 
 
 def ustats(request):
