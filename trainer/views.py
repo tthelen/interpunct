@@ -892,7 +892,10 @@ def stats3(request):
                     if answers[j] < 5: i.q[2][j] = answers[j]
             except ValueError:
                 pass
-        i.groupscore=GroupScore.objects.get(group=i.gamification_group).score
+        try:
+            i.groupscore = GroupScore.objects.get(group=i.gamification_group).score
+        except GroupScore.DoesNotExist:
+            i.groupscore = 0
 
         # fetch all timestamps and determine activity streaks
         timestamps = Solution.objects.filter(user=i).order_by('mkdate')
