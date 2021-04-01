@@ -27,7 +27,8 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
             user = User(user_id=username)
             user.rules_activated_count = 0
             user.strategy = user.LEITNER  #  random.choice([user.BAYES, user.BAYES, user.LEITNER])
-            user.gamification = random.choice([user.GAMIFICATION_CLASSIC, user.GAMIFICATION_INDIVIDUAL, user.GAMIFICATION_GROUP])
+            # user.gamification = random.choice([user.GAMIFICATION_CLASSIC, user.GAMIFICATION_INDIVIDUAL, user.GAMIFICATION_GROUP])
+            user.gamification = user.GAMIFICATION_CLASSIC
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -286,15 +287,15 @@ def task(request):
 
     # ------------------------------------------------------------------------
     # gamification questionnaire form
-    if user.rules_activated_count >= 5 and not user.data_gamification_1:
-        iteration=1
-        return render(request, 'trainer/gamification_questionaire.html', locals())
-    if user.rules_activated_count >= 15 and not user.data_gamification_2:
-        iteration=2
-        return render(request, 'trainer/gamification_questionaire.html', locals())
-    if user.rules_activated_count >= 30 and not user.data_gamification_3:
-        iteration=3
-        return render(request, 'trainer/gamification_questionaire.html', locals())
+    #if user.rules_activated_count >= 5 and not user.data_gamification_1:
+    #    iteration=1
+    #    return render(request, 'trainer/gamification_questionaire.html', locals())
+    #if user.rules_activated_count >= 15 and not user.data_gamification_2:
+    #    iteration=2
+    #    return render(request, 'trainer/gamification_questionaire.html', locals())
+    #if user.rules_activated_count >= 30 and not user.data_gamification_3:
+    #    iteration=3
+    #    return render(request, 'trainer/gamification_questionaire.html', locals())
 
     # ------------------------------------------------------------------------
     # normal task selection process
