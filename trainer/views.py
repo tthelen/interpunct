@@ -308,56 +308,56 @@ def task(request):
     show_ranking=True
 
     # prepare highscore list
-    if user.gamification == User.GAMIFICATION_INDIVIDUAL:
-        user.update_score()
-        raw_scores = User.objects.filter(gamification=User.GAMIFICATION_INDIVIDUAL).order_by('-gamification_score')
+    #if user.gamification == User.GAMIFICATION_INDIVIDUAL:
+    #    user.update_score()
+    #    raw_scores = User.objects.filter(gamification=User.GAMIFICATION_INDIVIDUAL).order_by('-gamification_score')
 
         # find user rank (same scores count as same rank)
-        user_rank = 0
-        last_score = -1
-        counter = 1
-        rank = 1
-        for rsi in range(len(raw_scores)):
-            if rsi > 0 and raw_scores[rsi].gamification_score != last_score:
-                rank = counter
-            if user == raw_scores[rsi]:
-                user_rank = rank
-                break
-            last_score = raw_scores[rsi].gamification_score
-            counter = counter + 1
-        # print("Rank is: {} out of {}".format(user_rank, raw_scores))
-        # build scores list
-        scores=[]
-        last_score = -1
-        counter = 1
-        rank = 1
-        for rsi in range(len(raw_scores)):
-            if raw_scores[rsi].gamification_score != last_score:  # only new rank if score differs (but then rank is number of people, not ranks)
-                rank = counter
-            if rsi < 3:  # always include first three ranks
-                scores.append((rank, raw_scores[rsi]))
-            elif abs(rank-user_rank) < 3:  # show people around me
-                scores.append((rank, raw_scores[rsi]))
-            elif rsi > 0:
-                if scores[-1] != (-1,None):
-                    scores.append((-1,None))
-            last_score = raw_scores[rsi].gamification_score
-            counter = counter + 1
-        print(scores)
-    elif user.gamification == User.GAMIFICATION_GROUP:
-        user.update_score()
-        raw_scores = GroupScore.objects.order_by('-score')
-        # build scores list
-        scores=[]
-        last_score = -1
-        counter = 1
-        rank = 1
-        for rsi in range(len(raw_scores)):
-            if rsi > 0 and raw_scores[rsi].score != last_score:
-                rank = counter
-            scores.append((rank,raw_scores[rsi]))
-            last_score = raw_scores[rsi].score
-            counter = counter + 1
+    #    user_rank = 0
+    #    last_score = -1
+    #    counter = 1
+    #    rank = 1
+    #    for rsi in range(len(raw_scores)):
+    #        if rsi > 0 and raw_scores[rsi].gamification_score != last_score:
+    #            rank = counter
+    #        if user == raw_scores[rsi]:
+    #            user_rank = rank
+    #            break
+    #        last_score = raw_scores[rsi].gamification_score
+    #        counter = counter + 1
+    #    # print("Rank is: {} out of {}".format(user_rank, raw_scores))
+    #    # build scores list
+    #    scores=[]
+    #    last_score = -1
+    #    counter = 1
+    #    rank = 1
+    #    for rsi in range(len(raw_scores)):
+    #        if raw_scores[rsi].gamification_score != last_score:  # only new rank if score differs (but then rank is number of people, not ranks)
+    #            rank = counter
+    #        if rsi < 3:  # always include first three ranks
+    #            scores.append((rank, raw_scores[rsi]))
+    #        elif abs(rank-user_rank) < 3:  # show people around me
+    #            scores.append((rank, raw_scores[rsi]))
+    #        elif rsi > 0:
+    #            if scores[-1] != (-1,None):
+    #                scores.append((-1,None))
+    #        last_score = raw_scores[rsi].gamification_score
+    #        counter = counter + 1
+    #    print(scores)
+    #elif user.gamification == User.GAMIFICATION_GROUP:
+    #    user.update_score()
+    #    raw_scores = GroupScore.objects.order_by('-score')
+    #    # build scores list
+    #    scores=[]
+    #    last_score = -1
+    #    counter = 1
+    #    rank = 1
+    #    for rsi in range(len(raw_scores)):
+    #        if rsi > 0 and raw_scores[rsi].score != last_score:
+    #            rank = counter
+    #        scores.append((rank,raw_scores[rsi]))
+    #        last_score = raw_scores[rsi].score
+    #        counter = counter + 1
 
 
     # choose a sentence from roulette wheel (the bigger the error for
@@ -623,7 +623,7 @@ def submit_task_explain_commas(request):
                     error_rules.append(r)
 
     # recalculate individual or group score
-    user.update_score(resp)
+    # user.update_score(resp)
 
     # write solution to db
     time_elapsed = request.POST.get('tim', 0)

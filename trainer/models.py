@@ -650,6 +650,7 @@ class User(models.Model):
 
         resp = list of comma position analyses, each classified as correct or wrong
         """
+        return
 
         # 1. If current user has individual ranking
         if self.gamification == self.GAMIFICATION_INDIVIDUAL:
@@ -783,7 +784,7 @@ class User(models.Model):
             else:
                 resp.append({'correct': True, 'rule': {'code':'', 'mode':0}})
 
-        self.update_score(resp)
+        # self.update_score(resp)
 
         return resp
 
@@ -868,7 +869,7 @@ class User(models.Model):
                         resp.append({'correct': corr, 'rule': {'code': rule.code, 'mode': rule.mode}})
                         first = False
 
-        self.update_score(resp)
+        # self.update_score(resp)
         return resp
 
     def sentence_selector(self):
