@@ -1,3 +1,5 @@
+import re
+
 from django.core.management.base import BaseCommand, CommandError
 from trainer.models import Rule, Sentence, SentenceRule
 from django.db import transaction
@@ -22,19 +24,22 @@ class Command(BaseCommand):
         #if 'deactivate' in options:  # deactivate all sentences
         #    Sentence.objects.all().update(active=False)
 
+        import os
+        print(os.getcwd())
+
         for fn in options['filename']:  # read all given files
             with open(fn, "r", encoding="utf-8") as f:
                 for line in f:  # all lines in file
                     with transaction.atomic():  # all db actions as one transaction
                         shortcut_string=line.strip()
-                        sentence, words, rules = self.from_shortcuts(shortcut_string)
-                        print("Sentence: {}, Words: {}, Rules: {}".format(sentence, words, rules))
-                        s = Sentence(text=sentence, active=True)
+                        sentence, words, rules, source = self.from_shortcuts(shortcut_string)
+                        print("Sentence: {}, Words: {}, Rules: {}, Source: {}".format(sentence, words, rules, source))
+                        s = Sentence(text=sentence, active=True, source=source)
                         s.comma_select = ",".join(["0" for x in s.get_commalist()])
                         s.save()
                         for (pos,pair, r) in rules:
-                            rs = SentenceRule(rule=r, sentence=s, position=pos, pair=pair)
-                            rs.save()
+                           rs = SentenceRule(rule=r, sentence=s, position=pos, pair=pair)
+                           rs.save()
 
 
     def from_shortcuts(self, shortcut_string):
@@ -54,6 +59,13 @@ class Command(BaseCommand):
                  rule - Rule object))
         """
 
+        # try to extract source information from shortcut (source info is given in brackets at the end of the sentence)
+        source_match = re.search(r'\[(.*)\]', shortcut_string)
+        source = None
+        if source_match:
+            source = source_match.group(1)
+            shortcut_string = re.sub(r'\[(.*)\]', '', shortcut_string
+                                     )
         shortcut_string.replace('(,)',',') # treat MAY-commas indicated as (,) like , - the mode comes from the rules
 
         import shlex
@@ -97,4 +109,4 @@ class Command(BaseCommand):
                     sentence += token+" "
                     position += 1
 
-        return (sentence, words, rules)
+        return (sentence, words, rules, source)

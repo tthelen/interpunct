@@ -5,23 +5,21 @@
   <head>
 
     <meta charset="utf-8">
-    <title>{% block title %}Komma-Trainer. Üben, üben_ üben.{% endblock %}</title>
+    <title>{% block title %}Kommatraining. Üben, üben_ üben.{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'interpunct.css' %}">
-    <meta property="og:title" content="Der Komma-Trainer" />
+    <meta property="og:title" content="Das Kommatraining" />
     <meta property="og:image" content="http://vm009.rz.uos.de/interpunct/static/images/K%C3%B6nig_10.png" />
-    <meta property="og:description" content="Trainiere deine Komma-Fertigkeiten und werde zum Komma-König. Der Komma-Trainer orientiert sich an den amtlichen Regeln und ist besonders für Lehramtsstudierende geeignet. (Externer Dienst der Uni Osnabrück)"/>
+    <meta property="og:description" content="Trainiere deine Komma-Fertigkeiten und werde zum Komma-König. Das Kommatraining orientiert sich an den amtlichen Regeln und ist besonders für Lehramtsstudierende geeignet. (Externer Dienst der Uni Osnabrück)"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
-
     <!-- Bootstrap core CSS -->
     <link href="{% static 'bootstrap/css/bootstrap.bundle.min.css'%}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{% static 'css/scrolling-nav.css'%}" rel="stylesheet">
+<!--    <link href="{% static 'css/scrolling-nav.css'%}" rel="stylesheet"> -->
     <!-- Bootstrap core JavaScript -->
     <script src="{% static 'jquery/jquery.min.js'%}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -30,59 +28,71 @@
     <script src="{%  static 'jquery-easing/jquery.easing.min.js' %}"></script>
 
     <!-- Custom JavaScript for this theme -->
-    <script src="{%  static 'js/scrolling-nav.js' %}"></script>
-
-    <script src="{% static 'VanillaLM.js' %}"></script>
+<!--    <script src="{%  static 'js/scrolling-nav.js' %}"></script>-->
 
   </head>
 
   <body id="page-top">
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARdSURBVGhD7ZlZiM1RHMfHOhhjmZgM2SfmYcrOGzOKrPNgH8uDKGNLlsiWGcUD5cGDUlIUyvaAyJOlMJRkeSHFlBohZAnRjM/31+9Ot5iaO3P+996p+61P5/f7nfP/nXPufzv/c7MyyiijjDKKV319fS/hbutQXV1dLiyA0/AKfjIJk2yPncKdT5nrh6WPGFhXBrYXvmJ/ptRElsNUKHZkK3bG26htpY71NKkVA5oF7+A1LGVgHb2qUakNbZdBDdTCTK9KjRjAVvgDVfETwB5CbJNsyp3C7c2qky3hZ4PO5G/Y6uHkio6r4CvM8ZBiayEfBkOFx/KE26u9Tm3WKCZhz4VvTLLSQ8kRneqG1q843UMm/N0MZoC7jUpt1NZdE/4MzznPQ9GKjvrDN7BLh0HpRr9H2ckaJCAdw7F3lUM+9mbP3c8aRCk6OQ7VdN7GQxpQiZsJK/5Y5ST3AzjmoWhER0V0opt7knxK3ewjrLIFUg7Y4nYpqI/hVhmFSK4nzH135ZczuYanUHOlHORa6K7yPiAW3Y1PB49hh9vB38yxnJS74JEFQ4vE+fxKWmrYpUR5D+wSCyHlUk7ZdDNSfaE+VhlSdDJWmSlz3O+M23DDt1TKpZyyKXO9r2A/VINIOhu+yKaPDtgTrSKglFO53dbLdoFVhJSSQq3bA+GaVQSUciq321qHLbaKkOKXKiHxH8p2HopU9KUzUuZuOJF0GJPQdVvg/gYotMpAIt81uhgEPbyv0V4VTiTVSvULzHV/PdhlEErkmwnqp9gnku9VYUXusyQ/6a78YJcZudqTe5RsyjL4bhVRiOTl8Am6uX8VglzH5NFXpL1HKA/CDauIQvxq+rJ7Cfvc7wn2uAwp8mvhuMfdaEQHi+A7xB6TOXALsq1BM8XxV5QT9CGmp2OzV9RNEh3oDXwdnmB3UQx7mpd5qpedqDh2OnQGfWW+jeJM/yM66U5nL+AydsMHFb4WlXbDxibZFHHMEtrHPq4ewgGrSIborBC0T1UNfRVjMO29bgr2Tbd1KS6S3ZioP0F7vT/GgFTkVckRA+gNt0FbOqsZgE1Ewo8tyccKC/5HHDPITbW9BNfdTa4YiBaQ+tb+CM9hW1N/UdpqN+U97dtSTgBpnFenRgxGy4pKBvKMUm/lN3AHLsAZOE/4nxcosTaC+htw0cPpIQY0FFbCfjgKH+CcV5vwV8HxOPsHRPed3lIxuH6g/arZHjLh6/3Tm7OhPS6t4Wx7KW3FQHW51VDGPwjuwlBiHeEm9h3KpHweNEsMTpt372G9h0z4+mzWcucIvMNu8U5MpGKQ20FnI7YCWAFVbmsf+BeUyk9bMUDdG/rKW+IhxQqYlDb5tIrWJpxtdKetGKwep/Zyc7sAnmLrfaFvf00iNX8jJCIGuRF0Nmwz2iczHiogdf+FJCIG3Y6BaqNbA9byZbLHDoHOxDpv2jrEgIfBSdCE9JbXEmaqV7c+MXhN6LBKD2WUUUZJV1bWXzc8FGX6MrmlAAAAAElFTkSuQmCC">
-            Kommatrainer</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <ul class="navbar-nav mr-auto">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item {% if active == 'task' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'task' %}">Training</a>
+                </li>
+                <li class="nav-item {% if active == 'help' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'help' %}">Anleitung</a>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link {% if active == 'task' %}active{% endif %}" href="{% url 'task' %}">Start</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="mx-auto order-0">
+        <a class="navbar-brand mx-auto" href="#"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARdSURBVGhD7ZlZiM1RHMfHOhhjmZgM2SfmYcrOGzOKrPNgH8uDKGNLlsiWGcUD5cGDUlIUyvaAyJOlMJRkeSHFlBohZAnRjM/31+9Ot5iaO3P+996p+61P5/f7nfP/nXPufzv/c7MyyiijjDKKV319fS/hbutQXV1dLiyA0/AKfjIJk2yPncKdT5nrh6WPGFhXBrYXvmJ/ptRElsNUKHZkK3bG26htpY71NKkVA5oF7+A1LGVgHb2qUakNbZdBDdTCTK9KjRjAVvgDVfETwB5CbJNsyp3C7c2qky3hZ4PO5G/Y6uHkio6r4CvM8ZBiayEfBkOFx/KE26u9Tm3WKCZhz4VvTLLSQ8kRneqG1q843UMm/N0MZoC7jUpt1NZdE/4MzznPQ9GKjvrDN7BLh0HpRr9H2ckaJCAdw7F3lUM+9mbP3c8aRCk6OQ7VdN7GQxpQiZsJK/5Y5ST3AzjmoWhER0V0opt7knxK3ewjrLIFUg7Y4nYpqI/hVhmFSK4nzH135ZczuYanUHOlHORa6K7yPiAW3Y1PB49hh9vB38yxnJS74JEFQ4vE+fxKWmrYpUR5D+wSCyHlUk7ZdDNSfaE+VhlSdDJWmSlz3O+M23DDt1TKpZyyKXO9r2A/VINIOhu+yKaPDtgTrSKglFO53dbLdoFVhJSSQq3bA+GaVQSUciq321qHLbaKkOKXKiHxH8p2HopU9KUzUuZuOJF0GJPQdVvg/gYotMpAIt81uhgEPbyv0V4VTiTVSvULzHV/PdhlEErkmwnqp9gnku9VYUXusyQ/6a78YJcZudqTe5RsyjL4bhVRiOTl8Am6uX8VglzH5NFXpL1HKA/CDauIQvxq+rJ7Cfvc7wn2uAwp8mvhuMfdaEQHi+A7xB6TOXALsq1BM8XxV5QT9CGmp2OzV9RNEh3oDXwdnmB3UQx7mpd5qpedqDh2OnQGfWW+jeJM/yM66U5nL+AydsMHFb4WlXbDxibZFHHMEtrHPq4ewgGrSIborBC0T1UNfRVjMO29bgr2Tbd1KS6S3ZioP0F7vT/GgFTkVckRA+gNt0FbOqsZgE1Ewo8tyccKC/5HHDPITbW9BNfdTa4YiBaQ+tb+CM9hW1N/UdpqN+U97dtSTgBpnFenRgxGy4pKBvKMUm/lN3AHLsAZOE/4nxcosTaC+htw0cPpIQY0FFbCfjgKH+CcV5vwV8HxOPsHRPed3lIxuH6g/arZHjLh6/3Tm7OhPS6t4Wx7KW3FQHW51VDGPwjuwlBiHeEm9h3KpHweNEsMTpt372G9h0z4+mzWcucIvMNu8U5MpGKQ20FnI7YCWAFVbmsf+BeUyk9bMUDdG/rKW+IhxQqYlDb5tIrWJpxtdKetGKwep/Zyc7sAnmLrfaFvf00iNX8jJCIGuRF0Nmwz2iczHiogdf+FJCIG3Y6BaqNbA9byZbLHDoHOxDpv2jrEgIfBSdCE9JbXEmaqV7c+MXhN6LBKD2WUUUZJV1bWXzc8FGX6MrmlAAAAAElFTkSuQmCC">
+            Kommatraining</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <!--
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#about">Über den Kommatrainer</a>
-            </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Hintergrund
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Wissenschaft</a>
-              <a class="dropdown-item" href="#">Mitmachen</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Lizenzen und Urheberrecht</a>
-            </div>
-          </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#contact">Impressum</a>
-            </li>
-            <li class="nav-item">
-              <a role="button" class="btn btn-warning" href="#">Login</a>
-            </li>
-          </ul>
-          -->
-        </div>
-      </div>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            {% if request.user.is_authenticated %}
+                {% if user.code %}
+                    <li class="nav-item"></li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
     </nav>
 
     {% block globalmain %}
-    <section id="main">
+    <section id="main" style="padding-top:25px;">
       <div class="container">
         <div class="row">
     <div class="col-lg-10">
+        <h1>Dein Kommatraining {% if additional_heading %}&ndash; {{ additional_heading }}{% endif %}</h1>
+
+    {% for message in messages %}
+    <div class="container-fluid p-0">
+      <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+
         {% block main %}
-        <h2>Der Komma-Trainer</h2>
 
         Hallo. Hier ist etwas schiefgelaufen.
         {% endblock %}
@@ -152,7 +162,7 @@
                     {% endfor %}
                 <p>&nbsp;</p>
                 <p><a href="{% url 'help' %}"><button class="btn btn-default">Anleitung</button></a></p>
-                <p style="margin-top:1em;visibility: visible;" id="detachlink"><a href="" target="_blank" class="manual">Komma-Trainer in eigenem Fenster anzeigen</a></p>
+                <p style="margin-top:1em;visibility: visible;" id="detachlink"><a href="" target="_blank" class="manual">Kommatraining in eigenem Fenster anzeigen</a></p>
 
            </div>
         {% endif %}
@@ -167,10 +177,13 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
+          {% if user.code %}
+              <p class="m-0 text-center text-white"><a href="{% url 'code' %}"><button class="btn btn-secondary">Dein Code: &nbsp; <code style="color:#222">{{ user.code }}</code></button></a><br>&nbsp;</p>
+          {% endif %}
         <p class="m-0 text-center text-white">
             Ein Angebot der &nbsp;
-            <img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo.png" width="200px" style="margin-top:-10px">
-            &nbsp; 2017-2020</p>
+            <a href="https://www.uni-osnabrueck.de"><img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo.png" width="200px" style="margin-top:-15px"></a>
+            &nbsp; 2017-2021 &nbsp; &middot; &nbsp; <a style="color:white;" href="{% url 'impressum' %}">Impressum</a></p>
       </div>
 
       <!-- /.container -->

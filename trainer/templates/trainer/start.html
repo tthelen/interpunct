@@ -1,0 +1,61 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Willkommen beim Kommatraining!{% endblock %}
+
+{% block main %}
+
+    <h1>Kommatraining</h1>
+
+    <p>Herzlich Willkommen zum Kommatraining! Du möchtest auf motivierende und herausfordernde Weise an Deinen Kommasetzungs-Fähigkeiten arbeiten?
+    Kein Problem - die Kommas sind nur noch wenige Klicks entfernt. Lange Anleitungen und Vorreden gibt es nicht, dafür aber jede Menge
+    interessanter Sätze, spielerischer Elemente und dazu noch die Möglichkeit, etwas für die Wissenschaft zu tun.
+    </p>
+
+    <h2>Datenschutz und Cookies</h2>
+
+    <p>
+       Diese Anwendung ist sehr datensparsam gestaltet, d.h. es werden keine personenbezogenen Daten gespeichert.
+       Um allerdings Deinen individuellen Stand (welche Regeln hast Du schon kennengelernt, welches Level hast Du erreicht,
+       welche Aufgaben hast Du wie gut gelöst) speichern und wieder abrufen zu können, wird ein Cookie in Deinem
+       Browser gespeichert. Dieses Cookie enthält lediglich eine zufällige, nicht erratbare Zeichenkette und ist technisch
+       notwendig und mit Start des Kommatrainers stimmst Du diesem Cookie zu.
+    </p>
+    <p>
+       Die während der Nutzung anfallenden anonymen Daten werden ggf. wissenschaftloch ausgewertet, d.h. wir untersuchen,
+       welche Aufgaben besonders schwierig sind, bei welchen Regeln kaum Fehler gemacht werden und wie häufig und intensiv
+       der Kommatrainer genutzt wird. Bei all diesen Daten ist es nicht möglich, auf Deine Person rückzuschließen.
+    </p>
+
+    <p>&nbsp;</p>
+
+    <h2>Start eines neuen Durchlaufs</h2>
+
+    <p>Wenn Du den Kommatrainer noch nie genutzt hast, oder noch einmal ganz neu anfangen möchtest, generiert der
+    Kommatrainer für Dich einen neuen Durchlauf. Du bekommst einen Code und einen Link, die Du beide nutzen kannst,
+    um den Durchlauf später auch mit einem anderen Browser bzw. anderen Gerät weiterzuspielen.</p>
+
+    <form action="{% url 'start_new' %}" method="post">
+        <div class="form-check">
+          {% csrf_token %}
+          <input class="form-check-input" type="checkbox" required value="" id="consent" name="consent">
+          <label class="form-check-label" for="consent">
+            Ich bin mit dem technisch notwendigen Cookie und der anonymen wissenschaftlichen Auswertung einverstanden.<br>&nbsp;
+          </label>
+        </div>
+        <p><button type="submit" class="btn btn-primary">Neuen Durchlauf starten</button></p>
+    </form>
+
+    <p>&nbsp;</p>
+
+    <h2>Fortführung eines bereits begonnenen Durchlaufs</h2>
+
+   <p>Wenn Du einen Code aus einem bereits begonnen Durchlauf hast, kannst DU ihn hier eingeben, um den Durchlauf
+    fortzusetzen. Ein Code besteht aus vier Wörtern wie z.B. "Punkt Punkt Komma Strich", die durch Leerzeichen getrennt
+    werden.</p>
+
+    <form class="form">
+    <p><input name="code" type="text" class="form-control" placeholder="Vier-Wort-Code eingeben"></p>
+    <p><button class="btn btn-secondary" type="submit">Durchlauf fortsetzen</button></p>
+    </form>
+
+{% endblock %}

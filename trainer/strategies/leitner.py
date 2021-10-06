@@ -13,6 +13,7 @@ class LeitnerStrategy:
         self.rule_order = [
             "A1",  # 1 GLEICHRANG
             "A2",  # 2 ENTGEGEN
+            "A4",  # 12 GLEIHRANG KONJUNKT
             "B1.1",  # 3 NEBEN
             "B2.1",  # 4 UMOHNESTATT
             "C1",  # 5 PARANTHESE
@@ -22,7 +23,6 @@ class LeitnerStrategy:
             "A3",  # 9 SATZREIHUNG
             "C5",  # 10 HINWEIS
             "B1.5",  # 11 FORMELHAFT
-            "A4",  # 12 GLEIHRANG KONJUNKT
             "D3",  # 13 BEKTRÄFT
             "B2.2",  # 14
             "C3.1",  # 15
@@ -224,7 +224,7 @@ class LeitnerStrategy:
             return self.roulette_wheel_selection()
 
         # pick least often used of the possible sentences
-        possible_sentences.sort(key=lambda sentence: sentence[1])  # sort ascending by counts
+        possible_sentences.sort(key=lambda sentence: (sentence[1], len(sentence[0].sentence.text)))  # sort ascending by counts and length of senetences (in characters)
 
         if possible_sentences[0][1] == 0:  # first use all sentences at least once
             num = 1                        # i.e. if least used sentence has zero count, use it

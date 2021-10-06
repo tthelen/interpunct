@@ -1,48 +1,88 @@
 {% extends "trainer/base.html" %}
 
-{% block title %}Komma-Trainer - Hilfe{% endblock %}
+{% block title %}Kommatrraining - Hilfe{% endblock %}
 
 {% block main %}
-<h2>Anleitung</h2>
 <p>&nbsp;</p>
-    <h4>Was ist der Komma-Trainer?</h4>
-    <p>Mit dem Komma-Trainer kannst Du Regeln wiederholen und üben, Kommas zu setzen. Es geht ganz einfach los,
-        nach und nach kommen dann weitere Regeln hinzu. Jede zusätzliche Regel entspricht einem neuen Level, insgesamt
-        gibt es 30 Level. Mit einer neuen Regel werden die alten Regeln aber nicht ausgeblendet. Je nachdem, wie gut
-        du eine Regel beherrschst, tauchen gelegentlich noch Aufgaben zu den alten Regeln auf.</p>
+<div class="card" style="width: 75%;">
+  <div class="card-body">
+    <h5 class="card-title">Was ist das Kommatraining?</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Üben, üben, üben...</h6>
+    <p class="card-text">Mit dem Kommatrraining kannst Du Regeln wiederholen und üben, Kommas zu setzen. Es geht ganz einfach los,
+    nach und nach kommen dann weitere Regeln hinzu. Jede zusätzliche Regel entspricht einem neuen Level, insgesamt
+    gibt es 30 Level. Mit einer neuen Regel werden die alten Regeln aber nicht ausgeblendet. Je nachdem, wie gut
+    du eine Regel beherrschst, tauchen gelegentlich noch Aufgaben zu den alten Regeln auf.</p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>
+<p>&nbsp;</p>
+    <div class="card" style="width: 75%;">
+  <div class="card-body">
+    <h5 class="card-title">Was gibt es für Aufgabentypen?</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Kommas setzen, korrigieren und erklären</h6>
+    <p class="card-text">Es gibt drei verschiedene Aufgabenarten:<br>
+<ol>
+<li>Komma setzen: Hier bekommst du einen Satz ohne Kommas. Setze an allen passenden Stellen per Mausklick ein Komma.
+Wenn ein Komma an einer Stelle stehen kann, aber nicht muss, hast du die Wahl: Beides ist richtig.</li>
+<li>Kommas korrigieren: Hier bekommst du einen Satz, in dem schon einige Kommas gesetzt sind. Du sollst alle
+Fehler anstreichen, d.h. fehlende und überflüssige Kommas markieren. Aber Vorsicht: Hier musst Du wissen, welche Kommas
+optional sind. Es geht also nicht darum, ob du an einer Stelle ein Komma setzen würdest, sondern ob die angegebene
+Lösung korrekt ist.</li>
+<li>Kommas erklären: Hier wird eine Kommastelle im Satz ausgewählt und du bekommst drei mögliche Regeln zur
+Auswahl. Wähle die Regel(n) aus, die zu der markierten Stelle passen. Anfangs ist das fast immer nur eine Regel,
+später können es auch zwei oder drei sein.</li>
+</ol></p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>
 
-    <h4>Was gibt es für Aufgabentypen?</h4>
-    <p>Es gibt drei verschiedene Aufgabenarten:</p>
-    <ol>
-    <li>Komma setzen: Hier bekommst du einen Satz ohne Kommas. Setze an allen passenden Stellen per Mausklick ein Komma.
-    Wenn ein Komma an einer Stelle stehen kann, aber nicht muss, hast du die Wahl: Beides ist richtig.</li>
-    <li>Kommas korrigieren: Hier bekommst du einen Satz, in dem schon einige Kommas gesetzt sind. Du sollst alle
-    Fehler anstreichen, d.h. fehlende und überflüssige Kommas markieren. Aber Vorsicht: Hier musst Du wissen, welche Kommas
-    optional sind. Es geht also nicht darum, ob du an einer Stelle ein Komma setzen würdest, sondern ob die angegebene
-    Lösung korrekt ist.</li>
-    <li>Kommas erklären: Hier wird eine Kommastelle im Satz ausgewählt und du bekommst drei mögliche Regeln zur
-    Auswahl. Wähle die Regel(n) aus, die zu der markierten Stelle passen. Anfangs ist das fast immer nur eine Regel,
-    später können es auch zwei oder drei sein.</li>
-    </ol>
-    <h4>Wann bekomme ich neue Regeln?</h4>
-    <p>Du bekommst eine neue Regel, wenn Du zu der zuletzt hinzugekommenen Regel mindestens vier Aufgaben überwiegend
-        korrekt gelöst hast.</p>
-    <h4>Was bedeutet "Regeln im Fokus"?</h4>
-    <p>Das Programm funktioniert wie der gute alte Karteikasten zum Vokabellernen. Jede Regel steckt in einem der
-        fünf Kästen. Ganz vorne sind die Regeln, die noch sehr neu sind oder bei denen du mehrere Fehler hintereinander gemacht hast.
-    Diese Regeln werden mit sehr viel höherer Wahrscheinlichkeit ausgewählt, als die in weiter hinten liegenden Kästen.
-    Wenn du eine Regel drei mal hintereinander richtig anwendest, wird sie nach hinten sortiert, machst Du drei Fehler
-    hintereinander, landet die Regel wieder ganz vorne. Unter "Regeln im Fokus" werden dir die bis zu fünf Regeln
-    angezeigt, die derzeit am häufigsten ausgewählt werden, d.h. in den vorderen Kästen stecken.</p>
-    <h4>Wie kann ich mir die Regeln nochmal anzeigen lassen?</h4>
-    <p>Klicke einfach auf die umrandeten Regelnamen unter "Regeln im Fokus" oder in der Anzeige des korrekten
-    Satzes nach dem Abschicken einer Lösung.</p>
 <p>&nbsp;</p>
+    <div class="card" style="width: 75%;">
+  <div class="card-body">
+    <h5 class="card-title">Wann bekomme ich neue Regeln?</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Wenn die Hälfte der Lösungen korrekt ist (mindestens aber 4)</h6>
+    <p class="card-text">Du bekommst eine neue Regel, wenn Du zu der zuletzt hinzugekommenen Regel die Hälfte der Aufgaben (mindestens aber vier) korrekt gelöst hast.</p>
+      <p class="card-text">Beispiele:
+      <ul>
+      <li>Du hast 3 Aufgaben zu deiner neuen Regel gelöst, alle 3 korrekt. Es gibt aber noch keine neue Regel, weil mindestens 4 Aufgaben korrekt gelöst worden sein müssen.</li>
+      <li>Du hast 10 Aufgaben zu deiner neuen Regel gelöst, davon 4 korrekt. Du bekommst hier auch noch keine neue Regel, weil 4 weniger als die Hälfte von 10 ist.</li>
+      <li>Du hast 12 Aufgaben zu deiner neuen Regel gelöst, davon 6 korrekt. Jetzt bekommst Du eine neue Regel.</li>
+  </ul>
+      </p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>
 
-    <p>
-    <a href="{% url 'task' %}"><button class="btn btn-default">Weiter üben</button></a>
-    </p>
 <p>&nbsp;</p>
-<p>(<a href="logout">Alle Daten löschen und von vorne anfangen.</a>)</p>
+    <div class="card" style="width: 75%;">
+  <div class="card-body">
+    <h5 class="card-title">Was bedeutet "Regeln im Fokus"?</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Lernen nach dem Karteikastenprinzip</h6>
+    <p class="card-text">Das Programm funktioniert wie der gute alte Karteikasten zum Vokabellernen. Jede Regel steckt in einem der
+    fünf Kästen. Ganz vorne sind die Regeln, die noch sehr neu sind oder bei denen du mehrere Fehler hintereinander gemacht hast.
+Diese Regeln werden mit sehr viel höherer Wahrscheinlichkeit ausgewählt, als die in weiter hinten liegenden Kästen.
+Wenn du eine Regel drei mal hintereinander richtig anwendest, wird sie nach hinten sortiert, machst Du drei Fehler
+hintereinander, landet die Regel wieder ganz vorne. Unter "Regeln im Fokus" werden dir die bis zu fünf Regeln
+angezeigt, die derzeit am häufigsten ausgewählt werden, d.h. in den vorderen Kästen stecken.</p>
+  </div>
+</div>
+
+ <p>&nbsp;</p>
+    <div class="card" style="width: 75%;">
+  <div class="card-body">
+    <h5 class="card-title">Wie kann ich mir die Regeln nochmal anzeigen lassen?</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Regelnamen anklicken</h6>
+    <p class="card-text">Klicke einfach auf die umrandeten Regelnamen unter "Regeln im Fokus" oder in der Anzeige des korrekten
+Satzes nach dem Abschicken einer Lösung.</p>
+  </div>
+</div>
+<p>
+
+<p>
+<a href="{% url 'task' %}"><button class="btn btn-default">Weiter üben</button></a>
+</p>
 
 {% endblock %}

@@ -1,0 +1,30 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Kommatraining - Dein Code{% endblock %}
+
+{% block main %}
+
+    <p>Du kannst den Durchlauf jederzeit mit einem anderen Browser oder Gerät fortsetzen, indem Du auf der Startseite folgenden Code eingibst:</p>
+
+    <div class="card">
+      <div class="card-body">
+          <code style="font-size: 150%">{{ user.code }}</code>
+      </div>
+    </div>
+
+    <p>&nbsp;</p>
+    <p>Alternativ kannst Du auch folgenden Link verwenden:</p>
+
+    <div class="card">
+      <div class="card-body">
+          <code style="font-size: 100%"><a href="{% url 'task' %}?uname={{ user.user_id }}">https://kommatrainer.virtuos.uni-osnabrueck.de/?uname={{ user.user_id }}</a></code>
+      </div>
+    </div>
+
+    <p>&nbsp;</p>
+
+<p>
+<a href="{% url 'task' %}"><button class="btn btn-default">Weiter üben</button></a>
+</p>
+
+{% endblock %}

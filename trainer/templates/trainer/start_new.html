@@ -1,0 +1,40 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Willkommen beim Kommatraining!{% endblock %}
+
+{% block main %}
+
+    <h1>Neuen Kommatrainings-Durchlauf starten</h1>
+
+    <p>Herzlich Willkommen zum Kommatraining! Du möchtest auf motivierende und herausfordernde Weise an deinen Kommasetzungs-Fähigkeiten arbeiten?
+    Kein Problem - die Kommas sind nur noch wenige Klicks entfernt. Lange Anleitungen und Vorreden gibt es nicht, dafür aber jede Menge
+    interessanter Sätze, spielerischer Elemente und dazu noch die Möglichkeit, etwas für die Wissenschaft zu tun.
+    </p>
+
+    <h1>Dein Code</h1>
+
+    <p>Du kannst den Durchlauf jederzeit mit einem anderen Browser oder Gerät fortsetzen, indem Du auf der Startseite folgenden Code eingibst:</p>
+
+    <div class="card">
+      <div class="card-body">
+          <code style="font-size: 150%">{{ code }}</code>
+      </div>
+    </div>
+
+    <p>&nbsp;</p>
+    <p>Alternativ kannst Du auch folgenden Link verwenden:</p>
+
+    <div class="card">
+      <div class="card-body">
+          <code style="font-size: 100%"><a href="{% url 'task' %}?uname={{ hash_code }}">https://kommatrainer.virtuos.uni-osnabrueck.de/?uname={{ hash_code }}</a></code>
+      </div>
+    </div>
+
+    <p>&nbsp;</p>
+
+    <h1>Starten</h1>
+
+    <p>Mit dem nächsten Klick geht es los:</p>
+    <p><a href="{% url 'task' %}?uname={{ hash_code }}" class="btn btn-primary">Start</a></p>
+
+{% endblock %}

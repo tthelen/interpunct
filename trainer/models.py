@@ -91,6 +91,7 @@ class Sentence(models.Model):
     total_submits = models.IntegerField(default='0')  #
     rules = models.ManyToManyField(Rule, through='SentenceRule')
     active = models.BooleanField(default=True)
+    source = models.CharField(max_length=512, null=True)
 
     def __str__(self):
         return self.text
@@ -506,6 +507,7 @@ class User(models.Model):
                  40: "nicht studierend"}
 
     user_id = models.CharField(max_length = 255)
+    code = models.CharField(max_length=265, null=True)
 
     data = models.CharField(max_length=255, default='')
 

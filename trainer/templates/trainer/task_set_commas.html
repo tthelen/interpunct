@@ -1,6 +1,6 @@
 {% extends "trainer/base.html" %}
 
-{% block title %}Komma-Trainer - Übung: Kommas setzen{% endblock %}
+{% block title %}Kommatraining - Übung: Kommas setzen{% endblock %}
 
 {% block main %}
     <h2 class="task_header">Übung: Komma setzen
@@ -16,6 +16,7 @@
 {% for w in words %}{{w}}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}">&nbsp; </span>{% endif %}{% endfor %}
 {% endspaceless %}
         </div>
+{% if sentence.source %}<div style="font-size: 70%;color:#999;text-align:right;margin-right:1.43em;">&mdash; {{ sentence.source }} Quelle: Das Grundgesetz der Bundesrepublik Deutschland</div>{% endif %}
 <p>&nbsp;</p>
         <p id="feedback-{{ sentence.id }}">
             <button class="interpunct-sentence-submit" data-sentence="{{ sentence.id }}">Abschicken</button>

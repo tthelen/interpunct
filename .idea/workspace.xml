@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="- bugfix: check for highest level adjusted">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/interpunct.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="- remove score update">
+      <change afterPath="$PROJECT_DIR$/data/additional_sentences_4.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/quellen.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/words.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trainer/genpasswd.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trainer/migrations/0032_user_code.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trainer/migrations/0033_sentence_source.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trainer/templates/trainer/code.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trainer/templates/trainer/start_new.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata.keystream" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata.keystream.len" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata.len" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata_i" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/948627af-16bd-4562-8b76-47857f843b8b/_metadata_/metadata_i.len" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/output_users.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/data/output_users.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sentences.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sentences.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/interpunct/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/interpunct/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/management/commands/read_sentences.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/management/commands/read_sentences.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/strategies/leitner.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/strategies/leitner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/_task_explain_commas.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/_task_explain_commas.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/adaptivity_questionaire.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/allstats.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/allstats.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/allstats_correct.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/allstats_correct.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/error.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/gamification_questionaire.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/help.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/mystats.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/mystats.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/nocookies.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/nocookies.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/reset.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/reset.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/stats.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/stats.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/stats2.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/stats2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/stats3.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/stats3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/ustats.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/ustats.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/vanillalm.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/vanillalm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/welcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/start.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/welcome_gamification.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/welcome_noquestionnaire.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/welcome_noquestionnaire.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trainer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,6 +113,10 @@
     <property name="js.eslint.eslintPackage" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/trainer/templates/trainer" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -83,19 +130,20 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\admin\PycharmProjects\interpunct\trainer\templates\trainer" />
+      <recent name="C:\Users\admin\PycharmProjects\interpunct\sensitive_data" />
+      <recent name="C:\Users\admin\PycharmProjects\interpunct" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\management\commands" />
-      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\data" />
-      <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer\partials" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\PycharmProjects\interpunct\sensitive_data" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\static" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct\trainer\templates\trainer\old" />
       <recent name="C:\Users\Tobias\PycharmProjects\interpunct" />
     </key>
   </component>
-  <component name="RunManager" selected="Django Server.interpunct">
+  <component name="RunManager" selected="Python.genpasswd">
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -129,6 +177,28 @@
       <option name="ADDITIONAL_ARGS" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="check (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="interpunct" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sensitive_data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sensitive_data/check.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="check" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="interpunct" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -143,6 +213,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/check.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="genpasswd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="interpunct" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/trainer" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/trainer/genpasswd.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -280,15 +372,20 @@
       <item itemvalue="Python.scratch" />
       <item itemvalue="Python.scratch_1" />
       <item itemvalue="Python.check" />
+      <item itemvalue="Python.check (1)" />
+      <item itemvalue="Python.genpasswd" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.genpasswd" />
+        <item itemvalue="Python.check (1)" />
         <item itemvalue="Python.check" />
         <item itemvalue="Python.scratch_1" />
         <item itemvalue="Python.scratch" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -303,42 +400,31 @@
       <workItem from="1602744350288" duration="10414000" />
       <workItem from="1603660714887" duration="4420000" />
       <workItem from="1603714879195" duration="611000" />
-      <workItem from="1603747173436" duration="227000" />
-    </task>
-    <task id="LOCAL-00031" summary="- highlight current rule">
-      <created>1496354820746</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1496354820746</updated>
-    </task>
-    <task id="LOCAL-00032" summary="- changed rule order&#10;- reduced number of rules to 30&#10;- metadata is stored explicitly&#10;- finishing message on uplevel screen">
-      <created>1496391789935</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1496391789935</updated>
-    </task>
-    <task id="LOCAL-00033" summary="- fixed bug in rule file formatting">
-      <created>1496398595624</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1496398595624</updated>
-    </task>
-    <task id="LOCAL-00034" summary="- bootstrap grid changed to col-xs-&#10;- uname parameter wins over session cookie">
-      <created>1496436379183</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1496436379183</updated>
-    </task>
-    <task id="LOCAL-00035" summary="- no container">
-      <created>1496437081355</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1496437081355</updated>
+      <workItem from="1603747173436" duration="866000" />
+      <workItem from="1603809737324" duration="569000" />
+      <workItem from="1603884324355" duration="1203000" />
+      <workItem from="1604567021779" duration="603000" />
+      <workItem from="1605170458124" duration="877000" />
+      <workItem from="1606803647501" duration="634000" />
+      <workItem from="1606828342227" duration="1222000" />
+      <workItem from="1606941087054" duration="2493000" />
+      <workItem from="1607025091513" duration="269000" />
+      <workItem from="1607335354921" duration="708000" />
+      <workItem from="1607583419118" duration="631000" />
+      <workItem from="1607591351475" duration="19000" />
+      <workItem from="1607722499933" duration="679000" />
+      <workItem from="1608097702472" duration="19000" />
+      <workItem from="1608109398508" duration="647000" />
+      <workItem from="1617283152686" duration="1269000" />
+      <workItem from="1617865128792" duration="28000" />
+      <workItem from="1618417815251" duration="1490000" />
+      <workItem from="1618762599651" duration="736000" />
+      <workItem from="1619007636834" duration="40000" />
+      <workItem from="1622015288616" duration="4813000" />
+      <workItem from="1622142064639" duration="772000" />
+      <workItem from="1633200494888" duration="26790000" />
+      <workItem from="1633383113134" duration="7192000" />
+      <workItem from="1633558842058" duration="416000" />
     </task>
     <task id="LOCAL-00036" summary="- introduce active and inactive sentences&#10;- sentence import script handles multiple files and can deactivate all old sentences&#10;- introduce comma pairs&#10;- make boostrap container depend on iframe embedding">
       <created>1496526563037</created>
@@ -648,7 +734,42 @@
       <option name="project" value="LOCAL" />
       <updated>1603665174632</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="- fix ValueErrors">
+      <created>1603747436192</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1603747436192</updated>
+    </task>
+    <task id="LOCAL-00081" summary="- fix GroupScore.DoesNotExist error">
+      <created>1607722734796</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1607722734797</updated>
+    </task>
+    <task id="LOCAL-00082" summary="- no more gamification">
+      <created>1617283472692</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1617283472693</updated>
+    </task>
+    <task id="LOCAL-00083" summary="- no more gamification">
+      <created>1617283828355</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1617283828355</updated>
+    </task>
+    <task id="LOCAL-00084" summary="- remove score update">
+      <created>1618420445494</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1618420445494</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TodoView">
@@ -661,7 +782,19 @@
     </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -672,10 +805,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- improved statistics: questionnaire infos" />
-    <MESSAGE value="- bugfix: handle multiple UserSentence entries" />
-    <MESSAGE value="- bugfix: handle inexistant UserRule (models.py 505)" />
-    <MESSAGE value="- bugfix: handle empty possible_sentence list in roulette_wheel_selection" />
     <MESSAGE value="- add admin views&#10;- ensure that new username is &gt; 8 chars" />
     <MESSAGE value="- bugfix: username attribute" />
     <MESSAGE value="- include accumulated time in statistics" />
@@ -697,56 +826,14 @@
     <MESSAGE value="- additions fo gamification experiment" />
     <MESSAGE value="- bugfix: questionnaire changes and highlighting of own rank/group" />
     <MESSAGE value="- help texts and proper score updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="- help texts and proper score updates" />
+    <MESSAGE value="- fix ValueErrors" />
+    <MESSAGE value="- fix GroupScore.DoesNotExist error" />
+    <MESSAGE value="- no more gamification" />
+    <MESSAGE value="- remove score update" />
+    <option name="LAST_COMMIT_MESSAGE" value="- remove score update" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="873" y="359" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602448654063">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="873" y="359" key="#com.intellij.execution.impl.EditConfigurationsDialog/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602448654063" />
-    <state x="910" y="269" key="CommitChangelistDialog2" timestamp="1603665173993">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="910" y="269" key="CommitChangelistDialog2/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1603665173993" />
-    <state x="1061" y="455" key="FileChooserDialogImpl" timestamp="1602448642869">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1061" y="455" key="FileChooserDialogImpl/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602448642869" />
-    <state width="1741" height="401" key="GridCell.Tab.0.bottom" timestamp="1602485515342">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1741" height="401" key="GridCell.Tab.0.bottom/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602485515342" />
-    <state width="1741" height="401" key="GridCell.Tab.0.center" timestamp="1602485515342">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1741" height="401" key="GridCell.Tab.0.center/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602485515342" />
-    <state width="1741" height="401" key="GridCell.Tab.0.left" timestamp="1602485515341">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1741" height="401" key="GridCell.Tab.0.left/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602485515341" />
-    <state width="1741" height="401" key="GridCell.Tab.0.right" timestamp="1602485515342">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1741" height="401" key="GridCell.Tab.0.right/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602485515342" />
-    <state x="782" y="345" key="SettingsEditor" timestamp="1602403566218">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="782" y="345" key="SettingsEditor/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602403566218" />
-    <state x="873" y="433" key="Vcs.Push.Dialog.v2" timestamp="1603665178969">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="873" y="433" key="Vcs.Push.Dialog.v2/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1603665178969" />
-    <state x="1011" y="505" key="com.intellij.database.dbimport.ImportUtil.ChooseTargetDialog" timestamp="1603664507872">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1011" y="505" key="com.intellij.database.dbimport.ImportUtil.ChooseTargetDialog/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1603664507872" />
-    <state x="1091" y="614" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602969059469">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1091" y="614" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602969059469" />
-    <state x="986" y="435" width="966" height="530" key="find.popup" timestamp="1602964576235">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="986" y="435" width="966" height="530" key="find.popup/1031.2160.1536.816/0.0.2560.1400@0.0.2560.1400" timestamp="1602964576235" />
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/interpunct$genpasswd.coverage" NAME="genpasswd Coverage Results" MODIFIED="1633203879634" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trainer" />
+    <SUITE FILE_PATH="coverage/interpunct$check__1_.coverage" NAME="check (1) Coverage Results" MODIFIED="1622142236751" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/sensitive_data" />
   </component>
 </project>
