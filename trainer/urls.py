@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^start_continue$', views.start_continue, name='start_continue'),
     url(r'^help$', views.help, name='help'),
     url(r'^nocookies$', views.nocookies, name='nocookies'),
-    url(r'^impressum$', views.task, name='impressum'),
+    url(r'^impressum$', views.impressum, name='impressum'),
     url(r'^code$', views.code, name='code'),
     url(r'^logout$', views.logout_view, name='logout'),
 

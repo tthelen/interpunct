@@ -53,11 +53,11 @@ Durch den Bundesrat (E2) wirken die Länder bei der Gesetzgebung und Verwaltung 
 Der Bundesrat besteht aus Mitgliedern der Regierungen der Länder, (B1.1) die sie bestellen (A4) und abberufen. [Grundgesetz für die Bundesrepublik Deutschland]
 Ich schwöre, (B1.1) dass ich meine Kraft dem Wohle des deutschen Volkes widmen, (A1) seinen Nutzen mehren, (A1) Schaden von ihm wenden, (A1) das Grundgesetz (A4) und die Gesetze des Bundes wahren (A4) und verteidigen, (A1) meine Pflichten gewissenhaft erfüllen (A4) und Gerechtigkeit gegen jedermann üben werde. [Grundgesetz für die Bundesrepublik Deutschland]
 Der Bundestag kann dem Bundeskanzler das Misstrauen nur dadurch aussprechen, (B1.1) dass er mit der Mehrheit seiner Mitglieder einen Nachfolger wählt (A4) und den Bundespräsidenten ersucht(,) (B2.5) den Bundeskanzler zu entlassen. [Grundgesetz für die Bundesrepublik Deutschland]
-Am Vormittag wird es sonnig(,) (A3) und am Nachmittag wird es auch sonnig. [Grundgesetz für die Bundesrepublik Deutschland]
-Der Ball ist rund(,) (A3) und das Spiel dauert 90 Minuten. [Grundgesetz für die Bundesrepublik Deutschland]
-Wir haben Hunger (A4) und Durst(,) (A3) und wir wollen nicht mehr warten. [Grundgesetz für die Bundesrepublik Deutschland]
-Ich möchte so gern noch schauen, (A2) aber der Wagen, (B1.1) der rollt. [Hoch auf dem gelben Wagen]
-Gern wär' ich selbst noch geblieben, (A2) aber der Wagen, (B1.1) der rollt. [Hoch auf dem gelben Wagen]
+Am Vormittag wird es sonnig(,) (A3) und am Nachmittag wird es auch sonnig.
+Der Ball ist rund(,) (A3) und das Spiel dauert 90 Minuten.
+Wir haben Hunger (A4) und Durst(,) (A3) und wir wollen nicht mehr warten.
+Ich möchte so gern noch schauen, (A2) aber der Wagen, (B1.1) der rollt. [Hoch auf dem gelben Wagen, Volkslied]
+Gern wär' ich selbst noch geblieben, (A2) aber der Wagen, (B1.1) der rollt. [Hoch auf dem gelben Wagen, Volkslied]
 Ach ja, (D3) ärmlich sah es bei Weißes aus. [Artur Landsberger: Bei feinen Leuten]
 Das sogenannte Wohnzimmer verriet deutlich, (B1.1) dass es das einzige war. [Artur Landsberger: Bei feinen Leuten]
 Das Wohnzimmer ließ Schlüsse auf die übrigen Räume (A4) und auf die Verhältnisse der Bewohner zu, (B1.1) die besagten, (B1.1) dass beide alles andere als glänzend waren. [Artur Landsberger: Bei feinen Leuten]
@@ -67,3 +67,9 @@ Da war vor allem der leichte, (A1) federnde Gang, (B1.1) den jede Frau verliert,
 Da war die schmale, (A1) weiße Hand, (#1,B1.1) die man sich wohl vorstellen konnte, (#2,B1.1) wie sie sich an weiche Schweden schmiegte (A4) oder über den Saffianeinband kostbarer Bücher strich, (#1,B1.1,#2,B1.1) der man es aber ansah, (B1.1) dass sie nie schwere Arbeit getan hatte. [Artur Landsberger: Bei feinen Leuten]
 Suse, (#1,B1.1) die elternlos war (A4) und bei ihren feinen Verwandten aufwuchs, (#1,B1.1) schlug alle Partien aus, (B1.1) die Onkel (A4) und Tanten mit Rücksicht auf ihre Vermögenslosigkeit in Vorschlag brachten (A4) und deren Quintessenz ohne Rücksicht auf Sympathie immer nur die Versorgung war. [Artur Landsberger: Bei feinen Leuten]
 Suse war anderer Ansicht (A4) und schenkte ihre Hand einem armen Künstler, (B1.1) an den sie ihr Herz verloren hatte. [Artur Landsberger: Bei feinen Leuten]
+Es soll regnen (A4) oder schneien.
+Es soll regnen(,) (A3) oder es soll schneien.
+Soll es regnen (A4) oder schneien?
+Soll es regnen(,) (A3) oder soll es schneien?
+Ich bin fix (A4) und fertig.
+Ich bin fix, (A1) und du bist fertig.

@@ -178,6 +178,7 @@ def has_perm_or_basicauth(perm, realm=""):
 
 
 def code_start(request):
+    nologo = True
     return render(request, 'trainer/start.html', locals())
 
 
@@ -550,7 +551,7 @@ def logout_view(request):
     u = User.objects.get(django_user=request.user)
     code = u.code
     logout(request)
-    messages.add_message(request, messages.SUCCESS, f'Du hast Dich ausgeloggt und kannst einen neuen Durchlauf beginnen, oder Dich mit Deinem bisherigen Code "{code}" wieder einloggen.')
+    messages.add_message(request, messages.SUCCESS, 'Du hast Dich ausgeloggt und kannst einen neuen Durchlauf beginnen, oder Dich mit Deinem bisherigen Code "{}" wieder einloggen.'.format(code))
     return redirect('task')
 
 
@@ -577,12 +578,25 @@ def help(request):
     user = User.objects.get(django_user=request.user.id)
     return render(request, 'trainer/help.html', locals())
 
+
 def code(request):
     """Renders code and link explanation template"""
     active = 'code'
     additional_heading = 'Dein Code'
     user = User.objects.get(django_user=request.user)
     return render(request, 'trainer/code.html', locals())
+
+
+def impressum(request):
+    """Renders help template"""
+    active = 'Impressum'
+    # additional_heading = 'Anleitung'
+    try:
+        user = User.objects.get(django_user=request.user.id)
+    except User.DoesNotExist:
+        user = None
+    nologo = True
+    return render(request, 'trainer/impressum.html', locals())
 
 
 def nocookies(request):
@@ -592,6 +606,7 @@ def nocookies(request):
     display_rank = False  # show the rank in output? (not on welcome and rule explanation screens)
     uname = request.GET.get('uname','')
     return render(request, 'trainer/nocookies.html', locals())
+
 
 def stats(request):
     """Render general statistics."""

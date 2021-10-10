@@ -3205,6 +3205,6 @@ words = ["Zeit",
 #           "9"]
 #
 def generate_passphrase():
-    import secrets
-    password = ' '.join(secrets.choice(words) for i in range(3))
+    import random
+    password = ' '.join(random.choice(words) for i in range(3))
     return password
