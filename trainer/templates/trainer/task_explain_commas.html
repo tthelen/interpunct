@@ -15,7 +15,8 @@
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     <div class="interaction">
     {% spaceless %}{% for w in words_and_commas %}{{ w.0 }}{% if not forloop.last %}<span class="{% if forloop.counter == explanation_position.0 %}explanation-position{% endif %}">{% if w.1 != 0 %},{% endif %}{% if forloop.counter0 == explanation_position.0 %} [1]{% endif %}</span> {% endif %}{% endfor %}{% endspaceless %}
-    </div>
+    </div>{% if sentence.source %}<div style="font-size: 70%;color:#999;text-align:right;margin-right:1.43em;">&mdash; Quelle: {{ sentence.source }}</div>{% endif %}
+
 <p>&nbsp;</p>
     <div class = "explanations">
         <form class="exp-form" id="form0">
