@@ -204,7 +204,16 @@ def start_new(request):
 
 
 def start_continue(request):
-    return render(request, 'trainer/start_new.html', locals())
+    if 'code' in request.POST:
+        try:
+            u = User.objects.get(code=request.POST.get('code'))
+        except User.DoesNotExist:
+            messages.error(request, "Der eingegebene Code ist ungültig. Bitte erneut probieren.")
+            return render(request, 'trainer/start.html', locals())
+
+        u.login(request)
+        messages.success(request, "Der eingegebene Code ist gültig. Du kannst jetzt weiter üben.")
+        return redirect(reverse('task'))
 
 
 @logged_in_or_basicauth("Bitte einloggen")

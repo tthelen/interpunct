@@ -63,7 +63,7 @@
             fortzusetzen. Ein Code besteht aus drei Wörtern wie z.B. "Punkt Komma Strich", die durch Leerzeichen getrennt
             werden.</p>
 
-            <form class="form">
+            <form class="form" action="{% url 'start_continue' %}" method="POST"> {% csrf_token %}
             <p><input name="code" type="text" class="form-control" placeholder="Drei-Wort-Code eingeben"></p>
             <p><button class="btn btn-outline-secondary" type="submit">Durchlauf fortsetzen</button></p>
             </form>
