@@ -71,7 +71,12 @@ class LeitnerStrategy:
         """Activate first rule"""
         if not new_rule:
             new_rule = Rule.objects.get(code=self.rule_order[0])
-        ur = UserRule.objects.get(rule=new_rule, user=self.user)
+        try:
+            ur = UserRule.objects.get(rule=new_rule, user=self.user)
+        except UserRule.MultipleObjectsReturned:
+            urs = UserRule.objects.filter(rule=new_rule, user=self.user)
+            ur = urs[0]
+            urs[1].delete()
         ur.active = True
         ur.save()
 
