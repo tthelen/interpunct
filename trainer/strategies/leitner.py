@@ -59,13 +59,10 @@ class LeitnerStrategy:
 
         # create correct rules
         for r in self.rule_order:
-            ur = UserRule(rule=Rule.objects.get(code=r), user=self.user, active=False)
-            ur.save()
+            ur, created = UserRule.objects.get_or_create(rule=Rule.objects.get(code=r), user=self.user, defaults={'active':False})
         # create error rules
-        ur = UserRule(rule=Rule.objects.get(code="E1"), user=self.user, active=False)
-        ur.save()
-        ur = UserRule(rule=Rule.objects.get(code="E2"), user=self.user, active=False)
-        ur.save()
+        ur, created = UserRule.objects.get_or_create(rule=Rule.objects.get(code="E1"), user=self.user, defaults={'active':False})
+        ur, created = UserRule.objects.get_or_create(rule=Rule.objects.get(code="E2"), user=self.user, defaults={'active':False})
 
     def activate_first_rule(self, new_rule=None):
         """Activate first rule"""
