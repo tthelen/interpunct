@@ -135,7 +135,13 @@ class LeitnerStrategy:
 
         # bugix: previous version set rule_activated_count too high
         # decrease level or activate first rule
-        check_rule = UserRule.objects.get(user=self.user, rule__code=self.rule_order[self.user.rules_activated_count-1])
+        try:
+            check_rule = UserRule.objects.get(user=self.user, rule__code=self.rule_order[self.user.rules_activated_count-1])
+        except UserRule.MultipleObjectsReturned:
+            urs = UserRule.objects.filter(user=self.user, rule__code=self.rule_order[self.user.rules_activated_count-1])
+            check_rule = urs[0]
+            urs[1].delete()
+
         if not check_rule.active:
             if self.user.rules_activated_count>0:
                 self.user.rules_activated_count -= 1
