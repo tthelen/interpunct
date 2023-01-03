@@ -41,7 +41,8 @@ class Command(BaseCommand):
 
         count = 0
 
-        for s in Solution.objects.all():
+
+        for s in Solution.objects.all()[400000:500000]:
 
             sols = s.for_export_correct()
 
@@ -94,7 +95,7 @@ class Command(BaseCommand):
                     self.stdout.write('{} Zeilen erstellt'.format(count))
 
         self.stdout.write("Schreibe XLSX-Datei")
-        with open('data/output_solutions_correct.xlsx', 'wb') as f:
+        with open('data/output_solutions_correct-5.xlsx', 'wb') as f:
             f.write(data.xlsx)
 
         self.stdout.write(self.style.SUCCESS('Successfully exported {} solutions.'.format(count)))

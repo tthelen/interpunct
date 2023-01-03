@@ -28,7 +28,7 @@ class Command(BaseCommand):
                 self.stdout.write('{} Zeilen erstellt'.format(count))
 
         self.stdout.write("Schreibe XLSX-Datei")
-        with open('data/output_userlevels.csv', 'wb') as f:
-            f.write(data.csv)
+        with open('data/output_userlevels.xlsx', 'wb') as f:
+            f.write(data.xlsx)
 
         self.stdout.write(self.style.SUCCESS('Successfully exported {} users.'.format(count)))
