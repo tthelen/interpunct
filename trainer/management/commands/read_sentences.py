@@ -16,13 +16,26 @@ class Command(BaseCommand):
             action='store_true',
             dest='deactivate',
             default=False,
-            help='Deactivate all rules before importing new ones.',
+            help='Deactivate all existing sentences before importing new ones.',
+        )
+        parser.add_argument(
+            '--clean',
+            action='store_true',
+            dest='clean',
+            default=False,
+            help='Clean all sentences before importing new sentences.',
         )
 
     def handle(self, *args, **options):
 
-        #if 'deactivate' in options:  # deactivate all sentences
-        #    Sentence.objects.all().update(active=False)
+        if 'deactivate' in options:  # deactivate all sentences
+            Sentence.objects.all().update(active=False)
+
+        if 'clean' in options:  # delete all sentences
+            self.stdout.write(self.style.SUCCESS('Deleting all sentences...'))
+            num_sentences = Sentence.objects.count()
+            Sentence.objects.all().delete()
+            self.stdout.write(self.style.SUCCESS('All {} sentences deleted...'.format(num_sentences)))
 
         import os
         print(os.getcwd())

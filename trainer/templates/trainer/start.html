@@ -5,7 +5,7 @@
 
 {% block globalmain %}
 
-     <header class="x-bg-primary text-white" style="background-color:#AC1035;background-image:url({% static 'images/bg.png' %});padding-top:2em;padding-bottom:1em;">
+         <header class="x-bg-primary text-white" style="background-color:#AC1035;background-image:url({% static 'images/bg.png' %});padding-top:2em;padding-bottom:1em;">
       <div class="container text-center">
             <h1>
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARdSURBVGhD7ZlZiM1RHMfHOhhjmZgM2SfmYcrOGzOKrPNgH8uDKGNLlsiWGcUD5cGDUlIUyvaAyJOlMJRkeSHFlBohZAnRjM/31+9Ot5iaO3P+996p+61P5/f7nfP/nXPufzv/c7MyyiijjDKKV319fS/hbutQXV1dLiyA0/AKfjIJk2yPncKdT5nrh6WPGFhXBrYXvmJ/ptRElsNUKHZkK3bG26htpY71NKkVA5oF7+A1LGVgHb2qUakNbZdBDdTCTK9KjRjAVvgDVfETwB5CbJNsyp3C7c2qky3hZ4PO5G/Y6uHkio6r4CvM8ZBiayEfBkOFx/KE26u9Tm3WKCZhz4VvTLLSQ8kRneqG1q843UMm/N0MZoC7jUpt1NZdE/4MzznPQ9GKjvrDN7BLh0HpRr9H2ckaJCAdw7F3lUM+9mbP3c8aRCk6OQ7VdN7GQxpQiZsJK/5Y5ST3AzjmoWhER0V0opt7knxK3ewjrLIFUg7Y4nYpqI/hVhmFSK4nzH135ZczuYanUHOlHORa6K7yPiAW3Y1PB49hh9vB38yxnJS74JEFQ4vE+fxKWmrYpUR5D+wSCyHlUk7ZdDNSfaE+VhlSdDJWmSlz3O+M23DDt1TKpZyyKXO9r2A/VINIOhu+yKaPDtgTrSKglFO53dbLdoFVhJSSQq3bA+GaVQSUciq321qHLbaKkOKXKiHxH8p2HopU9KUzUuZuOJF0GJPQdVvg/gYotMpAIt81uhgEPbyv0V4VTiTVSvULzHV/PdhlEErkmwnqp9gnku9VYUXusyQ/6a78YJcZudqTe5RsyjL4bhVRiOTl8Am6uX8VglzH5NFXpL1HKA/CDauIQvxq+rJ7Cfvc7wn2uAwp8mvhuMfdaEQHi+A7xB6TOXALsq1BM8XxV5QT9CGmp2OzV9RNEh3oDXwdnmB3UQx7mpd5qpedqDh2OnQGfWW+jeJM/yM66U5nL+AydsMHFb4WlXbDxibZFHHMEtrHPq4ewgGrSIborBC0T1UNfRVjMO29bgr2Tbd1KS6S3ZioP0F7vT/GgFTkVckRA+gNt0FbOqsZgE1Ewo8tyccKC/5HHDPITbW9BNfdTa4YiBaQ+tb+CM9hW1N/UdpqN+U97dtSTgBpnFenRgxGy4pKBvKMUm/lN3AHLsAZOE/4nxcosTaC+htw0cPpIQY0FFbCfjgKH+CcV5vwV8HxOPsHRPed3lIxuH6g/arZHjLh6/3Tm7OhPS6t4Wx7KW3FQHW51VDGPwjuwlBiHeEm9h3KpHweNEsMTpt372G9h0z4+mzWcucIvMNu8U5MpGKQ20FnI7YCWAFVbmsf+BeUyk9bMUDdG/rKW+IhxQqYlDb5tIrWJpxtdKetGKwep/Zyc7sAnmLrfaFvf00iNX8jJCIGuRF0Nmwz2iczHiogdf+FJCIG3Y6BaqNbA9byZbLHDoHOxDpv2jrEgIfBSdCE9JbXEmaqV7c+MXhN6LBKD2WUUUZJV1bWXzc8FGX6MrmlAAAAAElFTkSuQmCC">
@@ -16,20 +16,23 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-6 mx-auto">
             <p>&nbsp;</p>
 
-    {% for message in messages %}
-    <div class="container-fluid p-0">
-      <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        {{ message }}
-      </div>
-    </div>
-        <p>&nbsp;</p>
-    {% endfor %}
+            {% for message in messages %}
+            <div class="container-fluid p-0">
+              <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+              </div>
+            </div>
+                <p>&nbsp;</p>
+            {% endfor %}
+
+
+           <h2>Worum geht's?</h2>
             <p class="lead">Du möchtest auf motivierende und herausfordernde Weise an Deinen Kommasetzungs-Fähigkeiten arbeiten?
             Kein Problem - die Kommas sind nur noch wenige Klicks entfernt. Lange Anleitungen und Vorreden gibt es nicht, dafür aber jede Menge
             interessanter Sätze, spielerischer Elemente und dazu noch die Möglichkeit, etwas für die Wissenschaft zu tun.
@@ -38,37 +41,36 @@
 
             <p>&nbsp;</p>
 
-            <h2>Jetzt starten</h2>
-
-            <p>Wenn Du den Kommatrainer noch nie genutzt hast, oder noch einmal ganz neu anfangen möchtest, generiert der
-            Kommatrainer für Dich einen neuen Durchlauf. Du bekommst einen Code und einen Link, die Du beide nutzen kannst,
-            um den Durchlauf später auch mit einem anderen Browser bzw. anderen Gerät weiterzuspielen.</p>
+           <h2>Jetzt starten</h2>
 
             <form action="{% url 'start_new' %}" method="post">
+                  <p><input name="code" type="text" class="form-control" placeholder="Code zum Weitermachen vorhanden?"></p>
                 <div class="form-check">
                   {% csrf_token %}
-                  <input class="form-check-input" type="checkbox" required value="" id="consent" name="consent">
+                  <p><input class="form-check-input" type="checkbox" required value="" id="consent" name="consent">
                   <label class="form-check-label" for="consent">
                     Ich bin mit dem technisch notwendigen Cookie (s.u.) und der anonymen wissenschaftlichen Auswertung einverstanden.<br>&nbsp;
-                  </label>
+                  </label></p>
                 </div>
-                <p><button type="submit" class="btn btn-primary">Neuen Durchlauf starten</button></p>
+                <p><button type="submit" class="btn btn-primary">Loslegen!</button></p>
             </form>
+
+                <p> &nbsp;</p>
+
+            </div>
+            <div class="col-lg-6 mx-auto">
+                <img style="margin-top:20px;marign-bottom:20px;" src="{% static 'images/kommatraining_start.jpg' %}">
+
+
+
+            </div>
 
             <p>&nbsp;</p>
 
-            <h2>Später weitermachen</h2>
 
-           <p>Wenn Du einen Code aus einem bereits begonnen Durchlauf hast, kannst Du ihn hier eingeben, um den Durchlauf
-            fortzusetzen. Ein Code besteht aus drei Wörtern wie z.B. "Punkt Komma Strich", die durch Leerzeichen getrennt
-            werden.</p>
-
-            <form class="form" action="{% url 'start_continue' %}" method="POST"> {% csrf_token %}
-            <p><input name="code" type="text" class="form-control" placeholder="Drei-Wort-Code eingeben"></p>
-            <p><button class="btn btn-outline-secondary" type="submit">Durchlauf fortsetzen</button></p>
-            </form>
-
-            <p>&nbsp;</p>
+            </div>
+        <div class="row">
+            <div class="col-lg-12">
 
             <h2>Datenschutz und Cookies</h2>
 
@@ -86,7 +88,6 @@
             </p>
 
             <p>&nbsp;</p>
-
             </div>
         </div>
     </div>

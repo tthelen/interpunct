@@ -1,4 +1,4 @@
-from trainer.models import Rule, UserRule, SentenceRule, UserSentence, UserPretest
+from trainer.models import Rule, UserRule, SentenceRule, UserSentence
 import random
 
 
@@ -11,48 +11,29 @@ class LeitnerStrategy:
 
         # order of rules (increasing difficulty)
         self.rule_order = [
-            "A1",  # 1 GLEICHRANG
-            "A2",  # 2 ENTGEGEN
-            "A4",  # 12 GLEIHRANG KONJUNKT
-            "B1.1",  # 3 NEBEN
-            "B2.1",  # 4 UMOHNESTATT
-            "C1",  # 5 PARANTHESE
-            "D1",  # 6 ANREDE/AUSRUF
-            "B1.2",  # 7 NEBEN EINLEIT
-            "C2",  # 8 APPOSITION
-            "A3",  # 9 SATZREIHUNG
-            "C5",  # 10 HINWEIS
-            "B1.5",  # 11 FORMELHAFT
-            "D3",  # 13 BEKTRÄFT
-            "B2.2",  # 14
-            "C3.1",  # 15
-            "B2.3",  # 16
-            "C3.2",  # 17
-            "B2.4.1",  # 18
-            "C4.1",  # 19
-            "B2.4.2",  # 20
-            "B2.5",  # 21
-            "C6.1",  # 22
-            "C6.2",  # 23
-            "C6.3.1",  # 24
-            "C6.3.2",  # 25
-            "C6.4",  # 26
-            "C7",  # 27
-            "B1.3",  # 28 NEBEN KONJUNKT
-            "B1.4.1",  # 29
-            "B1.4.2",  # 30
-        ]
-
-    pretest_rules = [("A1",   "A3",   "C1"),
-                     ("A2",   "C4.1", "C1"),
-                     ("B1.1", "B1.5", "C5"),
-                     ("B2.1", "B2.2", "B2.3"),
-                     ("C1",   "C2",   "C5"),
-                     ("D1",   "C1",   "A1"),
-                     ("B1.2", "B1.1", "B1.5"),
-                     ("C2",   "C5",   "C1"),
-                     ("A3",   "C4.1", "B2.5"),
-                     ("C5",   "C6.1", "C6.2")]
+        "A1",  # 1 GLEICHRANG
+        "A2",  # 2 ENTGEGEN
+        "B1.1",  # 3 NEBEN
+        "B2.1",  # 4 UMOHNESTATT
+        "B1.2",  # 5 NEBENEINLEIT
+        "B1.5",  # 6 FORMELHAFT
+        "A3",  # 7 SATZREIHUNG
+        "A4",  # 8 GLEICHRANG KONJUNKT
+        "D1",  # 9 ANREDE/AUSRUF/STELLUNGNAHME
+        "B2.2",  # 10 INF:VERWEIS
+        "B2.3",  # 11 INF:EINFACH
+        "B2.5",  # 12 INFP
+        "C1",  # 13 HERAUSSTELLUNG
+        "C6.2",  # 14 NACHTRAG
+        "C3.1",  # 15 NOPRÄP
+        "C3.2",  # 16 NOPRÄP:SCHLIESS
+        "C6.1",  # 17 EIGENNAME:TITEL
+        "C7",  # 18 EIGENNAME:KEINNACHTRAG
+        "C8",  # 19 HINWEIS:GESETZ
+        "B1.3",  # 20 NEBEN KONJUNKT
+        "B1.4.1",  # 21 SUBORD:KOORD:KONJ:ADJAZ
+        "B1.4.2",  # 22 SUBORD:KOORD:KONJ:NONADJAZ
+    ]
 
     def init_rules(self):
         """Initialize active rules for user."""
@@ -66,6 +47,7 @@ class LeitnerStrategy:
 
     def activate_first_rule(self, new_rule=None):
         """Activate first rule"""
+        self.init_rules()
         if not new_rule:
             new_rule = Rule.objects.get(code=self.rule_order[0])
         try:
@@ -80,38 +62,6 @@ class LeitnerStrategy:
         self.user.rules_activated_count = self.rule_order.index(new_rule.code)+1  # activate first rule for next request
         self.user.save()
         return new_rule
-
-    def process_pretest(self):
-        """Process the results of the pretest.
-        Problem for current leitner representation: Rule order is fixed. So set level to last level befor first error."""
-
-        self.user.pretest = True
-        self.user.save()
-        last_pos = -1  # highest position in self.rule_order for whoch the pretest was positive
-        new_rule = None
-        for rule_idx in range(len(self.rule_order)):
-            pretest_result = None
-            try:
-                pretest_result = UserPretest.objects.get(user=self.user, rule__code=self.rule_order[rule_idx])
-                if pretest_result.result:
-                    last_pos = rule_idx  # new best position
-                    new_ur = UserRule.objects.filter(rule__code=self.rule_order[rule_idx], user=self.user).first()
-                    new_ur.active = True  # activate new rule
-                    new_ur.box = 4 # lowest box
-                    new_ur.save()
-                else:
-                    # WARNING: pretest must be shorter than rule list, otherwise we might fail here
-                    new_rule = Rule.objects.get(code=self.rule_order[rule_idx])
-                    break
-            except UserPretest.DoesNotExist:
-                break
-
-        # increase level for user
-        if last_pos+1 > self.user.rules_activated_count:
-            self.user.rules_activated_count = last_pos +1
-        self.user.save()
-
-        return self.activate_first_rule(new_rule)
 
     def get_active_rules(self):
         """Return UserRule and examples sentence data for displaying level and expanations.

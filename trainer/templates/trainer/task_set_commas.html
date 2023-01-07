@@ -3,7 +3,7 @@
 {% block title %}Kommatraining - Übung: Kommas setzen{% endblock %}
 
 {% block main %}
-    <h2 class="task_header">Übung: Komma setzen
+    <h2 class="task_header"><b>Übung</b> | Komma setzen
             <button class="btn btn-info"
             data-toggle="popover"
             title="Anleitung"
@@ -13,7 +13,7 @@
     <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
         <div class="interaction">
 {% spaceless %}
-{% for w in words %}{{w}}{% if not forloop.last %}<span class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}">&nbsp; </span>{% endif %}{% endfor %}
+    {% for w in words %}{{w}}{% if not forloop.last %}<kbd class="interpunct-commaslot" id="interpunct-commaslot-{{ forloop.counter }}">&nbsp;</kbd>{% endif %}{% endfor %}
 {% endspaceless %}
         </div>
 {% if sentence.source %}<div style="font-size: 70%;color:#999;text-align:right;margin-right:1.43em;">&mdash; Quelle: {{ sentence.source }}</div>{% endif %}
@@ -36,9 +36,10 @@
         /* Switch the content of a comma slot from blank to comma / comma to blank */
         function toggle_comma(element) {
             if (element.innerHTML.indexOf(',') == -1) {
-                element.innerHTML = "<span class='comma'>,</span> &nbsp; ";
+                // element.innerHTML = "<span class='comma'>,</span> &nbsp; ";
+                element.innerHTML = ", ";
             } else {
-                element.innerHTML = "&nbsp; ";
+                element.innerHTML = "&nbsp;";
             }
         }
 

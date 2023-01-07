@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Count
 from django.urls import reverse
-from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule, UserPretest
+from .models import Sentence, Solution, Rule, SolutionRule, SentenceRule, User, UserSentence, UserRule
 import random
 import hashlib
 import base64
@@ -183,6 +183,9 @@ def code_start(request):
 
 
 def start_new(request):
+    if 'code' in request.POST and request.POST['code'] != '':
+        return start_continue(request)
+
     from trainer.genpasswd import generate_passphrase
     while True:
         code = generate_passphrase()
@@ -289,14 +292,18 @@ def task(request):
 
 
     # get user from URL or session or default
-    # get user from URL or session or default
-    # user_id = request.GET.get('user_id', request.session.get('user_id', "testuser00"))
-    user = User.objects.get(django_user=request.user)
+    try:
+        user = User.objects.get(django_user=request.user)
+    except User.DoesNotExist:
+        # destroy session and redirect to start page
+        logout(request)
+        messages.error(request, "Die vorhandene Sitzung ist ungültig geworden, weil die Regeln vereinfacht und z.T. neu formuliert worden und neue Beispielsätze erstellt wurden. Bitte neu beginnen.")
+        return redirect(reverse('task'))
+
     new_rule = None  # new level reached? (new rule to explain)
     display_rank = True  # show the rank in output? (not on welcome and rule explanation screens)
     rankimg = ""
     finished = False # default is: we're not yet finished
-    in_pretest = False
     # select strategy
     strategy = user.get_strategy()
     strategy_debug = strategy.debug_output()
@@ -311,22 +318,11 @@ def task(request):
         return render(request, 'trainer/welcome_noquestionnaire.html', locals())
 
     # -----------------------------------------------------------------------
-    # pretest
-    if not user.pretest:
-        strategy.init_rules()
-        new_rule = strategy.process_pretest() # evaluate pretest and activate known rules, set level etc.
-        user.pretest=True
-        user.save()
-        display_rank = 0
-        return render(request, 'trainer/level_progress.html', locals())
-
-    # -----------------------------------------------------------------------
-    # pretest passed
     # user without activated rules: show first rule page
     if user.rules_activated_count == 0:
         new_rule = strategy.activate_first_rule()
         display_rank=False
-        level = 0
+        level = 1
         return render(request, 'trainer/level_progress.html', locals())
 
     # fetch and prepare information about level for template
@@ -341,6 +337,7 @@ def task(request):
 
     # level progress: show new rules instead of task
     if new_rule:
+        level = user.rules_activated_count  # user's current level
         return render(request, 'trainer/level_progress.html', locals())
 
     show_ranking=True
@@ -499,23 +496,13 @@ def submit_task_explain_commas(request):
         chosen = 1 if r.code in request.POST else 0  # chosen if box was checked
         solution.append("{}:{}:{}".format(r.id, correct, chosen))
         resp.append({'correct': (correct==chosen)})
-        # are we in pretest?
-        if not user.pretest:
-            if user.get_strategy().pretest_rules[user.pretest_count][0] == r.code:  # do we look at the rule to test?
-                # save pretest result
-                up = UserPretest(user=user, rule=r, result=(correct==chosen))
-                up.save()
-                user.pretest_count += 1  # increase pretest counter
-                user.save()
-                return JsonResponse({'submit': 'ok'})
-        else:  # not on pretest
-            # update strategy model (3=COMMA_EXPLAIN)
-            user.get_strategy().update(r, 3, (correct == chosen))
-            if not r.code.startswith('E'):  # only count non-error rules
-                ur = UserRule.objects.get(user=user, rule=r)
-                ur.count((correct == chosen))  # count rule application as correct if correct rule was chosen and vice versa
-                if correct != chosen:
-                    error_rules.append(r)
+        # update strategy model (3=COMMA_EXPLAIN)
+        user.get_strategy().update(r, 3, (correct == chosen))
+        if not r.code.startswith('E'):  # only count non-error rules
+            ur = UserRule.objects.get(user=user, rule=r)
+            ur.count((correct == chosen))  # count rule application as correct if correct rule was chosen and vice versa
+            if correct != chosen:
+                error_rules.append(r)
 
     # recalculate individual or group score
     # user.update_score(resp)
@@ -586,6 +573,16 @@ def help(request):
     additional_heading = 'Anleitung'
     user = User.objects.get(django_user=request.user.id)
     return render(request, 'trainer/help.html', locals())
+
+
+def rules(request):
+    """Shows user rules and all rules"""
+    all_rules = Rule.objects.all()
+    user_rules = UserRule.objects.filter(user__django_user=request.user.id, active=True)
+    active = 'rules'
+    additional_heading = 'Alle Regeln'
+    user = User.objects.get(django_user=request.user.id)
+    return render(request, 'trainer/rules.html', locals())
 
 
 def code(request):

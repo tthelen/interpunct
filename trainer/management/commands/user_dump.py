@@ -1,8 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
-from trainer.models import Rule, Sentence, SentenceRule, User, UserRule
-from django.db.models import Count
-from trainer.strategies.bayes import DynamicNode, BayesStrategy
-
+from django.core.management.base import BaseCommand
+from trainer.models import User
 
 class Command(BaseCommand):
     help = 'Debug info for user state.'

@@ -35,52 +35,60 @@
   <body id="page-top">
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-        <ul class="navbar-nav mr-auto">
-            {% if request.user.is_authenticated %}
-                <li class="nav-item {% if active == 'task' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'task' %}">Training</a>
-                </li>
-                <li class="nav-item {% if active == 'help' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'help' %}">Anleitung</a>
-                </li>
-            {% else %}
-                <li class="nav-item active">
-                    <a class="nav-link {% if active == 'task' %}active{% endif %}" href="{% url 'task' %}">Start</a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-    <div class="mx-auto order-0">
-{% if not nologo %}
-        <a class="navbar-brand mx-auto" href="/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARdSURBVGhD7ZlZiM1RHMfHOhhjmZgM2SfmYcrOGzOKrPNgH8uDKGNLlsiWGcUD5cGDUlIUyvaAyJOlMJRkeSHFlBohZAnRjM/31+9Ot5iaO3P+996p+61P5/f7nfP/nXPufzv/c7MyyiijjDKKV319fS/hbutQXV1dLiyA0/AKfjIJk2yPncKdT5nrh6WPGFhXBrYXvmJ/ptRElsNUKHZkK3bG26htpY71NKkVA5oF7+A1LGVgHb2qUakNbZdBDdTCTK9KjRjAVvgDVfETwB5CbJNsyp3C7c2qky3hZ4PO5G/Y6uHkio6r4CvM8ZBiayEfBkOFx/KE26u9Tm3WKCZhz4VvTLLSQ8kRneqG1q843UMm/N0MZoC7jUpt1NZdE/4MzznPQ9GKjvrDN7BLh0HpRr9H2ckaJCAdw7F3lUM+9mbP3c8aRCk6OQ7VdN7GQxpQiZsJK/5Y5ST3AzjmoWhER0V0opt7knxK3ewjrLIFUg7Y4nYpqI/hVhmFSK4nzH135ZczuYanUHOlHORa6K7yPiAW3Y1PB49hh9vB38yxnJS74JEFQ4vE+fxKWmrYpUR5D+wSCyHlUk7ZdDNSfaE+VhlSdDJWmSlz3O+M23DDt1TKpZyyKXO9r2A/VINIOhu+yKaPDtgTrSKglFO53dbLdoFVhJSSQq3bA+GaVQSUciq321qHLbaKkOKXKiHxH8p2HopU9KUzUuZuOJF0GJPQdVvg/gYotMpAIt81uhgEPbyv0V4VTiTVSvULzHV/PdhlEErkmwnqp9gnku9VYUXusyQ/6a78YJcZudqTe5RsyjL4bhVRiOTl8Am6uX8VglzH5NFXpL1HKA/CDauIQvxq+rJ7Cfvc7wn2uAwp8mvhuMfdaEQHi+A7xB6TOXALsq1BM8XxV5QT9CGmp2OzV9RNEh3oDXwdnmB3UQx7mpd5qpedqDh2OnQGfWW+jeJM/yM66U5nL+AydsMHFb4WlXbDxibZFHHMEtrHPq4ewgGrSIborBC0T1UNfRVjMO29bgr2Tbd1KS6S3ZioP0F7vT/GgFTkVckRA+gNt0FbOqsZgE1Ewo8tyccKC/5HHDPITbW9BNfdTa4YiBaQ+tb+CM9hW1N/UdpqN+U97dtSTgBpnFenRgxGy4pKBvKMUm/lN3AHLsAZOE/4nxcosTaC+htw0cPpIQY0FFbCfjgKH+CcV5vwV8HxOPsHRPed3lIxuH6g/arZHjLh6/3Tm7OhPS6t4Wx7KW3FQHW51VDGPwjuwlBiHeEm9h3KpHweNEsMTpt372G9h0z4+mzWcucIvMNu8U5MpGKQ20FnI7YCWAFVbmsf+BeUyk9bMUDdG/rKW+IhxQqYlDb5tIrWJpxtdKetGKwep/Zyc7sAnmLrfaFvf00iNX8jJCIGuRF0Nmwz2iczHiogdf+FJCIG3Y6BaqNbA9byZbLHDoHOxDpv2jrEgIfBSdCE9JbXEmaqV7c+MXhN6LBKD2WUUUZJV1bWXzc8FGX6MrmlAAAAAElFTkSuQmCC"> Kommatraining</a>
-{% endif %}
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-md navbar-dark bg-uni">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <div class="logo d-none d-lg-block" style="width:280px">
+                <img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo-unbounded.svg" alt="Uni OS Logo">
+            </div>
+            <ul class="navbar-nav mr-auto">
+                {% if request.user.is_authenticated %}
 
-    </div>
-    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-        <ul class="navbar-nav ml-auto">
-            {% if request.user.is_authenticated %}
-                {% if user.code %}
-                    <li class="nav-item"></li>
+                {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link {% if active == 'task' %}active{% endif %}" href="{% url 'task' %}">Start</a>
+                    </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+    {% if not nologo %}
+            <a class="navbar-brand mx-auto" href="/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARdSURBVGhD7ZlZiM1RHMfHOhhjmZgM2SfmYcrOGzOKrPNgH8uDKGNLlsiWGcUD5cGDUlIUyvaAyJOlMJRkeSHFlBohZAnRjM/31+9Ot5iaO3P+996p+61P5/f7nfP/nXPufzv/c7MyyiijjDKKV319fS/hbutQXV1dLiyA0/AKfjIJk2yPncKdT5nrh6WPGFhXBrYXvmJ/ptRElsNUKHZkK3bG26htpY71NKkVA5oF7+A1LGVgHb2qUakNbZdBDdTCTK9KjRjAVvgDVfETwB5CbJNsyp3C7c2qky3hZ4PO5G/Y6uHkio6r4CvM8ZBiayEfBkOFx/KE26u9Tm3WKCZhz4VvTLLSQ8kRneqG1q843UMm/N0MZoC7jUpt1NZdE/4MzznPQ9GKjvrDN7BLh0HpRr9H2ckaJCAdw7F3lUM+9mbP3c8aRCk6OQ7VdN7GQxpQiZsJK/5Y5ST3AzjmoWhER0V0opt7knxK3ewjrLIFUg7Y4nYpqI/hVhmFSK4nzH135ZczuYanUHOlHORa6K7yPiAW3Y1PB49hh9vB38yxnJS74JEFQ4vE+fxKWmrYpUR5D+wSCyHlUk7ZdDNSfaE+VhlSdDJWmSlz3O+M23DDt1TKpZyyKXO9r2A/VINIOhu+yKaPDtgTrSKglFO53dbLdoFVhJSSQq3bA+GaVQSUciq321qHLbaKkOKXKiHxH8p2HopU9KUzUuZuOJF0GJPQdVvg/gYotMpAIt81uhgEPbyv0V4VTiTVSvULzHV/PdhlEErkmwnqp9gnku9VYUXusyQ/6a78YJcZudqTe5RsyjL4bhVRiOTl8Am6uX8VglzH5NFXpL1HKA/CDauIQvxq+rJ7Cfvc7wn2uAwp8mvhuMfdaEQHi+A7xB6TOXALsq1BM8XxV5QT9CGmp2OzV9RNEh3oDXwdnmB3UQx7mpd5qpedqDh2OnQGfWW+jeJM/yM66U5nL+AydsMHFb4WlXbDxibZFHHMEtrHPq4ewgGrSIborBC0T1UNfRVjMO29bgr2Tbd1KS6S3ZioP0F7vT/GgFTkVckRA+gNt0FbOqsZgE1Ewo8tyccKC/5HHDPITbW9BNfdTa4YiBaQ+tb+CM9hW1N/UdpqN+U97dtSTgBpnFenRgxGy4pKBvKMUm/lN3AHLsAZOE/4nxcosTaC+htw0cPpIQY0FFbCfjgKH+CcV5vwV8HxOPsHRPed3lIxuH6g/arZHjLh6/3Tm7OhPS6t4Wx7KW3FQHW51VDGPwjuwlBiHeEm9h3KpHweNEsMTpt372G9h0z4+mzWcucIvMNu8U5MpGKQ20FnI7YCWAFVbmsf+BeUyk9bMUDdG/rKW+IhxQqYlDb5tIrWJpxtdKetGKwep/Zyc7sAnmLrfaFvf00iNX8jJCIGuRF0Nmwz2iczHiogdf+FJCIG3Y6BaqNbA9byZbLHDoHOxDpv2jrEgIfBSdCE9JbXEmaqV7c+MXhN6LBKD2WUUUZJV1bWXzc8FGX6MrmlAAAAAElFTkSuQmCC"> Kommatraining</a>
+    {% endif %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item {% if active == 'task' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'task' %}">Training</a>
+                    </li>
+                    <li class="nav-item {% if active == 'help' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'help' %}">Anleitung</a>
+                    </li>
+                    {% if user.code %}
+                        <li class="nav-item"></li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link {% if active == 'task' %}active{% endif %}" href="{% url 'task' %}">Start</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
 
     {% block globalmain %}
-    <section id="main" style="padding-top:25px;">
+    <section id="main" style="padding-top:35px;">
       <div class="container">
         <div class="row">
-    <div class="col-lg-10">
-        <h1>Dein Kommatraining {% if additional_heading %}&ndash; {{ additional_heading }}{% endif %}</h1>
+    <div class="col-lg-8 text-center">
+<!--        <h1>Dein Kommatraining {% if additional_heading %}&ndash; {{ additional_heading }}{% endif %}</h1> -->
 
     {% for message in messages %}
     <div class="container-fluid p-0">
@@ -97,28 +105,21 @@
 
         Hallo. Hier ist etwas schiefgelaufen.
         {% endblock %}
-<div id="debug_info" style="display:none">{{ strategy_debug|safe }}</div>
     </div>
           <div class="col-lg-2 mx-auto">
-            {% if in_pretest %}
-                <div class="alert alert-info" role="alert">
-                    <h4 class="alert-heading">Aufwärmen</h4>
-                    <p>Einstufungstest<br>{{ pretest_counter }} von {{ pretest_max }}</p>
-                <!--<hr>
-                <p><a class="btn btn-secondary" href="{% url 'task' %}?skip_pretest=1">Überspringen</a></p>-->
-                </div>
-            {% endif %}
         {% if display_rank %}
-            {% with 'images/'|add:rankimg as image_static %}
-                <img style="display:block;width:160px;" src="{% static image_static %}">
-            {% endwith %}
-            <div class="rank">
-            <p>Du bist in Level {{ level }}.</p>
+            <div class="card text-center" style="margin-top:4em">
+                <div class="card-header" style="background:linear-gradient(0deg,#17a2b8 0,#138496 100%);font-weight:bold;color:white;">Level</div>
+                <p style="font-size:7vw;line-height:1.0;margin-top:0px;margin-bottom:0px;">{{ level }}</p>
+                <div class="card-footer text-muted">von 25</div>
+            </div>
             <p>&nbsp;</p>
-                <h4>Regeln im Fokus:</h4>
+            <div class="card text-center">
+                <div class="card-header">Regeln im Fokus:</div>
+                <div class="card-body">
                     {%  for ur in activerules %}
                     <p>
-                        <span class="counter">[{{ ur.correct|stringformat:"02d" }}/{{ ur.total|stringformat:"02d" }}]</span>
+                        <!--<span class="counter">[{{ ur.correct|stringformat:"02d" }}/{{ ur.total|stringformat:"02d" }}]</span>-->
                         <button type="button" class="btn {% if ur.user.current_rule == ur.rule and not finished %}btn-info{% endif %}" data-toggle="modal" data-target="#modal-{{ ur.rule.id }}">{{ ur.rule.rule }}</button>
                     </p>
                     {% endfor %}
@@ -140,30 +141,35 @@
                                       <tr><td>Vorkommen in Übungen: </td><td style="text-align: right">{{ ur.total }}</td></tr>
                                       <tr><td>Davon korrekt gelöst: </td><td style="text-align: right">{{ ur.correct }}</td></tr>
                                       <tr><td>Übungshäufigkeit: </td><td>
-                                          {% if ur.box == 0 %}sehr häufig{% endif %}
+                                      {% if ur.box == 0 %}sehr häufig{% endif %}
                                           {% if ur.box == 1 %}häufig{% endif %}
                                           {% if ur.box == 2 %}mittelmäßig oft{% endif %}
                                           {% if ur.box == 3 %}selten{% endif %}
                                           {% if ur.box == 4 %}sehr selten{% endif %}
                                       </td></tr>
-                                  </table>
-                                  {% if ur.user.current_rule == ur.rule %}
-                                  <h4>Levelaufstieg</h4>
-                                  <p>Diese Regel ist als letzte hinzugekommen. Du steigst in den nächsten Level auf, wenn du mindestens
-                                      4 Aufgaben zu dieser Regel mehrheitlich korrekt gelöst hast.</p>
-                                  {% endif %}
-                              </p>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                                      </table>
+                                      {% if ur.user.current_rule == ur.rule %}
+                                      <h4>Levelaufstieg</h4>
+                                      <p>Diese Regel ist als letzte hinzugekommen. Du steigst in den nächsten Level auf, wenn du mindestens
+                                          4 Aufgaben zu dieser Regel mehrheitlich korrekt gelöst hast.</p>
+                                      {% endif %}
+                                  </p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                    {% endfor %}
-                <p>&nbsp;</p>
-                <p><a href="{% url 'help' %}"><button class="btn btn-default">Anleitung</button></a></p>
-                <p style="margin-top:1em;visibility: visible;" id="detachlink"><a href="" target="_blank" class="manual">Kommatraining in eigenem Fenster anzeigen</a></p>
+                        {% endfor %}
+                </div>
+                  <div class="card-footer">
+                    <a href="{% url 'rules' %}" class="card-link">Alle Regeln</a>
+                  </div>
+
+            </div>
+
+            <p style="margin-top:1em;visibility: visible;" id="detachlink"><a href="" target="_blank" class="manual">Kommatraining in eigenem Fenster anzeigen</a></p>
 
            </div>
         {% endif %}
@@ -188,7 +194,7 @@
           {% if user.code %}<a href="{% url 'code' %}"><button class="btn btn-secondary">Dein Code: &nbsp; <code style="color:#222">{{ user.code }}</code></button></a> &nbsp; &nbsp;{% endif %}
             Ein Angebot der &nbsp;
             <a href="https://www.uni-osnabrueck.de"><img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo.png" width="200px" style="margin-top:-15px"></a>
-            &nbsp; <b>virtUOS</b>, 2017-2021 &nbsp; &middot; &nbsp; <a style="color:white;" href="{% url 'impressum' %}">Impressum</a></p>
+            &nbsp; <b>virtUOS</b>, 2017-2023 &nbsp; &middot; &nbsp; <a style="color:white;" href="{% url 'impressum' %}">Impressum</a></p>
       </div>
 
       <!-- /.container -->

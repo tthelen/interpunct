@@ -1,14 +1,23 @@
 {% extends "trainer/base.html" %}
-
+{% load static %}
 {% block title %}Kommatraining - Levelaufstieg{% endblock %}
 
 {% block main %}
-{% if level > 0 %}
-<h2 class="task_header">Du bist aufgestiegen!</h2>
+{% if level > 1 %}
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h2 class="task_header">Du bist aufgestiegen!</h2>
 
-<p>Herzlichen Glückwunsch!
+                <p>Du bist ein Level aufgestiegen und bist jetzt in Level {{level}}.</p>
+                <p>Du hast eine neue Regel bekommen. Die Regel lautet:</p>
 
-<p>Du bist einen Level aufgestiegen und bist jetzt in Level {{level}}. Und Du hast eine neue Regel bekommen. Die Regel lautet:</p>
+            </div>
+            <div class="col-4">
+                <img src="{% static 'images/hurray.jpg' %}" alt="Levelaufstieg" class="img-fluid">
+            </div>
+        </div>
+    </div>
 {%  else %}
 <h2>Deine erste Regel</h2>
 

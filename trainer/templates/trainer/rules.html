@@ -1,0 +1,25 @@
+{% extends "trainer/base.html" %}
+
+{% block title %}Kommatraining - Regeln{% endblock %}
+
+{% block main %}
+<p>&nbsp;</p>
+    <h1>Deine bereits eingeführten <b>Regeln</b></h1>
+<p>&nbsp;</p>
+    {% for r in user_rules %}
+        <div class="card text-left">
+            <h5 class="card-header">Regel {{ r.rule.rule }}</h5>
+            <div class="card-body">
+                <p class="example card-text">{{ r.rule.description|safe}}</p>
+                <h5 class="card-title">Beispiel:</h5>
+                <p class="card-text example"><em>{{ r.rule.example|safe }}</em></p>
+            </div>
+        </div>
+        <p>&nbsp;</p>
+    {% endfor %}
+
+<p>
+<a href="{% url 'task' %}"><button class="btn btn-default">Weiter üben</button></a>
+</p>
+
+{% endblock %}

@@ -22,7 +22,6 @@ class Rule(models.Model):
     )
 
     code = models.CharField(max_length=32)
-    slug = models.SlugField(max_length=128)
     mode = models.IntegerField(choices=MODES)
     description = models.CharField(max_length=2048)
     rule = models.CharField(max_length=255)
@@ -463,6 +462,7 @@ class SentenceRule(models.Model):
     def __str__(self):
         return "Rule {} at #{}: {} (Pair {})".format(self.rule.code, self.position, self.sentence.text, self.pair)
 
+
 class User(models.Model):
     def __str__(self):
         return self.user_id
@@ -479,7 +479,6 @@ class User(models.Model):
     BAYES = 1
     STRATS = (
         (LEITNER, 'Leitnerbox'),  # simple leitner box algorithm
-        (BAYES, 'Bayes')        # bayesian net (anna pillar)
     )
 
     GAMIFICATION_NONE = 0
@@ -545,41 +544,13 @@ class User(models.Model):
     counter_correct = models.IntegerField(default=0)
     counter_wrong = models.IntegerField(default=0)
 
-    # has user passed pretest (to which level)?
-    pretest = models.BooleanField(default=False)
-    pretest_count = models.IntegerField(default=0)
-
     # rules_activated: user progress in terms of available rules.
     # Starts at 0, continues to ~40
     rules_activated_count = models.IntegerField(default=0)
     rules = models.ManyToManyField(Rule, through='UserRule')
 
     django_user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, default=None)
-    # order of rules (increasing difficulty)
-    rule_order = [
-        "A1",  # 1 GLEICHRANG
-        "A2",  # 2 ENTGEGEN
-        "B1.1",  # 3 NEBEN
-        "B2.1",  # 4 UMOHNESTATT
-        "B1.2",  # 5 NEBENEINLEIT
-        "B1.5",  # 6 FORMELHAFT
-        "A3",  # 7 SATZREIHUNG
-        "A4",  # 8 GLEICHRANG KONJUNKT
-        "D1",  # 9 ANREDE/AUSRUF/STELLUNGNAHME
-        "B2.2",  # 10 INF:VERWEIS
-        "B2.3",  # 11 INF:EINFACH
-        "B2.5",  # 12 INFP
-        "C1",  # 13 HERAUSSTELLUNG
-        "C6.2",  # 14 NACHTRAG
-        "C3.1",  # 15 NOPRÄP
-        "C3.2",  # 16 NOPRÄP:SCHLIESS
-        "C6.1",  # 17 EIGENNAME:TITEL
-        "C7",  # 18 EIGENNAME:KEINNACHTRAG
-        "C8",  # 19 HINWEIS:GESETZ
-        "B1.3",  # 20 NEBEN KONJUNKT
-        "B1.4.1",  # 21 SUBORD:KOORD:KONJ:ADJAZ
-        "B1.4.2",  # 22 SUBORD:KOORD:KONJ:NONADJAZ
-    ]
+
 
     def prepare(self, request):
         # create a real django user
@@ -596,9 +567,6 @@ class User(models.Model):
         if self.strategy == self.LEITNER:
             from trainer.strategies.leitner import LeitnerStrategy
             return LeitnerStrategy(self)
-        elif self.strategy == self.BAYES:
-            from trainer.strategies.bayes import BayesStrategy
-            return BayesStrategy(self)
         else:
             raise Exception("Invalid strategy: {}".format(self.strategy))
 
@@ -1040,17 +1008,6 @@ class UserRule(models.Model):
     total = models.IntegerField(default=0)  # total rule solution counter
     correct = models.IntegerField(default=0)  # correct rule solution counter
 
-    staticnet = models.FloatField(default=0.0) # float value for static bayesian net (see strategies/bayes.py)
-    dynamicnet_active = models.BooleanField(default=False)  # is rule part of user's current dynamic net? (see strategies/bayes.py)
-    dynamicnet_current = models.BooleanField(default=False) # is rule current (=main focus) rule?
-    dynamicnet_count = models.IntegerField(default=0) # how often has rule been
-    dynamicnet_count1 = models.IntegerField(default=0)  # how often has rule been for task type 1
-    dynamicnet_count2 = models.IntegerField(default=0)  # how often has rule been for task type 2
-    dynamicnet_count3 = models.IntegerField(default=0)  # how often has rule been for task type 3
-    dynamicnet_history1 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_SET)
-    dynamicnet_history2 = models.IntegerField(default=0)  # Bitfield for history of task type 2 (COMMA_CORRECT)
-    dynamicnet_history3 = models.IntegerField(default=0)  # Bitfield for history of task type 1 (COMMA_EXPLAIN)
-
     def count(self, correct=True, tries=1):
         """Register solution for a rule.
         
@@ -1113,15 +1070,6 @@ class UserSentence(models.Model):
 
     class Meta:
         ordering = ('count',)
-
-
-class UserPretest(models.Model):
-    """
-    Store pretest results for user/rule.
-    """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
-    result = models.BooleanField(default=False)
 
 
 class UserHistory(models.Model):

@@ -4,7 +4,7 @@
 
 {% block main %}
 
-    <h2 class="task_header">Übung: Erkläre die Kommaposition
+    <h2 class="task_header"><b>Übung</b> | Erkläre die Kommaposition
         <button class="btn btn-info"
             data-toggle="popover"
             title="Anleitung"
@@ -14,23 +14,22 @@
 
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
     <div class="interaction">
-    {% spaceless %}{% for w in words_and_commas %}{{ w.0 }}{% if not forloop.last %}<span class="{% if forloop.counter == explanation_position.0 %}explanation-position{% endif %}">{% if w.1 != 0 %},{% endif %}{% if forloop.counter0 == explanation_position.0 %} [1]{% endif %}</span> {% endif %}{% endfor %}{% endspaceless %}
+        {% spaceless %}{% for w in words_and_commas %}{{ w.0 }}{% if not forloop.last %}<span class="{% if forloop.counter == explanation_position.0 %}explanation-position{% endif %}">{% if forloop.counter0 == explanation_position.0 %}<kbd>{% if w.1 != 0 %},{%else%}&nbsp;{% endif %}</kbd>{% else %}{% if w.1 != 0 %},{%else%}&nbsp;{% endif %}{% endif %}</span> {% endif %}{% endfor %}{% endspaceless %}
     </div>{% if sentence.source %}<div style="font-size: 70%;color:#999;text-align:right;margin-right:1.43em;">&mdash; Quelle: {{ sentence.source }}</div>{% endif %}
 
 <p>&nbsp;</p>
-    <div class = "explanations">
+    <div class = "explanations text-left">
         <form class="exp-form" id="form0">
-            <h3>Erkläre die Kommaposition [1]</h3>
+            <h3>Erkläre die Kommapostion <kbd>, </kbd>:</h3>
             {% csrf_token %}
-            <script>console.log("{{ guessing_candidates|safe }}");</script>
             <input type="hidden" name="sentence_id" value="{{ sentence.id }}">
             <input type="hidden" name="position" value="{{ explanation_position.0 }}">
             <input type="hidden" name="rule-0" value="{{ guessing_candidates.0.code }}">
             <input type="hidden" name="rule-1" value="{{ guessing_candidates.1.code }}">
             <input type="hidden" name="rule-2" value="{{ guessing_candidates.2.code }}">
-            <p id="p-expl-0" class="form-check"><input id="expl-0" class="form-check align-middle" type="checkbox" name="{{ guessing_candidates.0.code }}"> <label class="form-check" for="expl-0">{{ guessing_candidates.0.description|safe }}</label></p>
-            <p id="p-expl-1" class="form-check"><input id="expl-1" class="form-check" type="checkbox" name="{{ guessing_candidates.1.code }}"> <label class="form-check" for="expl-1">{{ guessing_candidates.1.description|safe }}</label></p>
-            <p id="p-expl-2" class="form-check"><input id="expl-2" class="form-check" type="checkbox" name="{{ guessing_candidates.2.code }}"> <label class="form-check" for="expl-2">{{ guessing_candidates.2.description|safe }}</label></p>
+            <p id="p-expl-0" class="form-check"><input id="expl-0" class="form-check-input align-middle" type="checkbox" name="{{ guessing_candidates.0.code }}"> <label class="form-check-label" for="expl-0">{{ guessing_candidates.0.description|safe }}</label></p>
+            <p id="p-expl-1" class="form-check"><input id="expl-1" class="form-check-input" type="checkbox" name="{{ guessing_candidates.1.code }}"> <label class="form-check-label" for="expl-1">{{ guessing_candidates.1.description|safe }}</label></p>
+            <p id="p-expl-2" class="form-check"><input id="expl-2" class="form-check-input" type="checkbox" name="{{ guessing_candidates.2.code }}"> <label class="form-check-label" for="expl-2">{{ guessing_candidates.2.description|safe }}</label></p>
         </form>
     </div>
     <p>&nbsp;</p>

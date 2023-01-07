@@ -7,6 +7,7 @@ urlpatterns = [
     path('start_new', views.start_new, name='start_new'),
     path('start_continue', views.start_continue, name='start_continue'),
     path('help', views.help, name='help'),
+    path('rules', views.rules, name='rules'),
     path('nocookies', views.nocookies, name='nocookies'),
     path('impressum', views.impressum, name='impressum'),
     path('code', views.code, name='code'),
@@ -17,7 +18,7 @@ urlpatterns = [
     path('submit_task_correct_commas', views.submit_task_correct_commas),
     path('submit_task_explain_commas', views.submit_task_explain_commas, name='submit_task_explain_commas'),
     path('delete_user', views.delete_user),
-    path('sentence/<int:id>', views.sentence, name='sentence'),  # ajax load html for single correct sentence
+    path('sentence/<int:sentence_id>', views.sentence, name='sentence'),  # ajax load html for single correct sentence
 
     # statistics
     path('mystats', views.mystats, name='mystats'),
