@@ -67,18 +67,18 @@
                 for (var i=0; i<sentence.length; i++) {  // mark correct, optional and incorredt
                     if (data.response[i].correct) {
                         if (data.response[i].rule.mode == 2) { // must comma is set
-                            sentence[i].style.background = "#85e278"; //green
+                            sentence[i].style.background = "#02a131"; //green
                             sentence[i].classList.add('markingright');
                         } else if (data.response[i].rule.mode == 1) { // may comma is correct
-                            sentence[i].style.background = "#219fff"; //blue
+                            sentence[i].style.background = "#17a2b8"; //blue
                             sentence[i].classList.add('markingright');
                         }
                     } else {
                         if (data.response[i].rule.mode == 0 || data.response[i].rule.mode == 2) { // must not comma is set or must is not set
-                            sentence[i].style.background = "#ff876e"; // red
+                            sentence[i].style.background = "#ac0634"; // red
                             sentence[i].classList.add('markingwrong');
                         } else if (data.response[i].rule.mode == 1) { // may comma is not correct
-                            sentence[i].style.background = "#219fff"; //blue
+                            sentence[i].style.background = "#17a2b8"; //blue
                             sentence[i].style.border = "3px solid red";
                             sentence[i].classList.add('markingwrong');
                         }

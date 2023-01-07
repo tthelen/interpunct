@@ -333,8 +333,11 @@ body {
     border-bottom: rgba(0,0,200,0.5) 4px solid;
 }
 
-.markingright::after { color: green; content: "✔"; }
-.markingwrong::after { color: red; content: "✘"; }
+.markingright { color:white }
+.markingwrong { color:white }
+
+.markingright::after { color: white; content: "✔"; }
+.markingwrong::after { color: white; content: "✘"; }
 
 
 /* modal */

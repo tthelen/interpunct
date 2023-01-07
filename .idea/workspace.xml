@@ -19,57 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="- closes #17">
-      <change afterPath="$PROJECT_DIR$/data/old_version22/kommaregeln.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/old_version22/quellen.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/old_version22/sentences.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/old_version22/words.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/images/hurray.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/images/kommatraining_start.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trainer/migrations/0034_remove_rule_slug.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trainer/migrations/0035_remove_user_pretest_remove_user_pretest_count_and_more.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trainer/templates/trainer/rules.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trainer/templates/trainer/start-orig.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/interpunct.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/interpunct.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="c27e21c9-abfd-4383-9be3-1ce7a89018f8" name="Default" comment="- new layout, new sentences">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/additional_sentences.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/old_version22/additional_sentences.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/additional_sentences2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/old_version22/additional_sentences2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/additional_sentences3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/old_version22/additional_sentences3.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/additional_sentences_4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/old_version22/additional_sentences_4.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/additional_sentences_5.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/old_version22/additional_sentences_5.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/kommaregeln.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/kommaregeln.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_correlation_data.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_sentences.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_solutions.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_solutions_correct.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_solutions_explain.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_users.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_users_450.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/output_users_per_level.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/sentences.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sentences.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interpunct/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/interpunct/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/interpunct.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/interpunct.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/management/commands/import_rules.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/management/commands/read_rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/management/commands/read_rules.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/management/commands/read_sentences.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/management/commands/read_sentences.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/management/commands/user_dump.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/management/commands/user_dump.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/strategies/bayes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/strategies/leitner.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/strategies/leitner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/level_progress.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/partials/correct_sentence.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/partials/correct_sentence.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/start.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/start.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/stats2.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/stats2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_correct_commas.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_explain_commas.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/templates/trainer/task_set_commas.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -451,14 +405,7 @@
       <workItem from="1670567030861" duration="32431000" />
       <workItem from="1671097319995" duration="595000" />
       <workItem from="1672739562326" duration="17677000" />
-      <workItem from="1672989127581" duration="19824000" />
-    </task>
-    <task id="LOCAL-00041" summary="- bugfix: handle multiple UserSentence entries">
-      <created>1496867920982</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1496867920982</updated>
+      <workItem from="1672989127581" duration="21229000" />
     </task>
     <task id="LOCAL-00042" summary="- bugfix: handle multiple UserSentence entries">
       <created>1496868009153</created>
@@ -796,7 +743,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672782134083</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="- new layout, new sentences">
+      <created>1673132302745</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1673132302746</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TodoView">
@@ -832,7 +786,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- 3rd party cookie bugfix&#10;- change probabilites of task types" />
     <MESSAGE value="- user cleanup command&#10;- repair restart /reset view" />
     <MESSAGE value="- improved general statistics (still wip)" />
     <MESSAGE value="- Import von Orthographie-Seminar-Teilnehmern" />
@@ -857,7 +810,8 @@
     <MESSAGE value="- hotfix MultipleObjectsReturned" />
     <MESSAGE value="- make sure rules are only created once per user" />
     <MESSAGE value="- closes #17" />
-    <option name="LAST_COMMIT_MESSAGE" value="- closes #17" />
+    <MESSAGE value="- new layout, new sentences" />
+    <option name="LAST_COMMIT_MESSAGE" value="- new layout, new sentences" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/interpunct$genpasswd.coverage" NAME="genpasswd Coverage Results" MODIFIED="1633203879634" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trainer" />
