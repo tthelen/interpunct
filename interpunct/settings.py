@@ -148,3 +148,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/images/',
 ]
+
+# load prodiction settings if file exists
+try:
+    from .production_settings import *
+except ImportError:
+    pass
