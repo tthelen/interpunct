@@ -40,15 +40,6 @@
             <div class="logo d-none d-lg-block" style="width:280px">
                 <img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo-unbounded.svg" alt="Uni OS Logo">
             </div>
-            <ul class="navbar-nav mr-auto">
-                {% if request.user.is_authenticated %}
-
-                {% else %}
-                    <li class="nav-item active">
-                        <a class="nav-link {% if active == 'task' %}active{% endif %}" href="{% url 'task' %}">Start</a>
-                    </li>
-                {% endif %}
-            </ul>
         </div>
         <div class="mx-auto order-0">
     {% if not nologo %}
