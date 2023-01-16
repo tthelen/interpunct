@@ -306,7 +306,6 @@ def task(request):
     finished = False # default is: we're not yet finished
     # select strategy
     strategy = user.get_strategy()
-    strategy_debug = strategy.debug_output()
 
     # -----------------------------------------------------------------------
     # new user: show welcome page
@@ -328,7 +327,6 @@ def task(request):
     # fetch and prepare information about level for template
     level = user.rules_activated_count  # user's current level
     activerules = strategy.get_active_rules()
-    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1)%10)+1)  # construct image name
     show_ranking = False
 
     # ------------------------------------------------------------------------
@@ -579,6 +577,8 @@ def rules(request):
     """Shows user rules and all rules"""
     all_rules = Rule.objects.all()
     user_rules = UserRule.objects.filter(user__django_user=request.user.id, active=True)
+    strategy = User.objects.get(django_user=request.user.id).get_strategy()
+    active_rules = strategy.get_active_rules()
     active = 'rules'
     additional_heading = 'Alle Regeln'
     user = User.objects.get(django_user=request.user.id)

@@ -197,6 +197,3 @@ class LeitnerStrategy:
 
     def get_active_rules(self):
         return UserRule.objects.filter(user=self.user, active=1)[:5]
-
-    def debug_output(self):
-        return "<p>Strategy: Leitner, no debug info</p>"

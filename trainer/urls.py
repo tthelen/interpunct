@@ -21,7 +21,6 @@ urlpatterns = [
     path('sentence/<int:sentence_id>', views.sentence, name='sentence'),  # ajax load html for single correct sentence
 
     # statistics
-    path('mystats', views.mystats, name='mystats'),
     path('mystats_rule/', views.mystats_rule, name='mystats_rule'),  # ajax load for single rule stat
     path('allstats_sentence/', views.allstats_sentence, name='allstats_sentence'),
     # ajax load for single sentence stats

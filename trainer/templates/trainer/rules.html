@@ -18,6 +18,10 @@
         </div>
         <p>&nbsp;</p>
     {% endfor %}
+    <p>&nbsp;</p>
+{% for ur in active_rules %}
+<p>{{ ur.rule.rule }}, Anzahl Versuche: {{ur.total}}, davon {{ur.correct}} korrekt. Aktueller Score: {{ur.score}}, Box {{ur.box}}
+{% endfor %}
 
 <p>
 <a href="{% url 'task' %}"><button class="btn btn-default">Weiter üben</button></a>
