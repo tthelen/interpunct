@@ -68,7 +68,7 @@ class LeitnerStrategy:
            At most 5 rules sorted by box position."""
 
         limit = min(self.user.rules_activated_count, 5)
-        res = UserRule.objects.filter(user=self.user, active=1).order_by('box')[:limit]
+        res = UserRule.objects.filter(user=self.user, active=True).order_by('box')[:limit]
         return res
 
     def progress(self):

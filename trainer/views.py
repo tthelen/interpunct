@@ -326,7 +326,9 @@ def task(request):
 
     # fetch and prepare information about level for template
     level = user.rules_activated_count  # user's current level
-    activerules = strategy.get_active_rules()
+    # activerules = strategy.get_active_rules()
+    activerules = UserRule.objects.filter(user__django_user=request.user.id, active=True).order_by('box')[:5]
+
     show_ranking = False
 
     # ------------------------------------------------------------------------
@@ -578,8 +580,7 @@ def rules(request):
     all_rules = Rule.objects.all()
     user_rules = UserRule.objects.filter(user__django_user=request.user.id, active=True)
     strategy = User.objects.get(django_user=request.user.id).get_strategy()
-    active_rules = strategy.get_active_rules()
-    active_rules = UserRule.objects.filter(user__django_user=request.user.id, active=True).order_by('box')[:5]
+
     active = 'rules'
     additional_heading = 'Alle Regeln'
     user = User.objects.get(django_user=request.user.id)
