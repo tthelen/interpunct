@@ -33,7 +33,8 @@ class Command(BaseCommand):
                 "B1.4.1",  # 21 SUBORD:KOORD:KONJ:ADJAZ
                 "B1.4.2",  # 22 SUBORD:KOORD:KONJ:NONADJAZ
             ]
-            for r in rule_order:
+            for userrule in UserRule.objects.filter(user=u):
+                r = userrule.rule
                 try:
                     ur = UserRule.objects.get(rule=Rule.objects.get(code=r), user=u)
                 except MultipleObjectsReturned:
