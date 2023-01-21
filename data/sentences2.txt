@@ -10,6 +10,46 @@ Als die Sonne aufging,(B1.1) verzog sich der Nebel.
 Der Nebel verzog sich,(B1.1) als die Sonne aufging.
 Der Mond ist weniger hell als die Sonne.
 
+Ich liebe es(,)(B2.2) zu essen!
+
+Bert hat Hunger.
+Bert könnte sofort ein,(A1) zwei Brötchen verputzen.
+Bert hat kein Geld,(A2) sondern nur ein leeres Portemonnaie.
+Bert erinnert sich plötzlich,(B1.1) was er noch in seiner Hosentasche hat.
+Berst steckt,(B2.1) ohne zu zögern,(B2.1) die Hand in die Hosentasche.
+Bert hofft,(B1.1) dass sein Plan aufgeht,(B1.1) vorausgesetzt(,)(B1.2) dass er vorher nicht verhungert.
+wie üblich (B1.5)
+Bert hat immer noch Hunger,(A3) und das geht ihm auf den Geist.
+Bert überlegt und (A4) überlegt und (A4) findet keine Lösung.
+Bert,(D1) bitte,(D1) mach es nicht so spannend.
+Bert will seine Idee, doch noch an Essen zu gelangen, jetzt schnell umsetzen.
+
+Bert stecke seine Hand,(B1.1) die zittert (B1.3) und die feucht ist,(B1.1) in seine Tasche.
+
+        "A1",  # 1 GLEICHRANG
+        "A2",  # 2 ENTGEGEN
+        "B1.1",  # 3 NEBEN
+        "B2.1",  # 4 UMOHNESTATT
+        "B1.2",  # 5 NEBENEINLEIT
+        "B1.5",  # 6 FORMELHAFT
+        "A3",  # 7 SATZREIHUNG
+        "A4",  # 8 GLEICHRANG KONJUNKT
+        "D1",  # 9 ANREDE/AUSRUF/STELLUNGNAHME
+        "B2.2",  # 10 INF:VERWEIS
+        "B2.3",  # 11 INF:EINFACH
+        "B2.5",  # 12 INFP
+        "C1",  # 13 HERAUSSTELLUNG
+        "C6.2",  # 14 NACHTRAG
+        "C3.1",  # 15 NOPRÄP
+        "C3.2",  # 16 NOPRÄP:SCHLIESS
+        "C6.1",  # 17 EIGENNAME:TITEL
+        "C7",  # 18 EIGENNAME:KEINNACHTRAG
+        "C8",  # 19 HINWEIS:GESETZ
+        "B1.3",  # 20 NEBEN KONJUNKT
+        "B1.4.1",  # 21 SUBORD:KOORD:KONJ:ADJAZ
+        "B1.4.2",  # 22 SUBORD:KOORD:KONJ:NONADJAZ
+
+
 
 Aaron verlässt endlich(,)(#1,C6.2) immer noch grübelnd(,)(#1,C6.2) sein Haus.
 Aber als Impuls, (#1,B2.1) um jetzt in zwanzig Minuten einen Text zu produzieren, (#1,B2.1) sollte es ausreichen.
@@ -150,9 +190,6 @@ Ich jobbe montags,(A1) mittwochs und samstags.
 Ich kann grünes Gemüse(,)(#1,C6.2) wie Brokkoli,(A1) Bohnen oder Gurken(,)(#1,C6.2) nicht ausstehen.
 Ich kann mir vorstellen, (#1,B1.1) wie schwierig es ist, (B2.2) einen günstigen Flug nach Australien zu finden.
 Ich koche dann gerne, (#1,B1.1) wenn meine Gäste freundlich sind (A4) und nicht vergessen(,)(B2.5) ein Gastgeschenk mitzubringen,(#1,B1.1, A2,B2.5) aber ansonsten nicht.
-
-Ich liebe es(,)(B2.2) zu essen!
-
 Ich möchte so gern noch schauen, (A2) aber der Wagen, (B1.1) der rollt. [Hoch auf dem gelben Wagen, Volkslied]
 Ich schwöre, (B1.1) dass ich meine Kraft dem Wohle des deutschen Volkes widmen, (A1) seinen Nutzen mehren, (A1) Schaden von ihm wenden, (A1) das Grundgesetz (A4) und die Gesetze des Bundes wahren (A4) und verteidigen, (A1) meine Pflichten gewissenhaft erfüllen (A4) und Gerechtigkeit gegen jedermann üben werde. [Grundgesetz für die Bundesrepublik Deutschland]
 Ich spiele gerne Baseball,(A2) aber nicht mit dir.
