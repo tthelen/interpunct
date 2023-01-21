@@ -1008,6 +1008,9 @@ class UserRule(models.Model):
     total = models.IntegerField(default=0)  # total rule solution counter
     correct = models.IntegerField(default=0)  # correct rule solution counter
 
+    class Meta:
+        unique_together = ('user', 'rule')
+
     def count(self, correct=True, tries=1):
         """Register solution for a rule.
         
