@@ -25,7 +25,7 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
-            user.strategy = user.LEITNER  # random.choice([user.BAYES, user.BAYES, user.LEITNER])
+            user.strategy = user.SEK2 # user.LEITNER  # random.choice([user.BAYES, user.BAYES, user.LEITNER])
             user.gamification = user.GAMIFICATION_CLASSIC
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
@@ -83,7 +83,7 @@ def view_or_welcome(view, request, test_func, realm="", *args, **kwargs):
         except User.DoesNotExist:  # new user: welcome!
             user = User(user_id=username)
             user.rules_activated_count = 0
-            user.strategy = user.LEITNER  #  random.choice([user.BAYES, user.BAYES, user.LEITNER])
+            user.strategy = user.SEK2 # user.LEITNER  #  random.choice([user.BAYES, user.BAYES, user.LEITNER])
             # user.gamification = random.choice([user.GAMIFICATION_CLASSIC, user.GAMIFICATION_INDIVIDUAL, user.GAMIFICATION_GROUP])
             user.gamification = user.GAMIFICATION_CLASSIC
             user.prepare(request)  # create a corresponding django user and set up auth system
@@ -197,7 +197,7 @@ def start_new(request):
 
     user = User(user_id=hash_code)
     user.rules_activated_count = 0
-    user.strategy = user.LEITNER
+    user.strategy = user.SEK2 # user.LEITNER
     user.code = code
     user.gamification = user.GAMIFICATION_CLASSIC
     user.prepare(request)  # create a corresponding django user and set up auth system
@@ -332,52 +332,61 @@ def task(request):
     show_ranking = False
 
     # ------------------------------------------------------------------------
-    # normal task selection process
-    (new_rule, finished, forgotten) = strategy.progress()  # checks if additional rule should be activated or user has finished all levels
+    if user.strategy == user.LEITNER:
+        # normal task selection process
+        (new_rule, finished, forgotten) = strategy.progress()  # checks if additional rule should be activated or user has finished all levels
 
-    # level progress: show new rules instead of task
-    if new_rule:
-        level = user.rules_activated_count  # user's current level
-        return render(request, 'trainer/level_progress.html', locals())
+        # level progress: show new rules instead of task
+        if new_rule:
+            level = user.rules_activated_count  # user's current level
+            return render(request, 'trainer/level_progress.html', locals())
 
-    show_ranking=True
+        show_ranking=True
 
-    # choose a sentence from roulette wheel (the bigger the error for
-    # a certain rule, the more likely one will get a sentence with that rule)
-    sentence_rule = strategy.roulette_wheel_selection()  # choose sentence and rule
-    sentence = sentence_rule.sentence
-    rule = sentence_rule.rule
+        # choose a sentence from roulette wheel (the bigger the error for
+        # a certain rule, the more likely one will get a sentence with that rule)
+        sentence_rule = strategy.roulette_wheel_selection()  # choose sentence and rule
+        sentence = sentence_rule.sentence
+        rule = sentence_rule.rule
 
-    # prepare some special views for templates
-    words = sentence.get_words()  # pack all words of this sentence in a list
-    comma = sentence.get_commalist() # pack all commas [0,1,2] in a list
-    words_and_commas = list(zip(words,comma+[0]))  # make a combines list of both
+        # prepare some special views for templates
+        words = sentence.get_words()  # pack all words of this sentence in a list
+        comma = sentence.get_commalist() # pack all commas [0,1,2] in a list
+        words_and_commas = list(zip(words,comma+[0]))  # make a combines list of both
 
-    # task randomizer
-    # explain task only for must or may commas, usres with at least 3 active rules and non-error rules
-    if rule.mode > 0 and user.rules_activated_count >= 3 and not rule.code.startswith('E'):
-        index = random.randint(0, 100)
-    else:  # less than 3 active rules: only set and correct tasks
-        index = 0
+        # task randomizer
+        # explain task only for must or may commas, usres with at least 3 active rules and non-error rules
+        if rule.mode > 0 and user.rules_activated_count >= 3 and not rule.code.startswith('E'):
+            index = random.randint(0, 100)
+        else:  # less than 3 active rules: only set and correct tasks
+            index = 0
 
-    if index < 67:  # 1/3 chance for rule explanation
-        if random.randint(0,100) > 50: # 50% chance for correct commas
-            comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
-            # comma_types.append([])  # bugfix: no comma after last position
-            comma_to_check = []
-            for ct in comma_types:
-                if ct != [] and ct[0][0] != 'E':  # rule, but no error rule
-                    # at a rule position include comma with 50% probabily
-                    comma_to_check.append(random.randint(0, 1))
-                else:  # 1/6 prob. to set comma in no-comma position
-                    comma_to_check.append(random.choice([1, 0, 0, 0, 0, 0]))
-            comma_to_check.append(0)
-            return render(request, 'trainer/task_correct_commas.html', locals())
+        if index < 67:  # 1/3 chance for rule explanation
+            if random.randint(0,100) > 50: # 50% chance for correct commas
+                comma_types = sentence.get_commatypelist()  # pack all comma types [['A2.1'],...] of this sentence in a list
+                # comma_types.append([])  # bugfix: no comma after last position
+                comma_to_check = []
+                for ct in comma_types:
+                    if ct != [] and ct[0][0] != 'E':  # rule, but no error rule
+                        # at a rule position include comma with 50% probabily
+                        comma_to_check.append(random.randint(0, 1))
+                    else:  # 1/6 prob. to set comma in no-comma position
+                        comma_to_check.append(random.choice([1, 0, 0, 0, 0, 0]))
+                comma_to_check.append(0)
+                return render(request, 'trainer/task_correct_commas.html', locals())
+            else:
+                return render(request, 'trainer/task_set_commas.html', locals())
         else:
-            return render(request, 'trainer/task_set_commas.html', locals())
-    else:
-        # EXPLANATION task
-        return render_task_explain_commas(request, sentence, template_params=locals())
+            # EXPLANATION task
+            return render_task_explain_commas(request, sentence, template_params=locals())
+    elif user.strategy == user.SEK2:
+        (rule, sentence) = strategy.get_next_task()
+
+        # prepare some special views for templates
+        words = sentence.get_words()  # pack all words of this sentence in a list
+        comma = sentence.get_commalist()  # pack all commas [0,1,2] in a list
+        words_and_commas = list(zip(words, comma + [0]))  # make a combines list of both
+        return render(request, 'trainer/task_set_commas.html', locals())
 
 @logged_in_or_basicauth("Bitte einloggen")
 def submit_task_set_commas(request):

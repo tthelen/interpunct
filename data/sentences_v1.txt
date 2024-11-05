@@ -1,0 +1,49 @@
+# Typ1: Einsetzen von Kommata
+# Typ2: Erkennen der Regel
+# Typ3: Kommata korrigieren
+# Typ4: Erkennen der richtigen Sätze
+R1-01|Typ1|Auf dem Bild sieht man eine Blumenwiese, (A1) einen Vogel, (A1) ein Mädchen, (A1) einen Hund.
+R1-02|Typ1|Das Mädchen heißt Mia. Mia hat blondes Haar, (A1) grüne Augen, (A1) außerdem trägt sie einen bunten Pulli.
+R1-03|Typ1|Die Blumenwiese erstrahlt in bunten Farben. Mia zählt orange, (A1) weiße, (A2) rote (A2) und lilane Blütenfarben.
+R1-04|Typ2|In ihrer Freizeit spielt Mia gerne Fußball, (A1) backt gerne (A2) und turnt.
+R1-05|Typ3|Mia hat vier Geschwister. Einen kleinen Bruder Marlo, (A1) eine ältere Schwester Taylor (A2) und zwei Halbgeschwister Tom (A2) und Quin.
+R1-06|Typ3|Mias Mutter Hilde engagiert sich ehrenamtlich in der Suppenküche, (A1) gibt Sprach-, (A1) sowie Kochkurse.
+R1-07|Typ3|Mias Vater hingegen arbeitet in einer Tierarztpraxis. Dort behandelt er Hunde, (A1) Katzen, (A1) Vögel, (A1) aber auch Bauernhoftiere wie beispielsweise Pferde.
+R1-08|Typ4|Obwohl Mia an den Wochenenden viele Aktivitäten plant, (C1) darunter Gartenarbeit, (A1) den Besuch bei Freunden (A2) und Fußballturnieren, (A1) muss sich Mia immer erst um ihren Hund kümmern.
+R1-09|Typ4|Während Marlo seine freie Zeit mit Freunden, (A1) zocken (A2) oder Basketball verbringt, (C1) verbringt Taylor die Zeit lieber mit lesen, (A1) Fahrrad fahren, (A1) Badminton spielen (A2) oder backen.
+R1-10|Typ4|Mia verbringt die Sommerferien in den Bergen, (A1) dort denkt sie am liebsten über verschiedene Themen nach (A2) oder wandert zusammen mit ihrem Opa. Außerdem liest sie gerne Comics (A2) oder Romane.
+R1-11|Typ2|Mia geht in die sechste Klasse einer weiterführenden Schule (A2) und spielt in der Mädchenfußball- AG ihrer Schule.
+R1-12|Typ3|Die Lieblingsfußballer:innen von Mia sind Jule Brand (A2) und Thomas Müller (A2) und Lena Oberdorf (A2) und Kai Havertz.
+R1-13|Typ3|Nächstes Jahr steht für die Familie von Mia eine Weltreise an. Sie fliegen unter anderem nach New York, (A1) Bangkok, (A1) Japan (A2) und Bali.
+R1-14|Typ3|Mias Familie wohnt in einem weißen Haus mit einem Garten, (A1) einem Balkon (A2) und einer Terrasse.
+R1-15|Typ3|Während Mia das Reisen in die Berge zum Skifahren (A2) und Wandern liebt, (A1) liebt der Rest ihrer Familie das Reisen an den Strand, (A1) in die Sonne (A2) und in weit entfernte Länder.
+R2-01|Typ2|Das Bild zeigt eine Welt voller Magie, (C1) weil ein Zauberer mit Hut zu erkennen ist.
+R2-02|Typ1|Harry Potter ist ein Teil einer solchen magischen Welt, (C1) weil er als Zauberer geboren wurde.
+R2-03|Typ1|Harry Potter ist ein Junge, (C1) der als Zauberer geboren wurde, (C1) jedoch erst bei seinen Verwandten lebt, bevor er nach Hogwarts kommt.
+R2-04|Typ1|Menschen, (C1) die wahre Harry Potter Fans sind, (C1) werden als Potterheads bezeichnet.
+R2-05|Typ1|Obwohl Harry, (C1) dessen Eltern ebenfalls Schüler an der Schule für Hexerei (A2) und Zauberei waren, (C1) sich in große Gefahr begibt, (C1) kämpft er zusammen mit seinen Freunden Ron (A2) und Hermine gegen die dunklen Mächte.
+R2-06|Typ2|Der Hogwart-Express bringt die Schüler: innen nach Hogwarts, dieser fährt vom Gleis 9¾ ab, (C1) dessen Existenz lediglich Zauberer und (A2) Hexen sehen.
+R2-07|Typ3|Die Anhänger von Lord Voldemort besitzen ein Symbol am Arm, (C1) welches als dunkles Mal bezeichnet wird. Immer dann (C1) wenn ein Verbrechen unter Lord Voldemorts Namen verübt wird, (C1) erscheint das dunkle Mal am Himmel, (C1) sodass jeder das Zeichen sehen kann.
+R2-08|Typ3|Die Heiligtümer des Todes sind Gegenstände, (C1) die vom Tod selbst erschaffen wurden. Dazu zählen ein Zauberstab, (C1) der jedes Duell gewinnt, (C1,A1) ein Stein, (C1) der bereits Verstorbene wieder lebendig macht, (C1) und ein Tarnumhang.
+R2-09|Typ3|Die Anhänger von Lord Voldemort bezeichnen sich selbst als Todesser (C2) und bedienen sich allen Mitteln für die Übernahme der Macht in der magischen Welt.
+R2-10|Typ4|Der Hauself Dobby, (C1) der durch Harry Potter von seinem Hausherren befreit wurde, (C1) fühlt sich Harry Potter zu Dank verpflichtet, (C1) sodass er ihm in seinem Kampf gegen die dunklen Mächte behilflich ist.
+R2-11|Typ4|Die Figur Bellatrix Lestrange, (C1) die eine Anhängerin Voldemorts ist, (C1) begeht viele Verbrechen in der Zauberwelt, (A1) sie tötet zum Beispiel ihren Cousin Sirius Black. Für diese Verbrechen saß sie einst in Askaban, (C1) das eine Art Hochsicherheitsgefängnis darstellt, (C1) aus dem nur schwer zu entkommen ist.
+R2-12|Typ4|Harry Potter kauft seine Schulsachen in der Winkelgasse, (C1) weil er eine Schule für Zauberei besucht.
+R2-13|Typ1|Als Muggel werden in der magischen Welt Menschen bezeichnet, (C1) die keine magischen Kräfte besitzen.
+R2-14|Typ1|Die Schüler:innen von Hogwarts werden in verschiedene Häuser eingeteilt, (A1) dies geschieht durch den sprechenden Hut.
+R2-15|Typ2|Der, (C1) dessen Name nicht genannt werden darf, (C1) versucht Harry Potter zu töten.
+R3-01|Typ1|Das Bild, (C1) das du gerade siehst, (C1) zeigt Gegenstände aus dem Schulalltag.
+R3-02|Typ1|Den Rucksack, (B1) den nutzen viele Schüler: innen im Schulalltag.
+R3-03|Typ1|Das linierte Heft, (B1) das wird vor allem im Deutschunterricht gebraucht.
+R3-04|Typ1|Die Schere, (C1) die für den Kunstunterricht benötigt wird, (C1) liegt neben dem Füller.
+R3-05|Typ1|Das Tablet, (C1) das links im Bild zu erkennen ist, (C1) ist Bestandteil von digitalen Klassenräumen.
+R3-06|Typ1|Der Globus, (C1) der von Lehrkräften im Fach Erdkunde verwendet wird, (C1) steht neben dem Rucksack.
+R3-07|Typ1|Der Schulbus, (C1) der im Bild zu sehen ist, (C1) symbolisiert den Fahrweg von Schüler:innen zur Schule.
+R3-08|Typ1|Die Kopfhörer, (C1) die im Unterricht oft verboten sind, (C1) werden von Schüler:innen gerne genutzt, (C1) um Musik zu hören.
+R3-09|Typ1|Die Trinkflasche, (C1) die du im Sportunterricht brauchst, (C1) ist pink.
+R3-10|Typ1|Der Pinsel, (C1) der im Kunstunterricht von Schüler: innen verwendet wird, (C1) liegt über dem Lineal.
+R3-11|Typ1|Das Lineal, (C1) das in jeder Federmappe vorhanden sein sollte, (C1) wird genutzt, (C1) um gerade Linien zu zeichnen.
+R3-12|Typ1|Die Bücher, (C1) die für die Schule wichtig sind, (C1) findest du rechts im Bild.
+R3-13|Typ1|Der Wecker, (C1) der von den meisten Schüler:innen gehasst wird, (C1) klingelt im Schulalltag schon sehr früh.
+R3-14|Typ1|Der Stundenplan, (C1) der die Fächer von Montag bis Freitag vorgibt, (C1) ist auf dem Bild in bunten Farben dargestellt.
+R3-15|Typ1|Außerdem sind Stifte im Bild zu sehen, (C1) die vor allem im Kunstunterricht verwendet werden.

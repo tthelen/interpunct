@@ -91,6 +91,10 @@ class Sentence(models.Model):
     rules = models.ManyToManyField(Rule, through='SentenceRule')
     active = models.BooleanField(default=True)
     source = models.CharField(max_length=512, null=True)
+    part = models.IntegerField(default=0)  # added for #SEK2
+    level = models.IntegerField(default=0)  # added for #SEK2
+    extra = models.BooleanField(default=False)  # added for #SEK2
+    excercise_type = models.IntegerField(default=1)  # added for #SEK2
 
     def __str__(self):
         return self.text
@@ -477,8 +481,11 @@ class User(models.Model):
     # rule selection strategy
     LEITNER = 0
     BAYES = 1
+    SEK2 = 2
     STRATS = (
         (LEITNER, 'Leitnerbox'),  # simple leitner box algorithm
+        (BAYES, 'Bayes'),  # bayesian network
+        (SEK2, 'SEK2'),  # SEK2 strategy
     )
 
     GAMIFICATION_NONE = 0
@@ -535,6 +542,10 @@ class User(models.Model):
     data_gamification_2 = models.CharField(max_length=255, default='')  # for gamification study / questionnaire results
     data_gamification_3 = models.CharField(max_length=255, default='')  # for gamification study / questionnaire results
 
+    # rule can be 1, 2 or 3
+    sek2_rule = models.IntegerField(default=1)  # bigger part of training: rule 1, 2 or 3?
+    sek2_level = models.IntegerField(default=1)  # level within a rule
+
     # counts wrong answers for a specific comma type
     comma_type_false = models.CharField(max_length=400,default="A1:0/0, A2:0/0, A3:0/0, A4:0/0, B1.1:0/0, B1.2:0/0, B1.3:0/0, B1.4.1:0/0, B1.4.2:0/0, B1.5:0/0, B2.1:0/0, B2.2:0/0, B2.3:0/0, B2.4.1:0/0, B2.4.2:0/0, B2.5:0/0, C1:0/0, C2:0/0, C3.1:0/0, C3.2:0/0, C4.1:0/0, C4.2:0/0, C5:0/0, C6.1:0/0, C6.2:0/0, C6.3.1:0/0, C6.3.2:0/0, C6.4:0/0, C7:0/0, C8:0/0, D1:0/0, D2:0/0, D3:0/0, E1:0/0")
     sentences = models.ManyToManyField(Sentence, through='UserSentence')
@@ -567,6 +578,9 @@ class User(models.Model):
         if self.strategy == self.LEITNER:
             from trainer.strategies.leitner import LeitnerStrategy
             return LeitnerStrategy(self)
+        elif self.strategy == self.SEK2:  # added for SEK2
+            from trainer.strategies.sek2 import Sek2Strategy
+            return Sek2Strategy(self)
         else:
             raise Exception("Invalid strategy: {}".format(self.strategy))
 
@@ -737,7 +751,8 @@ class User(models.Model):
                     if first: # save response only for first rule (others must be same)
                         resp.append({'correct': corr,  'rule': {'code': rule.code, 'mode': rule.mode}})
                         first = False
-                    userrule.count(correct=corr)
+                    if userrule:
+                        userrule.count(correct=corr)
                     if not rule.code.startswith('E'): # count everything but error positions
                         self.count(corr)
                         self.save()

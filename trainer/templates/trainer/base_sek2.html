@@ -101,13 +101,7 @@
         {% if display_rank %}
             <div class="card text-center">
             <div>
-                {% if user.sek2_rule == 1 %}
-                    <img src="{% static 'images/sek2_part1.jpg' %}" width="100%" style="margin-bottom: 10px;">
-                {% elif user.sek2_rule == 2 %}
-                    <img src="{% static 'images/sek2_part2.jpg' %}" width="100%" style="margin-bottom: 10px;">
-                {% elif user.sek2_rule == 3 %}
-                    <img src="{% static 'images/sek2_part3.jpg' %}" width="100%" style="margin-bottom: 10px;">
-                {% endif %}
+                <img src="{% static 'images/sek2_part{{ user.sek2_rule }}.jpg %}" width="100%" style="margin-bottom: 10px;">
             </div>
                 <div class="card-header">Regeln im Fokus:</div>
                 <div class="card-body">

@@ -43,11 +43,37 @@ class Command(BaseCommand):
         for fn in options['filename']:  # read all given files
             with open(fn, "r", encoding="utf-8") as f:
                 for line in f:  # all lines in file
+                    if line.startswith("#"):  # skip comments
+                        continue
                     with transaction.atomic():  # all db actions as one transaction
-                        shortcut_string=line.strip()
+                        stripped_line=line.strip()
+
+                        # determine rule and level, added for #SEK2
+                        print(stripped_line)
+                        (rules_level, typ, shortcut_string) = stripped_line.split("|", 2)  # added for #SEK2
+                        # rules_level has the form R01-01 with R01 stading for part 1 and 01 for level 1
+                        # parse rules_level and assign to part and level
+                        m = re.match(r'(R|X)(\d+)-(\d+)', rules_level)
+                        if m:
+                            extra = (m.group(1) == "X")
+                            part = int(m.group(2))
+                            level = int(m.group(3))
+                        else:
+                            raise CommandError("Rules level not parsable")
+
+                        # parse excercise type, added for #SEK2
+                        m = re.match(r'Typ([12345])', typ)
+                        if m:
+                            excercise_type = int(m.group(1))
+                        else:
+                            raise CommandError("Exercise type not parsable")
+
+                        # parse comma positions
                         sentence, words, rules, source = self.from_shortcuts(shortcut_string)
                         print("Sentence: {}, Words: {}, Rules: {}, Source: {}".format(sentence, words, rules, source))
-                        s = Sentence(text=sentence, active=True, source=source)
+                        s = Sentence(text=sentence, active=True, source=source,
+                                     extra=extra, part=part, level=level, excercise_type=excercise_type)
+                        s.save()
                         s.comma_select = ",".join(["0" for x in s.get_commalist()])
                         s.save()
                         for (pos,pair, r) in rules:
