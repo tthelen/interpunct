@@ -1,4 +1,6 @@
 {% extends "trainer/base.html" %}
+{% load static %}
+
 
 {% block title %}Kommatraining - Übung: Erkläre die Kommaposition{% endblock %}
 
@@ -10,6 +12,15 @@
             title="Anleitung"
             data-content="Wähle für die markierte Kommaposition die passenden Regeln aus. Insbesondere bei höheren Leveln können auch mehrere oder gar alle Regeln passen.">?</button>
     </h2>
+    <div>
+    {% if user.sek2_rule == 1 %}
+        <img src="{% static 'images/sek2_part1.jpg' %}" width="50%" style="margin-bottom: 10px;">
+    {% elif user.sek2_rule == 2 %}
+        <img src="{% static 'images/sek2_part2.jpg' %}" width="50%" style="margin-bottom: 10px;">
+    {% elif user.sek2_rule == 3 %}
+        <img src="{% static 'images/sek2_part3.jpg' %}" width="50%" style="margin-bottom: 10px;">
+    {% endif %}
+    </div>
 
 
 <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">

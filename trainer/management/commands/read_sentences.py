@@ -53,16 +53,16 @@ class Command(BaseCommand):
                         (rules_level, typ, shortcut_string) = stripped_line.split("|", 2)  # added for #SEK2
                         # rules_level has the form R01-01 with R01 stading for part 1 and 01 for level 1
                         # parse rules_level and assign to part and level
-                        m = re.match(r'(R|X)(\d+)-(\d+)', rules_level)
+                        m = re.match(r'(R)(\d+)-(\d+|X)', rules_level)
                         if m:
-                            extra = (m.group(1) == "X")
+                            extra = (m.group(3) == "X")
                             part = int(m.group(2))
-                            level = int(m.group(3))
+                            level = int(m.group(3)) if not extra else 0
                         else:
                             raise CommandError("Rules level not parsable")
 
                         # parse excercise type, added for #SEK2
-                        m = re.match(r'Typ([12345])', typ)
+                        m = re.match(r'Typ([0123456])', typ)
                         if m:
                             excercise_type = int(m.group(1))
                         else:

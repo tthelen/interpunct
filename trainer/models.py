@@ -628,75 +628,6 @@ class User(models.Model):
         """
         return
 
-        # 1. If current user has individual ranking
-        if self.gamification == self.GAMIFICATION_INDIVIDUAL:
-
-            # save current task for gamification scoring history
-            if resp:
-                completely_correct = True  # assume that tas was correct until we find an error
-                for r in resp:
-                    if not r['correct']:
-                        completely_correct = False  # error found
-                        break
-                hist = UserHistory(user=self, correct=completely_correct)  # create a new UserHistory database entry
-                hist.save()  # end save it
-
-            # activity is number of tasks in the last 48 hours
-            # find in database all UserHistory entries for current user that are not older than 2 days
-            twodaysago = timezone.now() - timezone.timedelta(days=2)
-            activity = UserHistory.objects.filter(user=self, mkdate__gte=twodaysago).count()
-
-            # hist is correctness value for last 30 tasks (with degrading contribution to value)
-            # a) find in database all UserHistory entries for current user sorted descending by date (newest first)
-            hist = UserHistory.objects.filter(user=self).order_by('-mkdate')
-            value = 0  # error value
-            # b) check 10 most recent
-            for h in hist[0:10]:  # the 10 latest task submissions (0-9)
-                if not h.correct:
-                    value += 2.0  # recent mistake results in -2 points
-            # c) check 10th-19th most recent
-            for h in hist[10:20]:  # the 10 latest before that (10-19)
-                if not h.correct:
-                    value += 1.5  # mid-recent mistake results in -1.5 points
-            # d) check 20th-29th most recent
-            for h in hist[20:30]:  # the 10 latest before that (20-29)
-                if not h.correct:
-                    value += 1.25 # less-recent mistake results in -1.5 points
-
-            # score = activity value - error value
-            self.gamification_score = activity - value  # set score for current user
-            self.save()  # and save to database
-
-            onehourago = timezone.now() - timezone.timedelta(hours=1)
-            c = LastRecalc.objects.filter(date__gte=onehourago).count()
-            if not c: # have all users' points been recalculated in the last 1 hour? If not, do so now...
-                LastRecalc.objects.all().delete()
-                LastRecalc().save()
-                recalc_users = User.objects.filter(gamification=User.GAMIFICATION_INDIVIDUAL)
-                for u in recalc_users:
-                    u.update_score()
-
-        # 1. If current user has group ranking
-        elif self.gamification == User.GAMIFICATION_GROUP:
-
-            # save for gamification scoring history
-            if resp:
-                completely_correct = True
-                for r in resp:
-                    if not r['correct']:
-                        completely_correct = False
-                        break
-                # save result to a new entry in the GroupHistory table
-                hist = GroupHistory(group=self.gamification_group, correct=completely_correct)
-                hist.save()
-
-                self.update_group_score()
-
-            # always update all groups
-            for g in GroupScore.objects.all():
-                self.update_group_score(g.group)
-
-
 
     def eval_set_commas(self, user_array_str, sentence, solution):
         """
@@ -710,6 +641,7 @@ class User(models.Model):
         solution_array = sentence.get_commatypelist()
         pairs = sentence.get_commapairlist()
         user_array = re.split(r'[ ,]+', user_array_str)
+        all_correct = True
         for i in range(len(solution_array)):
             if len(solution_array[i]) == 0 and int(user_array[i]) == 1: # comma in the wild
                 rule = Rule.objects.get(code="E1")
@@ -719,6 +651,7 @@ class User(models.Model):
                     userrule = UserRule(user=self, rule=rule)
                 userrule.count(correct=False)
                 resp.append({'correct':False,  'rule': {'code': rule.code, 'mode': rule.mode}})
+                all_correct = False
                 SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
             elif len(solution_array[i]) != 0: # comma at rule position
                 rules = Rule.objects.filter(code=solution_array[i][0])
@@ -748,6 +681,7 @@ class User(models.Model):
                             corr = True
                     else:
                         corr = False
+                        all_correct = False
                     if first: # save response only for first rule (others must be same)
                         resp.append({'correct': corr,  'rule': {'code': rule.code, 'mode': rule.mode}})
                         first = False
@@ -760,6 +694,9 @@ class User(models.Model):
                         SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
             else:
                 resp.append({'correct': True, 'rule': {'code':'', 'mode':0}})
+
+        solution.correct = all_correct
+        solution.save()
 
         # self.update_score(resp)
 
@@ -776,6 +713,7 @@ class User(models.Model):
         solution_array = sentence.get_commatypelist()  # for every position: rules for that position
         pairs = sentence.get_commapairlist()
         resp = []
+        all_correct = True
 
         for i in range(len(solution_array)):
 
@@ -787,9 +725,14 @@ class User(models.Model):
                     resp.append({'correct': True, 'rule': {'code': '', 'mode': 0}})
                 else:  # wrong comma without rule not detected correctly or no-comma position marked
                     rule = Rule.objects.get(code="E1")
-                    userrule = UserRule.objects.get(user=self, rule=rule)
+                    try:
+                        userrule = UserRule.objects.get(user=self, rule=rule)
+                    except UserRule.DoesNotExist:
+                        userrule = UserRule(user=self, rule=rule)
+                        userrule.save()
                     userrule.count(correct=False)
                     resp.append({'correct': False, 'rule': {'code': rule.code, 'mode': rule.mode}})
+                    all_correct = False
                     SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
 
             elif len(solution_array[i]) != 0: # rule position
@@ -824,11 +767,13 @@ class User(models.Model):
                             if not found:  # first occurence is always wrong if set
                                 if user_array[i][1] == '1':
                                     corr = False
+                                    all_correct = False
                                 else:
                                     corr = True
                         else:
                             if user_array[i][1] == '1':
                                 corr = False  # marking a MAY comma slot is always false
+                                all_correct = False
                             else:
                                 corr = True
 
@@ -839,12 +784,16 @@ class User(models.Model):
                     userrule.count(correct=corr)
                     if not corr:
                         SolutionRule(solution=solution, rule=rule, error=True).save()  # save rule to solution
+                        all_correct = False
                     if not rule.code.startswith('E'): # count everything but error positions
                         self.count(corr)
                         self.save()
                     if first: # save response info only for first rule (other must be equal)
                         resp.append({'correct': corr, 'rule': {'code': rule.code, 'mode': rule.mode}})
                         first = False
+
+        solution.correct = all_correct
+        solution.save()
 
         # self.update_score(resp)
         return resp
@@ -1135,6 +1084,9 @@ class Solution(models.Model):
     time_elapsed = models.IntegerField(default=0) # time in ms
     mkdate = models.DateTimeField(auto_now_add=True)
     rules = models.ManyToManyField(Rule, through='SolutionRule')
+    correct = models.BooleanField(default=False)
+    sek2_rule = models.IntegerField(default=1)  # bigger part of training: rule 1, 2 or 3?
+    sek2_level = models.IntegerField(default=1)  # current user level when solving
 
     def __str__(self):
         return "User {} for Sentence {} - {} ms".format(self.user.id, self.sentence.id, self.time_elapsed)

@@ -100,15 +100,6 @@
           <div class="col-lg-2 mx-auto">
         {% if display_rank %}
             <div class="card text-center">
-            <div>
-                {% if user.sek2_rule == 1 %}
-                    <img src="{% static 'images/sek2_part1.jpg' %}" width="100%" style="margin-bottom: 10px;">
-                {% elif user.sek2_rule == 2 %}
-                    <img src="{% static 'images/sek2_part2.jpg' %}" width="100%" style="margin-bottom: 10px;">
-                {% elif user.sek2_rule == 3 %}
-                    <img src="{% static 'images/sek2_part3.jpg' %}" width="100%" style="margin-bottom: 10px;">
-                {% endif %}
-            </div>
                 <div class="card-header">Regeln im Fokus:</div>
                 <div class="card-body">
                     {%  for ur in activerules %}
@@ -128,27 +119,6 @@
                               <div class="modal-body">
                                 <h4>Regel {{ ur.rule.rule }}:</h4>
                                 <p>{{ ur.rule.description|safe }}<p>
-                                  
-{%                               <h4>Beispiel:</h4>
-                                  <p><em>{{ ur.rule.example|safe }}</em></p>
-                                  <h4>Statistik:</h4>
-                                  <table>
-                                      <tr><td>Vorkommen in Übungen: </td><td style="text-align: right">{{ ur.total }}</td></tr>
-                                      <tr><td>Davon korrekt gelöst: </td><td style="text-align: right">{{ ur.correct }}</td></tr>
-                                      <tr><td>Übungshäufigkeit: </td><td>
-                                      {% if ur.box == 0 %}sehr häufig{% endif %}
-                                          {% if ur.box == 1 %}häufig{% endif %}
-                                          {% if ur.box == 2 %}mittelmäßig oft{% endif %}
-                                          {% if ur.box == 3 %}selten{% endif %}
-                                          {% if ur.box == 4 %}sehr selten{% endif %}
-                                      </td></tr>
-                                      </table>
-                                      {% if ur.user.current_rule == ur.rule %}
-                                      <h4>Levelaufstieg</h4>
-                                      <p>Diese Regel ist als letzte hinzugekommen. Du steigst in den nächsten Level auf, wenn du mindestens
-                                          4 Aufgaben zu dieser Regel mehrheitlich korrekt gelöst hast.</p>
-                                      {% endif %}
-                                  </p> %}
                               
                                   </div>
                                   <div class="modal-footer">
@@ -161,6 +131,8 @@
                 </div>
                   <div class="card-footer">
                     <a href="{% url 'rules' %}" class="card-link">Alle Regeln</a>
+
+                      Part: {{ user.sek2_rule }} / Level: {{ user.sek2_level }}
                   </div>
 
             </div>

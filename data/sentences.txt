@@ -3,9 +3,10 @@
 # Typ3: Kommata korrigieren
 # Typ4: Erkennen der richtigen Sätze
 # Typ5: Beantwortung von Fragen
+# Typ6: Single-Choice Aufgabe
 R1-01|Typ1|Auf dem Bild sieht man eine Blumenwiese, (A1) einen Vogel, (A1) ein Mädchen, (A1) einen Hund.
 R1-02|Typ1|Das Mädchen heißt Mia. Mia hat blondes Haar, (A1) grüne Augen, (A1) außerdem trägt sie einen bunten Pulli.
-R1-03|Typ1|Die Blumenwiese erstrahlt in bunten Farben. Mia zählt orange, (A1) weiße, (A2) rote (A2) und lilane Blütenfarben.
+R1-03|Typ1|Die Blumenwiese erstrahlt in bunten Farben. Mia zählt orange, (A1) weiße, (A1) rote (A2) und lilane Blütenfarben.
 R1-04|Typ2|In ihrer Freizeit spielt Mia gerne Fußball, (A1) backt gerne (A2) und turnt.
 R1-05|Typ5|Mia hat vier Geschwister. Einen kleinen Bruder Marlo, (A1) eine ältere Schwester Taylor (A2) und zwei Halbgeschwister Tom (A2) und Quinn.
 R1-06|Typ3|Mias Mutter Hilde engagiert sich ehrenamtlich in der Suppenküche, (A1) gibt Sprach-, (A1) sowie Kochkurse.
@@ -26,17 +27,17 @@ R2-05|Typ1|Der, dessen Name nicht genannt werden darf, versucht Harry Potter zu 
 R2-06|Typ2|Der Hogwart-Express bringt die Schüler: innen nach Hogwarts, dieser fährt vom Gleis 9¾ ab, (C1) dessen Existenz lediglich Anhänger der magischen Welt sehen.
 R2-07|Typ4|Die Anhänger von Lord Voldemort besitzen ein Symbol am Arm, (C1) welches als dunkles Mal bezeichnet wird. Immer dann, (C1) wenn ein Verbrechen unter Lord Voldemorts Namen verübt wird, (C1) erscheint das dunkle Mal am Himmel, (C1) sodass jeder das Zeichen sehen kann.
 R2-08|Typ3|Die Heiligtümer des Todes sind Gegenstände, (C1) die vom Tod selbst erschaffen worden sind. Dazu zählen ein Zauberstab, (C1) der jedes Duell gewinnt, (C1,A1) ein Stein, (C1) der bereits Verstorbene wieder lebendig macht (C1) und ein Tarnumhang.
-R2-09|Typ5|Die Anhänger von Lord Voldemort bezeichnen sich selbst als Todesser (C2) und bedienen sich allen Mitteln für die Übernahme der Macht in der magischen Welt.
+R2-09|Typ6|Die Anhänger von Lord Voldemort bezeichnen sich selbst als Todesser (C2) und bedienen sich allen Mitteln für die Übernahme der Macht in der magischen Welt.
 R2-10|Typ3|Der Hauself Dobby, (C1) der durch Harry Potter von seinem Hausherren befreit wurde, (C1) fühlt sich Harry Potter zu Dank verpflichtet, (C1) sodass er ihm in seinem Kampf gegen die dunklen Mächte behilflich ist.
 R2-11|Typ3|Die Figur Bellatrix Lestrange, (C1) die eine Anhängerin Voldemorts ist, (C1) begeht viele Verbrechen in der Zauberwelt, (C1) sie tötet zum Beispiel ihren Cousin Sirius Black. Für dieses Verbrechen saß   sie einst in Askaban, (C1) das eine Art Hochsicherheitsgefängnis darstellt, (C1) aus dem nur schwer zu entkommen ist.
 R2-12|Typ1|Harry Potter kauft seine Schulsachen in der Winkelgasse, (C1) weil er eine Schule für Zauberei besucht.
 R2-13|Typ4|Muggel werden von Zauberern und Hexen abgegrenzt, (C1) weil sie keine magischen Fähigkeiten besitzen.
 R2-14|Typ1|Die Schüler:innen von Hogwarts werden in verschiedene Häuser eingeteilt, (C1) dies geschieht durch einen Hut, (C1) der sprechen kann.
-R2-15|Typ3| Obwohl Harry, (C1) dessen Eltern ebenfalls Schüler an der Schule für Hexerei und (C2) Zauberei waren, (C1) sich in große Gefahr begibt, (C1) kämpft er zusammen mit seinen Freunden Ron und (C2) Hermine gegen die dunklen Mächte.
+R2-15|Typ3|Obwohl Harry, (C1) dessen Eltern ebenfalls Schüler an der Schule für Hexerei und (C2) Zauberei waren, (C1) sich in große Gefahr begibt, (C1) kämpft er zusammen mit seinen Freunden Ron und (C2) Hermine gegen die dunklen Mächte.
 R3-01|Typ1|Das Bild, (C1) das du gerade siehst, (C1) zeigt Gegenstände aus dem Schulalltag.
 R3-02|Typ1|Das linierte Heft, das (B1) wird vor allem im Deutschunterricht gebraucht.
 R3-03|Typ1|Hast du ihn schon entdeckt, (B1) den Globus?
-R3-04|Typ5|Mia liebt es, (B1) das Fahren mit dem Fahrrad zur Schule.
+R3-04|Typ6|Mia liebt es, (B1) das Fahren mit dem Fahrrad zur Schule.
 R3-05|Typ3|Er hat besonders darauf geachtet, (B1) auf die Uhr links im Bild.
 R3-06|Typ3|Das Malen mit dem Tuschkasten, (B1) das wird von vielen Kindern im Kunstunterricht gerne gemacht.
 R3-07|Typ4|Der Globus, (C1) der von Lehrkräften im Fach Erdkunde verwendet wird, (C1) steht neben dem Rucksack.
@@ -48,3 +49,69 @@ R3-12|Typ1|Die Trinkflasche,(C1) die du im Sportunterricht brauchst, (C1) ist pi
 R3-13|Typ3|Den Schulbus zur Schule, (B1) daran sind viele Schüler: innen gewöhnt.
 R3-14|Typ1|Sie hat besonders darauf geachtet, (B1) auf den Taschenrechner in der Mitte des Bilds.
 R3-15|Typ4|Er hat den Fokus besonders darauf gelegt, (B1) auf den Apfel des Bilds.
+R1-X|Typ0|Im Sommer esse ich gerne Eis, (A1) Melone (A2) und Pfirsiche.
+R1-X|Typ0|Meine Lieblingsfarben sind Blau, (A1) Grün (A2) und Rot.
+R1-X|Typ0|Anna, (A1) Tom (A2) und Lisa gehen oft zusammen ins Kino.
+R1-X|Typ0|Zum Frühstück esse ich Brot, (A1) Marmelade (A2) und ein Ei.
+R1-X|Typ0|In der Stadt gibt es Parks, (A1) Cafés (A2)und Museen.
+R1-X|Typ0|Am Wochenende gehe ich schwimmen, (A1) radfahren (A2) und spazieren.
+R1-X|Typ0|Zu Weihnachten gibt es Plätzchen, (A1) Schokolade (A2) und Mandarinen.
+R1-X|Typ0|Für das Schulprojekt brauche ich Papier, (A1) Kleber (A2) und eine Schere.
+R1-X|Typ0|Der Herbst bringt Regen, (A1) Wind (A2) und bunte Blätter.
+R1-X|Typ0|Nach der Schule treffe ich Freunde, (A1) mache Hausaufgaben (A2) und spiele Fußball.
+R1-X|Typ0|In meinem Zimmer befinden sich ein Bett, (A1) ein Schreibtisch, (A1) eine Lampe (A2) und ein Kleiderschrank.
+R1-X|Typ0|Zum Frühstück trinke ich manchmal Milch, (A1) Tee (A2) oder frisch gepressten Orangensaft.
+R1-X|Typ0|Auf dem Bauernhof gibt es Kühe, (A1) Schweine, (A1) Hühner (A2) und manchmal auch Pferde.
+R1-X|Typ0|Bei unserem letzten Ausflug sind wir gewandert, (A1) haben gegrillt (A2) und die Sterne beobachtet.
+R1-X|Typ0|Im Zoo haben wir Elefanten, (A1) Giraffen, (A1) Affen (A2) und Krokodile gesehen.
+R1-X|Typ0|Beim Umzug haben wir Schränke, (A1) Betten, (A1) Stühle (A2) und Kartons voller Bücher und Kleidung getragen.
+R1-X|Typ0|Für die Party haben wir Dekorationen vorbereitet, (A1) Musik ausgesucht (A2) und Spiele geplant.
+R1-X|Typ0|Der Film zeigt spannende Abenteuer, (A1) unerwartete Wendungen (A2) und beeindruckende Spezialeffekte.
+R1-X|Typ0|Die neuen Möbel für mein Zimmer, (A1) darunter ein großer Schreibtisch, (A1) ein gemütlicher Sessel und ein farbenfroher Teppich, sehen toll aus.
+R1-X|Typ0|Wir haben alles für den Ausflug vorbereitet: Proviant gepackt,(A1) Zelte überprüft (A2) und den Rucksack gepackt.
+R1-X|Typ0|Auf dem Weihnachtsmarkt gibt es gebrannte Mandeln, (A1) heiße Schokolade, (A1) kunstvolle Holzfiguren (A2) und viele bunte Lichter.
+R2-X|Typ0|Morgen gehen wir ins Kino (C2) und danach essen wir etwas.
+R2-X|Typ0|Alex macht Sport, (C1) aber die Gruppe lernt lieber.
+R2-X|Typ0|Wir könnten ins Museum gehen, (C1) oder wir bleiben zu Hause.
+R2-X|Typ0|Taylor malt gerne, (C1) während Sam lieber liest.
+R2-X|Typ0|Jamie hilft beim Kochen, (C1) aber das Putzen überlässt Jamie anderen.
+R2-X|Typ0|Ich trinke Tee, (C1) weil er beruhigt.
+R2-X|Typ0|Wir bleiben hier, (C1) denn das Wetter ist schlecht.
+R2-X|Typ0|Riley spielt Fußball, (C1) während Alex Basketball trainiert.
+R2-X|Typ0|Jamie wollte eine Katze haben, (C1) obwohl eine Katze viel Arbeit bedeutet.
+R2-X|Typ0|Wenn es regnet, (C1) bleiben wir zu Hause.
+R2-X|Typ0|Es war spät, (C1) also sind wir alle nach Hause gegangen.
+R2-X|Typ0|Riley macht das Fenster auf, (C1) weil die Luft im Raum stickig ist.
+R2-X|Typ0|Taylor liest ein Buch, (C1) während Sam das Abendessen vorbereitet.
+R2-X|Typ0|Bevor der Unterricht beginnt, (C1) packen die Schüler*innen ihre Bücher aus, (C1) damit sie gut vorbereitet sind.
+R2-X|Typ0|Wenn der Sommer beginnt, (C1) freuen sich viele darauf, (C1) dass sie ihre Freizeit im Freibad verbringen können.
+R2-X|Typ0|Da das Wetter schlecht ist, (C1) beschließen die Klassenlehrkräfte, (C1) dass die Wanderung auf nächste Woche verschoben wird.
+R2-X|Typ0|Das Team arbeitet zusammen,(C1) bis die Aufgabe vollständig gelöst ist (C2) und alle zufrieden sind.
+R2-X|Typ0|Weil das Schulprojekt sehr gut gelaufen ist, (C1) bekommen die Beteiligten ein Lob von der Schulleitung.
+R2-X|Typ0|Obwohl das Spiel anstrengend war, (C1) haben die Schüler*innen bis zum Ende durchgehalten,(C1) sodass alle stolz auf ihre Leistung sein können.
+R2-X|Typ0|Bevor die Ferien beginnen, (C1) müssen alle sicherstellen, (C1) dass sie ihre Hausaufgaben vollständig erledigt haben.
+R2-X|Typ0|Da die Prüfungen bald anfangen, (C1) verbringen viele ihre Zeit in der Lernhalle, (C1) damit sie gut vorbereitet sind.
+R2-X|Typ0|Während der Pause sitzen einige Schüler*innen zusammen auf der Wiese, (C1) weil sie sich über das letzte Spiel austauschen möchten.
+R3-X|Typ0|Ehrlich gesagt, (B1) gefällt mir das neue Projekt.
+R3-X|Typ0|Natürlich, (B1) helfen wir gerne mit.
+R3-X|Typ0|Jamie, (B1) voller Energie, (B1) kam als Erstes an.
+R3-X|Typ0|Das Wetter, (B1) leider, (B1) war heute schlecht.
+R3-X|Typ0|Wir können morgen zum Park gehen, (B1) wenn es passt.
+R3-X|Typ0|Ohne Zweifel, (B1) hat das Team gute Arbeit geleistet.
+R3-X|Typ0|Sam kam, (B1) wie immer pünktlich, (B1) zur Besprechung.
+R3-X|Typ0|Der Kuchen, (B1) ehrlich gesagt, (B1) war zu süß.
+R3-X|Typ0|Das Spiel war spannend, (B1) ohne Frage.
+R3-X|Typ0|Alex, (B1) trotz der vielen Arbeit, (B1) blieb bis zum Schluss.
+R3-X|Typ0|Wir könnten später, (B1) wenn es für alle passt, (B1) ins Kino gehen.
+R3-X|Typ0|Jamie, (B1) voller Begeisterung, (B1) begann mit dem Projekt.
+R3-X|Typ0|Der Plan war gut,(B1) wie alle fanden, (B1) und wurde sofort umgesetzt.
+R3-X|Typ0|Das Team, (B1) nach einer kurzen Besprechung, (B1) stimmte zu.
+R3-X|Typ0|Morgen, (B1) falls es nicht regnet, (B1) machen wir einen Ausflug.
+R3-X|Typ0|Riley, (C1) die*der immer hilfsbereit ist, (C1) bot Unterstützung an.
+R3-X|Typ0|Der Workshop war anstrengend, (B1) ganz ehrlich, (B1) aber sehr lehrreich.
+R3-X|Typ0|Der Vortrag, (B1) um ehrlich zu sein,(B1) war fesselnd und inspirierend, (B1) was alle freute.
+R3-X|Typ0|Wir könnten das Meeting verschieben, (B1) falls es notwendig wird, (B1, C1) um mehr Zeit zu gewinnen.
+R3-X|Typ0|Die Gruppe, (B1) ganz ohne Anleitung, (B1) entwickelte neue Ideen, (B1) die gut ankamen.
+R3-X|Typ0|Riley, (B1) wie alle schnell bemerkten, (B1) hatte schon viel Erfahrung mit solchen Aufgaben.
+R3-X|Typ0|Der Ablauf, (B1) obwohl improvisiert, (B1) funktionierte überraschend gut, was alle erleichterte.
+R3-X|Typ0|Obwohl der Tag anstrengend war, (C1) gingen alle, (B1) voller Tatendrang, (B1) zum nächsten Projekt.
