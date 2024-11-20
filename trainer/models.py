@@ -116,7 +116,11 @@ class Sentence(models.Model):
         Get the word list.
         :return: List of words split at blanks or commas
         """
-        return re.split(r'[ ,]+', self.text.strip())
+        # Split self.text at blank and comma, but not at ". "
+        text = self.text.strip()
+        text = text.replace(". ", "__")
+        words = [w.replace('__', '. ') for w in re.split(r'[ ,]+', text)]
+        return words
 
     def get_commalist(self):
         """

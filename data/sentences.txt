@@ -17,16 +17,16 @@ R1-10|Typ3|Mia verbringt die Sommerferien in den Bergen, (A1) dort denkt sie am 
 R1-11|Typ1|Mia geht in die sechste Klasse einer weiterführenden Schule. Ihre Lieblingsfächer sind Mathe, (A1) Deutsch und (A2) Sport.
 R1-12|Typ3|Die Lieblingsfußballer:innen von Mia sind Jule Brand (A2) und Thomas Müller (A2) und Lena Oberdorf (A2) und Kai Havertz.
 R1-13|Typ3|Nächstes Jahr steht für die Familie von Mia eine Weltreise an. Sie fliegen unter anderem nach New York, (A1) Bangkok, (A1) Japan (A2) und Bali.
-R1-14|Typ3|Mia packt ihren Koffer, weil es bald für die Familie in den Urlaub geht und telefoniert währenddessen mit ihrer Freundin.
+R1-14|Typ3|Mia packt ihren Koffer mit all ihren Dingen für den Urlaub wie zum Beispiel ihrem Buch, (A1) ihren Kopfhörern (A2) und ihrer Sonnenbrille.
 R1-15|Typ5|Während Mia das Reisen in die Berge zum Skifahren (A2) und Wandern liebt, (A1) liebt der Rest ihrer Familie das Reisen an den Strand, (A1) in die Sonne (A2) und in weit entfernte Länder.
 R2-01|Typ2|Das Bild zeigt eine Welt voller Magie, (C1) weil ein Zauberer mit Hut zu erkennen ist.
 R2-02|Typ1|Harry Potter ist ein Teil einer solchen magischen Welt, (C1) weil er als Zauberer geboren wurde.
 R2-03|Typ1|Harry Potter ist ein Junge, (C1) der als Zauberer geboren wurde, (C1) jedoch erst bei seinen Verwandten lebt, bevor er nach Hogwarts kommt.
 R2-04|Typ1|Menschen, (C1) die wahre Harry Potter Fans sind, (C1) werden als Potterheads bezeichnet.
-R2-05|Typ1|Der, dessen Name nicht genannt werden darf, versucht Harry Potter zu töten.
+R2-05|Typ1|Der, (C1) dessen Name nicht genannt werden darf, (C1) versucht Harry Potter zu töten.
 R2-06|Typ2|Der Hogwart-Express bringt die Schüler: innen nach Hogwarts, dieser fährt vom Gleis 9¾ ab, (C1) dessen Existenz lediglich Anhänger der magischen Welt sehen.
 R2-07|Typ4|Die Anhänger von Lord Voldemort besitzen ein Symbol am Arm, (C1) welches als dunkles Mal bezeichnet wird. Immer dann, (C1) wenn ein Verbrechen unter Lord Voldemorts Namen verübt wird, (C1) erscheint das dunkle Mal am Himmel, (C1) sodass jeder das Zeichen sehen kann.
-R2-08|Typ3|Die Heiligtümer des Todes sind Gegenstände, (C1) die vom Tod selbst erschaffen worden sind. Dazu zählen ein Zauberstab, (C1) der jedes Duell gewinnt, (C1,A1) ein Stein, (C1) der bereits Verstorbene wieder lebendig macht (C1) und ein Tarnumhang.
+R2-08|Typ3|Die Heiligtümer des Todes sind Gegenstände, (C1) die vom Tod selbst erschaffen worden sind. Dazu zählen ein Zauberstab, (C1) der jedes Duell gewinnt, (C1,A1) ein Stein, (C1) der bereits Verstorbene wieder lebendig macht (C2) und ein Tarnumhang.
 R2-09|Typ6|Die Anhänger von Lord Voldemort bezeichnen sich selbst als Todesser (C2) und bedienen sich allen Mitteln für die Übernahme der Macht in der magischen Welt.
 R2-10|Typ3|Der Hauself Dobby, (C1) der durch Harry Potter von seinem Hausherren befreit wurde, (C1) fühlt sich Harry Potter zu Dank verpflichtet, (C1) sodass er ihm in seinem Kampf gegen die dunklen Mächte behilflich ist.
 R2-11|Typ3|Die Figur Bellatrix Lestrange, (C1) die eine Anhängerin Voldemorts ist, (C1) begeht viele Verbrechen in der Zauberwelt, (C1) sie tötet zum Beispiel ihren Cousin Sirius Black. Für dieses Verbrechen saß   sie einst in Askaban, (C1) das eine Art Hochsicherheitsgefängnis darstellt, (C1) aus dem nur schwer zu entkommen ist.
@@ -35,7 +35,7 @@ R2-13|Typ4|Muggel werden von Zauberern und Hexen abgegrenzt, (C1) weil sie keine
 R2-14|Typ1|Die Schüler:innen von Hogwarts werden in verschiedene Häuser eingeteilt, (C1) dies geschieht durch einen Hut, (C1) der sprechen kann.
 R2-15|Typ3|Obwohl Harry, (C1) dessen Eltern ebenfalls Schüler an der Schule für Hexerei und (C2) Zauberei waren, (C1) sich in große Gefahr begibt, (C1) kämpft er zusammen mit seinen Freunden Ron und (C2) Hermine gegen die dunklen Mächte.
 R3-01|Typ1|Das Bild, (C1) das du gerade siehst, (C1) zeigt Gegenstände aus dem Schulalltag.
-R3-02|Typ1|Das linierte Heft, das (B1) wird vor allem im Deutschunterricht gebraucht.
+R3-02|Typ1|Das linierte Heft, (B1) das wird vor allem im Deutschunterricht gebraucht.
 R3-03|Typ1|Hast du ihn schon entdeckt, (B1) den Globus?
 R3-04|Typ6|Mia liebt es, (B1) das Fahren mit dem Fahrrad zur Schule.
 R3-05|Typ3|Er hat besonders darauf geachtet, (B1) auf die Uhr links im Bild.

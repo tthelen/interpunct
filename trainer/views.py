@@ -223,7 +223,7 @@ def flip_sentence(sentence):
     comma_count = sentence1.count(',')
     words = sentence.get_words()
     # find random positions to insert commas. The number of commas isequal to comma_count, except comma_count is 0, then we insert 1 comma
-    comma_positions = random.sample(range(1, len(words)), max(comma_count, 1))
+    comma_positions = random.sample(range(1, len(words)-1), max(comma_count, 1))
     # concatenate words with commas
     sentence2 = ""
     for i, w in enumerate(words):
@@ -231,7 +231,10 @@ def flip_sentence(sentence):
         if i in comma_positions:
             sentence2 += ", "
         sentence2 += " "
-    return sentence2
+    if sentence2 != sentence:
+        return sentence2
+    else:
+        return flip_sentence(sentence)
 
 
 @logged_in_or_basicauth("Bitte einloggen")

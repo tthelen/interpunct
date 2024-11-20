@@ -107,9 +107,12 @@ class Command(BaseCommand):
                                      )
         shortcut_string.replace('(,)',',') # treat MAY-commas indicated as (,) like , - the mode comes from the rules
 
+        # replace '. ' by '__' to prevent comma positions after sentence end
+        shortcut_string = shortcut_string.replace('. ', '__')
+
         import shlex
         lexer = shlex.shlex(shortcut_string)
-        lexer.wordchars += '-.äöüÜÖÄß?!"\'#'  # Make . in Rule code (B4.1 etc.) and pair inf o #1... parseable
+        lexer.wordchars += '_-.:;äöüÜÖÄßéáèàâê?!0123456789²³¾"\'#'  # Make . in Rule code (B4.1 etc.) and pair inf o #1... parseable
         lexer.commenters = '' # no comments
         rules = []
         words = []
@@ -147,5 +150,10 @@ class Command(BaseCommand):
                     words.append(token)
                     sentence += token+" "
                     position += 1
+
+        # replace '__' by '. ' in all words to restore original sentence
+        sentence = sentence.replace('__', '. ')
+        # also in all words
+        words = [w.replace('__', '. ') for w in words]
 
         return (sentence, words, rules, source)

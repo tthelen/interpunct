@@ -11,8 +11,8 @@ class Sek2Strategy:
         # order of rules (increasing difficulty)
         self.rule_order = [
         "A1",
-        "B1",
-        "C1"
+        "C1",
+        "B1"
         ]
 
     def init_rules(self):
@@ -59,6 +59,17 @@ class Sek2Strategy:
                 self.user.rules_activated_count = self.user.sek2_rule
                 self.user.save()
                 new_rule = Rule.objects.get(code=self.rule_order[self.user.sek2_rule-1])
+
+                # activate UserRule for new rule
+                try:
+                    ur = UserRule.objects.get(rule=new_rule, user=self.user)
+                except UserRule.MultipleObjectsReturned:
+                    urs = UserRule.objects.filter(rule=new_rule, user=self.user)
+                    ur = urs[0]
+                    urs[1].delete()
+                ur.active = True
+                ur.save()
+
                 return (new_rule,False,False)
 
             # Passed a level -> move to next level
@@ -72,7 +83,7 @@ class Sek2Strategy:
     def get_next_task(self):
         "Return tupel (rule, sentence) for next task."
 
-        codes = [None, "A1", "B1", "C1"]
+        codes = [None, "A1", "C1", "B1"]
         rule = Rule.objects.get(code=codes[self.user.sek2_rule])
 
         # if user has correct solutions for this level, switch to next level
