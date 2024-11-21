@@ -374,8 +374,8 @@ def task(request):
         # determine task type
         task_type = sentence.excercise_type
         if task_type == 0:
-            # we want a random task type
-            task_type = random.choice([1, 2, 3, 4, 5, 6])
+            # we want a random task type (except 6 as it's very special)
+            task_type = random.choice([1, 2, 3, 4, 5])
 
         if task_type == 1:
             return render(request, 'trainer/task_set_commas.html', locals())
@@ -408,10 +408,20 @@ def task(request):
             sentence1 =  random.choice([flip_sentence(sentence), sentence.text])
             correct = "yes" if sentence1 == sentence.text else "no"
             return render(request, 'trainer/task_answer_question.html', locals())
-        elif task_type == 6:
-            sentence1 =  random.choice([flip_sentence(sentence), sentence.text])
-            correct = "yes" if sentence1 == sentence.text else "no"
-            return render(request, 'trainer/task_answer_question.html', locals())
+        elif task_type == 6:  # special questions
+            if user.sek2_rule == 2 and user.sek2_level == 9:
+                question= "Muss in diesem Satz ein Komma gesetzt werden?"
+                answer1 = "Ja, in diesem Satz muss ein Komma vor dem „und“ gesetzt werden, weil zwei Hauptsätze voneinander getrennt werden."
+                answer2 = "Nein, dieser Satz benötigt kein Komma, weil die Konjunktion „und“ die zwei Hauptsätze voneinander trennt."
+                sentence1 = sentence.text.replace(",", "")
+            elif user.sek2_rule == 3 and user.sek2_level == 4:
+                question = "Muss in diesem Satz ein Komma gesetzt werden?"
+                answer1 = "Nein, bei diesem Satz darf kein Komma stehen, da kein Satzglied herausgestellt wird."
+                answer2 = "Ja, bei diesem Satz muss ein Komma stehen, da ein Satzglied herausgestellt wird."
+                sentence1 = sentence.text.replace(",", "")
+            else:
+                return HttpResponseBadRequest("Unknown special question.")
+            return render(request, 'trainer/task_special_question.html', locals())
 
         # Typ1: Einsetzen von Kommata
         # Typ2: Erkennen der Regel
@@ -594,6 +604,28 @@ def submit_task_answer_question(request):
     time_elapsed = request.GET.get('tim',0)
 
     correct = (solution == "yes|yes" or solution == "no|no")
+    sol = Solution(user=user, sentence=sentence, type='question', time_elapsed=time_elapsed, solution=solution, sek2_rule=user.sek2_rule, sek2_level=user.sek2_level, correct=correct)
+    sol.save()
+
+    return JsonResponse({'submit': 'ok'})
+
+@logged_in_or_basicauth("Bitte einloggen")
+def submit_task_special_question(request):
+    """
+    Receives an AJAX GET request containing answer 1 or 2 to special question.
+    Saves solution and user_id to database.
+
+    :param request: Django request
+    :return: nothing
+    """
+
+    # extract request parameters
+    sentence = Sentence.objects.get(id=request.GET['id'])
+    user = User.objects.get(django_user=request.user)
+    solution = request.GET['sol']
+    time_elapsed = request.GET.get('tim',0)
+
+    correct = (solution == "2")  # HACK: In the examples, the correct answer is always the second one
     sol = Solution(user=user, sentence=sentence, type='question', time_elapsed=time_elapsed, solution=solution, sek2_rule=user.sek2_rule, sek2_level=user.sek2_level, correct=correct)
     sol.save()
 

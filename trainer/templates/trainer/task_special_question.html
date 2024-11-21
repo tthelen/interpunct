@@ -1,0 +1,85 @@
+{% extends "trainer/base.html" %}
+{% load static %}
+
+{% block title %}Kommatraining - Übung: Kommas korrigieren{% endblock %}
+
+{% block main %}
+    <h2 class="task_header"><b>Übung</b> | Richtig so?
+        <button class="btn btn-info"
+                data-toggle="popover"
+                title="Anleitung"
+                data-content="Entscheide, ob die Kommasetzung in diesem Satz korrekt ist.">?</button>
+    </h2>
+        <div>
+    {% if user.sek2_rule == 1 %}
+        <img src="{% static 'images/sek2_part1.jpg' %}" width="50%" style="margin-bottom: 10px;">
+    {% elif user.sek2_rule == 2 %}
+        <img src="{% static 'images/sek2_part2.jpg' %}" width="50%" style="margin-bottom: 10px;">
+    {% elif user.sek2_rule == 3 %}
+        <img src="{% static 'images/sek2_part3.jpg' %}" width="50%" style="margin-bottom: 10px;">
+    {% endif %}
+    </div>
+
+    <p class="manual">Entscheide!</p>
+    <div class="interpunct-sentence" id="interpunct-sentence-{{ sentence.id }}" data-user="{{ user_id }}">
+        <p>{{ question }}</p>
+        <p>{{ sentence1 }}</p>
+        <p>&nbsp;</p>
+        <p id="feedback-{{ sentence.id }}">
+            <button class="interpunct-question-submit" data-sentence="{{ sentence.id }}" data-chosen="1">{{ answer1 }}</button>
+            &nbsp;
+            <button class="interpunct-question-submit" data-sentence="{{ sentence.id }}" data-chosen="2">{{ answer2 }}</button>
+        </p>
+    <p>&nbsp;</p>
+    </div>
+    <p id="correction">&nbsp;</p>
+
+    <script>
+
+        var submitted = false;
+        var start_time = Date.now();
+
+        /* Check if a DOM element has a given CSS class. */
+        function has_class(element, cls) {
+            return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+        }
+
+        function toggle_correction(element) {
+            if (element.dataset.filled == '1') {
+                // for prefilled commas, just toggle the red cross for nulling them
+                element.classList.toggle("cross");
+            } else {
+                element.classList.toggle("addedcomma");
+                // for originally empty slots, toggle a red comma
+                if (element.innerHTML.indexOf(',') == -1) {
+                    element.innerHTML = ",";
+                } else {
+                    element.innerHTML = "&nbsp;";
+                }
+            }
+        }
+
+        function submit_sentence(element) {
+
+            /* find all commaslots for the submitted sentence */
+            var id = element.dataset.sentence;
+            var sentence = document.querySelectorAll("#interpunct-sentence-"+id+" .interpunct-commaslot");
+            var time_elapsed = Date.now() - start_time;
+            var solution = element.dataset.chosen+"|{{correct}}";
+            $.getJSON( "submit_task_special_question?id=" + id + "&tim=" + time_elapsed + "&sol=" + solution, function( data ) {
+                document.getElementById("feedback-" + id).innerHTML = "<br><a href={%  url 'task' %} class='interpunct-sentence-next'>Nächste Aufgabe</a>";
+                $('#correction').load('{% url 'sentence' sentence.id %}');
+                /* change color of all span slots */
+            });
+
+
+            submitted = true;
+        }
+
+        document.querySelector('body').addEventListener('click', function(event) {
+          if (has_class(event.target, 'interpunct-question-submit')) {
+              submit_sentence(event.target);
+          }
+        });
+    </script>
+{%  endblock %}

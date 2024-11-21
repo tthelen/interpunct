@@ -92,6 +92,23 @@ body {
 .interpunct-sentence-submit:hover{
    background-color: #91042c;
 }
+
+/* ----------- Question options ----------- */
+.interpunct-question-submit{
+    background-color: #9d9295;
+    border:none;
+    color: white;
+    font-size:100%;
+    padding: 12px 25px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius:4px;
+}
+.interpunct-sentence-submit:hover{
+   background-color: #b0b0b0;
+}
+
+
 /* ----- Next exercise button styling ----- */
 .interpunct-sentence-next:link, .interpunct-sentence-next:visited {
     background-color: #02a131;

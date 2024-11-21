@@ -18,6 +18,7 @@ urlpatterns = [
     path('submit_task_correct_commas', views.submit_task_correct_commas),
     path('submit_task_explain_commas', views.submit_task_explain_commas, name='submit_task_explain_commas'),
     path('submit_task_answer_question', views.submit_task_answer_question, name='submit_task_answer_question'),
+    path('submit_task_special_question', views.submit_task_special_question, name='submit_task_special_question'),
     path('submit_task_recognize_sentence', views.submit_task_recognize_sentence, name='submit_task_recognize_sentence'),
     path('delete_user', views.delete_user),
     path('sentence/<int:sentence_id>', views.sentence, name='sentence'),  # ajax load html for single correct sentence
