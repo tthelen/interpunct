@@ -21,7 +21,7 @@ R1-14|Typ3|Mia packt ihren Koffer mit all ihren Dingen für den Urlaub wie zum B
 R1-15|Typ5|Während Mia das Reisen in die Berge zum Skifahren (A2) und Wandern liebt, (A1) liebt der Rest ihrer Familie das Reisen an den Strand, (A1) in die Sonne (A2) und in weit entfernte Länder.
 R2-01|Typ2|Das Bild zeigt eine Welt voller Magie, (C1) weil ein Zauberer mit Hut zu erkennen ist.
 R2-02|Typ1|Harry Potter ist ein Teil einer solchen magischen Welt, (C1) weil er als Zauberer geboren wurde.
-R2-03|Typ1|Harry Potter ist ein Junge, (C1) der als Zauberer geboren wurde, (C1) jedoch erst bei seinen Verwandten lebt, (C1) bevor er nach Hogwarts kommt.
+R2-03|Typ1|Harry Potter ist ein Junge, (C1) der als Zauberer geboren wurde, (C1) jedoch erst bei seinen Verwandten lebt, bevor er nach Hogwarts kommt.
 R2-04|Typ1|Menschen, (C1) die wahre Harry Potter Fans sind, (C1) werden als Potterheads bezeichnet.
 R2-05|Typ1|Der, (C1) dessen Name nicht genannt werden darf, (C1) versucht Harry Potter zu töten.
 R2-06|Typ2|Der Hogwart-Express bringt die Schüler: innen nach Hogwarts, dieser fährt vom Gleis 9¾ ab, (C1) dessen Existenz lediglich Anhänger der magischen Welt sehen.
@@ -33,7 +33,7 @@ R2-11|Typ3|Die Figur Bellatrix Lestrange, (C1) die eine Anhängerin Voldemorts i
 R2-12|Typ1|Harry Potter kauft seine Schulsachen in der Winkelgasse, (C1) weil er eine Schule für Zauberei besucht.
 R2-13|Typ4|Muggel werden von Zauberern und Hexen abgegrenzt, (C1) weil sie keine magischen Fähigkeiten besitzen.
 R2-14|Typ1|Die Schüler:innen von Hogwarts werden in verschiedene Häuser eingeteilt, (C1) dies geschieht durch einen Hut, (C1) der sprechen kann.
-R2-15|Typ3|Obwohl Harry, (C1) dessen Eltern ebenfalls Schüler an der Schule für Hexerei (C2) und  Zauberei waren, (C1) sich in große Gefahr begibt, (C1) kämpft er zusammen mit seinen Freunden Ron (C2) und  Hermine gegen die dunklen Mächte.
+R2-15|Typ3|Obwohl Harry, (C1) dessen Eltern ebenfalls Schüler an der Schule für Hexerei und (C2) Zauberei waren, (C1) sich in große Gefahr begibt, (C1) kämpft er zusammen mit seinen Freunden Ron und (C2) Hermine gegen die dunklen Mächte.
 R3-01|Typ1|Das Bild, (C1) das du gerade siehst, (C1) zeigt Gegenstände aus dem Schulalltag.
 R3-02|Typ1|Das linierte Heft, (B1) das wird vor allem im Deutschunterricht gebraucht.
 R3-03|Typ1|Hast du ihn schon entdeckt, (B1) den Globus?
@@ -67,12 +67,12 @@ R1-X|Typ0|Im Zoo haben wir Elefanten, (A1) Giraffen, (A1) Affen (A2) und Krokodi
 R1-X|Typ0|Beim Umzug haben wir Schränke, (A1) Betten, (A1) Stühle (A2) und Kartons voller Bücher und Kleidung getragen.
 R1-X|Typ0|Für die Party haben wir Dekorationen vorbereitet, (A1) Musik ausgesucht (A2) und Spiele geplant.
 R1-X|Typ0|Der Film zeigt spannende Abenteuer, (A1) unerwartete Wendungen (A2) und beeindruckende Spezialeffekte.
-R1-X|Typ0|Die neuen Möbel für mein Zimmer, (A1) darunter ein großer Schreibtisch, (A1) ein gemütlicher Sessel (A2) und ein farbenfroher Teppich, sehen toll aus.
+R1-X|Typ0|Die neuen Möbel für mein Zimmer, (A1) darunter ein großer Schreibtisch, (A1) ein gemütlicher Sessel und ein farbenfroher Teppich, sehen toll aus.
 R1-X|Typ0|Wir haben alles für den Ausflug vorbereitet: Proviant gepackt,(A1) Zelte überprüft (A2) und den Rucksack gepackt.
 R1-X|Typ0|Auf dem Weihnachtsmarkt gibt es gebrannte Mandeln, (A1) heiße Schokolade, (A1) kunstvolle Holzfiguren (A2) und viele bunte Lichter.
 R2-X|Typ0|Morgen gehen wir ins Kino (C2) und danach essen wir etwas.
 R2-X|Typ0|Alex macht Sport, (C1) aber die Gruppe lernt lieber.
-R2-X|Typ0|Wir könnten ins Museum gehen, (C1) oder wir bleiben zu Hause. (nachgucken, denke kein Komma)
+R2-X|Typ0|Wir könnten ins Museum gehen, (C1) oder wir bleiben zu Hause.
 R2-X|Typ0|Taylor malt gerne, (C1) während Sam lieber liest.
 R2-X|Typ0|Jamie hilft beim Kochen, (C1) aber das Putzen überlässt Jamie anderen.
 R2-X|Typ0|Ich trinke Tee, (C1) weil er beruhigt.
@@ -104,14 +104,14 @@ R3-X|Typ0|Das Spiel war spannend, (B1) ohne Frage.
 R3-X|Typ0|Alex, (B1) trotz der vielen Arbeit, (B1) blieb bis zum Schluss.
 R3-X|Typ0|Wir könnten später, (B1) wenn es für alle passt, (B1) ins Kino gehen.
 R3-X|Typ0|Jamie, (B1) voller Begeisterung, (B1) begann mit dem Projekt.
-R3-X|Typ0|Der Plan war gut,(B1) wie alle fanden (C2) und wurde sofort umgesetzt.
+R3-X|Typ0|Der Plan war gut,(B1) wie alle fanden, (B1) und wurde sofort umgesetzt.
 R3-X|Typ0|Das Team, (B1) nach einer kurzen Besprechung, (B1) stimmte zu.
 R3-X|Typ0|Morgen, (B1) falls es nicht regnet, (B1) machen wir einen Ausflug.
 R3-X|Typ0|Riley, (C1) die*der immer hilfsbereit ist, (C1) bot Unterstützung an.
 R3-X|Typ0|Der Workshop war anstrengend, (B1) ganz ehrlich, (B1) aber sehr lehrreich.
 R3-X|Typ0|Der Vortrag, (B1) um ehrlich zu sein,(B1) war fesselnd und inspirierend, (B1) was alle freute.
 R3-X|Typ0|Wir könnten das Meeting verschieben, (B1) falls es notwendig wird, (B1, C1) um mehr Zeit zu gewinnen.
-R3-X|Typ0|Die Gruppe, (B1) ganz ohne Anleitung, (B1) entwickelte neue Ideen, (C1) die gut ankamen.
+R3-X|Typ0|Die Gruppe, (B1) ganz ohne Anleitung, (B1) entwickelte neue Ideen, (B1) die gut ankamen.
 R3-X|Typ0|Riley, (B1) wie alle schnell bemerkten, (B1) hatte schon viel Erfahrung mit solchen Aufgaben.
-R3-X|Typ0|Der Ablauf, (B1) obwohl improvisiert, (B1) funktionierte überraschend gut, (C1) was alle erleichterte.
+R3-X|Typ0|Der Ablauf, (B1) obwohl improvisiert, (B1) funktionierte überraschend gut, was alle erleichterte.
 R3-X|Typ0|Obwohl der Tag anstrengend war, (C1) gingen alle, (B1) voller Tatendrang, (B1) zum nächsten Projekt.
