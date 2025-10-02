@@ -1,0 +1,14 @@
+Ihr habt zwei neue Regeln eingeführt, C6.2.1 und C6.2.2, die beide gleichlautend sind:
+
+"In manchen Kontexten können Ausdrücke als Zusatz oder als Satzglied(teil) (z. B. adverbiale Bestimmung, Attribut) aufgefasst werden. Werden sie als Zusatz aufgefasst, steht das Komma. Dies ist nicht am Satzanfang möglich."
+
+Der Unterschied der beiden Regeln besteht darin, dass C6.2.1 Zusätze im Satzinneren betrifft und C6.2.2 solche am Satzanfang. So, wie die im Kommatraining geln präsentiert werden, ist das allerdings sehr verwirrend, da bei C6.2.2 dem Hinweis "Hier kommt eine weitere Regel:" dann der gleiche Text folgt. Ich habe das erstmal umformuliert, so dass es zwei verschiedene Formulierungen sind:
+
+C6.2.1: "In manchen Kontexten können Ausdrücke als Zusatz oder als Satzglied(teil) (z. B. adverbiale Bestimmung, Attribut) aufgefasst werden. Werden sie als Zusatz aufgefasst und stehen nicht am Satzanfang, wird ein Komma gesetzt."
+
+C6.2.2: "In manchen Kontexten können Ausdrücke als Zusatz oder als Satzglied(teil) (z. B. adverbiale Bestimmung, Attribut) aufgefasst werden. Stehen sie am Satzanfang, darf allerdings kein Komma gesetzt werden."
+
+Wenn Euch das nicht gefällt, könnte ich schauen, ob ich hier eine Sonderlösung programmieren kann.
+
+
+

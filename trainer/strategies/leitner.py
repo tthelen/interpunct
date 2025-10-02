@@ -11,29 +11,25 @@ class LeitnerStrategy:
 
         # order of rules (increasing difficulty)
         self.rule_order = [
-        "A1",  # 1 GLEICHRANG
-        "A2",  # 2 ENTGEGEN
-        "B1.1",  # 3 NEBEN
-        "B2.1",  # 4 UMOHNESTATT
-        "B1.2",  # 5 NEBENEINLEIT
-        "B1.5",  # 6 FORMELHAFT
-        "A3",  # 7 SATZREIHUNG
-        "A4",  # 8 GLEICHRANG KONJUNKT
-        "D1",  # 9 ANREDE/AUSRUF/STELLUNGNAHME
-        "B2.2",  # 10 INF:VERWEIS
-        "B2.3",  # 11 INF:EINFACH
-        "B2.5",  # 12 INFP
-        "C1",  # 13 HERAUSSTELLUNG
-        "C6.2",  # 14 NACHTRAG
-        "C3.1",  # 15 NOPRÄP
-        "C3.2",  # 16 NOPRÄP:SCHLIESS
-        "C6.1",  # 17 EIGENNAME:TITEL
-        "C7",  # 18 EIGENNAME:KEINNACHTRAG
-        "C8",  # 19 HINWEIS:GESETZ
-        "B1.3",  # 20 NEBEN KONJUNKT
-        "B1.4.1",  # 21 SUBORD:KOORD:KONJ:ADJAZ
-        "B1.4.2",  # 22 SUBORD:KOORD:KONJ:NONADJAZ
-    ]
+        "A1",
+        "A2",
+        "B1.1",
+        "B1.2.1",
+        "B1.2.2",
+        "A3",
+        "A4",
+        "B1.5",
+        "D1",
+        "C1",
+        "C6.2.1",
+        "C6.2.2",
+        "C3.1",
+        "C6.1",
+        "C7",
+        "C8",
+        "B1.4.1",
+        "B1.4.2",
+        ]
 
     def init_rules(self):
         """Initialize active rules for user."""

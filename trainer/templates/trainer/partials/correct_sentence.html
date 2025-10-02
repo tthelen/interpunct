@@ -6,9 +6,9 @@
       {% for x in wcr %}
         {{ x.0 }}{{ x.1 }}
         {% for y in x.2 %}
-            <button type="button" class="btn btn-sm {% if y.code == 'E2' %}btn-warning{% else %}btn-info{% endif %}" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>
-            {% if y.code == 'E2' %}<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>{% else %}{{ y.rule }}{% endif %}
-            </button>
+            {% if y.code != 'E2' %}
+               <button type="button" class="btn btn-sm btn-info" data-toggle='modal' data-target='#modal-rule-{{ y.id }}'>{{ y.rule }}</button>
+            {% endif %}
         {% endfor %}
       {% endfor %}
     </p>

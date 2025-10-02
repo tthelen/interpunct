@@ -48,6 +48,7 @@ class Command(BaseCommand):
                         sentence, words, rules, source = self.from_shortcuts(shortcut_string)
                         print("Sentence: {}, Words: {}, Rules: {}, Source: {}".format(sentence, words, rules, source))
                         s = Sentence(text=sentence, active=True, source=source)
+                        s.save()
                         s.comma_select = ",".join(["0" for x in s.get_commalist()])
                         s.save()
                         for (pos,pair, r) in rules:

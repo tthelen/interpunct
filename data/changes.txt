@@ -1,0 +1,10 @@
+B1.2.1 ist neu
+B1.2 heißt jetzt B1.2.2
+B1.2 entfällt
+B2.1 wird B1.1
+B2.2 wird B1.1
+B2.3 entfällt (? - Sätze sammeln(
+B2.5 entfällt
+C3.2 wird C3.1
+C6.2 wird C6.2.1 wenn die Konstruktion nicht am Satzanfang steht
+C6.2 wird C6.2.2 wenn die Konstruktion am Satzanfang steht

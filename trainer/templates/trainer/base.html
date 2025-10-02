@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'interpunct.css' %}">
     <meta property="og:title" content="Das Kommatraining" />
-    <meta property="og:image" content="http://vm009.rz.uos.de/interpunct/static/images/K%C3%B6nig_10.png" />
     <meta property="og:description" content="Trainiere deine Komma-Fertigkeiten und werde zum Komma-König. Das Kommatraining orientiert sich an den amtlichen Regeln und ist besonders für Lehramtsstudierende geeignet. (Externer Dienst der Uni Osnabrück)"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,11 +35,6 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark bg-uni">
-        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-            <div class="logo d-none d-lg-block" style="width:280px">
-                <img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo-unbounded.svg" alt="Uni OS Logo">
-            </div>
-        </div>
         <div class="mx-auto order-0">
     {% if not nologo %}
             <a class="navbar-brand mx-auto" href="/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARdSURBVGhD7ZlZiM1RHMfHOhhjmZgM2SfmYcrOGzOKrPNgH8uDKGNLlsiWGcUD5cGDUlIUyvaAyJOlMJRkeSHFlBohZAnRjM/31+9Ot5iaO3P+996p+61P5/f7nfP/nXPufzv/c7MyyiijjDKKV319fS/hbutQXV1dLiyA0/AKfjIJk2yPncKdT5nrh6WPGFhXBrYXvmJ/ptRElsNUKHZkK3bG26htpY71NKkVA5oF7+A1LGVgHb2qUakNbZdBDdTCTK9KjRjAVvgDVfETwB5CbJNsyp3C7c2qky3hZ4PO5G/Y6uHkio6r4CvM8ZBiayEfBkOFx/KE26u9Tm3WKCZhz4VvTLLSQ8kRneqG1q843UMm/N0MZoC7jUpt1NZdE/4MzznPQ9GKjvrDN7BLh0HpRr9H2ckaJCAdw7F3lUM+9mbP3c8aRCk6OQ7VdN7GQxpQiZsJK/5Y5ST3AzjmoWhER0V0opt7knxK3ewjrLIFUg7Y4nYpqI/hVhmFSK4nzH135ZczuYanUHOlHORa6K7yPiAW3Y1PB49hh9vB38yxnJS74JEFQ4vE+fxKWmrYpUR5D+wSCyHlUk7ZdDNSfaE+VhlSdDJWmSlz3O+M23DDt1TKpZyyKXO9r2A/VINIOhu+yKaPDtgTrSKglFO53dbLdoFVhJSSQq3bA+GaVQSUciq321qHLbaKkOKXKiHxH8p2HopU9KUzUuZuOJF0GJPQdVvg/gYotMpAIt81uhgEPbyv0V4VTiTVSvULzHV/PdhlEErkmwnqp9gnku9VYUXusyQ/6a78YJcZudqTe5RsyjL4bhVRiOTl8Am6uX8VglzH5NFXpL1HKA/CDauIQvxq+rJ7Cfvc7wn2uAwp8mvhuMfdaEQHi+A7xB6TOXALsq1BM8XxV5QT9CGmp2OzV9RNEh3oDXwdnmB3UQx7mpd5qpedqDh2OnQGfWW+jeJM/yM66U5nL+AydsMHFb4WlXbDxibZFHHMEtrHPq4ewgGrSIborBC0T1UNfRVjMO29bgr2Tbd1KS6S3ZioP0F7vT/GgFTkVckRA+gNt0FbOqsZgE1Ewo8tyccKC/5HHDPITbW9BNfdTa4YiBaQ+tb+CM9hW1N/UdpqN+U97dtSTgBpnFenRgxGy4pKBvKMUm/lN3AHLsAZOE/4nxcosTaC+htw0cPpIQY0FFbCfjgKH+CcV5vwV8HxOPsHRPed3lIxuH6g/arZHjLh6/3Tm7OhPS6t4Wx7KW3FQHW51VDGPwjuwlBiHeEm9h3KpHweNEsMTpt372G9h0z4+mzWcucIvMNu8U5MpGKQ20FnI7YCWAFVbmsf+BeUyk9bMUDdG/rKW+IhxQqYlDb5tIrWJpxtdKetGKwep/Zyc7sAnmLrfaFvf00iNX8jJCIGuRF0Nmwz2iczHiogdf+FJCIG3Y6BaqNbA9byZbLHDoHOxDpv2jrEgIfBSdCE9JbXEmaqV7c+MXhN6LBKD2WUUUZJV1bWXzc8FGX6MrmlAAAAAElFTkSuQmCC"> Kommatraining</a>
@@ -102,7 +96,7 @@
             <div class="card text-center" style="margin-top:4em">
                 <div class="card-header" style="background:linear-gradient(0deg,#17a2b8 0,#138496 100%);font-weight:bold;color:white;">Level</div>
                 <p style="font-size:5vw;line-height:1.0;margin-top:0px;margin-bottom:0px;">{{ level }}</p>
-                <div class="card-footer text-muted">von 22</div>
+                <div class="card-footer text-muted">von 18</div>
             </div>
             <p>&nbsp;</p>
             <div class="card text-center">
@@ -184,8 +178,8 @@
         <p class="m-0 text-center text-white" style="width:100%;">
           {% if user.code %}<a href="{% url 'code' %}"><button class="btn btn-secondary">Dein Code: &nbsp; <code style="color:#222">{{ user.code }}</code></button></a> &nbsp; &nbsp;{% endif %}
             Ein Angebot der &nbsp;
-            <a href="https://www.uni-osnabrueck.de"><img src="https://www.uni-osnabrueck.de/typo3conf/ext/uos_core/Resources/Public/Images/uni-os-logo.png" width="200px" style="margin-top:-15px"></a>
-            &nbsp; <b>virtUOS</b>, 2017-2023 &nbsp; &middot; &nbsp; <a style="color:white;" href="{% url 'impressum' %}">Impressum</a></p>
+            <a href="https://www.uni-osnabrueck.de"><img src="{% static 'images/uni-os-logo.svg' %}" width="200px" style="margin-top:-15px"></a>
+            &nbsp; &nbsp; &middot; &nbsp; <a style="color:white;" href="{% url 'impressum' %}">Impressum</a></p>
       </div>
 
       <!-- /.container -->

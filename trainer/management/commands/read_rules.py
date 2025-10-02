@@ -35,6 +35,8 @@ class Command(BaseCommand):
             for row in reader:
                 if row[0] == '':    # empty line
                     continue    # skip  empty lines
+                if row[0] == 'Code':  # skip header
+                    continue
                 try:
                     r = Rule.objects.get(code=row[0])
                     self.stdout.write(self.style.SUCCESS('Update rule "%s"' % row[0]))
