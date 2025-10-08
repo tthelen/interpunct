@@ -231,6 +231,8 @@ def task(request):
         if not template_params:
             template_params = {}
 
+        template_params['display_level'] = True
+
         # pick one comma slot from the sentence
         # there must at least be one non-error and non-'must not' rule (ensured above)
         comma_candidates = []
@@ -330,6 +332,9 @@ def task(request):
     if new_rule:
         level = user.rules_activated_count  # user's current level
         return render(request, 'trainer/level_progress.html', locals())
+
+    # show level information on screen
+    display_level = True
 
     # choose a sentence from roulette wheel (the bigger the error for
     # a certain rule, the more likely one will get a sentence with that rule)
