@@ -38,28 +38,7 @@
         padding-top: 7%;
         position: relative;
     }
-    .rank{
-        float: left;
-        width: 20%;
-        height: 100%;
-        padding-top: 3%;
-        position: fixed;
-        color: rgb(25,66,114);
-        font-family: Helvetica;
-    }
-    /*TODO: set min width*/
-    .rank a {
-        display: block;
-        border-radius: 15px;
-        padding: 8px 10px;
-        text-decoration: none;
-        color: rgb(25,66,114);
-        background-color: rgb(221,225,255);
-        margin-bottom: -7px;
-    }
-    .rank a:hover {
-        background-color: rgb(138,157,188);
-    }
+
     .description {
         margin-top: -120%;
         display: inline-block;
@@ -70,16 +49,7 @@
 </head>
 <body>
 <div class="dummy"></div>
-<div class="rank">
-    <img src="./static/images/Chaot_1.png" alt="{{ rank }}" width="100%"/>
-    <br><br><br>
 
-    <h3>Übungen:</h3>
-    {% for t in tasks %}
-        <a href=#>{{ t }}</a>
-        <br>
-    {% endfor %}
-</div>
 <div class="row">
 {% for c,s in new_dictionary.items %}
     <div class="progress" id="circle_{{ forloop.counter }}" score="{{ s }}">
@@ -109,21 +79,7 @@
             sheet = style.sheet;
             sheet.insertRule('#circle_'+(i+1)+'{background-image: url("./static/images/Name_'+step+'.png");}', 0);
         }
-        // Fill in the progress circle of the rang image
-        var rank_img = document.getElementsByClassName("rank")[0].childNodes[1];
-        var rang = "{{ rank }}";
-        switch(rang) {
-            case("Kommachaot"):
-                rank_img.src = "./static/images/Chaot_"+Math.floor(sum/circles.length)+".png";
-                break;
-            case("Kommakönner"):
-                rank_img.src = "./static/images/Könner_"+Math.floor(sum/circles.length)+".png";
-                break;
-            case("Kommakönig"):
-                rank_img.src = "./static/images/König_"+Math.floor(sum/circles.length)+".png";
-                break;
-            // TODO: + one more rang
-        }
+
     }
 
 </script>

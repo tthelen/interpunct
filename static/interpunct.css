@@ -7,9 +7,7 @@ body {
 .bg-uni {
     background:linear-gradient(0deg,#ac0634 0,#91042c 100%);
 }
-.rankinfo {
-    float:left; width:200px; padding:10px;
-}
+
 
 .main {
     padding: 10px; margin-left:220px;
@@ -324,7 +322,7 @@ body {
 }
 
 
-.manual, .rank {
+.manual {
     color: #777;
 }
 

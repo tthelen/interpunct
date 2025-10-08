@@ -26,7 +26,6 @@ def view_or_basicauth(view, request, test_func, realm="", *args, **kwargs):
             user = User(user_id=username)
             user.rules_activated_count = 0
             user.strategy = user.LEITNER  # random.choice([user.BAYES, user.BAYES, user.LEITNER])
-            user.gamification = user.GAMIFICATION_CLASSIC
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -84,8 +83,6 @@ def view_or_welcome(view, request, test_func, realm="", *args, **kwargs):
             user = User(user_id=username)
             user.rules_activated_count = 0
             user.strategy = user.LEITNER  #  random.choice([user.BAYES, user.BAYES, user.LEITNER])
-            # user.gamification = random.choice([user.GAMIFICATION_CLASSIC, user.GAMIFICATION_INDIVIDUAL, user.GAMIFICATION_GROUP])
-            user.gamification = user.GAMIFICATION_CLASSIC
             user.prepare(request)  # create a corresponding django user and set up auth system
             user.save()
         user.login(request)
@@ -199,7 +196,6 @@ def start_new(request):
     user.rules_activated_count = 0
     user.strategy = user.LEITNER
     user.code = code
-    user.gamification = user.GAMIFICATION_CLASSIC
     user.prepare(request)  # create a corresponding django user and set up auth system
     user.data="No questionnaire in this run."
     user.save()
@@ -301,8 +297,7 @@ def task(request):
         return redirect(reverse('task'))
 
     new_rule = None  # new level reached? (new rule to explain)
-    display_rank = True  # show the rank in output? (not on welcome and rule explanation screens)
-    rankimg = ""
+
     finished = False # default is: we're not yet finished
     # select strategy
     strategy = user.get_strategy()
@@ -310,7 +305,6 @@ def task(request):
     # -----------------------------------------------------------------------
     # new user: show welcome page
     if not user.data:
-        display_rank=False
         user.data="No questionnaire in this run."
         user.code = None
         user.save()
@@ -320,7 +314,6 @@ def task(request):
     # user without activated rules: show first rule page
     if user.rules_activated_count == 0:
         new_rule = strategy.activate_first_rule()
-        display_rank=False
         level = 1
         return render(request, 'trainer/level_progress.html', locals())
 
@@ -328,8 +321,6 @@ def task(request):
     level = user.rules_activated_count  # user's current level
     # activerules = strategy.get_active_rules()
     activerules = UserRule.objects.filter(user__django_user=request.user.id, active=True).order_by('box')[:5]
-
-    show_ranking = False
 
     # ------------------------------------------------------------------------
     # normal task selection process
@@ -339,8 +330,6 @@ def task(request):
     if new_rule:
         level = user.rules_activated_count  # user's current level
         return render(request, 'trainer/level_progress.html', locals())
-
-    show_ranking=True
 
     # choose a sentence from roulette wheel (the bigger the error for
     # a certain rule, the more likely one will get a sentence with that rule)
@@ -504,8 +493,7 @@ def submit_task_explain_commas(request):
             if correct != chosen:
                 error_rules.append(r)
 
-    # recalculate individual or group score
-    # user.update_score(resp)
+
 
     # write solution to db
     time_elapsed = request.POST.get('tim', 0)
@@ -611,7 +599,6 @@ def nocookies(request):
     """Renders information page if cookies could not be set."""
     active = ''
     additional_heading = "Cookie-Problem"
-    display_rank = False  # show the rank in output? (not on welcome and rule explanation screens)
     uname = request.GET.get('uname','')
     return render(request, 'trainer/nocookies.html', locals())
 
@@ -658,14 +645,11 @@ def ustats(request):
 @logged_in_or_basicauth("Bitte einloggen")
 def mystats(request):
     user = User.objects.get(django_user=request.user)
-    display_rank = False
+
     level = user.rules_activated_count
-    rank = user.get_user_rank_display()
 
     num_solutions = Solution.objects.filter(user=user).count()
     num_errors = SolutionRule.objects.filter(solution__user=user, error=True).count()
-
-    rankimg = "{}_{}.png".format(["Chaot", "Könner", "König"][int((level-1)/10)], int((level-1) % 10)+1)
 
     error_rules = sorted(UserRule.objects.filter(user=user, active=True), key=lambda t: t.incorrect)
     return render(request, 'trainer/mystats.html', locals())
