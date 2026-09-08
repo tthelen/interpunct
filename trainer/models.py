@@ -306,6 +306,19 @@ class Sentence(models.Model):
     def count_correct_solutions(self):
         return self.solution_set.filter(type='correct').count()
 
+    @classmethod
+    def error_prone_sentences(cls):
+        """Return list of sentences ordered by error rate."""
+        sentences = cls.objects.all()
+        result = []
+        for s in sentences:
+            total = s.solution_set.count()
+            if total > 0:
+                errors = s.solution_set.filter(solutionrule__error=True).distinct().count()
+                result.append((s, total, errors, float(errors)/float(total)))
+        result.sort(key=lambda x: x[3], reverse=True)
+        return result
+
 
 def render_one_set_solution(w,solution_array,pairs,solution):
     """Returns a list of words with additional information for rendering a solution.
